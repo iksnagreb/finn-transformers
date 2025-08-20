@@ -1,0 +1,44 @@
+# Experiment tag to help with aggregating and filtering experiment sweeps
+tag: benchmark
+# Global seed to make evaluation reproducible
+seed: 12
+# Model hyperparameters: ...
+model:
+  # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
+  # convolution, etc.
+  emb_dim: 32
+  # Number of attention heads
+  num_heads: 4
+  # Enable a bias added to the input and output projections
+  bias: false
+  # Normalization layer preceding or following each block
+  #   Options: batch-norm, layer-norm, none
+  norm: batch-norm
+  # Placement of the normalization layer: pre-norm or post-norm, if norm is not
+  # none
+  norm_placement: post-norm
+  # Number of quantization bits for weights and activations (for all
+  # intermediate layers), null means no quantization
+  bits: 8
+# Calibration dataset configuration
+dataset:
+  # Range for input values
+  range: [ -1, +1 ]
+  # Shape of input tensors excluding batch dimension
+  shape: [ 64, 32 ]
+# Model to ONNX export hyperparameters
+export:
+  # Explicitly splits all attention heads in the model graph to be parallel
+  split_heads: true
+  # Version of the default ONNX opset
+  opset_version: 18
+  # Apply the constant-folding optimization
+  do_constant_folding: true
+  # Export batch size - allows to provide more verification samples
+  batch_size: 1
+  # Need to use dynamo export to allow exporting torch.compiled graphs
+  dynamo: false
+  # Keep parameters as part of the model ONNX file
+  external_data: false
+  # Enables dynamo export model optimization
+  optimize: false

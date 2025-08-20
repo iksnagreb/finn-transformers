@@ -151,13 +151,14 @@ class Attention(torch.nn.Module):
         # Normalization layer preceding the attention if configured as pre-norm
         if norm_placement == "pre-norm" and norm is not None:
             self.pre_norm = torch.nn.Sequential(
-                # RadioML data comes in with sequence (temporal) dimension
-                # before channels but is treated as an image in channels-first
-                # layout
+                # Packed sequential/spatial data comes in channel-last layout
+                # while batch normalization expects channels-first
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm2d(),
+                torch.nn.LazyBatchNorm1d(),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits)] if bits else []),
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
@@ -214,13 +215,14 @@ class Attention(torch.nn.Module):
         # post-norm
         if norm_placement == "post-norm" and norm is not None:
             self.post_norm = torch.nn.Sequential(
-                # RadioML data comes in with sequence (temporal) dimension
-                # before channels but is treated as an image in channels-first
-                # layout
+                # Packed sequential/spatial data comes in channel-last layout
+                # while batch normalization expects channels-first
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm2d(),
+                torch.nn.LazyBatchNorm1d(),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits)] if bits else []),
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
@@ -229,13 +231,16 @@ class Attention(torch.nn.Module):
     def forward(self, x):
         # Pack multiple sequence/spatial dimensions into a single sequence
         # dimension
-        y, ps = pack([self.pre_norm(x)], "b * d")
+        x, ps = pack([x], "b * d")
+        # Apply pre-norm normalization once on the query, key and value input
+        # before forking
+        y = self.pre_norm(x)
         # Compute the self-attention operation on packed tensors
         y = self.mha(y, y, y)
-        # Unpack the tensor to continue with the original layer
-        [y] = unpack(y, ps, "b * d")
         # Quantized residual addition and post-norm normalization
-        return self.post_norm(self.quant(y) + self.quant(x))
+        y = self.post_norm(self.quant(y) + self.quant(x))
+        # Unpack the tensor to continue with the original layer
+        return unpack(y, ps, "b * d")[0]
 
 
 # Convolutional block according to Gulati et al. 2020. Comprises a normalization

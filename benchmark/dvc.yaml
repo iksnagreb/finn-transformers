@@ -1,0 +1,41 @@
+# List experiment stages, i.e., the jobs to be run
+stages:
+  # Model export stage: Calibrates and exports a benchmark model to ONNX format
+  # alongside some random verification samples
+  export:
+    # Run the stage relative to the project root directory
+    wdir: ..
+    # Stage runs the export script as the command
+    cmd: python -m benchmark.export
+    # Data and code dependencies of this stage to determine when it needs to be
+    # rerun
+    deps:
+      # Benchmark source files
+      - benchmark/model.py
+      - benchmark/export.py
+      # General source files shared by other experiments
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      - utils.py
+    # Parameters from params.yaml used by this stage, changing any of these
+    # triggers a rerun
+    params:
+      - benchmark/params.yaml:
+          - tag
+          - seed
+          - model
+          - dataset
+          - export
+    # Outputs produced which should be tracked and passed on to the next stages
+    outs:
+      # Calibrated model exported to the ONNX format
+      - outputs/benchmark/model.onnx
+      # Model verification input/output samples
+      - outputs/benchmark/inp.npy
+      - outputs/benchmark/out.npy
+  # TODO: FINN-build and deployment stages...

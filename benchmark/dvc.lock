@@ -1,0 +1,84 @@
+schema: '2.0'
+stages:
+  export:
+    cmd: python -m benchmark.export
+    deps:
+    - path: activations.py
+      hash: md5
+      md5: f528b1e97dfd8b8f2952306a4ccdb5f3
+      size: 298
+    - path: attention.py
+      hash: md5
+      md5: f9dcfe32256c4b182ec97853c29744e8
+      size: 7516
+    - path: benchmark/export.py
+      hash: md5
+      md5: b3b92fc8486edab34e4330eba75260ac
+      size: 3644
+    - path: benchmark/model.py
+      hash: md5
+      md5: ae4c43d6c9822d8d9d43e41395302b6e
+      size: 136
+    - path: blocks.py
+      hash: md5
+      md5: 61cb22fba566aa9cc8c9ca39c43cf496
+      size: 21569
+    - path: embedding.py
+      hash: md5
+      md5: 7ed092ae5710f20058b64ebbd7215126
+      size: 2698
+    - path: encoding.py
+      hash: md5
+      md5: 481854c553f5991907217d8981931d6c
+      size: 8840
+    - path: lazy.py
+      hash: md5
+      md5: dc8537c6a3615ea74c2d1db381974a55
+      size: 5162
+    - path: quant.py
+      hash: md5
+      md5: 861ee87e24d388efec8bc21cc3df989e
+      size: 1221
+    - path: utils.py
+      hash: md5
+      md5: f84dabfd10a04e1bb70b41d6be638042
+      size: 381
+    params:
+      benchmark/params.yaml:
+        dataset:
+          range:
+          - -1
+          - 1
+          shape:
+          - 64
+          - 32
+        export:
+          split_heads: true
+          opset_version: 18
+          do_constant_folding: true
+          batch_size: 1
+          dynamo: false
+          external_data: false
+          optimize: false
+        model:
+          emb_dim: 32
+          num_heads: 4
+          bias: false
+          norm: batch-norm
+          norm_placement: post-norm
+          bits: 8
+        seed: 12
+        tag: benchmark
+    outs:
+    - path: outputs/benchmark/inp.npy
+      hash: md5
+      md5: 49980be4347b64945d293ff16f5babe2
+      size: 8320
+    - path: outputs/benchmark/model.onnx
+      hash: md5
+      md5: 1a9b8511c7575e78363c82af492f1e2b
+      size: 34687
+    - path: outputs/benchmark/out.npy
+      hash: md5
+      md5: 5214433e4a4f1d1127896c8f37516497
+      size: 8320
