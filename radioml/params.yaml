@@ -46,7 +46,7 @@ model:
   # Normalization layer preceding or following each block
   #   Options: batch-norm, layer-norm, none
   norm: batch-norm
-  # Placement of the normalization layer: pre-norm or post-norm, ir norm is not
+  # Placement of the normalization layer: pre-norm or post-norm, if norm is not
   # none
   norm_placement: post-norm
   # Dropout: probability of an element to be zeroed during training

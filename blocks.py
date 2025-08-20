@@ -83,8 +83,7 @@ class MLP(torch.nn.Module):
             torch.nn.Dropout(p=dropout),
             # Quantized linear projection to the output embedding dimension
             LazyQuantLinear(emb_dim, bias=bias, **weight_quant),
-            # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
+            # No output quantizer here, see below, avoid double quantizer...
             # Amount of dropout to apply at the sublayer output
             torch.nn.Dropout(p=dropout),
         )
@@ -146,6 +145,24 @@ class Attention(torch.nn.Module):
         # Not support for other than batch normalization for now...
         assert norm in {"batch-norm", "none", None}, f"Unsupported norm: {norm}"
 
+        # Default identity pre-norm will be overwritten below if configured
+        self.pre_norm = torch.nn.Identity()
+
+        # Normalization layer preceding the attention if configured as pre-norm
+        if norm_placement == "pre-norm" and norm is not None:
+            self.pre_norm = torch.nn.Sequential(
+                # RadioML data comes in with sequence (temporal) dimension
+                # before channels but is treated as an image in channels-first
+                # layout
+                Rearrange("b ... c -> b c ..."),
+                # Batch normalization inferring the size of the embedding
+                # dimension
+                torch.nn.LazyBatchNorm2d(),
+                # Rearrange from channels-first back to channels-last
+                # sequence-first layout
+                Rearrange("b c ... -> b ... c"),
+            )
+
         # Block of quantized multihead attention where all quantizers share the
         # same quantization bit-width
         self.mha = QuantMultiheadAttention(
@@ -178,7 +195,7 @@ class Attention(torch.nn.Module):
             output_projection_bias_quant=None,
             # Output quantizer of the whole attention operation following the
             # output projection
-            output_quant=act_quantizer(bits),
+            output_quant=None,  # Avoid double quantizer
             # Return the quantization parameters so the next layer can
             # quantize the bias
             return_quant_tensor=False
@@ -212,7 +229,7 @@ class Attention(torch.nn.Module):
     def forward(self, x):
         # Pack multiple sequence/spatial dimensions into a single sequence
         # dimension
-        y, ps = pack([x], "b * d")
+        y, ps = pack([self.pre_norm(x)], "b * d")
         # Compute the self-attention operation on packed tensors
         y = self.mha(y, y, y)
         # Unpack the tensor to continue with the original layer
@@ -335,6 +352,7 @@ class Conv(torch.nn.Module):
             LazyQuantConv2d(
                 emb_dim, bias=bias, kernel_size=(1, 1), **weight_quant
             ),
+            # No output quantizer here, see below, avoid double quantizer...
             # Amount of dropout to apply at the sublayer output
             torch.nn.Dropout(p=dropout),
             # Rearrange from channels-first back to channels-last
