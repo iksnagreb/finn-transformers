@@ -14,7 +14,7 @@ class QuantMultiheadAttention(torch.nn.Module):
     def __init__(
             self,
             # Size of the embedding dimension
-            embed_dim,
+            emb_dim,
             # Number of attention heads to distribute the embeddings to
             num_heads,
             # Enable a bias added to the input and output projections
@@ -61,48 +61,48 @@ class QuantMultiheadAttention(torch.nn.Module):
 
         # (Quantized) Input projections: Linear projections with optional bias
         self.q_projection = brevitas.nn.QuantLinear(
-            embed_dim,
-            embed_dim,
+            emb_dim,
+            emb_dim,
             bias=bias,
             input_quant=input_projection_input_quant,
             weight_quant=input_projection_weight_quant,
             bias_quant=input_projection_bias_quant,
             output_quant=q_quant,
-            return_quant_tensor=(q_quant is not None)
+            return_quant_tensor=False
         )
 
         self.k_projection = brevitas.nn.QuantLinear(
-            embed_dim,
-            embed_dim,
+            emb_dim,
+            emb_dim,
             bias=bias,
             input_quant=input_projection_input_quant,
             weight_quant=input_projection_weight_quant,
             bias_quant=input_projection_bias_quant,
             output_quant=k_quant,
-            return_quant_tensor=(k_quant is not None)
+            return_quant_tensor=False
         )
 
         self.v_projection = brevitas.nn.QuantLinear(
-            embed_dim,
-            embed_dim,
+            emb_dim,
+            emb_dim,
             bias=bias,
             input_quant=input_projection_input_quant,
             weight_quant=input_projection_weight_quant,
             bias_quant=input_projection_bias_quant,
             output_quant=v_quant,
-            return_quant_tensor=(v_quant is not None)
+            return_quant_tensor=False
         )
 
         # (Quantized) Output projection: Linear projection with optional bias
         self.o_projection = brevitas.nn.QuantLinear(
-            embed_dim,
-            embed_dim,
+            emb_dim,
+            emb_dim,
             bias=bias,
             input_quant=output_projection_input_quant,
             weight_quant=output_projection_weight_quant,
             bias_quant=output_projection_bias_quant,
             output_quant=output_quant,
-            return_quant_tensor=return_quant_tensor
+            return_quant_tensor=return_quant_tensor and output_quant is not None
         )
 
         # Quantized softmax normalization of the attention weights
@@ -116,8 +116,7 @@ class QuantMultiheadAttention(torch.nn.Module):
 
         self.split_heads = split_heads
         self.num_heads = num_heads
-        self.embed_dim = embed_dim
-
+        self.embed_dim = emb_dim
 
     def forward(self, query, key, value, mask=None):
         # Apply input projections to query, key and value tensors

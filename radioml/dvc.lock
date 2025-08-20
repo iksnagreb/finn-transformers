@@ -1,0 +1,404 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: bash run.sh python -m radioml.train
+    deps:
+    - path: activations.py
+      hash: md5
+      md5: f528b1e97dfd8b8f2952306a4ccdb5f3
+      size: 298
+    - path: attention.py
+      hash: md5
+      md5: f9dcfe32256c4b182ec97853c29744e8
+      size: 7516
+    - path: blocks.py
+      hash: md5
+      md5: 677a30121ecb28376bd6c2c1c0821d52
+      size: 20337
+    - path: embedding.py
+      hash: md5
+      md5: 7ed092ae5710f20058b64ebbd7215126
+      size: 2698
+    - path: encoding.py
+      hash: md5
+      md5: 481854c553f5991907217d8981931d6c
+      size: 8840
+    - path: lazy.py
+      hash: md5
+      md5: dc8537c6a3615ea74c2d1db381974a55
+      size: 5162
+    - path: quant.py
+      hash: md5
+      md5: 861ee87e24d388efec8bc21cc3df989e
+      size: 1221
+    - path: radioml/dataset.py
+      hash: md5
+      md5: 098d3a3ea30571b048605c4de0818496
+      size: 5248
+    - path: radioml/model.py
+      hash: md5
+      md5: c4a625cc5752727bd3aa8c63c1e7f9ee
+      size: 6929
+    - path: radioml/train.py
+      hash: md5
+      md5: 0e37e92b6a6f7181ca5f7b23f834de7a
+      size: 6892
+    - path: utils.py
+      hash: md5
+      md5: f84dabfd10a04e1bb70b41d6be638042
+      size: 381
+    params:
+      radioml/params.yaml:
+        dataset:
+          signal_to_noise_ratios:
+          - -6
+          - -4
+          - -2
+          - 0
+          - 2
+          - 4
+          - 6
+          - 8
+          - 10
+          - 12
+          - 14
+          - 16
+          - 18
+          - 20
+          - 22
+          - 24
+          - 26
+          - 28
+          - 30
+          splits:
+          - 0.7
+          - 0.15
+          - 0.15
+          seed: 12
+          reshape:
+          - 1
+          - 1024
+          - 2
+        model:
+          num_classes: 24
+          embedding:
+            patches:
+            - 1
+            - 64
+            kernel_size:
+            - 1
+            - 16
+            stride:
+            - 1
+            - 16
+            activation: relu
+            bits:
+          positional: binary
+          configuration: original
+          num_layers: 1
+          num_heads: 4
+          emb_dim: 32
+          expansion_dim: 128
+          bits:
+          activation: relu
+          norm: batch-norm
+          norm_placement: post-norm
+          dropout: 0.0
+        seed: 12
+        tag: baseline
+        train:
+          epochs: 100
+          batch_size: 512
+          optimizer:
+            algorithm: adam
+            lr: 0.001
+            weight_decay: 0.0
+            betas:
+            - 0.9
+            - 0.98
+            eps: 1e-08
+          criterion: cross-entropy
+          scheduler:
+            factor: 0.1
+            patience: 10
+          loader:
+            shuffle: true
+            num_workers: 32
+            prefetch_factor: 4
+            persistent_workers: false
+            pin_memory: true
+            drop_last: true
+    outs:
+    - path: outputs/radioml/loss.yaml
+      hash: md5
+      md5: da5b9180bfa6e0305581d77a5def401f
+      size: 5441
+    - path: outputs/radioml/lr.yaml
+      hash: md5
+      md5: 7f88729195900c0406da086b214fdcc6
+      size: 2097
+    - path: outputs/radioml/model.pt
+      hash: md5
+      md5: 5656a401d61953fae7e381818e56b5e8
+      size: 71696
+    - path: outputs/radioml/optimizer.pt
+      hash: md5
+      md5: 6053b7525d2e92ce1f3fcdaebbe0882b
+      size: 131641
+  eval:
+    cmd: bash run.sh python -m radioml.eval
+    deps:
+    - path: activations.py
+      hash: md5
+      md5: f528b1e97dfd8b8f2952306a4ccdb5f3
+      size: 298
+    - path: attention.py
+      hash: md5
+      md5: f9dcfe32256c4b182ec97853c29744e8
+      size: 7516
+    - path: blocks.py
+      hash: md5
+      md5: 677a30121ecb28376bd6c2c1c0821d52
+      size: 20337
+    - path: embedding.py
+      hash: md5
+      md5: 7ed092ae5710f20058b64ebbd7215126
+      size: 2698
+    - path: encoding.py
+      hash: md5
+      md5: 481854c553f5991907217d8981931d6c
+      size: 8840
+    - path: lazy.py
+      hash: md5
+      md5: dc8537c6a3615ea74c2d1db381974a55
+      size: 5162
+    - path: outputs/radioml/model.pt
+      hash: md5
+      md5: 5656a401d61953fae7e381818e56b5e8
+      size: 71696
+    - path: quant.py
+      hash: md5
+      md5: 861ee87e24d388efec8bc21cc3df989e
+      size: 1221
+    - path: radioml/dataset.py
+      hash: md5
+      md5: 098d3a3ea30571b048605c4de0818496
+      size: 5248
+    - path: radioml/eval.py
+      hash: md5
+      md5: 98755020c249a4ccf747167552a4b265
+      size: 4151
+    - path: radioml/model.py
+      hash: md5
+      md5: c4a625cc5752727bd3aa8c63c1e7f9ee
+      size: 6929
+    - path: utils.py
+      hash: md5
+      md5: f84dabfd10a04e1bb70b41d6be638042
+      size: 381
+    params:
+      radioml/params.yaml:
+        dataset:
+          signal_to_noise_ratios:
+          - -6
+          - -4
+          - -2
+          - 0
+          - 2
+          - 4
+          - 6
+          - 8
+          - 10
+          - 12
+          - 14
+          - 16
+          - 18
+          - 20
+          - 22
+          - 24
+          - 26
+          - 28
+          - 30
+          splits:
+          - 0.7
+          - 0.15
+          - 0.15
+          seed: 12
+          reshape:
+          - 1
+          - 1024
+          - 2
+        eval:
+          batch_size: 512
+          loader:
+            num_workers: 8
+            prefetch_factor: 8
+            pin_memory: true
+            drop_last: false
+        model:
+          num_classes: 24
+          embedding:
+            patches:
+            - 1
+            - 64
+            kernel_size:
+            - 1
+            - 16
+            stride:
+            - 1
+            - 16
+            activation: relu
+            bits:
+          positional: binary
+          configuration: original
+          num_layers: 1
+          num_heads: 4
+          emb_dim: 32
+          expansion_dim: 128
+          bits:
+          activation: relu
+          norm: batch-norm
+          norm_placement: post-norm
+          dropout: 0.0
+        seed: 12
+        tag: baseline
+    outs:
+    - path: outputs/radioml/accuracy.yaml
+      hash: md5
+      md5: 8a64518e49aa73288007a07ad7c586ce
+      size: 52
+    - path: outputs/radioml/classes.csv
+      hash: md5
+      md5: c151c9a78d29a58d4e804564fc70a5b0
+      size: 1437838
+  export:
+    cmd: python -m radioml.export
+    deps:
+    - path: activations.py
+      hash: md5
+      md5: f528b1e97dfd8b8f2952306a4ccdb5f3
+      size: 298
+    - path: attention.py
+      hash: md5
+      md5: f9dcfe32256c4b182ec97853c29744e8
+      size: 7516
+    - path: blocks.py
+      hash: md5
+      md5: 677a30121ecb28376bd6c2c1c0821d52
+      size: 20337
+    - path: embedding.py
+      hash: md5
+      md5: 7ed092ae5710f20058b64ebbd7215126
+      size: 2698
+    - path: encoding.py
+      hash: md5
+      md5: 481854c553f5991907217d8981931d6c
+      size: 8840
+    - path: lazy.py
+      hash: md5
+      md5: dc8537c6a3615ea74c2d1db381974a55
+      size: 5162
+    - path: outputs/radioml/model.pt
+      hash: md5
+      md5: 5656a401d61953fae7e381818e56b5e8
+      size: 71696
+    - path: quant.py
+      hash: md5
+      md5: 861ee87e24d388efec8bc21cc3df989e
+      size: 1221
+    - path: radioml/dataset.py
+      hash: md5
+      md5: 098d3a3ea30571b048605c4de0818496
+      size: 5248
+    - path: radioml/export.py
+      hash: md5
+      md5: f4d39eda3436eecc8fe761ca3e19b385
+      size: 2993
+    - path: radioml/model.py
+      hash: md5
+      md5: c4a625cc5752727bd3aa8c63c1e7f9ee
+      size: 6929
+    - path: utils.py
+      hash: md5
+      md5: f84dabfd10a04e1bb70b41d6be638042
+      size: 381
+    params:
+      radioml/params.yaml:
+        dataset:
+          signal_to_noise_ratios:
+          - -6
+          - -4
+          - -2
+          - 0
+          - 2
+          - 4
+          - 6
+          - 8
+          - 10
+          - 12
+          - 14
+          - 16
+          - 18
+          - 20
+          - 22
+          - 24
+          - 26
+          - 28
+          - 30
+          splits:
+          - 0.7
+          - 0.15
+          - 0.15
+          seed: 12
+          reshape:
+          - 1
+          - 1024
+          - 2
+        export:
+          split_heads: false
+          opset_version: 18
+          do_constant_folding: true
+          batch_size: 1
+          dynamo: false
+          external_data: false
+          optimize: false
+        model:
+          num_classes: 24
+          embedding:
+            patches:
+            - 1
+            - 64
+            kernel_size:
+            - 1
+            - 16
+            stride:
+            - 1
+            - 16
+            activation: relu
+            bits:
+          positional: binary
+          configuration: original
+          num_layers: 1
+          num_heads: 4
+          emb_dim: 32
+          expansion_dim: 128
+          bits:
+          activation: relu
+          norm: batch-norm
+          norm_placement: post-norm
+          dropout: 0.0
+        seed: 12
+        tag: baseline
+    outs:
+    - path: outputs/radioml/inp.npy
+      hash: md5
+      md5: 08b8f0b2fe790382c0e49b84bcdb78d7
+      size: 8320
+    - path: outputs/radioml/model.onnx
+      hash: md5
+      md5: 43ad2a297d7ee8a20ae96b77a88929f7
+      size: 75104
+    - path: outputs/radioml/out.npy
+      hash: md5
+      md5: 6f6ad8855db562a804c48cfde8d276d8
+      size: 136

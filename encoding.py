@@ -3,6 +3,9 @@ import torch
 # Quantized versions of PyTorch components
 import brevitas.nn
 
+# Uses np.prod below to flatten all sequence/spatial dimensions
+import numpy as np
+
 
 # Quantized sinusoidal positional encoding layer
 class QuantSinusoidalPositionalEncoding(torch.nn.Module):
@@ -24,8 +27,11 @@ class QuantSinusoidalPositionalEncoding(torch.nn.Module):
     # Forward pass adding positional encoding to the input tensor
     def forward(self, x):
         # Get the size of the inputs to dynamically generate encodings of the
-        # same size
-        _, seq, emb = x.shape
+        # same size: Captures multiple sequence (actually spatial) dimensions
+        _, *seq, emb = x.shape
+        # Flatten all sequence/spatial dimensions to only have to enumerate the
+        # position for a single axis
+        seq = np.prod(seq)
         # Start by enumerating all steps of the sequence
         i = torch.as_tensor([[n] for n in range(seq)])
         # Scale factor adjusting the frequency/wavelength of the sinusoid
@@ -37,7 +43,7 @@ class QuantSinusoidalPositionalEncoding(torch.nn.Module):
         pos[:, 0::2] = torch.sin(f * i)
         pos[:, 1::2] = torch.cos(f * i)
         # Move the encoding tensor to the same device as the input tensor
-        pos = pos.to(x.device, torch.float32)
+        pos = pos.to(x.device, torch.float32).reshape(x.shape[1:])
         # Add the quantized encoding to the quantized input
         return self.add(x, pos)
 
@@ -47,8 +53,7 @@ class QuantLearnedPositionalEncoding(torch.nn.Module):
     # Initializes the model and registers the module parameters
     def __init__(
             self,
-            seq_len,
-            emb_dim,
+            shape,
             input_quant,
             output_quant,
             return_quant_tensor
@@ -67,7 +72,7 @@ class QuantLearnedPositionalEncoding(torch.nn.Module):
         )
         # Register a parameter tensor representing the not quantized positional
         # encoding
-        self.pos = torch.nn.Parameter(torch.empty(seq_len, emb_dim))
+        self.pos = torch.nn.Parameter(torch.empty(shape))
         # Reset/Initialize the parameter tensor
         self.reset_parameters()
 
@@ -99,7 +104,7 @@ class LazyQuantLearnedPositionalEncoding(
     def __init__(self, input_quant, output_quant, return_quant_tensor):
         # Initialize the quantizer parts of QuantLearnedPositionalEncoding,
         # leaving the dimensions empty
-        super().__init__(0, 0, input_quant, output_quant, return_quant_tensor)
+        super().__init__((), input_quant, output_quant, return_quant_tensor)
         # Register an uninitialized parameter tensor for the positional encoding
         self.pos = torch.nn.UninitializedParameter()
 
@@ -118,10 +123,10 @@ class LazyQuantLearnedPositionalEncoding(
             # Do not accumulate gradient information from initialization
             with torch.no_grad():
                 # Get the size of the inputs to generate encodings of the same
-                # size
-                _, seq, emb = x.shape
+                # size: Captures multiple sequence (actually spatial) dimensions
+                _, *dims = x.shape
                 # Materialize the positional encoding parameter tensor
-                self.pos.materialize((seq, emb))
+                self.pos.materialize(dims)
                 # Properly initialize the parameters by resetting the values
                 self.reset_parameters()
 
@@ -146,15 +151,44 @@ class QuantBinaryPositionalEncoding(torch.nn.Module):
     # Forward pass adding positional encoding to the input tensor
     def forward(self, x):
         # Get the size of the inputs to dynamically generate encodings of the
-        # same size
-        _, seq, emb = x.shape
+        # same size: Captures multiple sequence (actually spatial) dimensions
+        _, *seq, emb = x.shape
+        # Flatten all sequence/spatial dimensions to only have to enumerate the
+        # position for a single axis
+        seq = np.prod(seq)
         # Binary positional encoding fills the embedding dimension with the bit
         # pattern corresponding to the position in the sequence
         pos = torch.as_tensor([
             [(n & (1 << bit)) >> bit for bit in range(emb)] for n in range(seq)
         ])
         # Move the encoding tensor to the same device as the input tensor
-        pos = pos.to(x.device, dtype=torch.float32)
-        # Add the quantized encoding tp the quantized input
+        pos = pos.to(x.device, dtype=torch.float32).reshape(x.shape[1:])  # noqa
+        # Add the quantized encoding to the quantized input
         #   Note: Convert encoding to bipolar representation
         return self.add(x, 2 * pos - 1)
+
+
+# Activation quantizer configuration generator
+from quant import act_quantizer
+
+
+# Constructs a positional encoding layer by key and quantization settings
+def get_positional(key, bits=None, return_quant_tensor=False):
+    # Cannot return the quantized tensor if there is no quantization...
+    return_quant_tensor = return_quant_tensor and (bits is not None)
+    # Look up named positional encoding layers and insert quantizer
+    # configuration
+    return {
+        "none": brevitas.nn.QuantIdentity(
+            act_quantizer(bits), return_quant_tensor=return_quant_tensor
+        ),
+        "sinusoidal": QuantSinusoidalPositionalEncoding(
+            act_quantizer(bits), None, return_quant_tensor=return_quant_tensor
+        ),
+        "binary": QuantBinaryPositionalEncoding(
+            act_quantizer(bits), None, return_quant_tensor=return_quant_tensor
+        ),
+        "learned": LazyQuantLearnedPositionalEncoding(
+            act_quantizer(bits), None, return_quant_tensor=return_quant_tensor
+        ),
+    }[key]
