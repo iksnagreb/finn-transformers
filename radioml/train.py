@@ -19,7 +19,8 @@ from radioml.dataset import get_datasets
 from utils import seed
 
 # Path to the RadioML dataset
-RADIOML_PATH = os.environ["RADIOML_PATH"]
+# RADIOML_PATH = os.environ["RADIOML_PATH"]
+RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 
 
 # Gets an optimizer instance according to configuration and register the model

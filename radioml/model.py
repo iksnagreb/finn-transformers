@@ -3,6 +3,9 @@ import torch
 # Brevitas quantized equivalents of PyTorch layers
 from brevitas.nn import QuantIdentity
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Lazy initialization versions of Brevitas layers
 from lazy import LazyQuantLinear
 # Quantized positional encoding variants
@@ -16,6 +19,8 @@ from blocks import BLOCKS
 from einops import pack, unpack
 # Einops layers for rearranging data with convenient Einstein notation
 from einops.layers.torch import Rearrange
+
+
 
 # Original configuration of the Transformer-encoder according to Vaswani et al.
 # 2017

@@ -52,6 +52,55 @@ model:
   # Dropout: probability of an element to be zeroed during training
   dropout: 0.0
 # Training/Validation dataset configuration
+model_int8:
+  # Number of output classes to predict (default 24 RadioML classes)
+  num_classes: 24
+  # Configuration of the initial patch-embedding layer
+  embedding:
+    # Number of patches to aggregate the feature map into
+    patches: [ 1, 64 ]
+    # Kernel size for sliding windows generating the patches
+    kernel_size: [ 1, 16 ]
+    # Stride of the sliding windows
+    stride: [ 1, 16 ]
+    # Activation functions to use after the convolution layer
+    #   Options: tanh, sigmoid, relu, gelu, silu, none
+    activation: relu
+    # Number of quantization bits for weights and activations of the embedding
+    # layer, null means no quantization
+    bits: 8
+  # Type of positional encoding to use at the input (following the embedding)
+  #   Options are: none, sinusoidal, binary, learned
+  positional: binary
+  # List of layers configuring the encoder stack: Either a string referring to a
+  # pre-defined configuration or a list of individual layer configurations
+  configuration: original
+  # Number of layers, i.e., stacked repetitions of the encoder configuration
+  # above
+  num_layers: 1
+  # Number of attention heads
+  num_heads: 4
+  # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
+  # convolution, etc.
+  emb_dim: 32
+  # Expanded embedding dimension in MLP or convolution blocks, usually this is
+  # related to the embedding dimension as 4 * emb_dim
+  expansion_dim: 128
+  # Number of quantization bits for weights and activations (for all
+  # intermediate layers), null means no quantization
+  bits: null
+  # Activation functions to use after convolution and linear layers
+  #   Options: tanh, sigmoid, relu, gelu, silu
+  activation: relu
+  # Normalization layer preceding or following each block
+  #   Options: batch-norm, layer-norm, none
+  norm: batch-norm
+  # Placement of the normalization layer: pre-norm or post-norm, if norm is not
+  # none
+  norm_placement: post-norm
+  # Dropout: probability of an element to be zeroed during training
+  dropout: 0.0
+# Training/Validation dataset configuration
 dataset:
   # Optionally select only a subset of the classes
   #  classes: null
@@ -71,7 +120,7 @@ dataset:
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 100
+  epochs: 1
   # Batch size for training
   batch_size: 512
   # Optimizer configuration

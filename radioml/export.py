@@ -22,7 +22,9 @@ from attention import QuantMultiheadAttention
 from utils import seed
 
 # Path to the RadioML dataset
-RADIOML_PATH = os.environ["RADIOML_PATH"]
+# RADIOML_PATH = os.environ["RADIOML_PATH"]
+RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
 
 # Exports the model to ONNX in conjunction with an input-output pair for
@@ -59,6 +61,37 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     # Save the input and output data for verification purposes later
     np.save("outputs/radioml/inp.npy", inp.numpy())
     np.save("outputs/radioml/out.npy", out.numpy())
+
+    # Standard ONNX export for reference - works with dynamic batch sizes
+    onnx_path = "outputs/radioml/model_dynamic_batchsize.onnx"
+    torch.onnx.export(
+        model,
+        (inp,),
+        onnx_path,
+        export_params=True,
+        opset_version=17,
+        do_constant_folding=True,
+        input_names=['input'],
+        output_names=['output'],
+        dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
+    )
+    print(f"Modell als ONNX exportiert: {onnx_path}")
+
+
+    # Brevitas 8Bit export - problem: nicht möglich mit dynamischen batch-sizes, 
+    # wenn man es im nachinein patched sind die reshapes noch statisch -> funktioniert nicht mit tensorrt
+
+    for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
+        from brevitas.export import export_onnx_qcdq
+        dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
+        export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
+        export_onnx_qcdq(
+            model, 
+            (dummy_input,), # mal gucken ob das ein problem ist, vorher war es ein festes dummy input aber da haben die dimensionen auch nicht gepasst
+            export_path=export_path,
+            opset_version=17
+        )
+        print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
 
 # Script entrypoint

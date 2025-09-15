@@ -147,4 +147,134 @@ stages:
       # Model verification input/output samples from the RadioML dataset
       - outputs/radioml/inp.npy
       - outputs/radioml/out.npy
+      - outputs/radioml/model_dynamic_batchsize.onnx
   # TODO: FINN-build and deployment stages...
+  measure_32FP:
+    wdir: ..
+    cmd: FP16=0 python radioml/measure.py
+    deps:
+      - outputs/radioml/model_dynamic_batchsize.onnx
+      - radioml/measure.py
+      - radioml/export.py
+    plots:
+     -  outputs/radioml/throughput/FP32/throughput_results.json:
+         template: plot_templates/bar_2.json
+         x: batch_size
+         y: throughput_batches_per_s
+         cache: false
+     - outputs/radioml/throughput/FP32/throughput_results_2.json:
+         template: plot_templates/bar_1.json
+         x: batch_size
+         y: throughput_images_per_s
+         cache: false
+     - outputs/radioml/throughput/FP32/latency_results.json:
+         template: plot_templates/bar_3.json
+         x: batch_size
+         y: value
+         cache: false
+     - outputs/radioml/throughput/FP32/latency_results_batch.json:
+         template: plot_templates/bar_4.json
+         x: batch_size
+         y: value
+         cache: false
+  measure_16FP:
+    wdir: ..
+    cmd: FP16=1 python radioml/measure.py
+    deps:
+      - outputs/radioml/model_dynamic_batchsize.onnx
+      - radioml/measure.py
+      - radioml/export.py
+    plots:
+     -  outputs/radioml/throughput/FP16/throughput_results.json:
+         template: plot_templates/bar_2_FP16.json
+         x: batch_size
+         y: throughput_batches_per_s
+         cache: false
+     - outputs/radioml/throughput/FP16/throughput_results_2.json:
+         template: plot_templates/bar_1_FP16.json
+         x: batch_size
+         y: throughput_images_per_s
+         cache: false
+     - outputs/radioml/throughput/FP16/latency_results.json:
+         template: plot_templates/bar_3_FP16.json
+         x: batch_size
+         y: value
+         cache: false
+     - outputs/radioml/throughput/FP16/latency_results_batch.json:
+         template: plot_templates/bar_4_FP16.json
+         x: batch_size
+         y: value
+         cache: false
+  measure_INT8_brevitas:
+    wdir: ..
+    cmd: INT8=1 python radioml/measure.py
+    deps:
+      - radioml/measure.py
+      - plot_templates/bar_1_INT8.json
+      - plot_templates/bar_2_INT8.json
+      - plot_templates/bar_3_INT8.json
+      - plot_templates/bar_4_INT8.json
+    outs:
+      - outputs/radioml/eval_results/accuracy_INT8.json
+    plots:
+     -  outputs/radioml/throughput/INT8/throughput_results.json:
+         template: plot_templates/bar_2_INT8.json
+         x: batch_size
+         y: throughput_batches_per_s
+         cache: false
+     - outputs/radioml/throughput/INT8/throughput_results_2.json:
+         template: plot_templates/bar_1_INT8.json
+         x: batch_size
+         y: throughput_images_per_s
+         cache: false
+     - outputs/radioml/throughput/INT8/latency_results.json:
+         template: plot_templates/bar_3_INT8.json
+         x: batch_size
+         y: value
+         cache: false
+     - outputs/radioml/throughput/INT8/latency_results_batch.json:
+         template: plot_templates/bar_4_INT8.json
+         x: batch_size
+         y: value
+         cache: false
+  measure_INT8_tensorrt:
+    cmd: python radioml/measure_8bit.py
+    deps:
+      - radioml/measure_8bit.py
+      - plot_templates/bar_1_INT8_tensorrt.json
+      - plot_templates/bar_2_INT8_tensorrt.json
+      - plot_templates/bar_3_INT8_tensorrt.json
+      - plot_templates/bar_4_INT8_tensorrt.json
+      - outputs/radioml/engines
+    outs:
+      - eval_results/accuracy_INT8_tensorrt.json
+    plots:
+     -  throughput/INT8_tensorrt/throughput_results.json:
+         template: plot_templates/bar_2_INT8_tensorrt.json
+         x: batch_size
+         y: throughput_batches_per_s
+         cache: false
+     - throughput/INT8_tensorrt/throughput_results_2.json:
+         template: plot_templates/bar_1_INT8_tensorrt.json
+         x: batch_size
+         y: throughput_images_per_s
+         cache: false
+     - throughput/INT8_tensorrt/latency_results.json:
+         template: plot_templates/bar_3_INT8_tensorrt.json
+         x: batch_size
+         y: value
+         cache: false
+     - throughput/INT8_tensorrt/latency_results_batch.json:
+         template: plot_templates/bar_4_INT8_tensorrt.json
+         x: batch_size
+         y: value
+         cache: false
+
+
+         # add measure (without tensorrt int 8 bc. it just works with nonquant layers) and measure energy for radioml
+         # problem: bits=8 für brevitas nötig, RuntimeError: CUDA error: no kernel image is available for execution on the device nachdem train nochmal laufen gelassen wurde (ev. wegen neuen installationen)
+         # welche Bausteine sind gemeint? BERT anpassen
+         # https://github.com/iksnagreb/onnx-passes anschauen
+         # ausprobieren: ob du mit dem "import-qonnx" (siehe demo/quant) ein von Brevitas als QONNX exportiertes Modell mit TensorRT immerhin ausführen kannst
+         # vergleichen: TensorRT so wie du es bisher machst und TensorRT als Execution Provider
+
