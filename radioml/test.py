@@ -1,4 +1,6 @@
-import torch
-print(torch.__version__)
-print(torch.version.cuda)
-print(torch.cuda.get_device_name(0))
+import onnx
+
+model = onnx.load("/home/hanna/git/finn-transformers/outputs/radioml/model_brevitas_1.onnx")
+nodes = [node.op_type for node in model.graph.node]
+from collections import Counter
+print(Counter(nodes))

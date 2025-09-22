@@ -20,6 +20,9 @@ from radioml.dataset import get_datasets
 from attention import QuantMultiheadAttention
 # Seeding RNGs for reproducibility
 from utils import seed
+import onnx
+from onnxsim import simplify
+
 
 # Path to the RadioML dataset
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
@@ -29,20 +32,26 @@ RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
-def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"
     # Move the model to the training device
     model = model.to(device)  # noqa: Shadows model...
+    model_int8 = model_int8.to(device)  # noqa: Shadows model...
     # Set model to evaluation mode
     model = model.eval()  # noqa: Shadows model...
+    model_int8 = model_int8.eval()  # noqa: Shadows model...
 
     # Explicitly splits all attention heads in the model graph to be parallel
     if split_heads:
         # Iterate all modules in the model container and check for instances of
         # quantized multihead attention
         for name, module in model.named_modules():
+            if isinstance(module, QuantMultiheadAttention):
+                # Marks to take the split path next forward call
+                module.split_heads = True
+        for name, module in model_int8.named_modules():
             if isinstance(module, QuantMultiheadAttention):
                 # Marks to take the split path next forward call
                 module.split_heads = True
@@ -85,13 +94,24 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
         from brevitas.export import export_onnx_qcdq
         dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
         export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
+        simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
         export_onnx_qcdq(
-            model, 
-            (dummy_input,), # mal gucken ob das ein problem ist, vorher war es ein festes dummy input aber da haben die dimensionen auch nicht gepasst
+            model_int8, 
+            (dummy_input,), 
             export_path=export_path,
             opset_version=17
         )
         print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+
+        # Lade ONNX-Modell
+        model = onnx.load(export_path)
+        # Simplify mit onnxsim
+        model_simplified, check = simplify(model)
+        if not check:
+            print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+            continue
+        onnx.save(model_simplified, simplified_path)
+        print(f"Simplified gespeichert: {simplified_path}")
 
 
 # Script entrypoint
@@ -102,7 +122,9 @@ if __name__ == "__main__":
     seed(params["seed"])
     # Create a new model instance according to the configuration
     model = Model(**params["model"])
+    model_int8 = Model(**params["model_int8"])
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/radioml/model.pt"))
+    model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt"))
     # Pass the model and the export configuration to the evaluation loop
-    export(model, dataset=params["dataset"], **params["export"])
+    export(model, model_int8, dataset=params["dataset"], **params["export"])

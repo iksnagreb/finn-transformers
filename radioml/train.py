@@ -22,6 +22,9 @@ from utils import seed
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 
+INT8 = os.getenv("INT8", "0")  # Default = "0"
+if INT8 == "1":
+    print("INT8-Modus aktiviert")
 
 # Gets an optimizer instance according to configuration and register the model
 # parameters
@@ -133,11 +136,17 @@ def train(model, batch_size, epochs, criterion, optimizer, loader,  # noqa
 # Script entrypoint
 if __name__ == "__main__":
     # Load the stage parameters from the parameters file
-    params = dvc.api.params_show(stages="radioml/dvc.yaml:train")
+    if INT8 == "1":
+        params = dvc.api.params_show(stages="radioml/dvc.yaml:train_INT8")
+    else:
+        params = dvc.api.params_show(stages="radioml/dvc.yaml:train")
     # Seed all RNGs
     seed(params["seed"])
     # Create a new model instance according to the configuration
-    model = Model(**params["model"])
+    if INT8 == "1":
+        model = Model(**params["model_int8"])
+    else:
+        model = Model(**params["model"])
     # Pass the model and the training configuration to the training loop
     model, optimizer, loss, lr = train(
         model, dataset=params["dataset"], **params["train"]
@@ -145,9 +154,15 @@ if __name__ == "__main__":
     # Create the output directory if it does not already exist
     os.makedirs("outputs/radioml", exist_ok=True)
     # Save the model in PyTorch format
-    torch.save(model.state_dict(), "outputs/radioml/model.pt")
+    if INT8 == "1":
+        torch.save(model.state_dict(), "outputs/radioml/model_int8.pt")
+    else:
+        torch.save(model.state_dict(), "outputs/radioml/model.pt")
     # Save the optimizer state in PyTorch format
-    torch.save(optimizer.state_dict(), "outputs/radioml/optimizer.pt")
+    if INT8 == "1":
+        torch.save(optimizer.state_dict(), "outputs/radioml/optimizer_int8.pt")
+    else:
+        torch.save(optimizer.state_dict(), "outputs/radioml/optimizer.pt")
     # Save the training loss log as YAML
     with open("outputs/radioml/loss.yaml", "w") as file:
         # Dump the training log dictionary as YAML into the file

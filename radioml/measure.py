@@ -70,13 +70,15 @@ def save_json(log, filepath):
 
 def parse_shape(shape, batch_value):
     """Ersetzt 'batch_size' durch batch_value in der shape-Liste."""
+    print("shape:", shape)
     return tuple(
         batch_value if d == "batch_size"
-        else batch_value if (d == 1 and INT8)
+        else 1 if (i == 1 and INT8)  # zweite Dimension immer 1 im INT8-Modus
+        else batch_value if (i == 0 and INT8)
         else 128 if d == "sequence_length"
         else 64 if d == "Muloutput_dim_2"
         else d
-        for d in shape
+        for i, d in enumerate(shape)
     )
 
 
@@ -293,8 +295,6 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     profile = builder.create_optimization_profile()
 
-    model = onnx.load("outputs/radioml/model_brevitas_2.onnx")
-
     for inp in input_info:
         name = inp["name"]
         shape = inp["shape"]
@@ -304,6 +304,11 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         profile.set_shape(name, min_shape, opt_shape, max_shape)
 
     config.add_optimization_profile(profile)
+
+    print(f"Optimization profile for input '{name}':")
+    print(f"  min_shape: {min_shape}")
+    print(f"  opt_shape: {opt_shape}")
+    print(f"  max_shape: {max_shape}")
 
     serialized_engine = builder.build_serialized_network(network, config)
     if serialized_engine is None:
@@ -438,7 +443,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
     for batch_size in batch_sizes:
         if INT8:
-            onnx_model_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
+            onnx_model_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
         test_loader = create_test_dataloader(data_path, batch_size) 
         engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
         device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
@@ -528,7 +533,7 @@ if __name__ == "__main__":
     batch_sizes = [1, 2, 4, 8 , 16, 32, 64, 128, 256, 512, 1024]  
 
     if INT8:
-        onnx_model_path = "outputs/radioml/model_brevitas_1.onnx" 
+        onnx_model_path = "outputs/radioml/model_brevitas_1_simpl.onnx" 
 
 
 

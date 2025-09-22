@@ -53,7 +53,40 @@ stages:
           title: "RadioML Learning Rate per Epoch"
           # Track via git, not dvc cache
           cache: false
-  # Model evaluation stage: Evaluates the trained model on the RadioML dataset
+  train_INT8:
+    # Run the stage relative to the project root directory
+    wdir: ..
+    # Stage runs the training script as the command
+    cmd: INT8=1 bash run.sh python -m radioml.train
+    # Data and code dependencies of this stage to determine when it needs to be
+    # rerun
+    deps:
+      # RadioML case study source files
+      - radioml/model.py
+      - radioml/train.py
+      - radioml/dataset.py
+      # General source files shared by other experiments
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      - utils.py
+    # Parameters from params.yaml used by this stage, changing any of these
+    # triggers a rerun
+    params:
+      - radioml/params.yaml:
+          - tag
+          - seed
+          - model_int8
+          - dataset
+          - train
+    # Outputs produced which should be tracked and passed on to the next stages
+    outs:
+      - outputs/radioml/model_int8.pt
+      - outputs/radioml/optimizer_int8.pt
   eval:
     # Run the stage relative to the project root directory
     wdir: ..
@@ -138,6 +171,7 @@ stages:
           - tag
           - seed
           - model
+          - model_int8
           - dataset
           - export
     # Outputs produced which should be tracked and passed on to the next stages
@@ -237,7 +271,16 @@ stages:
          x: batch_size
          y: value
          cache: false
+  quantize_tensorrt_INT8:
+    wdir: ..
+    cmd: python radioml/quantize_tensorrt.py 
+    deps:
+      - radioml/quantize_tensorrt.py
+      - outputs/radioml/model_dynamic_batchsize.onnx
+    outs:
+      - outputs/radioml/engines
   measure_INT8_tensorrt:
+    wdir: ..
     cmd: python radioml/measure_8bit.py
     deps:
       - radioml/measure_8bit.py
@@ -247,34 +290,83 @@ stages:
       - plot_templates/bar_4_INT8_tensorrt.json
       - outputs/radioml/engines
     outs:
-      - eval_results/accuracy_INT8_tensorrt.json
+      - outputs/radioml/eval_results/accuracy_INT8_tensorrt.json
     plots:
-     -  throughput/INT8_tensorrt/throughput_results.json:
+     -  outputs/radioml/throughput/INT8_tensorrt/throughput_results.json:
          template: plot_templates/bar_2_INT8_tensorrt.json
          x: batch_size
          y: throughput_batches_per_s
          cache: false
-     - throughput/INT8_tensorrt/throughput_results_2.json:
+     - outputs/radioml/throughput/INT8_tensorrt/throughput_results_2.json:
          template: plot_templates/bar_1_INT8_tensorrt.json
          x: batch_size
          y: throughput_images_per_s
          cache: false
-     - throughput/INT8_tensorrt/latency_results.json:
-         template: plot_templates/bar_3_INT8_tensorrt.json
+     - outputs/radioml/throughput/INT8_tensorrt/latency_results.json:
          x: batch_size
          y: value
          cache: false
-     - throughput/INT8_tensorrt/latency_results_batch.json:
+     - outputs/radioml/throughput/INT8_tensorrt/latency_results_batch.json:
          template: plot_templates/bar_4_INT8_tensorrt.json
          x: batch_size
          y: value
          cache: false
+  accuracy_comparison:
+    wdir: ..
+    cmd: python radioml/accuracy_comparison.py
+    deps:
+      - radioml/accuracy_comparison.py
+      - outputs/radioml/eval_results/accuracy_FP32.json
+      - outputs/radioml/eval_results/accuracy_FP16.json
+      - outputs/radioml/eval_results/accuracy_INT8.json
+      - outputs/radioml/eval_results/accuracy_INT8_tensorrt.json
+    plots:
+     -  outputs/radioml/eval_results/accuracy.json:
+         template: plot_templates/bar_accuracy.json
+         x: quantisation_type
+         y: value
+         cache: false
+  energy_measure:
+    wdir: ..
+    cmd: python radioml/energy_tegrastats.py
+    deps:
+      - radioml/energy_tegrastats.py
+      - radioml/parse_tegrastats_to_json.py
+    outs:
+      - outputs/radioml/energy_metrics/tegrastats.log
+      - outputs/radioml/energy_metrics/energy_metrics.json
+      - outputs/radioml/energy_metrics/ram_metrics_2.json
+      - outputs/radioml/energy_metrics/energy_consumption_2.json
+    plots:
+     -  outputs/radioml/energy_metrics/ram_metrics.json:
+          template: plot_templates/ram_used.json
+          x: timestamp
+          y: ram_used
+          cache: false
+     -  outputs/radioml/energy_metrics/energy_consumption.json:
+          template: plot_templates/energy_consumption.json
+          x: timestamp
+          y: value
+          cache: false
 
 
          # add measure (without tensorrt int 8 bc. it just works with nonquant layers) and measure energy for radioml
-         # problem: bits=8 für brevitas nötig, RuntimeError: CUDA error: no kernel image is available for execution on the device nachdem train nochmal laufen gelassen wurde (ev. wegen neuen installationen)
+         # problem: bits=8 für brevitas nötig, "RuntimeError: CUDA error: no kernel image is available for execution on the device" nachdem train nochmal laufen gelassen wurde (evtl. wegen neuen installationen)
+         # Christoph fragen - Version von torch muss für measure 2.6 sein, aber für train 2.8?
+
+
          # welche Bausteine sind gemeint? BERT anpassen
+         # keine quantize/dequantize layer mehr - die hatte ich in meinem modell sowieso nicht drin
+         # stattdessen lazyquantlinear und lazydequantlinear nutzen? aber mt dem bert mache ich das ja eh anders mit pretrained model und mit diesem Beispielcode von brevitas, bits parameter nutzen?
+         # benchmark modell anschauen - soll da auch measure laufen?
+ 
+
+
+
          # https://github.com/iksnagreb/onnx-passes anschauen
          # ausprobieren: ob du mit dem "import-qonnx" (siehe demo/quant) ein von Brevitas als QONNX exportiertes Modell mit TensorRT immerhin ausführen kannst
+
+
+         
          # vergleichen: TensorRT so wie du es bisher machst und TensorRT als Execution Provider
 
