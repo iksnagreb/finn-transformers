@@ -317,9 +317,15 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             else:
                 raise ValueError("Unerwartete Batch-Größe!", len(batch))
             
+            start_time_datatransfer = time.time()  # Startzeit        
+
             dtype = onnx_dtype_to_torch(input_info[0]["dtype"])
 
             input_name = input_info[0]["name"]
+
+
+            xb = xb.view(xb.shape[0], 1, 1024, 2)
+
             device_input.copy_(xb.to(dtype))
             context.set_tensor_address(input_name, device_input.data_ptr())
             context.set_input_shape(input_name, device_input.shape)
@@ -337,6 +343,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
                 context.set_input_shape(token_type_name, device_token_type.shape)
 
             output_name = output_info[0]["name"]
+            context.set_tensor_address(output_name, device_output.data_ptr()) 
             context.set_tensor_address(output_name, device_output.data_ptr()) 
 
             
@@ -399,7 +406,7 @@ if __name__ == "__main__":
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
 
-    tegrastats_log = Path(__file__).resolve().parent / "outputs" / "radioml" / "energy_metrics" / "tegrastats.log"
+    tegrastats_log = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / "tegrastats.log"
 
     # tegrastats starten
     tegra_proc = start_tegrastats(tegrastats_log)
