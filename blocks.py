@@ -137,6 +137,9 @@ class Attention(torch.nn.Module):
             bits=None,
             # Dropout: probability of an element to be zeroed during training
             dropout=0.0,
+            # Inserts an additional input quantizer, e.g. when the block is used
+            # as the first block of the model
+            input_quant=False,
             # Catches all remaining, unused configuration options...
             **_
     ):
@@ -144,6 +147,12 @@ class Attention(torch.nn.Module):
 
         # Not support for other than batch normalization for now...
         assert norm in {"batch-norm", "none", None}, f"Unsupported norm: {norm}"
+
+        # Optional input quantizer in front of the entire block
+        self.input_quant = torch.nn.Identity()
+
+        if input_quant and bits is not None:
+            self.input_quant = QuantIdentity(bit_width=bits)
 
         # Default identity pre-norm will be overwritten below if configured
         self.pre_norm = torch.nn.Identity()
@@ -231,7 +240,7 @@ class Attention(torch.nn.Module):
     def forward(self, x):
         # Pack multiple sequence/spatial dimensions into a single sequence
         # dimension
-        x, ps = pack([x], "b * d")
+        x, ps = pack([self.input_quant(x)], "b * d")
         # Apply pre-norm normalization once on the query, key and value input
         # before forking
         y = self.pre_norm(x)

@@ -20,6 +20,9 @@ model:
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: 8
+  # Insert a quantizer at the input of the block: As the attention block is
+  # tested in isolation there is no other quantizer before this
+  input_quant: true
 # Calibration dataset configuration
 dataset:
   # Range for input values

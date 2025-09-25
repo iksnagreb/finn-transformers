@@ -21,8 +21,8 @@ stages:
       size: 136
     - path: blocks.py
       hash: md5
-      md5: 61cb22fba566aa9cc8c9ca39c43cf496
-      size: 21569
+      md5: 2879ba4272f420bb191b6e78df002568
+      size: 21964
     - path: embedding.py
       hash: md5
       md5: 7ed092ae5710f20058b64ebbd7215126
@@ -67,6 +67,7 @@ stages:
           norm: batch-norm
           norm_placement: post-norm
           bits: 8
+          input_quant: true
         seed: 12
         tag: benchmark
     outs:
@@ -76,9 +77,9 @@ stages:
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: 1a9b8511c7575e78363c82af492f1e2b
-      size: 34687
+      md5: 4896266c692fe0eb082fc5f19ccee475
+      size: 34913
     - path: outputs/benchmark/out.npy
       hash: md5
-      md5: 5214433e4a4f1d1127896c8f37516497
+      md5: 1ded6b66c03bf240fca5bdb391f1ec6e
       size: 8320
