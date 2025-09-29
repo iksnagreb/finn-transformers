@@ -98,6 +98,7 @@ def build_int8_engine(engine_path, onnx_model_path, calib_loader, batch_size, ca
 if __name__ == "__main__":
     params = dvc.api.params_show(stages="radioml/dvc.yaml:quantize_tensorrt_INT8")
     batch_sizes = params["batch_sizes"]
+    print("quantize tensorrt")
 
 
     for batch_size in batch_sizes:

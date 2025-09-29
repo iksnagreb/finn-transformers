@@ -383,6 +383,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             total = len(yb)
             correct_predictions += correct
             total_predictions += total
+            
 
     accuracy = 0
     if accuracy_flag:
@@ -394,7 +395,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
 def start_tegrastats(logfile_path: Path):
     # tegrastats im Hintergrund starten, Ausgabe in Logdatei
-    proc = subprocess.Popen(['sudo', 'tegrastats'], stdout=open(logfile_path, 'w'))
+    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '10'], stdout=open(logfile_path, 'w'))
     return proc
 
 def stop_tegrastats(proc: subprocess.Popen):
@@ -411,6 +412,9 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
 
     
     tegra_proc = start_tegrastats(tegrastats_log)
+
+    time.sleep(10)
+
     
         
     for i in range(2):
@@ -428,6 +432,8 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
                     output_info=output_info,
                     accuracy_flag=True
                 )
+
+    time.sleep(10)
 
     stop_tegrastats(tegra_proc)
 
@@ -462,4 +468,7 @@ if __name__ == "__main__":
         tegrastats_logs.append((tegrastats_log, batch_size))
 
     parse_tegrastats_to_json.parse_tegrastats(tegrastats_logs)
+
+
+    # vorher und nachher
 
