@@ -11,3 +11,4 @@ onnx==1.17.0
 pycuda
 onnxconverter-common == 1.15.0
 onnxruntime == 0.3.13
+onnxsim

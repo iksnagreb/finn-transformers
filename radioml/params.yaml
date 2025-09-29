@@ -3,6 +3,7 @@ tag: baseline
 # Global seed to make evaluation reproducible
 seed: 12
 # Model hyperparameters: ...
+batch_sizes: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 model:
   # Number of output classes to predict (default 24 RadioML classes)
   num_classes: 24

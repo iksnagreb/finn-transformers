@@ -8,6 +8,10 @@ import pycuda.autoinit
 import os
 import h5py
 import yaml
+import dvc.api
+
+RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+
 
 # ---- Kalibrator-Klasse für RadioML ----
 class MyEntropyCalibrator(trt.IInt8EntropyCalibrator2):
@@ -92,11 +96,13 @@ def build_int8_engine(engine_path, onnx_model_path, calib_loader, batch_size, ca
 
 
 if __name__ == "__main__":
-    batch_sizes = [1,2,4,8,16,32,64,128,256,512,1024]
+    params = dvc.api.params_show(stages="radioml/dvc.yaml:quantize_tensorrt_INT8")
+    batch_sizes = params["batch_sizes"]
+
 
     for batch_size in batch_sizes:
         onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
-        RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+        
 
         calib_loader = create_calib_dataloader(RADIOML_PATH, batch_size)
         engine_name = f"radioml_int8_{batch_size}.engine"

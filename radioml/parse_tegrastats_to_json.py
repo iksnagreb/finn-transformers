@@ -1,12 +1,14 @@
-def parse_tegrastats(input_log="tegrastats.log"):
+def parse_tegrastats(input_logs):
+    # input logs besteht aus tegrastats_log, batch_size tuples
+    # in jedem eintrag der output dateien soll als zusätzlicher key der batch_size wert stehen
     import re
     import json
     from datetime import datetime
     from pathlib import Path
 
     base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics"
-    input_log = base_path / "tegrastats.log"
-    output_json_full = base_path / "energy_metrics.json"
+    input_log = base_path / f"tegrastats.log"
+    output_json_full = base_path /"energy_metrics.json"
     output_json_simple = base_path / "ram_metrics.json"
     output_json_simple2 = base_path / "ram_metrics_2.json"
     output_json_energy = base_path / "energy_consumption.json" 
@@ -70,39 +72,44 @@ def parse_tegrastats(input_log="tegrastats.log"):
     simple_data = []
     energy_data = []
 
-    with open(input_log, "r") as f:
-        for line in f:
-            parsed = parse_tegrastats_line(line)
-            if parsed:
-                parsed_data.append(parsed)
+    for tegrastats_log, batch_size in input_logs:
+        with open(tegrastats_log, "r") as f:
+            for line in f:
+                parsed = parse_tegrastats_line(line)
+                if parsed:
+                    parsed_data.append(parsed)
 
-                # RAM vereinfachte Daten
-                if "timestamp" in parsed and "ram_used" in parsed and "ram_total" in parsed:
-                    simple_data.append({
-                        "timestamp": parsed["timestamp"],
-                        "ram_used": parsed["ram_used"],
-                        "ram_total": parsed["ram_total"]
-                    })
+                    # RAM vereinfachte Daten
+                    if "timestamp" in parsed and "ram_used" in parsed and "ram_total" in parsed:
+                        simple_data.append({
+                            "timestamp": parsed["timestamp"],
+                            "ram_used": parsed["ram_used"],
+                            "ram_total": parsed["ram_total"],
+                            "batch_size": batch_size
+                        })
 
-                # Energy-Daten in einzelne Objekte splitten
-                if all(k in parsed for k in ["vdd_gpu_soc", "vdd_cpu_cv", "vin_sys_5v0"]):
-                    energy_data.extend([
-                        {
-                            "timestamp": parsed["timestamp"],
-                            "type": "vdd_gpu_soc",
-                            "value": parsed["vdd_gpu_soc"]
-                        },
-                        {
-                            "timestamp": parsed["timestamp"],
-                            "type": "vdd_cpu_cv",
-                            "value": parsed["vdd_cpu_cv"]
-                        },
-                        {
-                            "timestamp": parsed["timestamp"],
-                            "type": "vin_sys_5v0",
-                            "value": parsed["vin_sys_5v0"]
-                        }
-                    ])
+                    # Energy-Daten in einzelne Objekte splitten
+                    if all(k in parsed for k in ["vdd_gpu_soc", "vdd_cpu_cv", "vin_sys_5v0"]):
+                        energy_data.extend([
+                            {
+                                "timestamp": parsed["timestamp"],
+                                "type": "vdd_gpu_soc",
+                                "value": parsed["vdd_gpu_soc"],
+                                "batch_size": batch_size
+                            },
+                            {
+                                "timestamp": parsed["timestamp"],
+                                "type": "vdd_cpu_cv",
+                                "value": parsed["vdd_cpu_cv"],
+                                "batch_size": batch_size
+                            },
+                            {
+                                "timestamp": parsed["timestamp"],
+                                "type": "vin_sys_5v0",
+                                "value": parsed["vin_sys_5v0"],
+                                "batch_size": batch_size
+                            }
+                        ])
 
     # Speichern
     with open(output_json_full, "w") as f:

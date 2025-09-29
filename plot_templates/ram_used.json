@@ -3,6 +3,11 @@
   "title": "RAM Usage Over Time",
   "description": "Line plot showing RAM used over time.",
   "data": {"values": "<DVC_METRIC_DATA>"},
+  "transform": [
+    {
+      "filter": "datum.batch_size === 1"
+    }
+  ],
   "mark": "line",
   "encoding": {
     "x": {

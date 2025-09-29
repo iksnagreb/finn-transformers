@@ -17,12 +17,15 @@ from torch.utils.data import TensorDataset, DataLoader
 import pycuda.driver as cuda
 cuda.init()
 device = cuda.Device(0)
-cfx = device.make_context()
+
 import os
 import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
 import parse_tegrastats_to_json
+import dvc.api
+
+RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
 
 # tensorrt, datasets(hugging face), pycuda
@@ -129,14 +132,14 @@ def get_model_io_info(model_path):
     return input_info, output_info
 
 
-def create_test_dataloader(data_path, batch_size):
+def create_test_dataloader(RADIOML_PATH_NPZ, batch_size):
     """
     Erstellt den DataLoader für die Testdaten.
-    :param data_path: Pfad zur Testdaten-Datei.
+    :param RADIOML_PATH_NPZ: Pfad zur Testdaten-Datei.
     :param batch_size: Die Batchgröße.
     :return: DataLoader-Objekt für die Testdaten.
     """
-    data = np.load(data_path)
+    data = np.load(RADIOML_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
     if len(input_info) == 2:
@@ -264,7 +267,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config = builder.create_builder_config()
     
-    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
+    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 30)
 
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
@@ -294,7 +297,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     return engine, context
 
 
-def run_inference(context, test_loader, device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, batch_size=1, input_info=None, output_info=None, accuracy_flag=False):
+def run_inference(context, test_loader, device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, batch_size=1, input_info=None, output_info=None, accuracy_flag=False, cfx=None):
     """
     Funktion zur Bestimmung der Inferenzlatenz.
     """
@@ -304,6 +307,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     correct_predictions = 0
     for i in range(2):
         for batch in test_loader: 
+            
             # je nach Aufbau des Modells: mit Attention Mask oder ohne
             if len(batch) == 2:
                 xb, yb = batch
@@ -330,6 +334,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             context.set_tensor_address(input_name, device_input.data_ptr())
             context.set_input_shape(input_name, device_input.shape)
 
+
             if att_mask is not None:
                 att_mask_name = input_info[1]["name"]
                 device_attention_mask.copy_(att_mask.to(dtype))
@@ -343,7 +348,6 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
                 context.set_input_shape(token_type_name, device_token_type.shape)
 
             output_name = output_info[0]["name"]
-            context.set_tensor_address(output_name, device_output.data_ptr()) 
             context.set_tensor_address(output_name, device_output.data_ptr()) 
 
             
@@ -389,62 +393,86 @@ def stop_tegrastats(proc: subprocess.Popen):
         proc.kill()
 
 if __name__ == "__main__":
-    onnx_model_path = "/home/hanna/git/finn-transformers/outputs/radioml/model_dynamic_batchsize.onnx"
-    data_path = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
-    batch_size = 1
+    # onnx_model_path = "/home/hanna/git/finn-transformers/outputs/radioml/model_dynamic_batchsize.onnx"
+    onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
+    
+    params = dvc.api.params_show(stages="radioml/dvc.yaml:energy_measure_FP32")
+    batch_sizes = params["batch_sizes"]
+
 
     if INT8:
-        onnx_model_path = "/home/hanna/git/finn-transformers/outputs/radioml/model_brevitas_1_simpl.onnx"
+        # onnx_model_path = "/home/hanna/git/finn-transformers/outputs/radioml/model_brevitas_1_simpl.onnx"
+        onnx_model_path = "outputs/radioml/model_brevitas_1_simpl.onnx"
+
+
 
     model = onnx.load(onnx_model_path)
+
+    tegrastats_logs = []
+
     if FP16:
         model = float16.convert_float_to_float16(model)
 
-    input_info, output_info = get_model_io_info(onnx_model_path)
-    test_loader = create_test_dataloader(data_path, 1)
-    engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
-    device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
+    for batch_size in batch_sizes:
 
-    tegrastats_log = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / "tegrastats.log"
+        cfx = device.make_context()
 
-    # tegrastats starten
-    tegra_proc = start_tegrastats(tegrastats_log)
-    time.sleep(2)  # kleine Wartezeit, damit tegrastats sauber startet
-
-    # Inferenz starten
-    _, _, _, accuracy = run_inference(
-        context=context,
-        test_loader=test_loader,
-        device_input=device_input,
-        device_output=device_output,
-        device_attention_mask=device_attention_mask,
-        device_token_type=device_token_type,
-        stream_ptr=stream_ptr,
-        torch_stream=torch_stream,
-        batch_size=batch_size,
-        input_info=input_info,
-        output_info=output_info,
-        accuracy_flag=True
-    )
-
-    # tegrastats stoppen
-    stop_tegrastats(tegra_proc)
-
-    print(f"Inferenz fertig mit accuracy {accuracy:.3f}")
-    print(f"tegrastats output wurde in {tegrastats_log} geschrieben.")
+        if INT8:
+            onnx_model_path = f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
+        model = onnx.load(onnx_model_path)
+        if FP16:
+            model = float16.convert_float_to_float16(model)
 
 
-    del context
-    del engine
-    del device_input
-    del device_output
-    del device_attention_mask
-    del device_token_type
-    del torch_stream
+        input_info, output_info = get_model_io_info(onnx_model_path)
+        test_loader = create_test_dataloader(RADIOML_PATH_NPZ, batch_size)
 
-    
-    cfx.pop()  # <== explizit den Kontext entfernen!
-    cfx.detach()
 
-    parse_tegrastats_to_json.parse_tegrastats()
+        engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
+        device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
+
+        tegrastats_log = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / f"tegrastats_{batch_size}.log"
+
+        # tegrastats starten
+        tegra_proc = start_tegrastats(tegrastats_log)
+        time.sleep(2)  # kleine Wartezeit, damit tegrastats sauber startet
+
+        # Inferenz starten
+        _, _, _, accuracy = run_inference(
+            context=context,
+            test_loader=test_loader,
+            device_input=device_input,
+            device_output=device_output,
+            device_attention_mask=device_attention_mask,
+            device_token_type=device_token_type,
+            stream_ptr=stream_ptr,
+            torch_stream=torch_stream,
+            batch_size=batch_size,
+            input_info=input_info,
+            output_info=output_info,
+            accuracy_flag=True,
+            cfx=cfx
+        )
+
+        # tegrastats stoppen
+        stop_tegrastats(tegra_proc)
+
+        print(f"Inferenz fertig mit accuracy {accuracy:.3f}")
+        print(f"tegrastats output wurde in {tegrastats_log} geschrieben.")
+
+
+        del context
+        del engine
+        del device_input
+        del device_output
+        del device_attention_mask
+        del device_token_type
+        del torch_stream
+
+        
+        cfx.pop()  # <== explizit den Kontext entfernen!
+
+        tegrastats_logs.append((tegrastats_log, batch_size))
+
+    parse_tegrastats_to_json.parse_tegrastats(tegrastats_logs)

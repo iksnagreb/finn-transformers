@@ -14,8 +14,11 @@ import pycuda.autoinit
 import os
 import yaml
 from onnxconverter_common import float16
+import dvc.api
 # tensorrt, datasets(hugging face), pycuda
 
+RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
 def to_device(data,device):
     if isinstance(data, (list,tuple)): #The isinstance() function returns True if the specified object is of the specified type, otherwise False.
@@ -127,12 +130,12 @@ def print_latency(latency_ms, latency_synchronize, latency_datatransfer, end_tim
 
 
 
-def create_test_dataloader(data_path, batch_size, seq_len=32, emb_dim=64):
+def create_test_dataloader(batch_size, seq_len=32, emb_dim=64):
     import h5py
     import numpy as np
     from torch.utils.data import TensorDataset, DataLoader
 
-    with h5py.File(data_path, "r") as f:
+    with h5py.File(RADIOML_PATH, "r") as f:
         X = np.array(f["X"][:10000])  # Nur die ersten 1000 Datensätze
         Y = np.array(f["Y"][:10000])
 
@@ -178,7 +181,7 @@ def calculate_latency_and_throughput(context, batch_sizes):
     latency_log_batch = []
 
     for batch_size in batch_sizes:
-        test_loader = create_test_dataloader(data_path, batch_size) 
+        test_loader = create_test_dataloader(batch_size) 
         engine_name = f"radioml_int8_{batch_size}.engine"
         engine_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "engines" / engine_name
         logger = trt.Logger(trt.Logger.WARNING)
@@ -283,7 +286,7 @@ def run_inference(batch_size=1):
     """
     engine_name = f"radioml_int8_32.engine"
     engine_path = f"outputs/radioml/engines/{engine_name}"
-    test_loader = create_test_dataloader(data_path, batch_size)
+    test_loader = create_test_dataloader(batch_size)
 
     logger = trt.Logger(trt.Logger.WARNING)
     runtime = trt.Runtime(logger)
@@ -330,10 +333,8 @@ dtype = torch.float32
 
 if __name__ == "__main__":
 
-    data_path = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
-
-
-    batch_sizes = [1,2,4,8, 16, 32, 64, 128, 256, 512, 1024]  # Liste der Batchgrößen
+    params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_INT8_tensorrt")
+    batch_sizes = params["batch_sizes"]
 
 
     context=0

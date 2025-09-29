@@ -118,11 +118,13 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
 if __name__ == "__main__":
     # Load the stage parameters from the parameters file
     params = dvc.api.params_show(stages="radioml/dvc.yaml:export")
+    batch_sizes = params["batch_sizes"]
     # Seed all RNGs
     seed(params["seed"])
     # Create a new model instance according to the configuration
     model = Model(**params["model"])
     model_int8 = Model(**params["model_int8"])
+    
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/radioml/model.pt"))
     model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt"))
