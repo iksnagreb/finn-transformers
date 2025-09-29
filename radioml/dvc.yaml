@@ -319,6 +319,7 @@ stages:
          y: throughput_images_per_s
          cache: false
      - outputs/radioml/throughput/INT8_tensorrt/latency_results.json:
+         template: plot_templates/bar_3_INT8_tensorrt.json
          x: batch_size
          y: value
          cache: false
