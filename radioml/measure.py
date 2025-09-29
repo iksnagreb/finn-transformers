@@ -410,7 +410,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         if accuracy_flag:
             pred = output.argmax(axis=-1)  # [batch, seq_len]
             correct = (pred == yb.numpy()).sum()
-            total = np.prod(yb.shape)
+            total = len(yb)
             correct_predictions += correct
             total_predictions += total
 
