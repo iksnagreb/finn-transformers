@@ -1056,8 +1056,8 @@ stages:
       size: 7068
     - path: radioml/tegrastats_new.py
       hash: md5
-      md5: fc536746764eb5d5539884f042a454be
-      size: 16448
+      md5: 191b6560434abab7308e2b24c4a71419
+      size: 16452
     params:
       radioml/params.yaml:
         batch_sizes:
@@ -1075,21 +1075,21 @@ stages:
     outs:
     - path: outputs/radioml/energy_metrics/energy_consumption.json
       hash: md5
-      md5: 4a35f21c1fd05de94c70dc27112b4382
-      size: 44188
+      md5: 02768589ea54ca6b3a66cd0d12e50e5f
+      size: 43737
     - path: outputs/radioml/energy_metrics/energy_consumption_2.json
       hash: md5
-      md5: 4a35f21c1fd05de94c70dc27112b4382
-      size: 44188
+      md5: 02768589ea54ca6b3a66cd0d12e50e5f
+      size: 43737
     - path: outputs/radioml/energy_metrics/energy_metrics.json
       hash: md5
-      md5: 49decc2996ce827644a2020dabbf635f
-      size: 58885
+      md5: e93bd46791cf8dcdfa2c495a3b6d4352
+      size: 58318
     - path: outputs/radioml/energy_metrics/ram_metrics.json
       hash: md5
-      md5: 95231f22e030211d1a4bcc411f7b617e
-      size: 14110
+      md5: cae531ec13c88b9733e56177b79d6f0c
+      size: 13966
     - path: outputs/radioml/energy_metrics/ram_metrics_2.json
       hash: md5
-      md5: 95231f22e030211d1a4bcc411f7b617e
-      size: 14110
+      md5: cae531ec13c88b9733e56177b79d6f0c
+      size: 13966
