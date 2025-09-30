@@ -441,13 +441,13 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
                     accuracy_flag=True
                 )
 
-    
+    time.sleep(10)
 
     timestamp = time.time()
     end_iso = datetime.fromtimestamp(timestamp).isoformat(timespec='milliseconds')
 
 
-    time.sleep(10)
+    
 
     timestamps = {
         "start_time": start_iso,
@@ -495,8 +495,6 @@ if __name__ == "__main__":
 
     parse_tegrastats_to_json.parse_tegrastats(tegrastats_logs)
 
-
-    # vorher und nachher
 
     # erster wert: current
     # /

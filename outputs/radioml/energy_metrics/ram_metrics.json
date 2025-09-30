@@ -1,562 +1,688 @@
 [
   {
-    "timestamp": "2025-09-30T10:40:17",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:26",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:17",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:27",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:18",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:27",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:18",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:28",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:19",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:28",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:19",
-    "ram_used": 13990,
+    "timestamp": "2025-09-30T11:06:29",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:20",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:29",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:20",
-    "ram_used": 13990,
+    "timestamp": "2025-09-30T11:06:30",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:21",
-    "ram_used": 13990,
+    "timestamp": "2025-09-30T11:06:30",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:21",
-    "ram_used": 13990,
+    "timestamp": "2025-09-30T11:06:31",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:22",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:31",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:23",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:32",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:23",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:32",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:24",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:33",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:24",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:33",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:25",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:34",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:25",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:34",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:26",
-    "ram_used": 13991,
+    "timestamp": "2025-09-30T11:06:35",
+    "ram_used": 14002,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:26",
-    "ram_used": 13993,
-    "ram_total": 62841,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:27",
-    "ram_used": 13993,
+    "timestamp": "2025-09-30T11:06:36",
+    "ram_used": 14004,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": true
   },
   {
-    "timestamp": "2025-09-30T10:40:27",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:36",
+    "ram_used": 14004,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": true
   },
   {
-    "timestamp": "2025-09-30T10:40:28",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:37",
+    "ram_used": 14004,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:28",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:37",
+    "ram_used": 14004,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:29",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:38",
+    "ram_used": 14004,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:29",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:38",
+    "ram_used": 14004,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:30",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:39",
+    "ram_used": 14005,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:30",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:39",
+    "ram_used": 14005,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:31",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:40",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:31",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:40",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:32",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:41",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:32",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:41",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:33",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:42",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:33",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:42",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:34",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:43",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:35",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:43",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:35",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:44",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:36",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:44",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:36",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:45",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:37",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:45",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:37",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:46",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:38",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:46",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:38",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:47",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:39",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:47",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:39",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:48",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:40",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:48",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:40",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:49",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:41",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:49",
+    "ram_used": 14003,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:41",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:50",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:42",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:50",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:42",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:51",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:43",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:51",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:43",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:52",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:44",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:52",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:44",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:53",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:45",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:53",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:45",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:54",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:46",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:55",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:46",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:55",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:47",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:56",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:47",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:56",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:48",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:57",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:48",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:57",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:49",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:58",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:49",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:58",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:50",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:59",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:50",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:06:59",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:51",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:00",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:51",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:00",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:52",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:01",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:53",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:01",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:53",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:02",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:54",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:02",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:54",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:03",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:55",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:03",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:55",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:04",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:56",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:04",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:56",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:05",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:57",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:05",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:57",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:06",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:58",
-    "ram_used": 13994,
+    "timestamp": "2025-09-30T11:07:06",
+    "ram_used": 14007,
     "ram_total": 62841,
     "batch_size": 1,
     "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:07",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:07",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:08",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:09",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:09",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:10",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:10",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:11",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:11",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:12",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:12",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:13",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:13",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:14",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:14",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:15",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:15",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:16",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:07:16",
+    "ram_used": 14007,
+    "ram_total": 62841,
+    "batch_size": 1,
+    "bar_start_end": true
   }
 ]

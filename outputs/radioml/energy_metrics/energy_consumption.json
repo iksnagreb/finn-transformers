@@ -1,1682 +1,2060 @@
 [
   {
-    "timestamp": "2025-09-30T10:40:17",
+    "timestamp": "2025-09-30T11:06:26",
     "type": "vdd_gpu_soc_average",
     "value": 2399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:17",
+    "timestamp": "2025-09-30T11:06:26",
     "type": "vdd_cpu_cv_average",
     "value": 399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:17",
+    "timestamp": "2025-09-30T11:06:26",
     "type": "vin_sys_5v0_average",
-    "value": 2813,
+    "value": 2913,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:17",
+    "timestamp": "2025-09-30T11:06:27",
     "type": "vdd_gpu_soc_average",
     "value": 2399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:17",
+    "timestamp": "2025-09-30T11:06:27",
     "type": "vdd_cpu_cv_average",
     "value": 399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:17",
+    "timestamp": "2025-09-30T11:06:27",
     "type": "vin_sys_5v0_average",
-    "value": 2713,
+    "value": 2763,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:18",
+    "timestamp": "2025-09-30T11:06:27",
     "type": "vdd_gpu_soc_average",
     "value": 2399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:18",
+    "timestamp": "2025-09-30T11:06:27",
     "type": "vdd_cpu_cv_average",
     "value": 399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:18",
+    "timestamp": "2025-09-30T11:06:27",
     "type": "vin_sys_5v0_average",
-    "value": 2646,
+    "value": 2712,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:18",
+    "timestamp": "2025-09-30T11:06:28",
     "type": "vdd_gpu_soc_average",
-    "value": 2299,
+    "value": 2399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:18",
+    "timestamp": "2025-09-30T11:06:28",
     "type": "vdd_cpu_cv_average",
     "value": 399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:18",
+    "timestamp": "2025-09-30T11:06:28",
     "type": "vin_sys_5v0_average",
-    "value": 2587,
+    "value": 2687,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:19",
+    "timestamp": "2025-09-30T11:06:28",
     "type": "vdd_gpu_soc_average",
-    "value": 2239,
+    "value": 2399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:19",
+    "timestamp": "2025-09-30T11:06:28",
     "type": "vdd_cpu_cv_average",
     "value": 399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:19",
+    "timestamp": "2025-09-30T11:06:28",
     "type": "vin_sys_5v0_average",
-    "value": 2552,
+    "value": 2652,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:19",
+    "timestamp": "2025-09-30T11:06:29",
     "type": "vdd_gpu_soc_average",
-    "value": 2199,
+    "value": 2332,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:19",
+    "timestamp": "2025-09-30T11:06:29",
     "type": "vdd_cpu_cv_average",
     "value": 399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:19",
+    "timestamp": "2025-09-30T11:06:29",
     "type": "vin_sys_5v0_average",
-    "value": 2528,
+    "value": 2612,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:20",
+    "timestamp": "2025-09-30T11:06:29",
     "type": "vdd_gpu_soc_average",
-    "value": 2170,
+    "value": 2284,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:20",
+    "timestamp": "2025-09-30T11:06:29",
     "type": "vdd_cpu_cv_average",
     "value": 399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:20",
+    "timestamp": "2025-09-30T11:06:29",
     "type": "vin_sys_5v0_average",
-    "value": 2512,
+    "value": 2583,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:20",
+    "timestamp": "2025-09-30T11:06:30",
     "type": "vdd_gpu_soc_average",
-    "value": 2149,
+    "value": 2249,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:20",
+    "timestamp": "2025-09-30T11:06:30",
     "type": "vdd_cpu_cv_average",
     "value": 399,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:20",
-    "type": "vin_sys_5v0_average",
-    "value": 2499,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:21",
-    "type": "vdd_gpu_soc_average",
-    "value": 2132,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:21",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:21",
-    "type": "vin_sys_5v0_average",
-    "value": 2489,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:21",
-    "type": "vdd_gpu_soc_average",
-    "value": 2119,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:21",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:21",
-    "type": "vin_sys_5v0_average",
-    "value": 2481,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:22",
-    "type": "vdd_gpu_soc_average",
-    "value": 2108,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:22",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:22",
-    "type": "vin_sys_5v0_average",
-    "value": 2475,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:23",
-    "type": "vdd_gpu_soc_average",
-    "value": 2099,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:23",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:23",
-    "type": "vin_sys_5v0_average",
-    "value": 2470,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:23",
-    "type": "vdd_gpu_soc_average",
-    "value": 2091,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:23",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:23",
-    "type": "vin_sys_5v0_average",
-    "value": 2465,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:24",
-    "type": "vdd_gpu_soc_average",
-    "value": 2085,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:24",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:24",
-    "type": "vin_sys_5v0_average",
-    "value": 2461,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:24",
-    "type": "vdd_gpu_soc_average",
-    "value": 2079,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:24",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:24",
-    "type": "vin_sys_5v0_average",
-    "value": 2458,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:25",
-    "type": "vdd_gpu_soc_average",
-    "value": 2074,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:25",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:25",
-    "type": "vin_sys_5v0_average",
-    "value": 2455,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:25",
-    "type": "vdd_gpu_soc_average",
-    "value": 2070,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:25",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:25",
-    "type": "vin_sys_5v0_average",
-    "value": 2452,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:26",
-    "type": "vdd_gpu_soc_average",
-    "value": 2066,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:26",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:26",
-    "type": "vin_sys_5v0_average",
-    "value": 2450,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:26",
-    "type": "vdd_gpu_soc_average",
-    "value": 2125,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:26",
-    "type": "vdd_cpu_cv_average",
-    "value": 399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:26",
-    "type": "vin_sys_5v0_average",
-    "value": 2464,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:27",
-    "type": "vdd_gpu_soc_average",
-    "value": 2159,
-    "batch_size": 1,
-    "bar_start_end": true
-  },
-  {
-    "timestamp": "2025-09-30T10:40:27",
-    "type": "vdd_cpu_cv_average",
-    "value": 419,
-    "batch_size": 1,
-    "bar_start_end": true
-  },
-  {
-    "timestamp": "2025-09-30T10:40:27",
-    "type": "vin_sys_5v0_average",
-    "value": 2491,
-    "batch_size": 1,
-    "bar_start_end": true
-  },
-  {
-    "timestamp": "2025-09-30T10:40:27",
-    "type": "vdd_gpu_soc_average",
-    "value": 2189,
-    "batch_size": 1,
-    "bar_start_end": true
-  },
-  {
-    "timestamp": "2025-09-30T10:40:27",
-    "type": "vdd_cpu_cv_average",
-    "value": 456,
-    "batch_size": 1,
-    "bar_start_end": true
-  },
-  {
-    "timestamp": "2025-09-30T10:40:27",
-    "type": "vin_sys_5v0_average",
-    "value": 2526,
-    "batch_size": 1,
-    "bar_start_end": true
-  },
-  {
-    "timestamp": "2025-09-30T10:40:28",
-    "type": "vdd_gpu_soc_average",
-    "value": 2217,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:28",
-    "type": "vdd_cpu_cv_average",
-    "value": 490,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:28",
+    "timestamp": "2025-09-30T11:06:30",
     "type": "vin_sys_5v0_average",
     "value": 2562,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:28",
+    "timestamp": "2025-09-30T11:06:30",
     "type": "vdd_gpu_soc_average",
-    "value": 2242,
+    "value": 2221,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:28",
+    "timestamp": "2025-09-30T11:06:30",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:30",
+    "type": "vin_sys_5v0_average",
+    "value": 2545,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:31",
+    "type": "vdd_gpu_soc_average",
+    "value": 2199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:31",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:31",
+    "type": "vin_sys_5v0_average",
+    "value": 2532,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:31",
+    "type": "vdd_gpu_soc_average",
+    "value": 2180,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:31",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:31",
+    "type": "vin_sys_5v0_average",
+    "value": 2521,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:32",
+    "type": "vdd_gpu_soc_average",
+    "value": 2165,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:32",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:32",
+    "type": "vin_sys_5v0_average",
+    "value": 2512,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:32",
+    "type": "vdd_gpu_soc_average",
+    "value": 2152,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:32",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:32",
+    "type": "vin_sys_5v0_average",
+    "value": 2504,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:33",
+    "type": "vdd_gpu_soc_average",
+    "value": 2141,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:33",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:33",
+    "type": "vin_sys_5v0_average",
+    "value": 2497,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:33",
+    "type": "vdd_gpu_soc_average",
+    "value": 2132,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:33",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:33",
+    "type": "vin_sys_5v0_average",
+    "value": 2491,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:34",
+    "type": "vdd_gpu_soc_average",
+    "value": 2124,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:34",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:34",
+    "type": "vin_sys_5v0_average",
+    "value": 2486,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:34",
+    "type": "vdd_gpu_soc_average",
+    "value": 2116,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:34",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:34",
+    "type": "vin_sys_5v0_average",
+    "value": 2482,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:35",
+    "type": "vdd_gpu_soc_average",
+    "value": 2110,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:35",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:35",
+    "type": "vin_sys_5v0_average",
+    "value": 2478,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:36",
+    "type": "vdd_gpu_soc_average",
+    "value": 2125,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:06:36",
+    "type": "vdd_cpu_cv_average",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:06:36",
+    "type": "vin_sys_5v0_average",
+    "value": 2480,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:06:36",
+    "type": "vdd_gpu_soc_average",
+    "value": 2179,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:06:36",
+    "type": "vdd_cpu_cv_average",
+    "value": 419,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:06:36",
+    "type": "vin_sys_5v0_average",
+    "value": 2507,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:06:37",
+    "type": "vdd_gpu_soc_average",
+    "value": 2208,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:37",
+    "type": "vdd_cpu_cv_average",
+    "value": 456,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:37",
+    "type": "vin_sys_5v0_average",
+    "value": 2540,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:37",
+    "type": "vdd_gpu_soc_average",
+    "value": 2235,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:37",
+    "type": "vdd_cpu_cv_average",
+    "value": 490,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:37",
+    "type": "vin_sys_5v0_average",
+    "value": 2576,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:38",
+    "type": "vdd_gpu_soc_average",
+    "value": 2259,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:38",
     "type": "vdd_cpu_cv_average",
     "value": 521,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:28",
+    "timestamp": "2025-09-30T11:06:38",
     "type": "vin_sys_5v0_average",
-    "value": 2595,
+    "value": 2608,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:29",
+    "timestamp": "2025-09-30T11:06:38",
     "type": "vdd_gpu_soc_average",
-    "value": 2265,
+    "value": 2282,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:29",
+    "timestamp": "2025-09-30T11:06:38",
     "type": "vdd_cpu_cv_average",
     "value": 549,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:29",
+    "timestamp": "2025-09-30T11:06:38",
     "type": "vin_sys_5v0_average",
-    "value": 2625,
+    "value": 2638,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:29",
+    "timestamp": "2025-09-30T11:06:39",
     "type": "vdd_gpu_soc_average",
-    "value": 2287,
+    "value": 2302,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:29",
+    "timestamp": "2025-09-30T11:06:39",
     "type": "vdd_cpu_cv_average",
     "value": 575,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:29",
+    "timestamp": "2025-09-30T11:06:39",
     "type": "vin_sys_5v0_average",
-    "value": 2653,
+    "value": 2665,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:30",
+    "timestamp": "2025-09-30T11:06:39",
     "type": "vdd_gpu_soc_average",
-    "value": 2306,
+    "value": 2321,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:30",
+    "timestamp": "2025-09-30T11:06:39",
     "type": "vdd_cpu_cv_average",
     "value": 599,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:30",
+    "timestamp": "2025-09-30T11:06:39",
     "type": "vin_sys_5v0_average",
-    "value": 2679,
+    "value": 2691,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:30",
+    "timestamp": "2025-09-30T11:06:40",
     "type": "vdd_gpu_soc_average",
-    "value": 2325,
+    "value": 2339,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:30",
+    "timestamp": "2025-09-30T11:06:40",
     "type": "vdd_cpu_cv_average",
     "value": 621,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:30",
+    "timestamp": "2025-09-30T11:06:40",
     "type": "vin_sys_5v0_average",
-    "value": 2699,
+    "value": 2714,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:31",
+    "timestamp": "2025-09-30T11:06:40",
     "type": "vdd_gpu_soc_average",
-    "value": 2341,
+    "value": 2356,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:31",
+    "timestamp": "2025-09-30T11:06:40",
     "type": "vdd_cpu_cv_average",
     "value": 642,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:31",
+    "timestamp": "2025-09-30T11:06:40",
     "type": "vin_sys_5v0_average",
-    "value": 2718,
+    "value": 2732,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:31",
+    "timestamp": "2025-09-30T11:06:41",
     "type": "vdd_gpu_soc_average",
-    "value": 2357,
+    "value": 2371,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:31",
+    "timestamp": "2025-09-30T11:06:41",
     "type": "vdd_cpu_cv_average",
     "value": 661,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:31",
+    "timestamp": "2025-09-30T11:06:41",
     "type": "vin_sys_5v0_average",
-    "value": 2738,
+    "value": 2749,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:32",
+    "timestamp": "2025-09-30T11:06:41",
     "type": "vdd_gpu_soc_average",
-    "value": 2372,
+    "value": 2385,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:32",
+    "timestamp": "2025-09-30T11:06:41",
     "type": "vdd_cpu_cv_average",
     "value": 679,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:32",
+    "timestamp": "2025-09-30T11:06:41",
     "type": "vin_sys_5v0_average",
-    "value": 2758,
+    "value": 2765,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:32",
+    "timestamp": "2025-09-30T11:06:42",
     "type": "vdd_gpu_soc_average",
-    "value": 2386,
+    "value": 2398,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:32",
+    "timestamp": "2025-09-30T11:06:42",
     "type": "vdd_cpu_cv_average",
     "value": 696,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:32",
+    "timestamp": "2025-09-30T11:06:42",
     "type": "vin_sys_5v0_average",
-    "value": 2776,
+    "value": 2779,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:33",
-    "type": "vdd_gpu_soc_average",
-    "value": 2399,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:33",
-    "type": "vdd_cpu_cv_average",
-    "value": 711,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:33",
-    "type": "vin_sys_5v0_average",
-    "value": 2793,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:33",
+    "timestamp": "2025-09-30T11:06:42",
     "type": "vdd_gpu_soc_average",
     "value": 2411,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:33",
+    "timestamp": "2025-09-30T11:06:42",
+    "type": "vdd_cpu_cv_average",
+    "value": 711,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:42",
+    "type": "vin_sys_5v0_average",
+    "value": 2796,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:43",
+    "type": "vdd_gpu_soc_average",
+    "value": 2423,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:06:43",
     "type": "vdd_cpu_cv_average",
     "value": 726,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:33",
+    "timestamp": "2025-09-30T11:06:43",
     "type": "vin_sys_5v0_average",
-    "value": 2806,
+    "value": 2809,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:34",
+    "timestamp": "2025-09-30T11:06:43",
     "type": "vdd_gpu_soc_average",
-    "value": 2422,
+    "value": 2434,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:34",
+    "timestamp": "2025-09-30T11:06:43",
     "type": "vdd_cpu_cv_average",
     "value": 740,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:34",
+    "timestamp": "2025-09-30T11:06:43",
     "type": "vin_sys_5v0_average",
     "value": 2821,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:35",
+    "timestamp": "2025-09-30T11:06:44",
     "type": "vdd_gpu_soc_average",
-    "value": 2433,
+    "value": 2444,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:35",
+    "timestamp": "2025-09-30T11:06:44",
     "type": "vdd_cpu_cv_average",
     "value": 753,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:35",
+    "timestamp": "2025-09-30T11:06:44",
     "type": "vin_sys_5v0_average",
-    "value": 2833,
+    "value": 2832,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:35",
+    "timestamp": "2025-09-30T11:06:44",
     "type": "vdd_gpu_soc_average",
-    "value": 2443,
+    "value": 2454,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:35",
+    "timestamp": "2025-09-30T11:06:44",
     "type": "vdd_cpu_cv_average",
     "value": 766,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:35",
+    "timestamp": "2025-09-30T11:06:44",
     "type": "vin_sys_5v0_average",
     "value": 2843,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:36",
+    "timestamp": "2025-09-30T11:06:45",
     "type": "vdd_gpu_soc_average",
-    "value": 2453,
+    "value": 2463,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:36",
+    "timestamp": "2025-09-30T11:06:45",
     "type": "vdd_cpu_cv_average",
     "value": 777,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:36",
+    "timestamp": "2025-09-30T11:06:45",
     "type": "vin_sys_5v0_average",
-    "value": 2856,
+    "value": 2853,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:36",
+    "timestamp": "2025-09-30T11:06:45",
     "type": "vdd_gpu_soc_average",
-    "value": 2462,
+    "value": 2472,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:36",
+    "timestamp": "2025-09-30T11:06:45",
     "type": "vdd_cpu_cv_average",
     "value": 788,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:36",
+    "timestamp": "2025-09-30T11:06:45",
     "type": "vin_sys_5v0_average",
-    "value": 2866,
+    "value": 2863,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:37",
+    "timestamp": "2025-09-30T11:06:46",
     "type": "vdd_gpu_soc_average",
-    "value": 2470,
+    "value": 2480,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:37",
+    "timestamp": "2025-09-30T11:06:46",
     "type": "vdd_cpu_cv_average",
     "value": 799,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:37",
+    "timestamp": "2025-09-30T11:06:46",
     "type": "vin_sys_5v0_average",
-    "value": 2877,
+    "value": 2872,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:37",
+    "timestamp": "2025-09-30T11:06:46",
     "type": "vdd_gpu_soc_average",
-    "value": 2478,
+    "value": 2488,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:37",
+    "timestamp": "2025-09-30T11:06:46",
     "type": "vdd_cpu_cv_average",
     "value": 809,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:37",
+    "timestamp": "2025-09-30T11:06:46",
     "type": "vin_sys_5v0_average",
-    "value": 2886,
+    "value": 2881,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:38",
+    "timestamp": "2025-09-30T11:06:47",
     "type": "vdd_gpu_soc_average",
-    "value": 2486,
+    "value": 2496,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:38",
+    "timestamp": "2025-09-30T11:06:47",
     "type": "vdd_cpu_cv_average",
     "value": 819,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:38",
+    "timestamp": "2025-09-30T11:06:47",
     "type": "vin_sys_5v0_average",
-    "value": 2894,
+    "value": 2889,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:38",
+    "timestamp": "2025-09-30T11:06:47",
     "type": "vdd_gpu_soc_average",
-    "value": 2494,
+    "value": 2503,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:38",
+    "timestamp": "2025-09-30T11:06:47",
     "type": "vdd_cpu_cv_average",
     "value": 828,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:38",
+    "timestamp": "2025-09-30T11:06:47",
     "type": "vin_sys_5v0_average",
-    "value": 2902,
+    "value": 2899,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:39",
+    "timestamp": "2025-09-30T11:06:48",
     "type": "vdd_gpu_soc_average",
-    "value": 2501,
+    "value": 2510,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:39",
+    "timestamp": "2025-09-30T11:06:48",
     "type": "vdd_cpu_cv_average",
     "value": 836,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:39",
+    "timestamp": "2025-09-30T11:06:48",
     "type": "vin_sys_5v0_average",
-    "value": 2909,
+    "value": 2907,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:39",
+    "timestamp": "2025-09-30T11:06:48",
     "type": "vdd_gpu_soc_average",
-    "value": 2507,
+    "value": 2516,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:39",
+    "timestamp": "2025-09-30T11:06:48",
     "type": "vdd_cpu_cv_average",
     "value": 844,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:39",
+    "timestamp": "2025-09-30T11:06:48",
     "type": "vin_sys_5v0_average",
-    "value": 2916,
+    "value": 2914,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:40",
+    "timestamp": "2025-09-30T11:06:49",
     "type": "vdd_gpu_soc_average",
-    "value": 2514,
+    "value": 2523,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:40",
+    "timestamp": "2025-09-30T11:06:49",
     "type": "vdd_cpu_cv_average",
     "value": 852,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:40",
+    "timestamp": "2025-09-30T11:06:49",
     "type": "vin_sys_5v0_average",
-    "value": 2923,
+    "value": 2921,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:40",
+    "timestamp": "2025-09-30T11:06:49",
     "type": "vdd_gpu_soc_average",
-    "value": 2520,
+    "value": 2529,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:40",
+    "timestamp": "2025-09-30T11:06:49",
     "type": "vdd_cpu_cv_average",
     "value": 860,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:40",
+    "timestamp": "2025-09-30T11:06:49",
     "type": "vin_sys_5v0_average",
-    "value": 2930,
+    "value": 2927,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:41",
+    "timestamp": "2025-09-30T11:06:50",
     "type": "vdd_gpu_soc_average",
-    "value": 2526,
+    "value": 2534,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:41",
+    "timestamp": "2025-09-30T11:06:50",
     "type": "vdd_cpu_cv_average",
     "value": 867,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:41",
+    "timestamp": "2025-09-30T11:06:50",
     "type": "vin_sys_5v0_average",
-    "value": 2936,
+    "value": 2934,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:41",
+    "timestamp": "2025-09-30T11:06:50",
     "type": "vdd_gpu_soc_average",
-    "value": 2532,
+    "value": 2540,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:41",
+    "timestamp": "2025-09-30T11:06:50",
     "type": "vdd_cpu_cv_average",
     "value": 874,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:41",
+    "timestamp": "2025-09-30T11:06:50",
     "type": "vin_sys_5v0_average",
-    "value": 2942,
+    "value": 2940,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:42",
+    "timestamp": "2025-09-30T11:06:51",
     "type": "vdd_gpu_soc_average",
-    "value": 2537,
+    "value": 2545,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:42",
+    "timestamp": "2025-09-30T11:06:51",
     "type": "vdd_cpu_cv_average",
     "value": 881,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:42",
+    "timestamp": "2025-09-30T11:06:51",
     "type": "vin_sys_5v0_average",
-    "value": 2947,
+    "value": 2945,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:42",
+    "timestamp": "2025-09-30T11:06:51",
     "type": "vdd_gpu_soc_average",
-    "value": 2542,
+    "value": 2550,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:42",
+    "timestamp": "2025-09-30T11:06:51",
     "type": "vdd_cpu_cv_average",
     "value": 887,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:42",
+    "timestamp": "2025-09-30T11:06:51",
     "type": "vin_sys_5v0_average",
-    "value": 2953,
+    "value": 2951,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:43",
+    "timestamp": "2025-09-30T11:06:52",
     "type": "vdd_gpu_soc_average",
-    "value": 2547,
+    "value": 2555,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:43",
+    "timestamp": "2025-09-30T11:06:52",
     "type": "vdd_cpu_cv_average",
     "value": 893,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:43",
+    "timestamp": "2025-09-30T11:06:52",
     "type": "vin_sys_5v0_average",
-    "value": 2958,
+    "value": 2956,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:43",
+    "timestamp": "2025-09-30T11:06:52",
     "type": "vdd_gpu_soc_average",
-    "value": 2552,
+    "value": 2560,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:43",
+    "timestamp": "2025-09-30T11:06:52",
     "type": "vdd_cpu_cv_average",
     "value": 899,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:43",
+    "timestamp": "2025-09-30T11:06:52",
     "type": "vin_sys_5v0_average",
     "value": 2963,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:44",
+    "timestamp": "2025-09-30T11:06:53",
     "type": "vdd_gpu_soc_average",
-    "value": 2557,
+    "value": 2564,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:44",
+    "timestamp": "2025-09-30T11:06:53",
     "type": "vdd_cpu_cv_average",
     "value": 905,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:44",
+    "timestamp": "2025-09-30T11:06:53",
     "type": "vin_sys_5v0_average",
     "value": 2968,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:44",
+    "timestamp": "2025-09-30T11:06:53",
     "type": "vdd_gpu_soc_average",
-    "value": 2561,
+    "value": 2568,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:44",
+    "timestamp": "2025-09-30T11:06:53",
     "type": "vdd_cpu_cv_average",
     "value": 910,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:44",
+    "timestamp": "2025-09-30T11:06:53",
     "type": "vin_sys_5v0_average",
     "value": 2973,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:45",
+    "timestamp": "2025-09-30T11:06:54",
     "type": "vdd_gpu_soc_average",
-    "value": 2566,
+    "value": 2573,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:45",
+    "timestamp": "2025-09-30T11:06:54",
     "type": "vdd_cpu_cv_average",
     "value": 915,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:45",
+    "timestamp": "2025-09-30T11:06:54",
     "type": "vin_sys_5v0_average",
     "value": 2977,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:45",
+    "timestamp": "2025-09-30T11:06:55",
     "type": "vdd_gpu_soc_average",
-    "value": 2570,
+    "value": 2577,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:45",
+    "timestamp": "2025-09-30T11:06:55",
     "type": "vdd_cpu_cv_average",
     "value": 920,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:45",
+    "timestamp": "2025-09-30T11:06:55",
     "type": "vin_sys_5v0_average",
-    "value": 2983,
+    "value": 2981,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:46",
+    "timestamp": "2025-09-30T11:06:55",
     "type": "vdd_gpu_soc_average",
-    "value": 2574,
+    "value": 2580,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:46",
+    "timestamp": "2025-09-30T11:06:55",
     "type": "vdd_cpu_cv_average",
     "value": 925,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:46",
+    "timestamp": "2025-09-30T11:06:55",
     "type": "vin_sys_5v0_average",
-    "value": 2987,
+    "value": 2986,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:46",
+    "timestamp": "2025-09-30T11:06:56",
     "type": "vdd_gpu_soc_average",
-    "value": 2578,
+    "value": 2584,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:46",
+    "timestamp": "2025-09-30T11:06:56",
     "type": "vdd_cpu_cv_average",
     "value": 930,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:46",
+    "timestamp": "2025-09-30T11:06:56",
     "type": "vin_sys_5v0_average",
-    "value": 2993,
+    "value": 2990,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:47",
-    "type": "vdd_gpu_soc_average",
-    "value": 2581,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:47",
-    "type": "vdd_cpu_cv_average",
-    "value": 935,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:47",
-    "type": "vin_sys_5v0_average",
-    "value": 2999,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:47",
-    "type": "vdd_gpu_soc_average",
-    "value": 2585,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:47",
-    "type": "vdd_cpu_cv_average",
-    "value": 939,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:47",
-    "type": "vin_sys_5v0_average",
-    "value": 3004,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:48",
+    "timestamp": "2025-09-30T11:06:56",
     "type": "vdd_gpu_soc_average",
     "value": 2588,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:48",
+    "timestamp": "2025-09-30T11:06:56",
     "type": "vdd_cpu_cv_average",
-    "value": 943,
+    "value": 935,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:48",
+    "timestamp": "2025-09-30T11:06:56",
     "type": "vin_sys_5v0_average",
-    "value": 3009,
+    "value": 2994,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:48",
+    "timestamp": "2025-09-30T11:06:57",
     "type": "vdd_gpu_soc_average",
-    "value": 2592,
+    "value": 2591,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:48",
+    "timestamp": "2025-09-30T11:06:57",
     "type": "vdd_cpu_cv_average",
-    "value": 947,
+    "value": 939,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:48",
+    "timestamp": "2025-09-30T11:06:57",
     "type": "vin_sys_5v0_average",
-    "value": 3014,
+    "value": 2997,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:49",
+    "timestamp": "2025-09-30T11:06:57",
     "type": "vdd_gpu_soc_average",
     "value": 2595,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:49",
+    "timestamp": "2025-09-30T11:06:57",
     "type": "vdd_cpu_cv_average",
-    "value": 951,
+    "value": 943,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:49",
+    "timestamp": "2025-09-30T11:06:57",
     "type": "vin_sys_5v0_average",
-    "value": 3019,
+    "value": 3003,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:49",
+    "timestamp": "2025-09-30T11:06:58",
     "type": "vdd_gpu_soc_average",
     "value": 2598,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:49",
+    "timestamp": "2025-09-30T11:06:58",
     "type": "vdd_cpu_cv_average",
-    "value": 955,
+    "value": 947,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:49",
+    "timestamp": "2025-09-30T11:06:58",
     "type": "vin_sys_5v0_average",
-    "value": 3022,
+    "value": 3008,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:50",
+    "timestamp": "2025-09-30T11:06:58",
     "type": "vdd_gpu_soc_average",
     "value": 2601,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:50",
+    "timestamp": "2025-09-30T11:06:58",
     "type": "vdd_cpu_cv_average",
-    "value": 959,
+    "value": 951,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:50",
+    "timestamp": "2025-09-30T11:06:58",
     "type": "vin_sys_5v0_average",
-    "value": 3025,
+    "value": 3011,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:50",
+    "timestamp": "2025-09-30T11:06:59",
     "type": "vdd_gpu_soc_average",
     "value": 2604,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:50",
+    "timestamp": "2025-09-30T11:06:59",
     "type": "vdd_cpu_cv_average",
-    "value": 963,
+    "value": 955,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:50",
+    "timestamp": "2025-09-30T11:06:59",
     "type": "vin_sys_5v0_average",
-    "value": 3028,
+    "value": 3014,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:51",
+    "timestamp": "2025-09-30T11:06:59",
     "type": "vdd_gpu_soc_average",
     "value": 2607,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:51",
+    "timestamp": "2025-09-30T11:06:59",
     "type": "vdd_cpu_cv_average",
-    "value": 966,
+    "value": 959,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:51",
+    "timestamp": "2025-09-30T11:06:59",
     "type": "vin_sys_5v0_average",
-    "value": 3031,
+    "value": 3018,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:51",
+    "timestamp": "2025-09-30T11:07:00",
     "type": "vdd_gpu_soc_average",
     "value": 2610,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:51",
+    "timestamp": "2025-09-30T11:07:00",
     "type": "vdd_cpu_cv_average",
-    "value": 970,
+    "value": 963,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:51",
+    "timestamp": "2025-09-30T11:07:00",
     "type": "vin_sys_5v0_average",
-    "value": 3034,
+    "value": 3021,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:52",
+    "timestamp": "2025-09-30T11:07:00",
     "type": "vdd_gpu_soc_average",
     "value": 2613,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:52",
+    "timestamp": "2025-09-30T11:07:00",
     "type": "vdd_cpu_cv_average",
-    "value": 973,
+    "value": 966,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:52",
+    "timestamp": "2025-09-30T11:07:00",
     "type": "vin_sys_5v0_average",
-    "value": 3037,
+    "value": 3024,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:53",
+    "timestamp": "2025-09-30T11:07:01",
     "type": "vdd_gpu_soc_average",
-    "value": 2615,
+    "value": 2616,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:53",
+    "timestamp": "2025-09-30T11:07:01",
     "type": "vdd_cpu_cv_average",
-    "value": 976,
+    "value": 970,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:53",
+    "timestamp": "2025-09-30T11:07:01",
     "type": "vin_sys_5v0_average",
-    "value": 3039,
+    "value": 3026,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:53",
+    "timestamp": "2025-09-30T11:07:01",
     "type": "vdd_gpu_soc_average",
     "value": 2618,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:53",
+    "timestamp": "2025-09-30T11:07:01",
     "type": "vdd_cpu_cv_average",
-    "value": 979,
+    "value": 973,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:53",
+    "timestamp": "2025-09-30T11:07:01",
     "type": "vin_sys_5v0_average",
-    "value": 3042,
+    "value": 3029,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:54",
+    "timestamp": "2025-09-30T11:07:02",
     "type": "vdd_gpu_soc_average",
-    "value": 2620,
+    "value": 2621,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:54",
+    "timestamp": "2025-09-30T11:07:02",
     "type": "vdd_cpu_cv_average",
-    "value": 982,
+    "value": 976,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:54",
+    "timestamp": "2025-09-30T11:07:02",
     "type": "vin_sys_5v0_average",
-    "value": 3046,
+    "value": 3032,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:54",
+    "timestamp": "2025-09-30T11:07:02",
     "type": "vdd_gpu_soc_average",
     "value": 2623,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:54",
+    "timestamp": "2025-09-30T11:07:02",
+    "type": "vdd_cpu_cv_average",
+    "value": 979,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:02",
+    "type": "vin_sys_5v0_average",
+    "value": 3035,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:03",
+    "type": "vdd_gpu_soc_average",
+    "value": 2626,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:03",
+    "type": "vdd_cpu_cv_average",
+    "value": 982,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:03",
+    "type": "vin_sys_5v0_average",
+    "value": 3037,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:03",
+    "type": "vdd_gpu_soc_average",
+    "value": 2628,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:03",
     "type": "vdd_cpu_cv_average",
     "value": 985,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:54",
+    "timestamp": "2025-09-30T11:07:03",
     "type": "vin_sys_5v0_average",
-    "value": 3049,
+    "value": 3040,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:55",
-    "type": "vdd_gpu_soc_average",
-    "value": 2625,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:55",
-    "type": "vdd_cpu_cv_average",
-    "value": 988,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:55",
-    "type": "vin_sys_5v0_average",
-    "value": 3052,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:55",
-    "type": "vdd_gpu_soc_average",
-    "value": 2628,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:55",
-    "type": "vdd_cpu_cv_average",
-    "value": 991,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:55",
-    "type": "vin_sys_5v0_average",
-    "value": 3055,
-    "batch_size": 1,
-    "bar_start_end": false
-  },
-  {
-    "timestamp": "2025-09-30T10:40:56",
+    "timestamp": "2025-09-30T11:07:04",
     "type": "vdd_gpu_soc_average",
     "value": 2630,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:56",
+    "timestamp": "2025-09-30T11:07:04",
+    "type": "vdd_cpu_cv_average",
+    "value": 988,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:04",
+    "type": "vin_sys_5v0_average",
+    "value": 3042,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:04",
+    "type": "vdd_gpu_soc_average",
+    "value": 2633,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:04",
+    "type": "vdd_cpu_cv_average",
+    "value": 991,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:04",
+    "type": "vin_sys_5v0_average",
+    "value": 3045,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:05",
+    "type": "vdd_gpu_soc_average",
+    "value": 2635,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:05",
     "type": "vdd_cpu_cv_average",
     "value": 994,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:56",
+    "timestamp": "2025-09-30T11:07:05",
     "type": "vin_sys_5v0_average",
-    "value": 3058,
+    "value": 3047,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:56",
+    "timestamp": "2025-09-30T11:07:05",
     "type": "vdd_gpu_soc_average",
-    "value": 2632,
+    "value": 2637,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:56",
+    "timestamp": "2025-09-30T11:07:05",
     "type": "vdd_cpu_cv_average",
     "value": 996,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:56",
+    "timestamp": "2025-09-30T11:07:05",
     "type": "vin_sys_5v0_average",
-    "value": 3060,
+    "value": 3049,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:57",
+    "timestamp": "2025-09-30T11:07:06",
     "type": "vdd_gpu_soc_average",
-    "value": 2634,
+    "value": 2639,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:57",
+    "timestamp": "2025-09-30T11:07:06",
     "type": "vdd_cpu_cv_average",
     "value": 999,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:57",
+    "timestamp": "2025-09-30T11:07:06",
     "type": "vin_sys_5v0_average",
-    "value": 3062,
+    "value": 3051,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:57",
+    "timestamp": "2025-09-30T11:07:06",
     "type": "vdd_gpu_soc_average",
-    "value": 2631,
+    "value": 2636,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:57",
+    "timestamp": "2025-09-30T11:07:06",
     "type": "vdd_cpu_cv_average",
-    "value": 996,
+    "value": 991,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:57",
+    "timestamp": "2025-09-30T11:07:06",
     "type": "vin_sys_5v0_average",
-    "value": 3060,
+    "value": 3047,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:58",
+    "timestamp": "2025-09-30T11:07:07",
     "type": "vdd_gpu_soc_average",
-    "value": 2628,
+    "value": 2633,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:58",
+    "timestamp": "2025-09-30T11:07:07",
     "type": "vdd_cpu_cv_average",
-    "value": 989,
+    "value": 984,
     "batch_size": 1,
     "bar_start_end": false
   },
   {
-    "timestamp": "2025-09-30T10:40:58",
+    "timestamp": "2025-09-30T11:07:07",
     "type": "vin_sys_5v0_average",
-    "value": 3054,
+    "value": 3042,
     "batch_size": 1,
     "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:07",
+    "type": "vdd_gpu_soc_average",
+    "value": 2630,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:07",
+    "type": "vdd_cpu_cv_average",
+    "value": 977,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:07",
+    "type": "vin_sys_5v0_average",
+    "value": 3036,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:08",
+    "type": "vdd_gpu_soc_average",
+    "value": 2627,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:08",
+    "type": "vdd_cpu_cv_average",
+    "value": 970,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:08",
+    "type": "vin_sys_5v0_average",
+    "value": 3031,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:09",
+    "type": "vdd_gpu_soc_average",
+    "value": 2624,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:09",
+    "type": "vdd_cpu_cv_average",
+    "value": 963,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:09",
+    "type": "vin_sys_5v0_average",
+    "value": 3025,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:09",
+    "type": "vdd_gpu_soc_average",
+    "value": 2617,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:09",
+    "type": "vdd_cpu_cv_average",
+    "value": 956,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:09",
+    "type": "vin_sys_5v0_average",
+    "value": 3018,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:10",
+    "type": "vdd_gpu_soc_average",
+    "value": 2610,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:10",
+    "type": "vdd_cpu_cv_average",
+    "value": 950,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:10",
+    "type": "vin_sys_5v0_average",
+    "value": 3010,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:10",
+    "type": "vdd_gpu_soc_average",
+    "value": 2603,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:10",
+    "type": "vdd_cpu_cv_average",
+    "value": 943,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:10",
+    "type": "vin_sys_5v0_average",
+    "value": 3003,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:11",
+    "type": "vdd_gpu_soc_average",
+    "value": 2596,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:11",
+    "type": "vdd_cpu_cv_average",
+    "value": 937,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:11",
+    "type": "vin_sys_5v0_average",
+    "value": 2997,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:11",
+    "type": "vdd_gpu_soc_average",
+    "value": 2589,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:11",
+    "type": "vdd_cpu_cv_average",
+    "value": 931,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:11",
+    "type": "vin_sys_5v0_average",
+    "value": 2990,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:12",
+    "type": "vdd_gpu_soc_average",
+    "value": 2582,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:12",
+    "type": "vdd_cpu_cv_average",
+    "value": 925,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:12",
+    "type": "vin_sys_5v0_average",
+    "value": 2983,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:12",
+    "type": "vdd_gpu_soc_average",
+    "value": 2576,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:12",
+    "type": "vdd_cpu_cv_average",
+    "value": 919,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:12",
+    "type": "vin_sys_5v0_average",
+    "value": 2977,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:13",
+    "type": "vdd_gpu_soc_average",
+    "value": 2570,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:13",
+    "type": "vdd_cpu_cv_average",
+    "value": 913,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:13",
+    "type": "vin_sys_5v0_average",
+    "value": 2971,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:13",
+    "type": "vdd_gpu_soc_average",
+    "value": 2563,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:13",
+    "type": "vdd_cpu_cv_average",
+    "value": 908,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:13",
+    "type": "vin_sys_5v0_average",
+    "value": 2965,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:14",
+    "type": "vdd_gpu_soc_average",
+    "value": 2557,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:14",
+    "type": "vdd_cpu_cv_average",
+    "value": 902,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:14",
+    "type": "vin_sys_5v0_average",
+    "value": 2959,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:14",
+    "type": "vdd_gpu_soc_average",
+    "value": 2551,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:14",
+    "type": "vdd_cpu_cv_average",
+    "value": 897,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:14",
+    "type": "vin_sys_5v0_average",
+    "value": 2953,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:15",
+    "type": "vdd_gpu_soc_average",
+    "value": 2545,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:15",
+    "type": "vdd_cpu_cv_average",
+    "value": 892,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:15",
+    "type": "vin_sys_5v0_average",
+    "value": 2947,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:15",
+    "type": "vdd_gpu_soc_average",
+    "value": 2540,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:15",
+    "type": "vdd_cpu_cv_average",
+    "value": 887,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:15",
+    "type": "vin_sys_5v0_average",
+    "value": 2942,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2025-09-30T11:07:16",
+    "type": "vdd_gpu_soc_average",
+    "value": 2534,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:07:16",
+    "type": "vdd_cpu_cv_average",
+    "value": 881,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:07:16",
+    "type": "vin_sys_5v0_average",
+    "value": 2937,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:07:16",
+    "type": "vdd_gpu_soc_average",
+    "value": 2529,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:07:16",
+    "type": "vdd_cpu_cv_average",
+    "value": 877,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2025-09-30T11:07:16",
+    "type": "vin_sys_5v0_average",
+    "value": 2932,
+    "batch_size": 1,
+    "bar_start_end": true
   }
 ]
