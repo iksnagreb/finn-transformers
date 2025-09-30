@@ -395,7 +395,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
 def start_tegrastats(logfile_path: Path):
     # tegrastats im Hintergrund starten, Ausgabe in Logdatei
-    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '100'], stdout=open(logfile_path, 'w'))
+    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '500'], stdout=open(logfile_path, 'w'))
     return proc
 
 def stop_tegrastats(proc: subprocess.Popen):

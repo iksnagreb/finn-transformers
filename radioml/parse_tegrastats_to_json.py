@@ -100,7 +100,7 @@ def parse_tegrastats(input_logs):
                     diff1 = abs((t1 - start).total_seconds())
                     diff2 = abs((t1 - end).total_seconds())
 
-                    if (diff1 or diff2) <= 1:
+                    if (diff1 or diff2) <= 0.5:
                         bar = True
                     else:
                         bar = False
