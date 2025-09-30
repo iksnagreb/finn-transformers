@@ -81,29 +81,29 @@ def parse_tegrastats(input_logs):
                     parsed_data.append(parsed)
 
                     # Start und Endzeit in Json eintragen
-                    print(parsed["timestamp"])
-                    fmt = "%Y-%m-%dT%H:%M:%S"
-                    t1 = datetime.strptime(parsed["timestamp"], "%Y-%m-%dT%H:%M:%S")
+                    # print(parsed["timestamp"])
+                    # fmt = "%Y-%m-%dT%H:%M:%S"
+                    # t1 = datetime.strptime(parsed["timestamp"], "%Y-%m-%dT%H:%M:%S")
 
 
-                    # aus json auslesen
-                    timestamps_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / f"timestamps_{batch_size}.json"
-                    with open(timestamps_file, "r") as f:
-                        timestamps = json.load(f)
-                    start_iso = timestamps["start_time"]
-                    end_iso = timestamps["end_time"]
+                    # # aus json auslesen
+                    # timestamps_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / f"timestamps_{batch_size}.json"
+                    # with open(timestamps_file, "r") as f:
+                    #     timestamps = json.load(f)
+                    # start_iso = timestamps["start_time"]
+                    # end_iso = timestamps["end_time"]
 
-                    start = datetime.strptime(start_iso, "%Y-%m-%dT%H:%M:%S.%f")
-                    end = datetime.strptime(end_iso, "%Y-%m-%dT%H:%M:%S.%f")
+                    # start = datetime.strptime(start_iso, "%Y-%m-%dT%H:%M:%S.%f")
+                    # end = datetime.strptime(end_iso, "%Y-%m-%dT%H:%M:%S.%f")
 
                     
-                    diff1 = abs((t1 - start).total_seconds())
-                    diff2 = abs((t1 - end).total_seconds())
+                    # diff1 = abs((t1 - start).total_seconds())
+                    # diff2 = abs((t1 - end).total_seconds())
+                    diff1= 2
+                    diff2 = 2                   
                     if (diff1 or diff2) <= 1:
-                        print("Timestamps innerhalb von 1000 ms")
                         bar = True
                     else:
-                        print("Timestamps unterscheiden sich mehr als 1000 ms")
                         bar = False
 
                     # RAM vereinfachte Daten
@@ -117,28 +117,29 @@ def parse_tegrastats(input_logs):
                         })
 
                     # Energy-Daten in einzelne Objekte splitten
-                    if all(k in parsed for k in ["vdd_gpu_soc", "vdd_cpu_cv", "vin_sys_5v0"]):
+                    if all(k in parsed for k in ["vdd_gpu_soc_average", "vdd_cpu_cv_average", "vin_sys_5v0_average"]):
+                        print("all keys present")
                         energy_data.extend([
                             {
                                 "timestamp": parsed["timestamp"],
-                                "type": "vdd_gpu_soc",
-                                "value": parsed["vdd_gpu_soc"],
+                                "type": "vdd_gpu_soc_average",
+                                "value": parsed["vdd_gpu_soc_average"],
                                 "batch_size": batch_size,
-                                "bar_start_end": bar
+                                "bar_start_end": False
                             },
                             {
                                 "timestamp": parsed["timestamp"],
-                                "type": "vdd_cpu_cv",
-                                "value": parsed["vdd_cpu_cv"],
+                                "type": "vdd_cpu_cv_average",
+                                "value": parsed["vdd_cpu_cv_average"],
                                 "batch_size": batch_size,
-                                "bar_start_end": bar
+                                "bar_start_end": False
                             },
                             {
                                 "timestamp": parsed["timestamp"],
-                                "type": "vin_sys_5v0",
-                                "value": parsed["vin_sys_5v0"],
+                                "type": "vin_sys_5v0_average",
+                                "value": parsed["vin_sys_5v0_average"],
                                 "batch_size": batch_size,
-                                "bar_start_end": bar
+                                "bar_start_end": False
                             }
                         ])
 
