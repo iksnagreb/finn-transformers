@@ -116,27 +116,27 @@ def parse_tegrastats(input_logs):
                         })
 
                     # Energy-Daten in einzelne Objekte splitten
-                    if all(k in parsed for k in ["vdd_gpu_soc_average", "vdd_cpu_cv_average", "vin_sys_5v0_average"]):
+                    if all(k in parsed for k in ["vdd_gpu_soc_current", "vdd_cpu_cv_current", "vin_sys_5v0_current"]):
                         print("all keys present")
                         energy_data.extend([
                             {
                                 "timestamp": parsed["timestamp"],
-                                "type": "vdd_gpu_soc_average",
-                                "value": parsed["vdd_gpu_soc_average"],
+                                "type": "vdd_gpu_soc_current",
+                                "value": parsed["vdd_gpu_soc_current"],
                                 "batch_size": batch_size,
                                 "bar_start_end": bar
                             },
                             {
                                 "timestamp": parsed["timestamp"],
-                                "type": "vdd_cpu_cv_average",
-                                "value": parsed["vdd_cpu_cv_average"],
+                                "type": "vdd_cpu_cv_current",
+                                "value": parsed["vdd_cpu_cv_current"],
                                 "batch_size": batch_size,
                                 "bar_start_end": bar
                             },
                             {
                                 "timestamp": parsed["timestamp"],
-                                "type": "vin_sys_5v0_average",
-                                "value": parsed["vin_sys_5v0_average"],
+                                "type": "vin_sys_5v0_current",
+                                "value": parsed["vin_sys_5v0_current"],
                                 "batch_size": batch_size,
                                 "bar_start_end": bar
                             }

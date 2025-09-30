@@ -28,7 +28,7 @@
           "field": "type",
           "type": "nominal",
           "scale": {
-            "domain": ["vdd_gpu_soc_average", "vdd_cpu_cv_average", "vin_sys_5v0_average"],
+            "domain": ["vdd_gpu_soc_current", "vdd_cpu_cv_current", "vin_sys_5v0_current"],
             "range": ["#1f77b4", "#ff7f0e", "#2ca02c"]
           },
           "title": "Energy Source"
