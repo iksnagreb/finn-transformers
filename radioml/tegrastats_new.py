@@ -19,7 +19,7 @@ import dvc.api
 import model
 import subprocess
 import parse_tegrastats_to_json
-
+from datetime import datetime
 # import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # tensorrt, datasets(hugging face), pycuda
@@ -395,17 +395,17 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
 def start_tegrastats(logfile_path: Path):
     # tegrastats im Hintergrund starten, Ausgabe in Logdatei
-    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '10'], stdout=open(logfile_path, 'w'))
+    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '100'], stdout=open(logfile_path, 'w'))
     return proc
 
 def stop_tegrastats(proc: subprocess.Popen):
     proc.terminate()  # schickt SIGTERM an tegrastats
     try:
-        proc.wait(timeout=5)
+        proc.wait(timeout=1)
     except subprocess.TimeoutExpired:
         proc.kill()
 
-def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path, tegrastats_log):
+def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
     test_loader = create_test_dataloader(RADIOML_PATH_NPZ, batch_size)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
@@ -415,9 +415,17 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
 
     time.sleep(10)
 
+    print("Startzeit: ", time.time())
+
+    timestamp = time.time()
+    start_iso = datetime.fromtimestamp(timestamp).isoformat(timespec='milliseconds')
+
+    data = {"start_time": start_iso}
+
+
     
         
-    for i in range(2):
+    for i in range(3):
         _, _, _, accuracy = run_inference(
                     context=context,
                     test_loader=test_loader,
@@ -433,9 +441,22 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
                     accuracy_flag=True
                 )
 
+    stop_tegrastats(tegra_proc)
+
+    timestamp = time.time()
+    end_iso = datetime.fromtimestamp(timestamp).isoformat(timespec='milliseconds')
+
+
     time.sleep(10)
 
-    stop_tegrastats(tegra_proc)
+    timestamps = {
+        "start_time": start_iso,
+        "end_time": end_iso
+    }
+    with open(timestamps_file, "w") as f:
+        json.dump(timestamps, f, indent=2)
+
+    
 
     return accuracy
 
@@ -452,6 +473,8 @@ if __name__ == "__main__":
 
     batch_sizes = params["batch_sizes"]
 
+    batch_sizes = [1]
+
 
     onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
 
@@ -462,7 +485,8 @@ if __name__ == "__main__":
             onnx_model_path = f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
         input_info, output_info = get_model_io_info(onnx_model_path)
         tegrastats_log = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / f"tegrastats_{batch_size}.log"
-        accuracy = run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path, tegrastats_log)
+        timestamps = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / f"timestamps_{batch_size}.json"
+        accuracy = run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps)
         print(f"Accuracy for batch size {batch_size}: {accuracy:.4f}")
 
         tegrastats_logs.append((tegrastats_log, batch_size))
@@ -471,4 +495,8 @@ if __name__ == "__main__":
 
 
     # vorher und nachher
+
+    # erster wert: current
+    # /
+    # zweiter wert: average
 

@@ -370,7 +370,8 @@ stages:
           x: timestamp
           y: value
           cache: false
-
+                    # z: bar_start_end funktioniert nicht
+# zwei pipelines (training und eval getrennt)
 
          # add measure (without tensorrt int 8 bc. it just works with nonquant layers) and measure energy for radioml
          # problem: bits=8 für brevitas nötig, "RuntimeError: CUDA error: no kernel image is available for execution on the device" nachdem train nochmal laufen gelassen wurde (evtl. wegen neuen installationen)

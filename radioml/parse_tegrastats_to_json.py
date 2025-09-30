@@ -59,9 +59,10 @@ def parse_tegrastats(input_logs):
 
             # Energieverbrauch (Leistung in mW)
             for name in ["VDD_GPU_SOC", "VDD_CPU_CV", "VIN_SYS_5V0"]:
-                match = re.search(rf"{name} (\d+)mW", line)
+                match = re.search(rf"{name} (\d+)mW/(\d+)mW", line)
                 if match:
-                    data[name.lower()] = int(match.group(1))
+                    data[f"{name.lower()}_current"] = int(match.group(1))
+                    data[f"{name.lower()}_average"] = int(match.group(2))
 
             return data
         except Exception as e:
@@ -79,13 +80,40 @@ def parse_tegrastats(input_logs):
                 if parsed:
                     parsed_data.append(parsed)
 
+                    # Start und Endzeit in Json eintragen
+                    print(parsed["timestamp"])
+                    fmt = "%Y-%m-%dT%H:%M:%S"
+                    t1 = datetime.strptime(parsed["timestamp"], "%Y-%m-%dT%H:%M:%S")
+
+
+                    # aus json auslesen
+                    timestamps_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / f"timestamps_{batch_size}.json"
+                    with open(timestamps_file, "r") as f:
+                        timestamps = json.load(f)
+                    start_iso = timestamps["start_time"]
+                    end_iso = timestamps["end_time"]
+
+                    start = datetime.strptime(start_iso, "%Y-%m-%dT%H:%M:%S.%f")
+                    end = datetime.strptime(end_iso, "%Y-%m-%dT%H:%M:%S.%f")
+
+                    
+                    diff1 = abs((t1 - start).total_seconds())
+                    diff2 = abs((t1 - end).total_seconds())
+                    if (diff1 or diff2) <= 1:
+                        print("Timestamps innerhalb von 1000 ms")
+                        bar = True
+                    else:
+                        print("Timestamps unterscheiden sich mehr als 1000 ms")
+                        bar = False
+
                     # RAM vereinfachte Daten
                     if "timestamp" in parsed and "ram_used" in parsed and "ram_total" in parsed:
                         simple_data.append({
                             "timestamp": parsed["timestamp"],
                             "ram_used": parsed["ram_used"],
                             "ram_total": parsed["ram_total"],
-                            "batch_size": batch_size
+                            "batch_size": batch_size,
+                            "bar_start_end": bar
                         })
 
                     # Energy-Daten in einzelne Objekte splitten
@@ -95,19 +123,22 @@ def parse_tegrastats(input_logs):
                                 "timestamp": parsed["timestamp"],
                                 "type": "vdd_gpu_soc",
                                 "value": parsed["vdd_gpu_soc"],
-                                "batch_size": batch_size
+                                "batch_size": batch_size,
+                                "bar_start_end": bar
                             },
                             {
                                 "timestamp": parsed["timestamp"],
                                 "type": "vdd_cpu_cv",
                                 "value": parsed["vdd_cpu_cv"],
-                                "batch_size": batch_size
+                                "batch_size": batch_size,
+                                "bar_start_end": bar
                             },
                             {
                                 "timestamp": parsed["timestamp"],
                                 "type": "vin_sys_5v0",
                                 "value": parsed["vin_sys_5v0"],
-                                "batch_size": batch_size
+                                "batch_size": batch_size,
+                                "bar_start_end": bar
                             }
                         ])
 
@@ -133,3 +164,7 @@ def parse_tegrastats(input_logs):
 
 if __name__ == "__main__":
     parse_tegrastats()
+
+
+
+#current oder gemittelt?
