@@ -9,27 +9,55 @@
       "filter": "datum.batch_size === 1"
     }
   ],
-  "mark": "bar",
-  "encoding": {
-    "x": {
-      "field": "timestamp",
-      "type": "temporal",
-      "title": "Timestamp"
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "timestamp",
+          "type": "temporal",
+          "title": "Timestamp"
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "value",
+          "type": "quantitative",
+          "title": "Power (mW)"
+        },
+        "color": {
+          "field": "type",
+          "type": "nominal",
+          "scale": {
+            "domain": ["vdd_gpu_soc_average", "vdd_cpu_cv_average", "vin_sys_5v0_average"],
+            "range": ["#1f77b4", "#ff7f0e", "#2ca02c"]
+          },
+          "title": "Energy Source"
+        }
+      }
     },
-    "y": {
-      "aggregate": "sum",
-      "field": "value",
-      "type": "quantitative",
-      "title": "Power (mW)"
-    },
-    "color": {
-      "field": "type",
-      "type": "nominal",
-      "scale": {
-        "domain": ["vdd_gpu_soc", "vdd_cpu_cv", "vin_sys_5v0"],
-        "range": ["#1f77b4", "#ff7f0e", "#2ca02c"]
+    {
+      "transform": [
+        {
+          "filter": "datum.bar_start_end === true"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "black",
+        "size": 2
       },
-      "title": "Energy Source"
+      "encoding": {
+        "x": {
+          "field": "timestamp",
+          "type": "temporal"
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": "height"
+        }
+      }
     }
-  }
+  ]
 }
