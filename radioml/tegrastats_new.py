@@ -441,7 +441,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
                     accuracy_flag=True
                 )
 
-    stop_tegrastats(tegra_proc)
+    
 
     timestamp = time.time()
     end_iso = datetime.fromtimestamp(timestamp).isoformat(timespec='milliseconds')
@@ -455,6 +455,8 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
     }
     with open(timestamps_file, "w") as f:
         json.dump(timestamps, f, indent=2)
+
+    stop_tegrastats(tegra_proc)
 
     
 
