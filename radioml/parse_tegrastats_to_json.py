@@ -81,26 +81,25 @@ def parse_tegrastats(input_logs):
                     parsed_data.append(parsed)
 
                     # Start und Endzeit in Json eintragen
-                    # print(parsed["timestamp"])
-                    # fmt = "%Y-%m-%dT%H:%M:%S"
-                    # t1 = datetime.strptime(parsed["timestamp"], "%Y-%m-%dT%H:%M:%S")
+                    print(parsed["timestamp"])
+                    fmt = "%Y-%m-%dT%H:%M:%S"
+                    t1 = datetime.strptime(parsed["timestamp"], "%Y-%m-%dT%H:%M:%S")
 
 
-                    # # aus json auslesen
-                    # timestamps_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / f"timestamps_{batch_size}.json"
-                    # with open(timestamps_file, "r") as f:
-                    #     timestamps = json.load(f)
-                    # start_iso = timestamps["start_time"]
-                    # end_iso = timestamps["end_time"]
+                    # aus json auslesen
+                    timestamps_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "energy_metrics" / f"timestamps_{batch_size}.json"
+                    with open(timestamps_file, "r") as f:
+                        timestamps = json.load(f)
+                    start_iso = timestamps["start_time"]
+                    end_iso = timestamps["end_time"]
 
-                    # start = datetime.strptime(start_iso, "%Y-%m-%dT%H:%M:%S.%f")
-                    # end = datetime.strptime(end_iso, "%Y-%m-%dT%H:%M:%S.%f")
+                    start = datetime.strptime(start_iso, "%Y-%m-%dT%H:%M:%S.%f")
+                    end = datetime.strptime(end_iso, "%Y-%m-%dT%H:%M:%S.%f")
 
                     
-                    # diff1 = abs((t1 - start).total_seconds())
-                    # diff2 = abs((t1 - end).total_seconds())
-                    diff1= 2
-                    diff2 = 2                   
+                    diff1 = abs((t1 - start).total_seconds())
+                    diff2 = abs((t1 - end).total_seconds())
+
                     if (diff1 or diff2) <= 1:
                         bar = True
                     else:
@@ -125,21 +124,21 @@ def parse_tegrastats(input_logs):
                                 "type": "vdd_gpu_soc_average",
                                 "value": parsed["vdd_gpu_soc_average"],
                                 "batch_size": batch_size,
-                                "bar_start_end": False
+                                "bar_start_end": bar
                             },
                             {
                                 "timestamp": parsed["timestamp"],
                                 "type": "vdd_cpu_cv_average",
                                 "value": parsed["vdd_cpu_cv_average"],
                                 "batch_size": batch_size,
-                                "bar_start_end": False
+                                "bar_start_end": bar
                             },
                             {
                                 "timestamp": parsed["timestamp"],
                                 "type": "vin_sys_5v0_average",
                                 "value": parsed["vin_sys_5v0_average"],
                                 "batch_size": batch_size,
-                                "bar_start_end": False
+                                "bar_start_end": bar
                             }
                         ])
 
