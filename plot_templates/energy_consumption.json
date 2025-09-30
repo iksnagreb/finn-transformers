@@ -44,7 +44,7 @@
       "mark": {
         "type": "rule",
         "color": "black",
-        "size": 2
+        "size": 10
       },
       "encoding": {
         "x": {
