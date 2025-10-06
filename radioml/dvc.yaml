@@ -348,10 +348,11 @@ stages:
          cache: false
   energy_measure_FP32:
     wdir: ..
-    cmd: python radioml/tegrastats_new.py
+    cmd: python radioml/tegrastats.py
     deps:
-      - radioml/tegrastats_new.py
+      - radioml/tegrastats.py
       - radioml/parse_tegrastats_to_json.py
+      - radioml/power_averages.py
     params:
       - radioml/params.yaml:
           - batch_sizes
@@ -370,7 +371,12 @@ stages:
           x: timestamp
           y: value
           cache: false
-                    # z: bar_start_end funktioniert nicht
+     - outputs/radioml/energy_metrics/power_averages.json:
+          template: plot_templates/power_averages.json
+          x: batch_size
+          y: value
+          cache: false
+
 # zwei pipelines (training und eval getrennt)
 
          # add measure (without tensorrt int 8 bc. it just works with nonquant layers) and measure energy for radioml

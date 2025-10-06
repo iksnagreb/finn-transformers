@@ -19,6 +19,7 @@ import dvc.api
 import model
 import subprocess
 import parse_tegrastats_to_json
+import power_averages
 from datetime import datetime
 # import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -494,6 +495,8 @@ if __name__ == "__main__":
         tegrastats_logs.append((tegrastats_log, batch_size))
 
     parse_tegrastats_to_json.parse_tegrastats(tegrastats_logs)
+    power_averages.power_averages(batch_sizes)
+    
 
 
     # erster wert: current

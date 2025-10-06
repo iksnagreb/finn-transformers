@@ -1,0 +1,23 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "FP32 Power per inteference of x data objects",
+  "data": {"values": "<DVC_METRIC_DATA>"},
+  "mark": "bar",
+  "encoding": {
+    "x": {
+        "field": "batch_size",
+        "type": "ordinal",
+        "title": "Batch Size"
+      },
+    "y": {"aggregate": "sum", "field": "value", "title": "Power"},
+    "color": {
+      "field": "type",
+      "type": "nominal",
+      "scale": {
+        "domain": ["vdd_gpu_avg", "vdd_cpu_avg", "vin_sys_avg"],
+        "range": ["red", "green", "yellow"]
+      },
+      "title": "Power type"
+    }
+  }
+}
