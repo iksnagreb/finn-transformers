@@ -426,7 +426,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
 
     
         
-    for i in range(3):
+    for i in range(10):
         _, _, _, accuracy = run_inference(
                     context=context,
                     test_loader=test_loader,
