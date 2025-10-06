@@ -6,7 +6,7 @@
   },
   "transform": [
     {
-      "filter": "datum.batch_size === 1"
+      "filter": "datum.batch_size === 2"
     }
   ],
   "layer": [

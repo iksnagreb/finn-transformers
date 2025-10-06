@@ -395,7 +395,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
 def start_tegrastats(logfile_path: Path):
     # tegrastats im Hintergrund starten, Ausgabe in Logdatei
-    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '500'], stdout=open(logfile_path, 'w'))
+    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '1000'], stdout=open(logfile_path, 'w'))
     return proc
 
 def stop_tegrastats(proc: subprocess.Popen):
@@ -475,7 +475,7 @@ if __name__ == "__main__":
 
     batch_sizes = params["batch_sizes"]
 
-    batch_sizes = [1]
+    batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
 
     onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
