@@ -15,7 +15,7 @@
       "type": "nominal",
       "scale": {
         "domain": ["vdd_gpu_avg", "vdd_cpu_avg", "vin_sys_avg"],
-        "range": ["red", "green", "yellow"]
+        "range": ["#1f77b4", "#ff7f0e", "#2ca02c"]
       },
       "title": "Power type"
     }
