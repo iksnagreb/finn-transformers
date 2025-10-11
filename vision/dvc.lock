@@ -74,8 +74,8 @@ stages:
         seed: 12
         tag: baseline
         train:
-          epochs: 15
-          batch_size: 512
+          epochs: 20
+          batch_size: 64
           optimizer:
             algorithm: adam
             lr: 0.001
@@ -98,19 +98,19 @@ stages:
     outs:
     - path: outputs/vision/loss.yaml
       hash: md5
-      md5: 2a1c3b4dd91eb277ca5b971f8058e2a2
-      size: 836
+      md5: ec699c0f1e595bea888c62238b0be599
+      size: 1085
     - path: outputs/vision/lr.yaml
       hash: md5
-      md5: d270f8ef8affa13aed6c086951924232
-      size: 274
+      md5: 352804c7dcabf266da98ffd9d9309782
+      size: 364
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 86c2680e0e667f4d1f4175927813669a
+      md5: 51c54697387a0157ad09e7ecf8b56937
       size: 67280
     - path: outputs/vision/optimizer.pt
       hash: md5
-      md5: 2aeb4907a5bac50fb576de41ac2ab680
+      md5: 65741f61d669b26f5a50f4fbc4786a50
       size: 122809
   eval:
     cmd: bash run.sh python -m vision.eval
@@ -141,7 +141,7 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 86c2680e0e667f4d1f4175927813669a
+      md5: 51c54697387a0157ad09e7ecf8b56937
       size: 67280
     - path: quant.py
       hash: md5
@@ -199,11 +199,11 @@ stages:
     outs:
     - path: outputs/vision/accuracy.yaml
       hash: md5
-      md5: 655eb3230a93e52d6419c4969228e99a
-      size: 28
+      md5: c4bd9588d21f41458e506711d45807ba
+      size: 27
     - path: outputs/vision/classes.csv
       hash: md5
-      md5: 724342d5a3028c012b5f81e7ccbf0d72
+      md5: f470512120683ce1daad868ac9e62bd0
       size: 40015
   export:
     cmd: python -m vision.export
@@ -234,7 +234,7 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 86c2680e0e667f4d1f4175927813669a
+      md5: 51c54697387a0157ad09e7ecf8b56937
       size: 67280
     - path: quant.py
       hash: md5
@@ -297,7 +297,7 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: a774c710d73a96726abf03f1e5943fc1
+      md5: 66092d0c07728c7806aaab2a9fdd5dfc
       size: 95249
     - path: outputs/vision/out.npy
       hash: md5

@@ -57,9 +57,9 @@ dataset: ...
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 15
+  epochs: 20
   # Batch size for training
-  batch_size: 512
+  batch_size: 64
   # Optimizer configuration
   optimizer:
     # Name of the optimization algorithm to use: adam or sgd
