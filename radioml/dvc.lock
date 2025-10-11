@@ -312,8 +312,8 @@ stages:
       size: 5248
     - path: radioml/export.py
       hash: md5
-      md5: f4d39eda3436eecc8fe761ca3e19b385
-      size: 2993
+      md5: 14edb86a85f133c0b8e68769e417ea2f
+      size: 3158
     - path: radioml/model.py
       hash: md5
       md5: f3ced2e5ddd6fb91e1c6f68e0609e1fe
@@ -390,15 +390,19 @@ stages:
         seed: 12
         tag: baseline
     outs:
+    - path: outputs/radioml/cls.npy
+      hash: md5
+      md5: 6f6ad8855db562a804c48cfde8d276d8
+      size: 136
     - path: outputs/radioml/inp.npy
       hash: md5
       md5: 08b8f0b2fe790382c0e49b84bcdb78d7
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: 3d720b5e44edbe6e99edd847dba165ec
+      md5: 8368dfbb359f98bccce64ecd6edd2292
       size: 75075
     - path: outputs/radioml/out.npy
       hash: md5
-      md5: 6f6ad8855db562a804c48cfde8d276d8
-      size: 136
+      md5: 50ab248ec458031d8bcff5f61c7c55b6
+      size: 224

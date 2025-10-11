@@ -51,7 +51,11 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
 
     # Sample the first batch from the export dataset
-    inp, out, _ = next(iter(export_data))
+    inp, cls, _ = next(iter(export_data))
+
+    # Also save the model output predictions (probabilities)
+    with torch.no_grad():
+        out = model(inp)
 
     # Export the model to ONNX using the input example
     export_qonnx(model, (inp,), "outputs/radioml/model.onnx", **kwargs)
@@ -59,6 +63,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     # Save the input and output data for verification purposes later
     np.save("outputs/radioml/inp.npy", inp.numpy())
     np.save("outputs/radioml/out.npy", out.numpy())
+    np.save("outputs/radioml/cls.npy", cls.numpy())
 
 
 # Script entrypoint

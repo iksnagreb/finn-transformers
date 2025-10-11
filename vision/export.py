@@ -65,7 +65,11 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
 
 
     # Sample the first batch from the export dataset
-    inp, out = next(iter(export_data))
+    inp, cls = next(iter(export_data))
+
+    # Also save the model output predictions (probabilities)
+    with torch.no_grad():
+        out = model(inp)
 
     # Export the model to ONNX using the input example
     export_qonnx(model, (inp,), "outputs/vision/model.onnx", **kwargs)
@@ -73,6 +77,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     # Save the input and output data for verification purposes later
     np.save("outputs/vision/inp.npy", inp.numpy())
     np.save("outputs/vision/out.npy", out.numpy())
+    np.save("outputs/vision/cls.npy", cls.numpy())
 
 
 # Script entrypoint

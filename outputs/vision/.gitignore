@@ -2,3 +2,4 @@
 /out.npy
 /model.pt
 /optimizer.pt
+/cls.npy

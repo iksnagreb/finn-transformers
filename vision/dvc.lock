@@ -246,8 +246,8 @@ stages:
       size: 1439
     - path: vision/export.py
       hash: md5
-      md5: 817e2dfb572b7dde780fe6f90b665596
-      size: 3576
+      md5: 2fd43b4b437ec9359510b791e9b33444
+      size: 3740
     - path: vision/model.py
       hash: md5
       md5: abfc880284221906d010de1a85c7cb4c
@@ -291,15 +291,19 @@ stages:
         seed: 12
         tag: baseline
     outs:
+    - path: outputs/vision/cls.npy
+      hash: md5
+      md5: efa9423070d05804ad902edd7b10a08b
+      size: 136
     - path: outputs/vision/inp.npy
       hash: md5
       md5: 2e88193b4ec4f0b4b43f9d4e7229e13c
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 66092d0c07728c7806aaab2a9fdd5dfc
+      md5: bba79ad2243ac8d9ad2c389ebb3422c8
       size: 95249
     - path: outputs/vision/out.npy
       hash: md5
-      md5: efa9423070d05804ad902edd7b10a08b
-      size: 136
+      md5: ccbcf1b57bb690c66e653c91c0a3a6f8
+      size: 168

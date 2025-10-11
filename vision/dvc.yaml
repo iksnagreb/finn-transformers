@@ -144,4 +144,5 @@ stages:
       # Model verification input/output samples from the Vision dataset
       - outputs/vision/inp.npy
       - outputs/vision/out.npy
+      - outputs/vision/cls.npy
   # TODO: FINN-build and deployment stages...

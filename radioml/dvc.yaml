@@ -147,4 +147,5 @@ stages:
       # Model verification input/output samples from the RadioML dataset
       - outputs/radioml/inp.npy
       - outputs/radioml/out.npy
+      - outputs/radioml/cls.npy
   # TODO: FINN-build and deployment stages...
