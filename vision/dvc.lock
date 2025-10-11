@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: bash run.sh python -m radioml.train
+    cmd: bash run.sh python -m vision.train
     deps:
     - path: activations.py
       hash: md5
@@ -31,66 +31,33 @@ stages:
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
       size: 1221
-    - path: radioml/dataset.py
-      hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
-    - path: radioml/model.py
-      hash: md5
-      md5: f3ced2e5ddd6fb91e1c6f68e0609e1fe
-      size: 6584
-    - path: radioml/train.py
-      hash: md5
-      md5: 8327f7f68b18751b585a3bf5fa97ae86
-      size: 5892
     - path: utils.py
       hash: md5
       md5: 46e1ab8e4a131348b7ef7482946e8bbd
       size: 1439
+    - path: vision/model.py
+      hash: md5
+      md5: abfc880284221906d010de1a85c7cb4c
+      size: 6545
+    - path: vision/train.py
+      hash: md5
+      md5: 5d608a45d6727dbd5f20108a07d44b7a
+      size: 6551
     params:
-      radioml/params.yaml:
-        dataset:
-          signal_to_noise_ratios:
-          - -6
-          - -4
-          - -2
-          - 0
-          - 2
-          - 4
-          - 6
-          - 8
-          - 10
-          - 12
-          - 14
-          - 16
-          - 18
-          - 20
-          - 22
-          - 24
-          - 26
-          - 28
-          - 30
-          splits:
-          - 0.7
-          - 0.15
-          - 0.15
-          seed: 12
-          reshape:
-          - 1
-          - 1024
-          - 2
+      vision/params.yaml:
+        dataset: '...'
         model:
-          num_classes: 24
+          num_classes: 10
           embedding:
             patches:
-            - 1
-            - 64
+            - 16
+            - 16
             kernel_size:
-            - 1
-            - 16
+            - 2
+            - 2
             stride:
-            - 1
-            - 16
+            - 2
+            - 2
             activation: relu
             bits:
           positional: binary
@@ -102,7 +69,7 @@ stages:
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: post-norm
+          norm_placement: pre-norm
           dropout: 0.0
         seed: 12
         tag: baseline
@@ -129,24 +96,24 @@ stages:
             pin_memory: true
             drop_last: true
     outs:
-    - path: outputs/radioml/loss.yaml
+    - path: outputs/vision/loss.yaml
       hash: md5
-      md5: d28d27d2b9ba22e3a614e5c0413e1b94
-      size: 819
-    - path: outputs/radioml/lr.yaml
+      md5: 2a1c3b4dd91eb277ca5b971f8058e2a2
+      size: 836
+    - path: outputs/vision/lr.yaml
       hash: md5
       md5: d270f8ef8affa13aed6c086951924232
       size: 274
-    - path: outputs/radioml/model.pt
+    - path: outputs/vision/model.pt
       hash: md5
-      md5: 2a0c2504876c68b1f30fee098e1a0443
-      size: 71760
-    - path: outputs/radioml/optimizer.pt
+      md5: 86c2680e0e667f4d1f4175927813669a
+      size: 67280
+    - path: outputs/vision/optimizer.pt
       hash: md5
-      md5: b0ecc786d25746f49501e4164e46e531
-      size: 131641
+      md5: 2aeb4907a5bac50fb576de41ac2ab680
+      size: 122809
   eval:
-    cmd: bash run.sh python -m radioml.eval
+    cmd: bash run.sh python -m vision.eval
     deps:
     - path: activations.py
       hash: md5
@@ -172,62 +139,29 @@ stages:
       hash: md5
       md5: dc8537c6a3615ea74c2d1db381974a55
       size: 5162
-    - path: outputs/radioml/model.pt
+    - path: outputs/vision/model.pt
       hash: md5
-      md5: 2a0c2504876c68b1f30fee098e1a0443
-      size: 71760
+      md5: 86c2680e0e667f4d1f4175927813669a
+      size: 67280
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
       size: 1221
-    - path: radioml/dataset.py
-      hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
-    - path: radioml/eval.py
-      hash: md5
-      md5: 98755020c249a4ccf747167552a4b265
-      size: 4151
-    - path: radioml/model.py
-      hash: md5
-      md5: f3ced2e5ddd6fb91e1c6f68e0609e1fe
-      size: 6584
     - path: utils.py
       hash: md5
       md5: 46e1ab8e4a131348b7ef7482946e8bbd
       size: 1439
+    - path: vision/eval.py
+      hash: md5
+      md5: 965691e57252b046442d7d590cb77a6c
+      size: 4748
+    - path: vision/model.py
+      hash: md5
+      md5: abfc880284221906d010de1a85c7cb4c
+      size: 6545
     params:
-      radioml/params.yaml:
-        dataset:
-          signal_to_noise_ratios:
-          - -6
-          - -4
-          - -2
-          - 0
-          - 2
-          - 4
-          - 6
-          - 8
-          - 10
-          - 12
-          - 14
-          - 16
-          - 18
-          - 20
-          - 22
-          - 24
-          - 26
-          - 28
-          - 30
-          splits:
-          - 0.7
-          - 0.15
-          - 0.15
-          seed: 12
-          reshape:
-          - 1
-          - 1024
-          - 2
+      vision/params.yaml:
+        dataset: '...'
         eval:
           batch_size: 512
           loader:
@@ -236,17 +170,17 @@ stages:
             pin_memory: true
             drop_last: false
         model:
-          num_classes: 24
+          num_classes: 10
           embedding:
             patches:
-            - 1
-            - 64
+            - 16
+            - 16
             kernel_size:
-            - 1
-            - 16
+            - 2
+            - 2
             stride:
-            - 1
-            - 16
+            - 2
+            - 2
             activation: relu
             bits:
           positional: binary
@@ -258,21 +192,21 @@ stages:
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: post-norm
+          norm_placement: pre-norm
           dropout: 0.0
         seed: 12
         tag: baseline
     outs:
-    - path: outputs/radioml/accuracy.yaml
+    - path: outputs/vision/accuracy.yaml
       hash: md5
-      md5: 657351a09a4508631b2a2dbb28e0f201
-      size: 52
-    - path: outputs/radioml/classes.csv
+      md5: 655eb3230a93e52d6419c4969228e99a
+      size: 28
+    - path: outputs/vision/classes.csv
       hash: md5
-      md5: 36250bcfc55b56099498c92b33761487
-      size: 1433223
+      md5: 724342d5a3028c012b5f81e7ccbf0d72
+      size: 40015
   export:
-    cmd: python -m radioml.export
+    cmd: python -m vision.export
     deps:
     - path: activations.py
       hash: md5
@@ -298,62 +232,29 @@ stages:
       hash: md5
       md5: dc8537c6a3615ea74c2d1db381974a55
       size: 5162
-    - path: outputs/radioml/model.pt
+    - path: outputs/vision/model.pt
       hash: md5
-      md5: 2a0c2504876c68b1f30fee098e1a0443
-      size: 71760
+      md5: 86c2680e0e667f4d1f4175927813669a
+      size: 67280
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
       size: 1221
-    - path: radioml/dataset.py
-      hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
-    - path: radioml/export.py
-      hash: md5
-      md5: f4d39eda3436eecc8fe761ca3e19b385
-      size: 2993
-    - path: radioml/model.py
-      hash: md5
-      md5: f3ced2e5ddd6fb91e1c6f68e0609e1fe
-      size: 6584
     - path: utils.py
       hash: md5
       md5: 46e1ab8e4a131348b7ef7482946e8bbd
       size: 1439
+    - path: vision/export.py
+      hash: md5
+      md5: 817e2dfb572b7dde780fe6f90b665596
+      size: 3576
+    - path: vision/model.py
+      hash: md5
+      md5: abfc880284221906d010de1a85c7cb4c
+      size: 6545
     params:
-      radioml/params.yaml:
-        dataset:
-          signal_to_noise_ratios:
-          - -6
-          - -4
-          - -2
-          - 0
-          - 2
-          - 4
-          - 6
-          - 8
-          - 10
-          - 12
-          - 14
-          - 16
-          - 18
-          - 20
-          - 22
-          - 24
-          - 26
-          - 28
-          - 30
-          splits:
-          - 0.7
-          - 0.15
-          - 0.15
-          seed: 12
-          reshape:
-          - 1
-          - 1024
-          - 2
+      vision/params.yaml:
+        dataset: '...'
         export:
           split_heads: false
           opset_version: 18
@@ -363,17 +264,17 @@ stages:
           external_data: false
           optimize: false
         model:
-          num_classes: 24
+          num_classes: 10
           embedding:
             patches:
-            - 1
-            - 64
+            - 16
+            - 16
             kernel_size:
-            - 1
-            - 16
+            - 2
+            - 2
             stride:
-            - 1
-            - 16
+            - 2
+            - 2
             activation: relu
             bits:
           positional: binary
@@ -385,20 +286,20 @@ stages:
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: post-norm
+          norm_placement: pre-norm
           dropout: 0.0
         seed: 12
         tag: baseline
     outs:
-    - path: outputs/radioml/inp.npy
+    - path: outputs/vision/inp.npy
       hash: md5
-      md5: 08b8f0b2fe790382c0e49b84bcdb78d7
-      size: 8320
-    - path: outputs/radioml/model.onnx
+      md5: 2e88193b4ec4f0b4b43f9d4e7229e13c
+      size: 12416
+    - path: outputs/vision/model.onnx
       hash: md5
-      md5: 77fb8cf1608ddbe3fddf69b11b6d222d
-      size: 75075
-    - path: outputs/radioml/out.npy
+      md5: a774c710d73a96726abf03f1e5943fc1
+      size: 95249
+    - path: outputs/vision/out.npy
       hash: md5
-      md5: 6f6ad8855db562a804c48cfde8d276d8
+      md5: efa9423070d05804ad902edd7b10a08b
       size: 136

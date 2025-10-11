@@ -25,7 +25,7 @@ from einops.layers.torch import Rearrange
 class Model(torch.nn.Module):
     def __init__(
             self,
-            # Number of output classes to predict (24 RadioML classes)
+            # Number of output classes to predict (10 CIFAR-10 classes)
             num_classes=24,
             # Configuration of the initial patch-embedding layer
             embedding=None,
@@ -55,14 +55,13 @@ class Model(torch.nn.Module):
         # Patch embedding layer generating embedding vectors for patches of
         # sliding windows from the input
         self.emb = torch.nn.Sequential(
-            # RadioML data comes in with sequence (temporal) dimension before
-            # channels but is treated as an image in channels-first layout
-            Rearrange("b h w c -> b c h w"),
+            # The input to the vision model is already image data in
+            # channels-first layout, no need to rearrange here
             # Patch embedding generating the embedding dimension from sliding
             # windows of the input
             *([PatchEmbedding(dim=emb_dim, **embedding)] if embedding else []),
-            # Rearrange from channels-first back to channels-last sequence-first
-            # layout
+            # Rearrange from channels-first to channels-last sequence-first
+            # layout as expected by Transformers
             Rearrange("b c h w -> b h w c"),
         )
 
@@ -116,7 +115,7 @@ class Model(torch.nn.Module):
             get_positional(positional, bits, return_quant_tensor=False),
             # Unpack and repeat the configured sequence of blocks
             *(num_layers * configuration),
-            # RadioML data comes in with sequence (temporal) dimension before
+            # Transformer data comes in with sequence (spatial) dimension before
             # channels but is treated as an image in channels-first layout
             Rearrange("b h w c -> b c h w"),
             # Global average pooling to flatten the feature map

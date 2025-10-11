@@ -59,7 +59,7 @@ class MLP(torch.nn.Module):
             # Normalization layer preceding the main branch if configured as
             # pre-norm
             *(torch.nn.Sequential(
-                # RadioML data comes in with sequence (temporal) dimension
+                # Transformer data comes in with sequence (temporal) dimension
                 # before channels but is treated as an image in channels-first
                 # layout
                 Rearrange("b ... c -> b c ..."),
@@ -101,7 +101,7 @@ class MLP(torch.nn.Module):
         # post-norm
         if norm_placement == "post-norm" and norm is not None:
             self.post_norm = torch.nn.Sequential(
-                # RadioML data comes in with sequence (temporal) dimension
+                # Transformer data comes in with sequence (temporal) dimension
                 # before channels but is treated as an image in channels-first
                 # layout
                 Rearrange("b ... c -> b c ..."),
@@ -313,7 +313,7 @@ class Conv(torch.nn.Module):
         # CNN block of three convolution layers as the main branch of the
         # residual block
         self.cnn = torch.nn.Sequential(
-            # RadioML data comes in with sequence (temporal) dimension
+            # Transformer data comes in with sequence (temporal) dimension
             # before channels but is treated as an image in channels-first
             # layout
             Rearrange("b ... c -> b c ..."),
@@ -387,7 +387,7 @@ class Conv(torch.nn.Module):
         # post-norm
         if norm_placement == "post-norm" and norm is not None:
             self.post_norm = torch.nn.Sequential(
-                # RadioML data comes in with sequence (temporal) dimension
+                # Transformer data comes in with sequence (temporal) dimension
                 # before channels but is treated as an image in channels-first
                 # layout
                 Rearrange("b ... c -> b c ..."),
@@ -433,7 +433,7 @@ class Downsample(torch.nn.Module):
 
         # Convolution downsampling followed by a quantized activation function
         self.conv = torch.nn.Sequential(
-            # RadioML data comes in with sequence (temporal) dimension
+            # Transformer data comes in with sequence (temporal) dimension
             # before channels but is treated as an image in channels-first
             # layout
             Rearrange("b ... c -> b c ..."),
@@ -477,3 +477,13 @@ class Downsample(torch.nn.Module):
 BLOCKS = {
     "attention": Attention, "mlp": MLP, "conv": Conv, "downsample": Downsample
 }
+
+# Original configuration of the Transformer-encoder according to Vaswani et al.
+# 2017
+ORIGINAL = ("attention", "mlp")
+# Conformer configuration of the Transformer-encoder according to Gulati et al.
+# 2020
+CONFORMER = ("mlp", "attention", "conv", "mlp")
+
+# Maps string identifiers to Transformer block configurations
+TRANSFORMER_CONFIGURATIONS = {"original": ORIGINAL, "conformer": CONFORMER}

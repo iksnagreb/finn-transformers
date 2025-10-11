@@ -3,6 +3,7 @@ tqdm~=4.67.1
 dvc[webdav]~=3.62.0
 pyyaml~=6.0.2
 torch~=2.8.0
+torchvision~=0.23.0
 brevitas[export]~=0.12.1
 numpy<2.0.0
 h5py~=3.14.0

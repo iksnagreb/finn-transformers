@@ -4,16 +4,17 @@ tag: baseline
 seed: 12
 # Model hyperparameters: ...
 model:
-  # Number of output classes to predict (default 24 RadioML classes)
-  num_classes: 24
+  # Number of output classes to predict (default 10 MNIST/CIFAR-10 classes)
+  num_classes: 10  # TODO: Derive from dataset...?
   # Configuration of the initial patch-embedding layer
   embedding:
     # Number of patches to aggregate the feature map into
-    patches: [ 1, 64 ]
+    # "An Image is worth 16x16 words"...
+    patches: [ 16, 16 ]
     # Kernel size for sliding windows generating the patches
-    kernel_size: [ 1, 16 ]
+    kernel_size: [ 2, 2 ]
     # Stride of the sliding windows
-    stride: [ 1, 16 ]
+    stride: [ 2, 2 ]
     # Activation functions to use after the convolution layer
     #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
@@ -48,26 +49,11 @@ model:
   norm: batch-norm
   # Placement of the normalization layer: pre-norm or post-norm, if norm is not
   # none
-  norm_placement: post-norm
+  norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
   dropout: 0.0
 # Training/Validation dataset configuration
-dataset:
-  # Optionally select only a subset of the classes
-  #  classes: null
-  # Optionally select only a subset of the available noise levels
-  signal_to_noise_ratios: [
-    # Noise levels from -6 dB upwards to 30 dB in steps of 2
-    #   !!python/object/apply:builtins.range [-6, 31, 2]
-    -6, -4, -2, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
-  ]
-  # Splits the dataset into train/validation/evaluation subsets
-  splits: [ 0.70, 0.15, 0.15 ]  # 70%, 15%, 15% splits
-  # Seed used for reproducible splitting of datasets
-  seed: 12
-  # Reshape the dataset to fit the expected embedding dimension of the model
-  # and to effectively reduce the sequence length
-  reshape: [ 1, 1024, 2 ]
+dataset: ...
 # Training hyperparameters
 train:
   # Number of training epochs to run

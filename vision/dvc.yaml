@@ -1,0 +1,147 @@
+# List experiment stages, i.e., the jobs to be run
+stages:
+  # Model training stage: Runs training of a classifier on the vision dataset
+  train:
+    # Run the stage relative to the project root directory
+    wdir: ..
+    # Stage runs the training script as the command
+    cmd: bash run.sh python -m vision.train
+    # Data and code dependencies of this stage to determine when it needs to be
+    # rerun
+    deps:
+      # Vision case study source files
+      - vision/model.py
+      - vision/train.py
+      # General source files shared by other experiments
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      - utils.py
+    # Parameters from params.yaml used by this stage, changing any of these
+    # triggers a rerun
+    params:
+      - vision/params.yaml:
+          - tag
+          - seed
+          - model
+          - dataset
+          - train
+    # Outputs produced which should be tracked and passed on to the next stages
+    outs:
+      - outputs/vision/model.pt
+      - outputs/vision/optimizer.pt
+    # Plots produced by this stage
+    plots:
+      # Curves of training and validation loss per epoch
+      - outputs/vision/loss.yaml:
+          # Explicitly plot the validation loss
+          y: valid
+          # Give a more readable title to the plot
+          title: "Vision Validation Loss per Epoch"
+          # Track via git, not dvc cache
+          cache: false
+      # Curves of learning rate per epoch
+      - outputs/vision/lr.yaml:
+          # Explicitly plot the learning rate at the start of the epoch
+          y: last
+          # Give a more readable title to the plot
+          title: "Vision Learning Rate per Epoch"
+          # Track via git, not dvc cache
+          cache: false
+  # Model evaluation stage: Evaluates the trained model on the Vision dataset
+  eval:
+    # Run the stage relative to the project root directory
+    wdir: ..
+    # Stage runs the evaluation script as the command
+    cmd: bash run.sh python -m vision.eval
+    # Data and code dependencies of this stage to determine when it needs to be
+    # rerun
+    deps:
+      # Vision case study source files
+      - vision/model.py
+      - vision/eval.py
+      # General source files shared by other experiments
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      - utils.py
+      # The model checkpoint produced by the training stage
+      - outputs/vision/model.pt
+    # Parameters from params.yaml used by this stage, changing any of these
+    # triggers a rerun
+    params:
+      - vision/params.yaml:
+          - tag
+          - seed
+          - model
+          - dataset
+          - eval
+    # Metrics produced by this stage
+    metrics:
+      # Classification accuracy over the evaluation dataset
+      - outputs/vision/accuracy.yaml:
+          # Track via git, not dvc cache
+          cache: false
+    # Plots produced by this stage
+    plots:
+      # Confusion matrix of predicted vs. true classes
+      - outputs/vision/classes.csv:
+          # Use true class label as x-axis
+          x: cls
+          # Use the predicted class label as y-axis
+          y: prediction
+          # Use the confusion matrix plot template
+          template: confusion
+          # Give a more readable title to the plot
+          title: "Vision Confusion Matrix"
+          # Track via git, not dvc cache
+          cache: false
+  # Model export stage: Exports the trained classifier to ONNX format alongside
+  # some verification samples from the Vision dataset
+  export:
+    # Run the stage relative to the project root directory
+    wdir: ..
+    # Stage runs the export script as the command
+    cmd: python -m vision.export
+    # Data and code dependencies of this stage to determine when it needs to be
+    # rerun
+    deps:
+      # Vision case study source files
+      - vision/model.py
+      - vision/export.py
+      # General source files shared by other experiments
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      - utils.py
+      # The model checkpoint produced by the training stage
+      - outputs/vision/model.pt
+    # Parameters from params.yaml used by this stage, changing any of these
+    # triggers a rerun
+    params:
+      - vision/params.yaml:
+          - tag
+          - seed
+          - model
+          - dataset
+          - export
+    # Outputs produced which should be tracked and passed on to the next stages
+    outs:
+      # Trained model exported to the ONNX format
+      - outputs/vision/model.onnx
+      # Model verification input/output samples from the Vision dataset
+      - outputs/vision/inp.npy
+      - outputs/vision/out.npy
+  # TODO: FINN-build and deployment stages...
