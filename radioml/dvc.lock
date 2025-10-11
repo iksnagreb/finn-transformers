@@ -97,21 +97,21 @@ stages:
           configuration: original
           num_layers: 1
           num_heads: 4
-          emb_dim: 32
-          expansion_dim: 128
+          emb_dim: 64
+          expansion_dim: 256
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: post-norm
+          norm_placement: pre-norm
           dropout: 0.0
         seed: 12
         tag: baseline
         train:
           epochs: 20
-          batch_size: 64
+          batch_size: 256
           optimizer:
             algorithm: adam
-            lr: 0.001
+            lr: 0.01
             weight_decay: 0.0
             betas:
             - 0.9
@@ -131,20 +131,20 @@ stages:
     outs:
     - path: outputs/radioml/loss.yaml
       hash: md5
-      md5: ef179eb7400814f854eb33790652990d
-      size: 1096
+      md5: 95b71c96d6eb5d25918a3630ed7549c6
+      size: 1102
     - path: outputs/radioml/lr.yaml
       hash: md5
-      md5: 17d00360a469230fd3b5fc82cbd876e2
-      size: 371
+      md5: dc4dccc4e6dfbe06aee67ef3d523f4a1
+      size: 346
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: 384376192bfdf2bc281fe648a3463212
-      size: 71760
+      md5: b4b88c93deaf6f2b8af5edcbb6f706e6
+      size: 228688
     - path: outputs/radioml/optimizer.pt
       hash: md5
-      md5: 9cf809a05200edb7dcc2413a1c1f23c6
-      size: 131641
+      md5: ccae0078dd8ba46a22e7f98250d57f47
+      size: 443961
   eval:
     cmd: bash run.sh python -m radioml.eval
     deps:
@@ -174,8 +174,8 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: 384376192bfdf2bc281fe648a3463212
-      size: 71760
+      md5: b4b88c93deaf6f2b8af5edcbb6f706e6
+      size: 228688
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -253,24 +253,24 @@ stages:
           configuration: original
           num_layers: 1
           num_heads: 4
-          emb_dim: 32
-          expansion_dim: 128
+          emb_dim: 64
+          expansion_dim: 256
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: post-norm
+          norm_placement: pre-norm
           dropout: 0.0
         seed: 12
         tag: baseline
     outs:
     - path: outputs/radioml/accuracy.yaml
       hash: md5
-      md5: 368e74479d816d54f3cf837a0c11d6f2
+      md5: b731bdccf56bf27ee8d9aac34c7177fb
       size: 52
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: efc13e97d9a7ddaa34387c90a5c4854e
-      size: 1417528
+      md5: 85bc16752a93ec7338500cd9f62ef0b2
+      size: 1431219
   export:
     cmd: python -m radioml.export
     deps:
@@ -300,8 +300,8 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: 384376192bfdf2bc281fe648a3463212
-      size: 71760
+      md5: b4b88c93deaf6f2b8af5edcbb6f706e6
+      size: 228688
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -380,29 +380,29 @@ stages:
           configuration: original
           num_layers: 1
           num_heads: 4
-          emb_dim: 32
-          expansion_dim: 128
+          emb_dim: 64
+          expansion_dim: 256
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: post-norm
+          norm_placement: pre-norm
           dropout: 0.0
         seed: 12
         tag: baseline
     outs:
     - path: outputs/radioml/cls.npy
       hash: md5
-      md5: 6f6ad8855db562a804c48cfde8d276d8
+      md5: 0551ae28c217f7e60f2c6625ebd6107e
       size: 136
     - path: outputs/radioml/inp.npy
       hash: md5
-      md5: 08b8f0b2fe790382c0e49b84bcdb78d7
+      md5: ee6680734888d36d65bb73c67d19a7a1
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: 8368dfbb359f98bccce64ecd6edd2292
-      size: 75075
+      md5: 1d9c91c07cf76897af342136d765fa13
+      size: 239828
     - path: outputs/radioml/out.npy
       hash: md5
-      md5: 50ab248ec458031d8bcff5f61c7c55b6
+      md5: e8e15b3ae5f1ccdb0ccdf6eadffe0fdb
       size: 224

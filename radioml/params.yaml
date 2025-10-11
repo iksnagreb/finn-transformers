@@ -33,10 +33,10 @@ model:
   num_heads: 4
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 32
+  emb_dim: 64
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 128
+  expansion_dim: 256
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: null
@@ -48,7 +48,7 @@ model:
   norm: batch-norm
   # Placement of the normalization layer: pre-norm or post-norm, if norm is not
   # none
-  norm_placement: post-norm
+  norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
   dropout: 0.0
 # Training/Validation dataset configuration
@@ -73,13 +73,13 @@ train:
   # Number of training epochs to run
   epochs: 20
   # Batch size for training
-  batch_size: 64
+  batch_size: 256
   # Optimizer configuration
   optimizer:
     # Name of the optimization algorithm to use: adam or sgd
     algorithm: adam
     # (Initial) Learning rate
-    lr: 0.001
+    lr: 0.01
     # L2 regularization
     weight_decay: 0.0
     # Coefficients used for computing running averages of gradient and its
