@@ -14,6 +14,8 @@ model:
     kernel_size: [ 1, 16 ]
     # Stride of the sliding windows
     stride: [ 1, 16 ]
+    # Padding to the input width to ensure expected number of output patches
+    padding: [ 0, 0 ]
     # Activation functions to use after the convolution layer
     #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
@@ -62,7 +64,7 @@ dataset:
     -6, -4, -2, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
   ]
   # Splits the dataset into train/validation/evaluation subsets
-  splits: [ 0.70, 0.15, 0.15 ]  # 70%, 15%, 15% splits
+  splits: [ 0.80, 0.10, 0.10 ]  # 80%, 10%, 10% splits
   # Seed used for reproducible splitting of datasets
   seed: 12
   # Reshape the dataset to fit the expected embedding dimension of the model
@@ -79,7 +81,7 @@ train:
     # Name of the optimization algorithm to use: adam or sgd
     algorithm: adam
     # (Initial) Learning rate
-    lr: 0.01
+    lr: 0.001
     # L2 regularization
     weight_decay: 0.0
     # Coefficients used for computing running averages of gradient and its
@@ -95,7 +97,7 @@ train:
     factor: 0.1
     # Number of epochs without improvement to wait before reducing the
     # learning rate
-    patience: 5
+    patience: 10
   # DataLoader keyword arguments
   loader:
     # Reshuffle data every epoch

@@ -13,6 +13,8 @@ model:
     patches: [ 16, 16 ]
     # Kernel size for sliding windows generating the patches
     kernel_size: [ 2, 2 ]
+    # Padding to the input width to ensure expected number of output patches
+    padding: [ 0, 0 ]
     # Stride of the sliding windows
     stride: [ 2, 2 ]
     # Activation functions to use after the convolution layer
@@ -81,7 +83,7 @@ train:
     factor: 0.1
     # Number of epochs without improvement to wait before reducing the
     # learning rate
-    patience: 5
+    patience: 10
   # DataLoader keyword arguments
   loader:
     # Reshuffle data every epoch
