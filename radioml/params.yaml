@@ -52,7 +52,7 @@ model:
   # none
   norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
-  dropout: 0.0
+  dropout: 0.1
 # Training/Validation dataset configuration
 dataset:
   # Optionally select only a subset of the classes
@@ -75,18 +75,18 @@ train:
   # Number of training epochs to run
   epochs: 20
   # Batch size for training
-  batch_size: 256
+  batch_size: 512
   # Optimizer configuration
   optimizer:
     # Name of the optimization algorithm to use: adam or sgd
     algorithm: adam
     # (Initial) Learning rate
-    lr: 0.001
+    lr: 0.0001
     # L2 regularization
     weight_decay: 0.0
     # Coefficients used for computing running averages of gradient and its
     # square.
-    betas: [ 0.9, 0.98 ]
+    betas: [ 0.9, 0.999 ]
     # Term added to the denominator to improve numerical stability
     eps: 1.0e-8
   # Loss function to use: cross-entropy or nll
@@ -94,7 +94,7 @@ train:
   # Learning rate scheduler (ReduceLROnPlateau) configuration
   scheduler:
     # Reduce learning rate by  this factor if the loss stops improving
-    factor: 0.1
+    factor: 0.5
     # Number of epochs without improvement to wait before reducing the
     # learning rate
     patience: 10
@@ -120,9 +120,11 @@ eval:
   # DataLoader keyword arguments
   loader:
     # Number of workers to use for loading the data in parallel
-    num_workers: 8
+    num_workers: 32
     # Number of batches loaded in advance by each worker
-    prefetch_factor: 8
+    prefetch_factor: 4
+    # Keep worker processes alive after consuming the dataset once
+    persistent_workers: false
     # Load tensors into device pinned memory
     pin_memory: true
     # Do not drop the last batch if it is incomplete
@@ -132,7 +134,7 @@ export:
   # Explicitly splits all attention heads in the model graph to be parallel
   split_heads: false
   # Version of the default ONNX opset
-  opset_version: 18
+  opset_version: 19
   # Apply the constant-folding optimization
   do_constant_folding: true
   # Export batch size - allows to provide more verification samples
