@@ -141,6 +141,14 @@ stages:
             pin_memory: true
             drop_last: true
     outs:
+    - path: outputs/language/loss.yaml
+      hash: md5
+      md5: a7b7ce71c8e1559358b6d4119df84068
+      size: 1111
+    - path: outputs/language/lr.yaml
+      hash: md5
+      md5: c8b81d8a509786e91ea15532342ff2bd
+      size: 384
     - path: outputs/language/model.pt
       hash: md5
       md5: ce3f1f3155714c337356e6cab993362b

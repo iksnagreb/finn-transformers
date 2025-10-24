@@ -61,6 +61,24 @@ stages:
     outs:
       - outputs/language/model.pt
       - outputs/language/optimizer.pt
+    # Plots produced by this stage
+    plots:
+      # Curves of training and validation loss per epoch
+      - outputs/language/loss.yaml:
+          # Explicitly plot the validation loss
+          y: valid
+          # Give a more readable title to the plot
+          title: "Language Validation Loss per Epoch"
+          # Track via git, not dvc cache
+          cache: false
+      # Curves of learning rate per epoch
+      - outputs/language/lr.yaml:
+          # Explicitly plot the learning rate at the start of the epoch
+          y: last
+          # Give a more readable title to the plot
+          title: "Language Learning Rate per Epoch"
+          # Track via git, not dvc cache
+          cache: false
   # Language model evaluation stage using the pre-trained tokenizer for
   # preprocessing the language dataset and evaluating the model trained in the
   # training stage
