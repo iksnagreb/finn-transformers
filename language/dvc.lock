@@ -104,7 +104,7 @@ stages:
             bits:
           positional: binary
           configuration: original
-          num_layers: 1
+          num_layers: 2
           num_heads: 4
           emb_dim: 64
           expansion_dim: 256
@@ -123,7 +123,7 @@ stages:
           mlm_probability: 0.15
           optimizer:
             algorithm: adam
-            lr: 0.0001
+            lr: 0.001
             weight_decay: 0.0
             betas:
             - 0.9
@@ -143,19 +143,19 @@ stages:
     outs:
     - path: outputs/language/loss.yaml
       hash: md5
-      md5: a7b7ce71c8e1559358b6d4119df84068
-      size: 1111
+      md5: b252c88b63c5b89bd5484459aa6cbaa7
+      size: 1115
     - path: outputs/language/lr.yaml
       hash: md5
-      md5: c8b81d8a509786e91ea15532342ff2bd
-      size: 384
+      md5: 352804c7dcabf266da98ffd9d9309782
+      size: 364
     - path: outputs/language/model.pt
       hash: md5
-      md5: ce3f1f3155714c337356e6cab993362b
-      size: 1267566
+      md5: 27d419e6cb00405f7f73db326be409da
+      size: 1274350
     - path: outputs/language/optimizer.pt
       hash: md5
-      md5: f35b2f186471da3da5d9051a32efdd25
+      md5: aefb1960d633d689ca0a955992e61ffa
       size: 2524738
   eval:
     cmd: PARTITION=gpu bash run.sh python -m language.eval
@@ -198,8 +198,8 @@ stages:
       size: 5162
     - path: outputs/language/model.pt
       hash: md5
-      md5: ce3f1f3155714c337356e6cab993362b
-      size: 1267566
+      md5: 27d419e6cb00405f7f73db326be409da
+      size: 1274350
     - path: outputs/language/tokenizer
       hash: md5
       md5: 61948a57f0450a0f7f7a9d7814450207.dir
@@ -239,7 +239,7 @@ stages:
             bits:
           positional: binary
           configuration: original
-          num_layers: 1
+          num_layers: 2
           num_heads: 4
           emb_dim: 64
           expansion_dim: 256
@@ -253,8 +253,8 @@ stages:
     outs:
     - path: outputs/language/accuracy.yaml
       hash: md5
-      md5: a495fe472047598e117aaa0dcefc5174
-      size: 52
+      md5: 6cf5a4cedb400ae4adc3edb1425ded75
+      size: 53
   export:
     cmd: PARTITION=normal bash run.sh python -m language.export
     deps:
@@ -296,8 +296,8 @@ stages:
       size: 5162
     - path: outputs/language/model.pt
       hash: md5
-      md5: ce3f1f3155714c337356e6cab993362b
-      size: 1267566
+      md5: 27d419e6cb00405f7f73db326be409da
+      size: 1274350
     - path: outputs/language/tokenizer
       hash: md5
       md5: 61948a57f0450a0f7f7a9d7814450207.dir
@@ -337,7 +337,7 @@ stages:
             bits:
           positional: binary
           configuration: original
-          num_layers: 1
+          num_layers: 2
           num_heads: 4
           emb_dim: 64
           expansion_dim: 256
@@ -359,9 +359,9 @@ stages:
       size: 2176
     - path: outputs/language/model.onnx
       hash: md5
-      md5: 517d9a631662dd319c4d0ccc2a9e6660
-      size: 1330860
+      md5: e79ed54cf55b337fd43ea49062c00558
+      size: 1535000
     - path: outputs/language/out.npy
       hash: md5
-      md5: 03b27cc80c9700f36eedcf537bfbee31
+      md5: 18f134eec61f38adb29f0ae3d92fe9b6
       size: 2097280

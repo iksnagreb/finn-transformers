@@ -114,7 +114,7 @@ stages:
           batch_size: 512
           optimizer:
             algorithm: adam
-            lr: 0.0001
+            lr: 0.01
             weight_decay: 0.0
             betas:
             - 0.9
@@ -134,19 +134,19 @@ stages:
     outs:
     - path: outputs/radioml/loss.yaml
       hash: md5
-      md5: b10695a882cd468e2e351624d8ae53bb
-      size: 1101
+      md5: 235d163d2ef22f9d02c20fce2c7c6647
+      size: 1100
     - path: outputs/radioml/lr.yaml
       hash: md5
-      md5: c8b81d8a509786e91ea15532342ff2bd
-      size: 384
+      md5: 472b4450f4964d7a0635c04bf54fec19
+      size: 344
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: f084c94f9571c44d1e91166ce091c7a5
+      md5: f40d654a805c274a83d25788167a19cd
       size: 228688
     - path: outputs/radioml/optimizer.pt
       hash: md5
-      md5: 9c1b3311cd9fed9a7e8d2df0c3e3f7aa
+      md5: d27ee332aed8a0ebad87a08233874e21
       size: 443961
   eval:
     cmd: bash run.sh python -m radioml.eval
@@ -177,7 +177,7 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: f084c94f9571c44d1e91166ce091c7a5
+      md5: f40d654a805c274a83d25788167a19cd
       size: 228688
     - path: quant.py
       hash: md5
@@ -272,12 +272,12 @@ stages:
     outs:
     - path: outputs/radioml/accuracy.yaml
       hash: md5
-      md5: 077ac9582b21935187fe6029c7477b3b
+      md5: 04f5e0c3b5af2992e7574c863f515181
       size: 52
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: 91bdfce0a4f7f7a03930a2965050b470
-      size: 952233
+      md5: a2980746edb382de81935288e194eee0
+      size: 960187
   export:
     cmd: python -m radioml.export
     deps:
@@ -307,7 +307,7 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: f084c94f9571c44d1e91166ce091c7a5
+      md5: f40d654a805c274a83d25788167a19cd
       size: 228688
     - path: quant.py
       hash: md5
@@ -410,9 +410,9 @@ stages:
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: 3f90d53cc8240001e22d8444f9617ebc
+      md5: 60dbc8e80991439c39e0a8b87b5e7810
       size: 240739
     - path: outputs/radioml/out.npy
       hash: md5
-      md5: f4bbc0ef7e983001659ba6fcab63d781
+      md5: 80089f6d903c363f63593cb53cd4b22f
       size: 224

@@ -31,7 +31,7 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 1
+  num_layers: 2
   # Number of attention heads
   num_heads: 4
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
@@ -67,7 +67,7 @@ train:
     # Name of the optimization algorithm to use: adam or sgd
     algorithm: adam
     # (Initial) Learning rate
-    lr: 0.0001
+    lr: 0.01
     # L2 regularization
     weight_decay: 0.0
     # Coefficients used for computing running averages of gradient and its
