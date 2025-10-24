@@ -7,8 +7,8 @@ from brevitas.nn import QuantIdentity
 from lazy import LazyQuantLinear
 # Quantized positional encoding variants
 from encoding import get_positional
-# Quantized patch embedding for ViT-like models
-from embedding import PatchEmbedding
+# Quantized token embedding for language models
+from embedding import TokenEmbedding
 # Collection of reusable, named and configurable Transformer blocks
 from blocks import BLOCKS, ORIGINAL, CONFORMER, TRANSFORMER_CONFIGURATIONS
 
@@ -18,16 +18,17 @@ from einops import pack, unpack
 from einops.layers.torch import Rearrange
 
 
-# Configurable Transformer implementation with patch embedding, positional
+# Configurable Transformer implementation with token embedding, positional
 # encoding, Transformer-encoder stack (original, conformer, or custom) and
 # linear classifier at the end. Can also be instantiated without any attention
 # operators, e.g., when training baselines or when conducting ablation studies.
 class Model(torch.nn.Module):
     def __init__(
             self,
-            # Number of output classes to predict (10 CIFAR-10 classes)
-            num_classes=24,
-            # Configuration of the initial patch-embedding layer
+            # Number of tokens in the vocabulary (size of embedding layer and
+            # output predictions per position)
+            vocab_size=4096,
+            # Configuration of the initial token embedding layer
             embedding=None,
             # Type of positional encoding to use at the input
             positional="sinusoidal",
@@ -52,18 +53,9 @@ class Model(torch.nn.Module):
     ):
         super().__init__()
 
-        # Patch embedding layer generating embedding vectors for patches of
-        # sliding windows from the input
-        self.emb = torch.nn.Sequential(
-            # The input to the vision model is already image data in
-            # channels-first layout, no need to rearrange here
-            # Patch embedding generating the embedding dimension from sliding
-            # windows of the input
-            *([PatchEmbedding(dim=emb_dim, **embedding)] if embedding else []),
-            # Rearrange from channels-first to channels-last sequence-first
-            # layout as expected by Transformers
-            Rearrange("b c h w -> b h w c"),
-        )
+        # Token embedding layer generating embedding vectors for the sequence of
+        # indices into the vocabulary
+        self.emb = TokenEmbedding(vocab_size, emb_dim, **embedding)
 
         # Map named block configuration to the actual tuple configuration from
         # the configuration dictionary
@@ -115,11 +107,6 @@ class Model(torch.nn.Module):
             get_positional(positional, bits, return_quant_tensor=False),
             # Unpack and repeat the configured sequence of blocks
             *(num_layers * configuration),
-            # Transformer data comes in with sequence (spatial) dimension before
-            # channels but is treated as an image in channels-first layout
-            Rearrange("b h w c -> b c h w"),
-            # Global average pooling to flatten the feature map
-            torch.nn.AdaptiveAvgPool2d((1, 1)), torch.nn.Flatten()
         )
 
         # Weight quantizer configuration: Disables quantizer if bits are None
@@ -127,11 +114,12 @@ class Model(torch.nn.Module):
             {"weight_bit_width": bits} if bits else {"weight_quant": None}
         )
 
-        # Linear layers as a classifier
+        # Linear layers as a classifier/prediction head producing a vector of
+        # token probabilities per position
         self.cls = torch.nn.Sequential(
             # A single Linear layer as the output layer - softmax activation
             # should be covered by the cross entropy loss
-            LazyQuantLinear(num_classes, **weight_quant),
+            LazyQuantLinear(vocab_size, **weight_quant),
             # Insert optional activation quantizer if enabled
             *([QuantIdentity(bit_width=bits)] if bits else []),
         )

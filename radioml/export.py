@@ -47,7 +47,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
 
     # Load the RadioML dataset splits as configured
     _, _, eval_data = get_datasets(path=RADIOML_PATH, **dataset)
-    # Create a batched and shuffled data loader the ImageNet validation split
+    # Create a batched and shuffled data loader the RadioML validation split
     export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
 
     # Sample the first batch from the export dataset

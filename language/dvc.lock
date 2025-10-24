@@ -1,7 +1,44 @@
 schema: '2.0'
 stages:
+  tokenizer:
+    cmd: PARTITION=normal bash run.sh python -m language.tokenizer
+    deps:
+    - path: language/dataset.py
+      hash: md5
+      md5: e66d569db8dcb3f5bb06e56941983854
+      size: 2302
+    - path: language/tokenizer.py
+      hash: md5
+      md5: facaff044fb3f5fb66bc4bc7d40aa147
+      size: 1593
+    - path: utils.py
+      hash: md5
+      md5: 46e1ab8e4a131348b7ef7482946e8bbd
+      size: 1439
+    params:
+      language/params.yaml:
+        dataset:
+          path: roneneldan/TinyStories
+          name:
+          split: train
+          splits:
+          - 0.8
+          - 0.1
+          - 0.1
+        seed: 12
+        tag: baseline
+        tokenizer:
+          pretrained: bert-base-cased
+          vocab_size: 2048
+          limit_alphabet: 150
+    outs:
+    - path: outputs/language/tokenizer
+      hash: md5
+      md5: 61948a57f0450a0f7f7a9d7814450207.dir
+      size: 55434
+      nfiles: 4
   train:
-    cmd: bash run.sh python -m radioml.train
+    cmd: PARTITION=gpu bash run.sh python -m language.train
     deps:
     - path: activations.py
       hash: md5
@@ -23,78 +60,47 @@ stages:
       hash: md5
       md5: 481854c553f5991907217d8981931d6c
       size: 8840
+    - path: language/dataset.py
+      hash: md5
+      md5: e66d569db8dcb3f5bb06e56941983854
+      size: 2302
+    - path: language/model.py
+      hash: md5
+      md5: 26b34eab64cb1f372623ad89b061b8d5
+      size: 5873
+    - path: language/train.py
+      hash: md5
+      md5: 7efc18bc2ce2eb396805e77ca64778bc
+      size: 7065
     - path: lazy.py
       hash: md5
       md5: dc8537c6a3615ea74c2d1db381974a55
       size: 5162
+    - path: outputs/language/tokenizer
+      hash: md5
+      md5: 61948a57f0450a0f7f7a9d7814450207.dir
+      size: 55434
+      nfiles: 4
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
       size: 1221
-    - path: radioml/dataset.py
-      hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
-    - path: radioml/model.py
-      hash: md5
-      md5: f3ced2e5ddd6fb91e1c6f68e0609e1fe
-      size: 6584
-    - path: radioml/train.py
-      hash: md5
-      md5: 8327f7f68b18751b585a3bf5fa97ae86
-      size: 5892
     - path: utils.py
       hash: md5
       md5: 46e1ab8e4a131348b7ef7482946e8bbd
       size: 1439
     params:
-      radioml/params.yaml:
+      language/params.yaml:
         dataset:
-          signal_to_noise_ratios:
-          - -6
-          - -4
-          - -2
-          - 0
-          - 2
-          - 4
-          - 6
-          - 8
-          - 10
-          - 12
-          - 14
-          - 16
-          - 18
-          - 20
-          - 22
-          - 24
-          - 26
-          - 28
-          - 30
+          path: roneneldan/TinyStories
+          name:
+          split: train
           splits:
           - 0.8
           - 0.1
           - 0.1
-          seed: 12
-          reshape:
-          - 1
-          - 1024
-          - 2
         model:
-          num_classes: 24
           embedding:
-            patches:
-            - 1
-            - 64
-            kernel_size:
-            - 1
-            - 16
-            stride:
-            - 1
-            - 16
-            padding:
-            - 0
-            - 0
-            activation: relu
             bits:
           positional: binary
           configuration: original
@@ -106,23 +112,26 @@ stages:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
-          dropout: 0.0
+          dropout: 0.1
         seed: 12
         tag: baseline
         train:
           epochs: 20
           batch_size: 256
+          context_length: 256
+          mlm: true
+          mlm_probability: 0.15
           optimizer:
             algorithm: adam
-            lr: 0.001
+            lr: 0.0001
             weight_decay: 0.0
             betas:
             - 0.9
-            - 0.98
+            - 0.999
             eps: 1e-08
           criterion: cross-entropy
           scheduler:
-            factor: 0.1
+            factor: 0.5
             patience: 10
           loader:
             shuffle: true
@@ -132,24 +141,16 @@ stages:
             pin_memory: true
             drop_last: true
     outs:
-    - path: outputs/radioml/loss.yaml
+    - path: outputs/language/model.pt
       hash: md5
-      md5: 3ad14a69f4c5f2ca6d516a153420dd49
-      size: 1083
-    - path: outputs/radioml/lr.yaml
+      md5: ce3f1f3155714c337356e6cab993362b
+      size: 1267566
+    - path: outputs/language/optimizer.pt
       hash: md5
-      md5: 352804c7dcabf266da98ffd9d9309782
-      size: 364
-    - path: outputs/radioml/model.pt
-      hash: md5
-      md5: 2551869c5ac75b6fd93bbb562e3fa00c
-      size: 228688
-    - path: outputs/radioml/optimizer.pt
-      hash: md5
-      md5: 99097a5dc110edcedc5fe9285b59404e
-      size: 443961
+      md5: f35b2f186471da3da5d9051a32efdd25
+      size: 2524738
   eval:
-    cmd: bash run.sh python -m radioml.eval
+    cmd: PARTITION=gpu bash run.sh python -m language.eval
     deps:
     - path: activations.py
       hash: md5
@@ -171,89 +172,62 @@ stages:
       hash: md5
       md5: 481854c553f5991907217d8981931d6c
       size: 8840
+    - path: language/dataset.py
+      hash: md5
+      md5: e66d569db8dcb3f5bb06e56941983854
+      size: 2302
+    - path: language/eval.py
+      hash: md5
+      md5: e67fdcb94509b2defa8d1d8fb2c38abe
+      size: 5091
+    - path: language/model.py
+      hash: md5
+      md5: 26b34eab64cb1f372623ad89b061b8d5
+      size: 5873
     - path: lazy.py
       hash: md5
       md5: dc8537c6a3615ea74c2d1db381974a55
       size: 5162
-    - path: outputs/radioml/model.pt
+    - path: outputs/language/model.pt
       hash: md5
-      md5: 2551869c5ac75b6fd93bbb562e3fa00c
-      size: 228688
+      md5: ce3f1f3155714c337356e6cab993362b
+      size: 1267566
+    - path: outputs/language/tokenizer
+      hash: md5
+      md5: 61948a57f0450a0f7f7a9d7814450207.dir
+      size: 55434
+      nfiles: 4
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
       size: 1221
-    - path: radioml/dataset.py
-      hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
-    - path: radioml/eval.py
-      hash: md5
-      md5: 98755020c249a4ccf747167552a4b265
-      size: 4151
-    - path: radioml/model.py
-      hash: md5
-      md5: f3ced2e5ddd6fb91e1c6f68e0609e1fe
-      size: 6584
     - path: utils.py
       hash: md5
       md5: 46e1ab8e4a131348b7ef7482946e8bbd
       size: 1439
     params:
-      radioml/params.yaml:
+      language/params.yaml:
         dataset:
-          signal_to_noise_ratios:
-          - -6
-          - -4
-          - -2
-          - 0
-          - 2
-          - 4
-          - 6
-          - 8
-          - 10
-          - 12
-          - 14
-          - 16
-          - 18
-          - 20
-          - 22
-          - 24
-          - 26
-          - 28
-          - 30
+          path: roneneldan/TinyStories
+          name:
+          split: train
           splits:
           - 0.8
           - 0.1
           - 0.1
-          seed: 12
-          reshape:
-          - 1
-          - 1024
-          - 2
         eval:
           batch_size: 512
+          context_length: 256
+          mlm: true
+          mlm_probability: 0.15
           loader:
-            num_workers: 8
-            prefetch_factor: 8
+            num_workers: 32
+            prefetch_factor: 4
+            persistent_workers: false
             pin_memory: true
-            drop_last: false
+            drop_last: true
         model:
-          num_classes: 24
           embedding:
-            patches:
-            - 1
-            - 64
-            kernel_size:
-            - 1
-            - 16
-            stride:
-            - 1
-            - 16
-            padding:
-            - 0
-            - 0
-            activation: relu
             bits:
           positional: binary
           configuration: original
@@ -265,20 +239,16 @@ stages:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
-          dropout: 0.0
+          dropout: 0.1
         seed: 12
         tag: baseline
     outs:
-    - path: outputs/radioml/accuracy.yaml
+    - path: outputs/language/accuracy.yaml
       hash: md5
-      md5: d21447bcbb81b2801ea14c9c35f40891
+      md5: a495fe472047598e117aaa0dcefc5174
       size: 52
-    - path: outputs/radioml/classes.csv
-      hash: md5
-      md5: e8bf5d8bd72bfc6668311b13ca2e9815
-      size: 963058
   export:
-    cmd: python -m radioml.export
+    cmd: PARTITION=normal bash run.sh python -m language.export
     deps:
     - path: activations.py
       hash: md5
@@ -300,90 +270,62 @@ stages:
       hash: md5
       md5: 481854c553f5991907217d8981931d6c
       size: 8840
+    - path: language/dataset.py
+      hash: md5
+      md5: e66d569db8dcb3f5bb06e56941983854
+      size: 2302
+    - path: language/export.py
+      hash: md5
+      md5: e3fe446fb3b0058b42a1a6e86f429a6f
+      size: 4424
+    - path: language/model.py
+      hash: md5
+      md5: 26b34eab64cb1f372623ad89b061b8d5
+      size: 5873
     - path: lazy.py
       hash: md5
       md5: dc8537c6a3615ea74c2d1db381974a55
       size: 5162
-    - path: outputs/radioml/model.pt
+    - path: outputs/language/model.pt
       hash: md5
-      md5: 2551869c5ac75b6fd93bbb562e3fa00c
-      size: 228688
+      md5: ce3f1f3155714c337356e6cab993362b
+      size: 1267566
+    - path: outputs/language/tokenizer
+      hash: md5
+      md5: 61948a57f0450a0f7f7a9d7814450207.dir
+      size: 55434
+      nfiles: 4
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
       size: 1221
-    - path: radioml/dataset.py
-      hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
-    - path: radioml/export.py
-      hash: md5
-      md5: 218115ef0d17dfd75becb36a0a4587f1
-      size: 3157
-    - path: radioml/model.py
-      hash: md5
-      md5: f3ced2e5ddd6fb91e1c6f68e0609e1fe
-      size: 6584
     - path: utils.py
       hash: md5
       md5: 46e1ab8e4a131348b7ef7482946e8bbd
       size: 1439
     params:
-      radioml/params.yaml:
+      language/params.yaml:
         dataset:
-          signal_to_noise_ratios:
-          - -6
-          - -4
-          - -2
-          - 0
-          - 2
-          - 4
-          - 6
-          - 8
-          - 10
-          - 12
-          - 14
-          - 16
-          - 18
-          - 20
-          - 22
-          - 24
-          - 26
-          - 28
-          - 30
+          path: roneneldan/TinyStories
+          name:
+          split: train
           splits:
           - 0.8
           - 0.1
           - 0.1
-          seed: 12
-          reshape:
-          - 1
-          - 1024
-          - 2
         export:
           split_heads: false
-          opset_version: 18
+          opset_version: 19
           do_constant_folding: true
           batch_size: 1
+          context_length: 256
+          mlm: true
+          mlm_probability: 0.15
           dynamo: false
           external_data: false
           optimize: false
         model:
-          num_classes: 24
           embedding:
-            patches:
-            - 1
-            - 64
-            kernel_size:
-            - 1
-            - 16
-            stride:
-            - 1
-            - 16
-            padding:
-            - 0
-            - 0
-            activation: relu
             bits:
           positional: binary
           configuration: original
@@ -395,23 +337,23 @@ stages:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
-          dropout: 0.0
+          dropout: 0.1
         seed: 12
         tag: baseline
     outs:
-    - path: outputs/radioml/cls.npy
+    - path: outputs/language/cls.npy
       hash: md5
-      md5: 361d5da968f55dffb2febf837426e1ef
-      size: 136
-    - path: outputs/radioml/inp.npy
+      md5: 0b8384ae3c53fba68d664bee45becab0
+      size: 2176
+    - path: outputs/language/inp.npy
       hash: md5
-      md5: 81611fc31c246749eff5e4c0b30ffc5c
-      size: 8320
-    - path: outputs/radioml/model.onnx
+      md5: 2be5b8970fe67ade3940bc431752928c
+      size: 2176
+    - path: outputs/language/model.onnx
       hash: md5
-      md5: 204637e94ecccc7839e9ff5fbaa47df0
-      size: 240739
-    - path: outputs/radioml/out.npy
+      md5: 517d9a631662dd319c4d0ccc2a9e6660
+      size: 1330860
+    - path: outputs/language/out.npy
       hash: md5
-      md5: f576e5618d4ca04c20d489e44b359bd0
-      size: 224
+      md5: 03b27cc80c9700f36eedcf537bfbee31
+      size: 2097280

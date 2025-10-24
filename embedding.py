@@ -1,7 +1,7 @@
 # Neural Network building blocks
 import torch
 # Brevitas quantized equivalents of PyTorch layers
-from brevitas.nn import QuantIdentity
+from brevitas.nn import QuantIdentity, QuantEmbedding
 
 # Selection of supported activation functions shared by different models
 from activations import ACTIVATIONS
@@ -62,3 +62,35 @@ class PatchEmbedding(torch.nn.Module):
 
     def forward(self, x):
         return self.patches(x)
+
+
+# Quantized token embedding for language models. This is just a wrapper around
+# the brevitas QuantEmbedding, forwarding a subset of arguments.
+class TokenEmbedding(torch.nn.Module):
+    def __init__(
+            self,
+            # Number of tokens in the vocabulary (size of embedding layer and
+            # output predictions per position)
+            vocab_size=4096,
+            # Embedding dimension: size of each embedding vector
+            emb_dim=512,
+            # Quantization bitwidth for embedding weights: None means no
+            # quantization
+            bits=None,
+            # Keyword arguments going to the QuantEmbedding layer configuring
+            # norm, padding, sparsity, etc.
+            **kwargs
+    ):
+        super().__init__()
+
+        # Weight quantizer configuration: Disables quantizer if bits are None
+        weight_quant = (
+            {"weight_bit_width": bits} if bits else {"weight_quant": None}
+        )
+
+        # Quantized token embedding: Learnable lookup layer with quantized
+        # weights
+        self.emb = QuantEmbedding(vocab_size, emb_dim, **weight_quant, **kwargs)
+
+    def forward(self, x):
+        return self.emb(x)

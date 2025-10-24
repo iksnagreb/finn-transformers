@@ -1,0 +1,146 @@
+stages:
+  # Before model training, the tokenizer needs to be trained. As this probably
+  # does not change but can take some time, this is its own stage
+  tokenizer:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the tokenizer training script as a module, potentially
+    # scheduled via SLURM by the run.sh script
+    # Note: Tokenizer training probably does not benefit from GPUs
+    cmd: PARTITION=normal bash run.sh python -m language.tokenizer
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Dataset and tokenizer configuration, loading and preprocessing
+      - language/dataset.py
+      - language/tokenizer.py
+      # General utilities, such as seeding RNGs
+      - utils.py
+    # Stage parameters determining when to rerun the stage
+    params:
+      - language/params.yaml: [ tag, seed, dataset, tokenizer ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/language/tokenizer:
+          cache: false
+  # Language model training stage using the pre-trained tokenizer for
+  # preprocessing the language dataset
+  train:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the training script as a module, potentially scheduled via
+    # SLURM by the run.sh script
+    # Note: Training needs GPUs, schedule to GPU partition if via SLURM.
+    cmd: PARTITION=gpu bash run.sh python -m language.train
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Dataset configuration, loading and preprocessing and model and training
+      # code
+      - language/dataset.py
+      - language/model.py
+      - language/train.py
+      # Model building block shared by all case studies
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      # General utilities, such as seeding RNGs
+      - utils.py
+      # Tokenizer trained by the previous stage
+      - outputs/language/tokenizer
+    # Stage parameters determining when to rerun the stage
+    params:
+      - language/params.yaml: [ tag, seed, model, dataset, train ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/language/model.pt
+      - outputs/language/optimizer.pt
+  # Language model evaluation stage using the pre-trained tokenizer for
+  # preprocessing the language dataset and evaluating the model trained in the
+  # training stage
+  eval:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the evaluation script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Evaluation needs GPUs, schedule to GPU partition if via SLURM.
+    cmd: PARTITION=gpu bash run.sh python -m language.eval
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Dataset configuration, loading and preprocessing, model and eval code
+      - language/dataset.py
+      - language/model.py
+      - language/eval.py
+      # Model building block shared by all case studies
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      # General utilities, such as seeding RNGs
+      - utils.py
+      # Tokenizer trained by the previous stage
+      - outputs/language/tokenizer
+      # Model trained by the previous stage
+      - outputs/language/model.pt
+    # Stage parameters determining when to rerun the stage
+    params:
+      - language/params.yaml: [ tag, seed, model, dataset, eval ]
+    # Metric files produced by the stage which should be tracked to be compared
+    # and summarized between/across revisions/experiments
+    metrics:
+      # Token prediction accuracy over the evaluation dataset
+      - outputs/language/accuracy.yaml:
+          # Track via git, not dvc cache
+          cache: false
+  # Language model ONNX export stage using the pre-trained tokenizer for
+  # preprocessing the language dataset and exporting the model trained in the
+  # training stage
+  export:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the export script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Never use a GPU node for exporting, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh python -m language.export
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Dataset configuration, loading and preprocessing, model and export code
+      - language/dataset.py
+      - language/model.py
+      - language/export.py
+      # Model building block shared by all case studies
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      # General utilities, such as seeding RNGs
+      - utils.py
+      # Tokenizer trained by the previous stage
+      - outputs/language/tokenizer
+      # Model trained by the previous stage
+      - outputs/language/model.pt
+    # Stage parameters determining when to rerun the stage
+    params:
+      - language/params.yaml: [ tag, seed, model, dataset, export ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/language/model.onnx
+      # Model verification input/output samples from the RadioML dataset
+      - outputs/language/inp.npy
+      - outputs/language/out.npy
+      - outputs/language/cls.npy

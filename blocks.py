@@ -65,7 +65,7 @@ class MLP(torch.nn.Module):
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm2d(),
+                torch.nn.LazyBatchNorm1d(),
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
@@ -107,14 +107,20 @@ class MLP(torch.nn.Module):
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm2d(),
+                torch.nn.LazyBatchNorm1d(),
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
             )
 
     def forward(self, x):
-        return self.post_norm(self.quant(self.mlp(x)) + self.quant(x))
+        # Pack multiple sequence/spatial dimensions into a single sequence
+        # dimension
+        x, ps = pack([x], "b * d")
+        # Quantized MLP block with residual connection and normalization
+        y = self.post_norm(self.quant(self.mlp(x)) + self.quant(x))
+        # Unpack the tensor to continue with the original layer
+        return unpack(y, ps, "b * d")[0]
 
 
 # Multihead Self Attention block according to Vaswani et al. 2017. Comprises a
