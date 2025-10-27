@@ -63,7 +63,7 @@ stages:
             - 2
             activation: relu
             bits:
-          positional: binary
+          positional: sinusoidal
           configuration: original
           num_layers: 2
           num_heads: 4
@@ -81,7 +81,7 @@ stages:
           batch_size: 256
           optimizer:
             algorithm: adam
-            lr: 0.01
+            lr: 0.0001
             weight_decay: 0.0
             betas:
             - 0.9
@@ -101,19 +101,19 @@ stages:
     outs:
     - path: outputs/vision/loss.yaml
       hash: md5
-      md5: 26710242e87c05664300f1498925f233
-      size: 1116
+      md5: d56f5b3678dc0d966a64a6bc2770c8b4
+      size: 1101
     - path: outputs/vision/lr.yaml
       hash: md5
-      md5: 472b4450f4964d7a0635c04bf54fec19
-      size: 344
+      md5: c3f16eb4e9a96422699c93121e6f545a
+      size: 391
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 03d36dd81bc8c5c621ed11402d3ed1d5
+      md5: f37f2a599b8fc4e45c13d1914dcd0795
       size: 226640
     - path: outputs/vision/optimizer.pt
       hash: md5
-      md5: d15e1e4ede4072806cffbea5c106a60b
+      md5: 2d7392beba887da13b5420bee54a8490
       size: 426425
   eval:
     cmd: bash run.sh python -m vision.eval
@@ -144,7 +144,7 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 03d36dd81bc8c5c621ed11402d3ed1d5
+      md5: f37f2a599b8fc4e45c13d1914dcd0795
       size: 226640
     - path: quant.py
       hash: md5
@@ -190,7 +190,7 @@ stages:
             - 2
             activation: relu
             bits:
-          positional: binary
+          positional: sinusoidal
           configuration: original
           num_layers: 2
           num_heads: 4
@@ -206,11 +206,11 @@ stages:
     outs:
     - path: outputs/vision/accuracy.yaml
       hash: md5
-      md5: ae155c0df20f0ec470c5187d9d9c26a1
+      md5: b21612cf41f4b7a43ba22f2c667442fb
       size: 27
     - path: outputs/vision/classes.csv
       hash: md5
-      md5: 418bef60ddf41af6f90238e69319d747
+      md5: 6bdee45667b17b5a601387497af87e16
       size: 40015
   export:
     cmd: python -m vision.export
@@ -241,7 +241,7 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 03d36dd81bc8c5c621ed11402d3ed1d5
+      md5: f37f2a599b8fc4e45c13d1914dcd0795
       size: 226640
     - path: quant.py
       hash: md5
@@ -287,7 +287,7 @@ stages:
             - 2
             activation: relu
             bits:
-          positional: binary
+          positional: sinusoidal
           configuration: original
           num_layers: 2
           num_heads: 4
@@ -311,9 +311,9 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 6b670f2af5d4a099a7b6947fdb8d4737
-      size: 485156
+      md5: fedbe95941a01aaba9a671bd097a210c
+      size: 568343
     - path: outputs/vision/out.npy
       hash: md5
-      md5: 084356a72d64a5180af9f3b47c874b05
+      md5: 2e32cba8e832f5586a296c85a906b9e0
       size: 168
