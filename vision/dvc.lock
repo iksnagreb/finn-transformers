@@ -72,12 +72,12 @@ stages:
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: pre-norm
+          norm_placement: post-norm
           dropout: 0.1
         seed: 12
         tag: baseline
         train:
-          epochs: 20
+          epochs: 50
           batch_size: 256
           optimizer:
             algorithm: adam
@@ -101,19 +101,19 @@ stages:
     outs:
     - path: outputs/vision/loss.yaml
       hash: md5
-      md5: 26710242e87c05664300f1498925f233
-      size: 1116
+      md5: 0b341ab3543aa012ab245aae17a26600
+      size: 2768
     - path: outputs/vision/lr.yaml
       hash: md5
-      md5: 472b4450f4964d7a0635c04bf54fec19
-      size: 344
+      md5: df9ce869dcaed687f85ecf2b4c6961e5
+      size: 862
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 03d36dd81bc8c5c621ed11402d3ed1d5
-      size: 226640
+      md5: 7e2d0a9093d3e6c1e84046410e230a67
+      size: 226768
     - path: outputs/vision/optimizer.pt
       hash: md5
-      md5: d15e1e4ede4072806cffbea5c106a60b
+      md5: c96dac1c24ff7dccca10719a534bc3a6
       size: 426425
   eval:
     cmd: bash run.sh python -m vision.eval
@@ -144,8 +144,8 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 03d36dd81bc8c5c621ed11402d3ed1d5
-      size: 226640
+      md5: 7e2d0a9093d3e6c1e84046410e230a67
+      size: 226768
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -199,18 +199,18 @@ stages:
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: pre-norm
+          norm_placement: post-norm
           dropout: 0.1
         seed: 12
         tag: baseline
     outs:
     - path: outputs/vision/accuracy.yaml
       hash: md5
-      md5: ae155c0df20f0ec470c5187d9d9c26a1
-      size: 27
+      md5: 5bc587aed6f17a6eedf4299279500f5c
+      size: 28
     - path: outputs/vision/classes.csv
       hash: md5
-      md5: 418bef60ddf41af6f90238e69319d747
+      md5: af5b9c87a093c9e0c90b20deb3bb4f2a
       size: 40015
   export:
     cmd: python -m vision.export
@@ -241,8 +241,8 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 03d36dd81bc8c5c621ed11402d3ed1d5
-      size: 226640
+      md5: 7e2d0a9093d3e6c1e84046410e230a67
+      size: 226768
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -296,7 +296,7 @@ stages:
           bits:
           activation: relu
           norm: batch-norm
-          norm_placement: pre-norm
+          norm_placement: post-norm
           dropout: 0.1
         seed: 12
         tag: baseline
@@ -311,9 +311,9 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 6b670f2af5d4a099a7b6947fdb8d4737
-      size: 485156
+      md5: 3f8915f6679016f761893ede80985275
+      size: 485426
     - path: outputs/vision/out.npy
       hash: md5
-      md5: 084356a72d64a5180af9f3b47c874b05
+      md5: c107fd6f8f9e25b8482387b92951e0d3
       size: 168
