@@ -10,22 +10,30 @@ model:
   embedding:
     # Number of patches to aggregate the feature map into
     # "An Image is worth 16x16 words"...
-    patches: [ 16, 16 ]
+    patches:
+    - 16
+    - 16
     # Kernel size for sliding windows generating the patches
-    kernel_size: [ 2, 2 ]
+    kernel_size:
+    - 2
+    - 2
     # Padding to the input width to ensure expected number of output patches
-    padding: [ 0, 0 ]
+    padding:
+    - 0
+    - 0
     # Stride of the sliding windows
-    stride: [ 2, 2 ]
+    stride:
+    - 2
+    - 2
     # Activation functions to use after the convolution layer
     #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: null
+    bits:
   # Type of positional encoding to use at the input (following the embedding)
   #   Options are: none, sinusoidal, binary, learned
-  positional: binary
+  positional: none
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
@@ -42,7 +50,7 @@ model:
   expansion_dim: 256
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: null
+  bits:
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
   activation: relu
@@ -55,7 +63,7 @@ model:
   # Dropout: probability of an element to be zeroed during training
   dropout: 0.1
 # Training/Validation dataset configuration
-dataset: ...
+dataset: '...'
 # Training hyperparameters
 train:
   # Number of training epochs to run
@@ -67,12 +75,14 @@ train:
     # Name of the optimization algorithm to use: adam or sgd
     algorithm: adam
     # (Initial) Learning rate
-    lr: 0.01
+    lr: 0.0001
     # L2 regularization
-    weight_decay: 0.0
+    weight_decay: 1e-05
     # Coefficients used for computing running averages of gradient and its
     # square.
-    betas: [ 0.9, 0.999 ]
+    betas:
+    - 0.9
+    - 0.999
     # Term added to the denominator to improve numerical stability
     eps: 1.0e-8
   # Loss function to use: cross-entropy or nll
