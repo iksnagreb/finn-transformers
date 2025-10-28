@@ -25,7 +25,7 @@ model:
     bits: null
   # Type of positional encoding to use at the input (following the embedding)
   #   Options are: none, sinusoidal, binary, learned
-  positional: binary
+  positional: learned
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
@@ -51,7 +51,7 @@ model:
   norm: batch-norm
   # Placement of the normalization layer: pre-norm or post-norm, if norm is not
   # none
-  norm_placement: pre-norm
+  norm_placement: post-norm
   # Dropout: probability of an element to be zeroed during training
   dropout: 0.1
 # Training/Validation dataset configuration
@@ -59,7 +59,7 @@ dataset: ...
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 20
+  epochs: 30
   # Batch size for training
   batch_size: 256
   # Optimizer configuration
@@ -69,7 +69,7 @@ train:
     # (Initial) Learning rate
     lr: 0.01
     # L2 regularization
-    weight_decay: 0.0
+    weight_decay: 1.0e-5
     # Coefficients used for computing running averages of gradient and its
     # square.
     betas: [ 0.9, 0.999 ]
