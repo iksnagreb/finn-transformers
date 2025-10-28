@@ -10,19 +10,27 @@ model:
   embedding:
     # Number of patches to aggregate the feature map into
     # "An Image is worth 16x16 words"...
-    patches: [ 16, 16 ]
+    patches:
+    - 16
+    - 16
     # Kernel size for sliding windows generating the patches
-    kernel_size: [ 2, 2 ]
+    kernel_size:
+    - 2
+    - 2
     # Padding to the input width to ensure expected number of output patches
-    padding: [ 0, 0 ]
+    padding:
+    - 0
+    - 0
     # Stride of the sliding windows
-    stride: [ 2, 2 ]
+    stride:
+    - 2
+    - 2
     # Activation functions to use after the convolution layer
     #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: null
+    bits:
   # Type of positional encoding to use at the input (following the embedding)
   #   Options are: none, sinusoidal, binary, learned
   positional: learned
@@ -33,16 +41,16 @@ model:
   # above
   num_layers: 2
   # Number of attention heads
-  num_heads: 4
+  num_heads: 2
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 64
+  emb_dim: 128
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
   expansion_dim: 256
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: null
+  bits:
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
   activation: relu
@@ -55,7 +63,7 @@ model:
   # Dropout: probability of an element to be zeroed during training
   dropout: 0.1
 # Training/Validation dataset configuration
-dataset: ...
+dataset: '...'
 # Training hyperparameters
 train:
   # Number of training epochs to run
@@ -72,7 +80,9 @@ train:
     weight_decay: 1.0e-5
     # Coefficients used for computing running averages of gradient and its
     # square.
-    betas: [ 0.9, 0.999 ]
+    betas:
+    - 0.9
+    - 0.999
     # Term added to the denominator to improve numerical stability
     eps: 1.0e-8
   # Loss function to use: cross-entropy or nll
