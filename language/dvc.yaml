@@ -158,7 +158,37 @@ stages:
     # to the next stages as dependencies
     outs:
       - outputs/language/model.onnx
-      # Model verification input/output samples from the RadioML dataset
+      # Model verification input/output samples from the dataset
       - outputs/language/inp.npy
       - outputs/language/out.npy
       - outputs/language/cls.npy
+  # Model streamlining stage to optimize the ONNX graph and prepare for building
+  # the FPGA dataflow accelerator using FINN
+  streamline:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the onnx-passes module, potentially scheduled via SLURM by
+    # the run.sh script
+    # Note: Never use a GPU node for streamlining, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh onnx-passes -c language/passes.yaml
+      -o outputs/language/streamlined.onnx outputs/language/model.onnx
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Trained and exported ONNX model
+      - outputs/language/model.onnx
+      # Model verification input/output samples from the language dataset
+      - outputs/language/inp.npy
+      - outputs/language/out.npy
+      - outputs/language/cls.npy
+      # Custom and ad hoc streamlining passes
+      - adhoc_passes.py
+    # Stage parameters determining when to rerun the stage
+    params:
+      - language/passes.yaml:
+        # Track everything from the passes configuration
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/language/streamlined.onnx
+      - outputs/language/streamlined.onnx.pkl.xz

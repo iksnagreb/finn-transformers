@@ -1,19 +1,20 @@
-# List experiment stages, i.e., the jobs to be run
 stages:
   # Model export stage: Calibrates and exports a benchmark model to ONNX format
   # alongside some random verification samples
   export:
-    # Run the stage relative to the project root directory
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
     wdir: ..
-    # Stage runs the export script as the command
-    cmd: python -m benchmark.export
-    # Data and code dependencies of this stage to determine when it needs to be
-    # rerun
+    # This stage runs the export script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Never use a GPU node for exporting, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh python -m benchmark.export
+    # Stage dependencies (code and data) determining when to rerun the stage
     deps:
-      # Benchmark source files
+      # Benchmark model definition and export source files
       - benchmark/model.py
       - benchmark/export.py
-      # General source files shared by other experiments
+      # Model building block shared by all experiments
       - activations.py
       - attention.py
       - blocks.py
@@ -22,20 +23,42 @@ stages:
       - lazy.py
       - quant.py
       - utils.py
-    # Parameters from params.yaml used by this stage, changing any of these
-    # triggers a rerun
+    # Stage parameters determining when to rerun the stage
     params:
-      - benchmark/params.yaml:
-          - tag
-          - seed
-          - model
-          - dataset
-          - export
-    # Outputs produced which should be tracked and passed on to the next stages
+      - benchmark/params.yaml: [ tag, seed, model, dataset, export ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
     outs:
-      # Calibrated model exported to the ONNX format
       - outputs/benchmark/model.onnx
       # Model verification input/output samples
       - outputs/benchmark/inp.npy
       - outputs/benchmark/out.npy
-  # TODO: FINN-build and deployment stages...
+  # Model streamlining stage to optimize the ONNX graph and prepare for building
+  # the FPGA dataflow accelerator using FINN
+  streamline:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the onnx-passes module, potentially scheduled via SLURM by
+    # the run.sh script
+    # Note: Never use a GPU node for streamlining, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh onnx-passes -c benchmark/passes.yaml
+      -o outputs/benchmark/streamlined.onnx outputs/benchmark/model.onnx
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Trained and exported ONNX model
+      - outputs/benchmark/model.onnx
+      # Model verification input/output samples
+      - outputs/benchmark/inp.npy
+      - outputs/benchmark/out.npy
+      # Custom and ad hoc streamlining passes
+      - adhoc_passes.py
+    # Stage parameters determining when to rerun the stage
+    params:
+      - benchmark/passes.yaml:
+        # Track everything from the passes configuration
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/benchmark/streamlined.onnx
+      - outputs/benchmark/streamlined.onnx.pkl.xz

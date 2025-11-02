@@ -1,18 +1,21 @@
-# List experiment stages, i.e., the jobs to be run
 stages:
-  # Model training stage: Runs training of a classifier on the vision dataset
+  # Vision model training stage training a ViT-like model on the dataset from
+  # scratch
   train:
-    # Run the stage relative to the project root directory
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
     wdir: ..
-    # Stage runs the training script as the command
-    cmd: bash run.sh python -m vision.train
-    # Data and code dependencies of this stage to determine when it needs to be
-    # rerun
+    # This stage runs the training script as a module, potentially scheduled via
+    # SLURM by the run.sh script
+    # Note: Training needs GPUs, schedule to GPU partition if via SLURM.
+    cmd: PARTITION=gpu bash run.sh python -m vision.train
+    # Stage dependencies (code and data) determining when to rerun the stage
     deps:
-      # Vision case study source files
+      # Dataset configuration, loading and preprocessing and model and training
+      # code
       - vision/model.py
       - vision/train.py
-      # General source files shared by other experiments
+      # Model building block shared by all case studies
       - activations.py
       - attention.py
       - blocks.py
@@ -20,17 +23,13 @@ stages:
       - encoding.py
       - lazy.py
       - quant.py
+      # General utilities, such as seeding RNGs
       - utils.py
-    # Parameters from params.yaml used by this stage, changing any of these
-    # triggers a rerun
+    # Stage parameters determining when to rerun the stage
     params:
-      - vision/params.yaml:
-          - tag
-          - seed
-          - model
-          - dataset
-          - train
-    # Outputs produced which should be tracked and passed on to the next stages
+      - vision/params.yaml: [ tag, seed, model, dataset, train ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
     outs:
       - outputs/vision/model.pt
       - outputs/vision/optimizer.pt
@@ -52,19 +51,22 @@ stages:
           title: "Vision Learning Rate per Epoch"
           # Track via git, not dvc cache
           cache: false
-  # Model evaluation stage: Evaluates the trained model on the Vision dataset
+  # Vision model evaluation stage evaluating the model trained in the
+  # training stage on the evaluation split of the dataset
   eval:
-    # Run the stage relative to the project root directory
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
     wdir: ..
-    # Stage runs the evaluation script as the command
-    cmd: bash run.sh python -m vision.eval
-    # Data and code dependencies of this stage to determine when it needs to be
-    # rerun
+    # This stage runs the evaluation script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Evaluation needs GPUs, schedule to GPU partition if via SLURM.
+    cmd: PARTITION=gpu bash run.sh python -m vision.eval
+    # Stage dependencies (code and data) determining when to rerun the stage
     deps:
-      # Vision case study source files
+      # Dataset configuration, loading and preprocessing, model and eval code
       - vision/model.py
       - vision/eval.py
-      # General source files shared by other experiments
+      # Model building block shared by all case studies
       - activations.py
       - attention.py
       - blocks.py
@@ -72,19 +74,15 @@ stages:
       - encoding.py
       - lazy.py
       - quant.py
+      # General utilities, such as seeding RNGs
       - utils.py
-      # The model checkpoint produced by the training stage
+      # Model trained by the previous stage
       - outputs/vision/model.pt
-    # Parameters from params.yaml used by this stage, changing any of these
-    # triggers a rerun
+    # Stage parameters determining when to rerun the stage
     params:
-      - vision/params.yaml:
-          - tag
-          - seed
-          - model
-          - dataset
-          - eval
-    # Metrics produced by this stage
+      - vision/params.yaml: [ tag, seed, model, dataset, eval ]
+    # Metric files produced by the stage which should be tracked to be compared
+    # and summarized between/across revisions/experiments
     metrics:
       # Classification accuracy over the evaluation dataset
       - outputs/vision/accuracy.yaml:
@@ -105,19 +103,21 @@ stages:
           # Track via git, not dvc cache
           cache: false
   # Model export stage: Exports the trained classifier to ONNX format alongside
-  # some verification samples from the Vision dataset
+  # some verification samples from the dataset
   export:
-    # Run the stage relative to the project root directory
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
     wdir: ..
-    # Stage runs the export script as the command
-    cmd: python -m vision.export
-    # Data and code dependencies of this stage to determine when it needs to be
-    # rerun
+    # This stage runs the export script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Never use a GPU node for exporting, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh python -m vision.export
+    # Stage dependencies (code and data) determining when to rerun the stage
     deps:
-      # Vision case study source files
+      # Dataset configuration, loading and preprocessing, model and export code
       - vision/model.py
       - vision/export.py
-      # General source files shared by other experiments
+      # Model building block shared by all case studies
       - activations.py
       - attention.py
       - blocks.py
@@ -125,24 +125,49 @@ stages:
       - encoding.py
       - lazy.py
       - quant.py
+      # General utilities, such as seeding RNGs
       - utils.py
-      # The model checkpoint produced by the training stage
+      # Model trained by the previous stage
       - outputs/vision/model.pt
-    # Parameters from params.yaml used by this stage, changing any of these
-    # triggers a rerun
+    # Stage parameters determining when to rerun the stage
     params:
-      - vision/params.yaml:
-          - tag
-          - seed
-          - model
-          - dataset
-          - export
-    # Outputs produced which should be tracked and passed on to the next stages
+      - vision/params.yaml: [ tag, seed, model, dataset, export ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
     outs:
-      # Trained model exported to the ONNX format
+      - outputs/vision/model.onnx
+      # Model verification input/output samples from the dataset
+      - outputs/vision/inp.npy
+      - outputs/vision/out.npy
+      - outputs/vision/cls.npy
+  # Model streamlining stage to optimize the ONNX graph and prepare for building
+  # the FPGA dataflow accelerator using FINN
+  streamline:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the onnx-passes module, potentially scheduled via SLURM by
+    # the run.sh script
+    # Note: Never use a GPU node for streamlining, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh onnx-passes -c vision/passes.yaml
+      -o outputs/vision/streamlined.onnx outputs/vision/model.onnx
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Trained and exported ONNX model
       - outputs/vision/model.onnx
       # Model verification input/output samples from the Vision dataset
       - outputs/vision/inp.npy
       - outputs/vision/out.npy
       - outputs/vision/cls.npy
-  # TODO: FINN-build and deployment stages...
+      # Custom and ad hoc streamlining passes
+      - adhoc_passes.py
+    # Stage parameters determining when to rerun the stage
+    params:
+      - vision/passes.yaml:
+        # Track everything from the passes configuration
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/vision/streamlined.onnx
+      - outputs/vision/streamlined.onnx.pkl.xz
+

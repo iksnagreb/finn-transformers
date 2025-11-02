@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: bash run.sh python -m vision.train
+    cmd: PARTITION=gpu bash run.sh python -m vision.train
     deps:
     - path: activations.py
       hash: md5
@@ -101,22 +101,22 @@ stages:
     outs:
     - path: outputs/vision/loss.yaml
       hash: md5
-      md5: 79ff3e53880e5b30b2fe14eb19bc51c1
-      size: 1663
+      md5: 0f2d07317cb2aebbb2a9f8c784a2bc50
+      size: 1669
     - path: outputs/vision/lr.yaml
       hash: md5
       md5: 770b805596acdf87c0c0634a3e3617e1
       size: 516
     - path: outputs/vision/model.pt
       hash: md5
-      md5: feb6463ca117cb93df56fb088b87f756
+      md5: f2ef9325a4fa1a481f65874d9cb153dd
       size: 292491
     - path: outputs/vision/optimizer.pt
       hash: md5
-      md5: 1a7452b3106d53c2a30197c8b39eb558
+      md5: 050e9a814c23110d1fb9d30ed5ba80ea
       size: 558326
   eval:
-    cmd: bash run.sh python -m vision.eval
+    cmd: PARTITION=gpu bash run.sh python -m vision.eval
     deps:
     - path: activations.py
       hash: md5
@@ -144,7 +144,7 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: feb6463ca117cb93df56fb088b87f756
+      md5: f2ef9325a4fa1a481f65874d9cb153dd
       size: 292491
     - path: quant.py
       hash: md5
@@ -206,14 +206,14 @@ stages:
     outs:
     - path: outputs/vision/accuracy.yaml
       hash: md5
-      md5: d0dd151758a0b82e2bb42bc2dfb45749
+      md5: 3c625e1d73e987197f44ce8570a05bd9
       size: 28
     - path: outputs/vision/classes.csv
       hash: md5
-      md5: 68550fecc63dc661090b149acc719772
+      md5: cdd630bd4789e2b61792c98a12932255
       size: 40015
   export:
-    cmd: python -m vision.export
+    cmd: PARTITION=normal bash run.sh python -m vision.export
     deps:
     - path: activations.py
       hash: md5
@@ -241,7 +241,7 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: feb6463ca117cb93df56fb088b87f756
+      md5: f2ef9325a4fa1a481f65874d9cb153dd
       size: 292491
     - path: quant.py
       hash: md5
@@ -311,9 +311,120 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 031501afd783515598630247bada4e67
+      md5: 3880c82b997734172d7fa44720da7cb1
       size: 485421
     - path: outputs/vision/out.npy
       hash: md5
-      md5: 579740542fed4c6f8c93cbe148fd82f8
+      md5: 6d2cb37204618bc8dbb4aa4a2d4c0f22
       size: 168
+  streamline:
+    cmd: PARTITION=normal bash run.sh onnx-passes -c vision/passes.yaml -o 
+      outputs/vision/streamlined.onnx outputs/vision/model.onnx
+    deps:
+    - path: adhoc_passes.py
+      hash: md5
+      md5: 330298c0b5c8dafef10094fd5180071e
+      size: 299
+    - path: outputs/vision/cls.npy
+      hash: md5
+      md5: efa9423070d05804ad902edd7b10a08b
+      size: 136
+    - path: outputs/vision/inp.npy
+      hash: md5
+      md5: 04c5db62fe1ce128901047ab233dd42e
+      size: 12416
+    - path: outputs/vision/model.onnx
+      hash: md5
+      md5: 3880c82b997734172d7fa44720da7cb1
+      size: 485421
+    - path: outputs/vision/out.npy
+      hash: md5
+      md5: 6d2cb37204618bc8dbb4aa4a2d4c0f22
+      size: 168
+    params:
+      vision/passes.yaml:
+        imports:
+        - adhoc_passes
+        layouts:
+          inp:
+          - assumes:
+            - N
+            - C
+            - H
+            - W
+            perm:
+            - 0
+            - 2
+            - 3
+            - 1
+        logging:
+          verbose: false
+          checkpoint: false
+          keep_intermediates: false
+        model_checker:
+          full_check: true
+        onnxruntime:
+          providers:
+          - - CPUExecutionProvider
+            - {}
+          full_context_dump: false
+        passes:
+        - import-qonnx
+        - convert-layouts
+        - shape-inference
+        - checker
+        - verify
+        - inline-qonnx
+        - inline-batchnorm
+        - inline-gemm
+        - lower-conv
+        - lower-pooling
+        - shape-inference
+        - checker
+        - verify
+        - streamline-thresholds
+        - streamline
+        - checker
+        - verify
+        - absorb-layouts
+        - decompose-thresholds
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - MoveMulPastTranspose
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - MoveSplitPastElementwise
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - unbroadcast
+        - eliminate
+        - checker
+        - verify
+        reference:
+          inp:
+          - outputs/vision/inp.npy
+          out:
+          - outputs/vision/out.npy
+        shape_inference: {}
+        verify:
+          tolerance:
+            atol: 0.001
+          metrics:
+            max_abs_error:
+            - 0.0
+            - 0.01
+    outs:
+    - path: outputs/vision/streamlined.onnx
+      hash: md5
+      md5: fe4d47baa51d2c103c4a65705c87c480
+      size: 1100195
+    - path: outputs/vision/streamlined.onnx.pkl.xz
+      hash: md5
+      md5: 2d83266f43c8f2706ad6b9e9984cba0d
+      size: 12020

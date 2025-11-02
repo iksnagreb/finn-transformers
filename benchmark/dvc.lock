@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   export:
-    cmd: python -m benchmark.export
+    cmd: PARTITION=normal bash run.sh python -m benchmark.export
     deps:
     - path: activations.py
       hash: md5
@@ -77,9 +77,102 @@ stages:
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: 741c8151ef695e0c8b1989a3ef67fb7c
+      md5: 00c82b7a069bbeaffa5de04e5e4d0772
       size: 34993
     - path: outputs/benchmark/out.npy
       hash: md5
       md5: 1ded6b66c03bf240fca5bdb391f1ec6e
       size: 8320
+  streamline:
+    cmd: PARTITION=normal bash run.sh onnx-passes -c benchmark/passes.yaml -o 
+      outputs/benchmark/streamlined.onnx outputs/benchmark/model.onnx
+    deps:
+    - path: adhoc_passes.py
+      hash: md5
+      md5: 330298c0b5c8dafef10094fd5180071e
+      size: 299
+    - path: outputs/benchmark/inp.npy
+      hash: md5
+      md5: 49980be4347b64945d293ff16f5babe2
+      size: 8320
+    - path: outputs/benchmark/model.onnx
+      hash: md5
+      md5: 00c82b7a069bbeaffa5de04e5e4d0772
+      size: 34993
+    - path: outputs/benchmark/out.npy
+      hash: md5
+      md5: 1ded6b66c03bf240fca5bdb391f1ec6e
+      size: 8320
+    params:
+      benchmark/passes.yaml:
+        imports:
+        - adhoc_passes
+        logging:
+          verbose: false
+          checkpoint: false
+          keep_intermediates: false
+        model_checker:
+          full_check: true
+        onnxruntime:
+          providers:
+          - - CPUExecutionProvider
+            - {}
+          full_context_dump: false
+        passes:
+        - import-qonnx
+        - shape-inference
+        - checker
+        - verify
+        - inline-qonnx
+        - inline-batchnorm
+        - inline-gemm
+        - lower-conv
+        - lower-pooling
+        - shape-inference
+        - checker
+        - verify
+        - streamline-thresholds
+        - streamline
+        - checker
+        - verify
+        - decompose-thresholds
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - MoveMulPastTranspose
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - MoveSplitPastElementwise
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - unbroadcast
+        - eliminate
+        - checker
+        - verify
+        reference:
+          inp:
+          - outputs/benchmark/inp.npy
+          out:
+          - outputs/benchmark/out.npy
+        shape_inference: {}
+        verify:
+          tolerance:
+            atol: 0.001
+          metrics:
+            max_abs_error:
+            - 0.0
+            - 0.01
+    outs:
+    - path: outputs/benchmark/streamlined.onnx
+      hash: md5
+      md5: a48bd826b3df2d5f27b16b32054a47d3
+      size: 367788
+    - path: outputs/benchmark/streamlined.onnx.pkl.xz
+      hash: md5
+      md5: 056a0edcf43c4464452d48cee899b926
+      size: 6860

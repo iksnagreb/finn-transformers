@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: bash run.sh python -m radioml.train
+    cmd: PARTITION=gpu bash run.sh python -m radioml.train
     deps:
     - path: activations.py
       hash: md5
@@ -134,22 +134,22 @@ stages:
     outs:
     - path: outputs/radioml/loss.yaml
       hash: md5
-      md5: 235d163d2ef22f9d02c20fce2c7c6647
-      size: 1100
+      md5: db8a32c811e13adabacafb8d6168347b
+      size: 1109
     - path: outputs/radioml/lr.yaml
       hash: md5
       md5: 472b4450f4964d7a0635c04bf54fec19
       size: 344
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: f40d654a805c274a83d25788167a19cd
+      md5: 644600f3fd5cb16b28cc5f8a46b1a07c
       size: 228688
     - path: outputs/radioml/optimizer.pt
       hash: md5
-      md5: d27ee332aed8a0ebad87a08233874e21
+      md5: dba0f8010be1c644fff26712ab97e73c
       size: 443961
   eval:
-    cmd: bash run.sh python -m radioml.eval
+    cmd: PARTITION=gpu bash run.sh python -m radioml.eval
     deps:
     - path: activations.py
       hash: md5
@@ -177,7 +177,7 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: f40d654a805c274a83d25788167a19cd
+      md5: 644600f3fd5cb16b28cc5f8a46b1a07c
       size: 228688
     - path: quant.py
       hash: md5
@@ -272,14 +272,14 @@ stages:
     outs:
     - path: outputs/radioml/accuracy.yaml
       hash: md5
-      md5: 04f5e0c3b5af2992e7574c863f515181
+      md5: 490d8869d627566804bb2bcae91f3d26
       size: 52
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: a2980746edb382de81935288e194eee0
-      size: 960187
+      md5: 1b7c22b736187d634b47e67302d6a51e
+      size: 964243
   export:
-    cmd: python -m radioml.export
+    cmd: PARTITION=normal bash run.sh python -m radioml.export
     deps:
     - path: activations.py
       hash: md5
@@ -307,7 +307,7 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: f40d654a805c274a83d25788167a19cd
+      md5: 644600f3fd5cb16b28cc5f8a46b1a07c
       size: 228688
     - path: quant.py
       hash: md5
@@ -410,9 +410,120 @@ stages:
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: 60dbc8e80991439c39e0a8b87b5e7810
+      md5: c8eaa6ca604255a46a081bd3cc122c20
       size: 240739
     - path: outputs/radioml/out.npy
       hash: md5
-      md5: 80089f6d903c363f63593cb53cd4b22f
+      md5: 3bbd382bdb46131e08395f3f6ecb5401
       size: 224
+  streamline:
+    cmd: PARTITION=normal bash run.sh onnx-passes -c radioml/passes.yaml -o 
+      outputs/radioml/streamlined.onnx outputs/radioml/model.onnx
+    deps:
+    - path: adhoc_passes.py
+      hash: md5
+      md5: 330298c0b5c8dafef10094fd5180071e
+      size: 299
+    - path: outputs/radioml/cls.npy
+      hash: md5
+      md5: 361d5da968f55dffb2febf837426e1ef
+      size: 136
+    - path: outputs/radioml/inp.npy
+      hash: md5
+      md5: 81611fc31c246749eff5e4c0b30ffc5c
+      size: 8320
+    - path: outputs/radioml/model.onnx
+      hash: md5
+      md5: c8eaa6ca604255a46a081bd3cc122c20
+      size: 240739
+    - path: outputs/radioml/out.npy
+      hash: md5
+      md5: 3bbd382bdb46131e08395f3f6ecb5401
+      size: 224
+    params:
+      radioml/passes.yaml:
+        imports:
+        - adhoc_passes
+        layouts:
+          inp:
+          - assumes:
+            - N
+            - C
+            - H
+            - W
+            perm:
+            - 0
+            - 2
+            - 3
+            - 1
+        logging:
+          verbose: false
+          checkpoint: false
+          keep_intermediates: false
+        model_checker:
+          full_check: true
+        onnxruntime:
+          providers:
+          - - CPUExecutionProvider
+            - {}
+          full_context_dump: false
+        passes:
+        - import-qonnx
+        - convert-layouts
+        - shape-inference
+        - checker
+        - verify
+        - inline-qonnx
+        - inline-batchnorm
+        - inline-gemm
+        - lower-conv
+        - lower-pooling
+        - shape-inference
+        - checker
+        - verify
+        - streamline-thresholds
+        - streamline
+        - checker
+        - verify
+        - absorb-layouts
+        - decompose-thresholds
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - MoveMulPastTranspose
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - MoveSplitPastElementwise
+        - shape-inference
+        - fold-constants
+        - eliminate
+        - cleanup
+        - unbroadcast
+        - eliminate
+        - checker
+        - verify
+        reference:
+          inp:
+          - outputs/radioml/inp.npy
+          out:
+          - outputs/radioml/out.npy
+        shape_inference: {}
+        verify:
+          tolerance:
+            atol: 0.001
+          metrics:
+            max_abs_error:
+            - 0.0
+            - 0.01
+    outs:
+    - path: outputs/radioml/streamlined.onnx
+      hash: md5
+      md5: 03df6419fb30d104a961cb790e65fdbb
+      size: 388285
+    - path: outputs/radioml/streamlined.onnx.pkl.xz
+      hash: md5
+      md5: 9feeb10bef1a0f25c430da799f618ac9
+      size: 14480

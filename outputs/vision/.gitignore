@@ -3,3 +3,4 @@
 /model.pt
 /optimizer.pt
 /cls.npy
+/streamlined.onnx.pkl.xz

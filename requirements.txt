@@ -11,3 +11,4 @@ einops~=0.8.1
 onnx==1.17.0
 datasets==4.2.0
 transformers==4.53.0
+onnx-passes @ git+https://github.com/iksnagreb/onnx-passes.git@8aa28e3
