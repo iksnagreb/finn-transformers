@@ -31,7 +31,7 @@ class Model(torch.nn.Module):
             # Configuration of the initial token embedding layer
             embedding=None,
             # Type of positional encoding to use at the input
-            positional="sinusoidal",
+            positional=None,
             # List of layers configuring the encoder stack: Either a string
             # referring to a pre-defined configuration or a list of individual
             # layer configurations
@@ -45,6 +45,9 @@ class Model(torch.nn.Module):
             # Number of quantization bits for weights and activations (for all
             # intermediate layers)
             bits=None,
+            # Number of quantization bits for weights and activations of the
+            # output classification layer
+            cls_bits=None,
             # Keyword arguments are forwards as global settings to each of the
             # blocks in configuration (alongside some of the explicit options
             # above) unless they are overwritten by local options as part of the
@@ -99,19 +102,23 @@ class Model(torch.nn.Module):
                 # Load the configuration into the block type
                 configuration[i] = BLOCKS[key](**global_config)
 
+        # Default positional encoding
+        if positional is None:
+            positional = {"encoding": "sinusoidal"}
+
         # Stacked attention, MLP, convolution, pooling and normalization layers
         # as feature extractor/encoder
         self.enc = torch.nn.Sequential(
             # Insert a (quantized) positional encoding layer between embedding
             # and encoder stack
-            get_positional(positional, bits, return_quant_tensor=False),
+            get_positional(**positional),
             # Unpack and repeat the configured sequence of blocks
             *(num_layers * configuration),
         )
 
         # Weight quantizer configuration: Disables quantizer if bits are None
         weight_quant = (
-            {"weight_bit_width": bits} if bits else {"weight_quant": None}
+            {"weight_bit_width": cls_bits} if bits else {"weight_quant": None}
         )
 
         # Linear layers as a classifier/prediction head producing a vector of
@@ -121,7 +128,7 @@ class Model(torch.nn.Module):
             # should be covered by the cross entropy loss
             LazyQuantLinear(vocab_size, **weight_quant),
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
+            *([QuantIdentity(bit_width=cls_bits)] if bits else []),
         )
 
     def forward(self, x):

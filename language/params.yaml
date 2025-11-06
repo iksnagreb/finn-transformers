@@ -1,5 +1,5 @@
 # Experiment tag to help with aggregating and filtering experiment sweeps
-tag: baseline
+tag: quantized
 # Global seed to make evaluation reproducible
 seed: 12
 # Model hyperparameters: ...
@@ -8,10 +8,16 @@ model:
   embedding:
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: null
-  # Type of positional encoding to use at the input (following the embedding)
-  #   Options are: none, sinusoidal, binary, learned
-  positional: binary
+    bits: 8
+  # Configures the positional encoding layer in front of the first attention
+  # block
+  positional:
+    # Type of positional encoding to use at the input (following the embedding)
+    #   Options are: none, sinusoidal, binary, learned
+    encoding: binary
+    # Number of quantization bits for weights and activations of the encoding
+    # layer, null means no quantization
+    bits: 8
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
@@ -28,7 +34,10 @@ model:
   expansion_dim: 256
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: null
+  bits: 4
+  # Number of quantization bits for weights and activations of the
+  # output classification layer, null means no quantization
+  cls_bits: 8
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
   activation: relu
@@ -132,7 +141,7 @@ eval:
 # Model to ONNX export hyperparameters
 export:
   # Explicitly splits all attention heads in the model graph to be parallel
-  split_heads: false
+  split_heads: true
   # Version of the default ONNX opset
   opset_version: 19
   # Apply the constant-folding optimization

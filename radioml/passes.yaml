@@ -32,11 +32,13 @@ onnxruntime:
 verify:
   # Tolerance-based verification, parameters passed to np.allclose(...)
   tolerance:
-    atol: 1.0e-3
+    atol: 0.5
   # Metric-based verification
   metrics:
     # Maximum Absolute Error over all outputs
-    max_abs_error: [ 0.0, 0.01 ]
+    max_abs_error: [ 0.0, 0.5 ]
+    # Number of mispredictions by taking the argmax along the final axis
+    count_mispredictions: [ 0, 0 ]
 # Configuration of logging and verbosity
 logging:
   # Enable all passes to print a message when entering/leaving
@@ -75,21 +77,12 @@ passes:
   # the models, exploiting some known properties/structure
   - absorb-layouts
   - decompose-thresholds
-  - shape-inference
-  - fold-constants
-  - eliminate
-  - cleanup
+  - tidyup
   - MoveMulPastTranspose
-  - shape-inference
-  - fold-constants
-  - eliminate
-  - cleanup
+  - tidyup
   - MoveSplitPastElementwise
-  - shape-inference
-  - fold-constants
-  - eliminate
-  - cleanup
+  - tidyup
   - unbroadcast
-  - eliminate
+  - tidyup
   - checker
   - verify

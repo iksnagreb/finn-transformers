@@ -29,8 +29,8 @@ stages:
       size: 3897
     - path: encoding.py
       hash: md5
-      md5: 481854c553f5991907217d8981931d6c
-      size: 8840
+      md5: 08ba618cce0e47e68014ac1c9ee77b05
+      size: 8835
     - path: lazy.py
       hash: md5
       md5: dc8537c6a3615ea74c2d1db381974a55
@@ -77,7 +77,7 @@ stages:
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: 00c82b7a069bbeaffa5de04e5e4d0772
+      md5: 741c8151ef695e0c8b1989a3ef67fb7c
       size: 34993
     - path: outputs/benchmark/out.npy
       hash: md5
@@ -89,15 +89,15 @@ stages:
     deps:
     - path: adhoc_passes.py
       hash: md5
-      md5: 330298c0b5c8dafef10094fd5180071e
-      size: 299
+      md5: 03d4a11676b8bc4a0407ca1de9037d34
+      size: 743
     - path: outputs/benchmark/inp.npy
       hash: md5
       md5: 49980be4347b64945d293ff16f5babe2
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: 00c82b7a069bbeaffa5de04e5e4d0772
+      md5: 741c8151ef695e0c8b1989a3ef67fb7c
       size: 34993
     - path: outputs/benchmark/out.npy
       hash: md5
@@ -136,22 +136,13 @@ stages:
         - checker
         - verify
         - decompose-thresholds
-        - shape-inference
-        - fold-constants
-        - eliminate
-        - cleanup
+        - tidyup
         - MoveMulPastTranspose
-        - shape-inference
-        - fold-constants
-        - eliminate
-        - cleanup
+        - tidyup
         - MoveSplitPastElementwise
-        - shape-inference
-        - fold-constants
-        - eliminate
-        - cleanup
+        - tidyup
         - unbroadcast
-        - eliminate
+        - tidyup
         - checker
         - verify
         reference:
@@ -170,9 +161,9 @@ stages:
     outs:
     - path: outputs/benchmark/streamlined.onnx
       hash: md5
-      md5: a48bd826b3df2d5f27b16b32054a47d3
-      size: 367788
+      md5: 643e1b29a3a56311267196d96dbe4f6e
+      size: 367646
     - path: outputs/benchmark/streamlined.onnx.pkl.xz
       hash: md5
-      md5: 056a0edcf43c4464452d48cee899b926
-      size: 6860
+      md5: 15b71d38d8e513f8e6906c20b701f5ac
+      size: 6912

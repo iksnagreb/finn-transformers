@@ -67,21 +67,12 @@ passes:
   # Custom and ad hoc passes to ensure FINN-compatibility: These are specific to
   # the models, exploiting some known properties/structure
   - decompose-thresholds
-  - shape-inference
-  - fold-constants
-  - eliminate
-  - cleanup
+  - tidyup
   - MoveMulPastTranspose
-  - shape-inference
-  - fold-constants
-  - eliminate
-  - cleanup
+  - tidyup
   - MoveSplitPastElementwise
-  - shape-inference
-  - fold-constants
-  - eliminate
-  - cleanup
+  - tidyup
   - unbroadcast
-  - eliminate
+  - tidyup
   - checker
   - verify
