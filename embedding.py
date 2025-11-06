@@ -49,7 +49,7 @@ class PatchEmbedding(torch.nn.Module):
             LazyQuantConv2d(dim, kernel_size, **kwargs, **weight_quant),
             # Normalization between convolution and activation function - this
             # is always a batch norm and not configurable
-            torch.nn.LazyBatchNorm2d(),
+            torch.nn.LazyBatchNorm2d(affine=False),
             # Select and instantiate activation functions from the dictionary
             # defined above
             ACTIVATIONS[activation](),

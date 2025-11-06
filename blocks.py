@@ -65,7 +65,7 @@ class MLP(torch.nn.Module):
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm1d(),
+                torch.nn.LazyBatchNorm1d(affine=False),
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
@@ -107,7 +107,7 @@ class MLP(torch.nn.Module):
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm1d(),
+                torch.nn.LazyBatchNorm1d(affine=False),
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
@@ -171,7 +171,7 @@ class Attention(torch.nn.Module):
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm1d(),
+                torch.nn.LazyBatchNorm1d(affine=False),
                 # Insert optional activation quantizer if enabled
                 *([QuantIdentity(bit_width=bits)] if bits else []),
                 # Rearrange from channels-first back to channels-last
@@ -235,7 +235,7 @@ class Attention(torch.nn.Module):
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm1d(),
+                torch.nn.LazyBatchNorm1d(affine=False),
                 # Insert optional activation quantizer if enabled
                 *([QuantIdentity(bit_width=bits)] if bits else []),
                 # Rearrange from channels-first back to channels-last

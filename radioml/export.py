@@ -18,8 +18,8 @@ from radioml.model import Model
 from radioml.dataset import get_datasets
 # Quantized custom implementation of multihead attention
 from attention import QuantMultiheadAttention
-# Seeding RNGs for reproducibility
-from utils import seed
+# Seeding RNGs for reproducibility, affine parameter export patching
+from utils import seed, patch_missing_affine_norms
 
 # Path to the RadioML dataset
 RADIOML_PATH = os.environ["RADIOML_PATH"]
@@ -76,5 +76,8 @@ if __name__ == "__main__":
     model = Model(**params["model"])
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/radioml/model.pt"))
+    # Prevent export and streamlining issues for missing affine normalization
+    # parameters
+    model = patch_missing_affine_norms(model)
     # Pass the model and the export configuration to the evaluation loop
     export(model, dataset=params["dataset"], **params["export"])

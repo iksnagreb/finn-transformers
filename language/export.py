@@ -20,8 +20,8 @@ from language.model import Model
 from language.dataset import get_datasets, preprocess
 # Quantized custom implementation of multihead attention
 from attention import QuantMultiheadAttention
-# Seeding RNGs for reproducibility
-from utils import seed
+# Seeding RNGs for reproducibility, affine parameter export patching
+from utils import seed, patch_missing_affine_norms
 
 
 # Exports the model to ONNX in conjunction with an input-output pair for
@@ -101,6 +101,9 @@ if __name__ == "__main__":
     model = Model(**params["model"], vocab_size=tokenizer.vocab_size)
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/language/model.pt"))
+    # Prevent export and streamlining issues for missing affine normalization
+    # parameters
+    model = patch_missing_affine_norms(model)
     # Pass the model and the export configuration to the evaluation loop
     export(model, dataset=params["dataset"], tokenizer=tokenizer,
            **params["export"])

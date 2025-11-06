@@ -16,8 +16,8 @@ from brevitas.export import export_qonnx
 from benchmark.model import Model
 # Quantized custom implementation of multihead attention
 from attention import QuantMultiheadAttention
-# Seeding RNGs for reproducibility
-from utils import seed
+# Seeding RNGs for reproducibility, affine parameter export patching
+from utils import seed, patch_missing_affine_norms
 
 
 # Generates "training" data for quantizer/norm layer calibration
@@ -57,6 +57,10 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             if isinstance(module, QuantMultiheadAttention):
                 # Marks to take the split path next forward call
                 module.split_heads = True
+
+    # Prevent export and streamlining issues for missing affine normalization
+    # parameters
+    model = patch_missing_affine_norms(model)
 
     # No gradient accumulation for export passes required
     with torch.no_grad():

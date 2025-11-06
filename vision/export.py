@@ -18,8 +18,8 @@ from brevitas.export import export_qonnx
 from vision.model import Model
 # Quantized custom implementation of multihead attention
 from attention import QuantMultiheadAttention
-# Seeding RNGs for reproducibility
-from utils import seed
+# Seeding RNGs for reproducibility, affine parameter export patching
+from utils import seed, patch_missing_affine_norms
 
 # Path to the CIFAR-10 dataset
 CIFAR10_ROOT = os.environ.setdefault("CIFAR10_ROOT", "data")
@@ -90,5 +90,8 @@ if __name__ == "__main__":
     model = Model(**params["model"])
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/vision/model.pt"))
+    # Prevent export and streamlining issues for missing affine normalization
+    # parameters
+    model = patch_missing_affine_norms(model)
     # Pass the model and the export configuration to the evaluation loop
     export(model, dataset=params["dataset"], **params["export"])
