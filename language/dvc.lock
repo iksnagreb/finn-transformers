@@ -50,8 +50,8 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: e313967ecf4f85c662b5d4cf42b53bfd
-      size: 22731
+      md5: dc77e8bfd3ac03048a7c6e049b4af55d
+      size: 22999
     - path: embedding.py
       hash: md5
       md5: 02ef6cc1037c25a3dd1de29d46acd7a1
@@ -146,19 +146,19 @@ stages:
     outs:
     - path: outputs/language/loss.yaml
       hash: md5
-      md5: bed3110d770a77a09b679eaff5e544b2
-      size: 1108
+      md5: b31b153c6083c5c8b2a5cc7e52f38def
+      size: 1111
     - path: outputs/language/lr.yaml
       hash: md5
       md5: 352804c7dcabf266da98ffd9d9309782
       size: 364
     - path: outputs/language/model.pt
       hash: md5
-      md5: cf8ca315c1ec2f1df7fa69d5fb7824ee
+      md5: d2646e753c4a532c911a54a940292367
       size: 1431804
     - path: outputs/language/optimizer.pt
       hash: md5
-      md5: 2c7a2f8c4e0ec03044d831b1f937034a
+      md5: 137fbc40f00ae3f9df7195b8a7fc523c
       size: 2530468
   eval:
     cmd: PARTITION=gpu bash run.sh python -m language.eval
@@ -173,8 +173,8 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: e313967ecf4f85c662b5d4cf42b53bfd
-      size: 22731
+      md5: dc77e8bfd3ac03048a7c6e049b4af55d
+      size: 22999
     - path: embedding.py
       hash: md5
       md5: 02ef6cc1037c25a3dd1de29d46acd7a1
@@ -201,7 +201,7 @@ stages:
       size: 5162
     - path: outputs/language/model.pt
       hash: md5
-      md5: cf8ca315c1ec2f1df7fa69d5fb7824ee
+      md5: d2646e753c4a532c911a54a940292367
       size: 1431804
     - path: outputs/language/tokenizer
       hash: md5
@@ -259,7 +259,7 @@ stages:
     outs:
     - path: outputs/language/accuracy.yaml
       hash: md5
-      md5: d5cf5dae1bfa1ec53758c158b2aa4f69
+      md5: 7a4adcf3e13093a604db6c81238fc80a
       size: 53
   export:
     cmd: PARTITION=normal bash run.sh python -m language.export
@@ -274,8 +274,8 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: e313967ecf4f85c662b5d4cf42b53bfd
-      size: 22731
+      md5: dc77e8bfd3ac03048a7c6e049b4af55d
+      size: 22999
     - path: embedding.py
       hash: md5
       md5: 02ef6cc1037c25a3dd1de29d46acd7a1
@@ -302,7 +302,7 @@ stages:
       size: 5162
     - path: outputs/language/model.pt
       hash: md5
-      md5: cf8ca315c1ec2f1df7fa69d5fb7824ee
+      md5: d2646e753c4a532c911a54a940292367
       size: 1431804
     - path: outputs/language/tokenizer
       hash: md5
@@ -368,11 +368,11 @@ stages:
       size: 2176
     - path: outputs/language/model.onnx
       hash: md5
-      md5: df1653efa6e928490bc313982e6d4750
+      md5: af6693eb160db598cc901a7b065bb95a
       size: 1379265
     - path: outputs/language/out.npy
       hash: md5
-      md5: 3df51d20669442f08f329e887f9c707b
+      md5: a849d878c8a90902b58ba686ae655f79
       size: 2097280
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c language/passes.yaml -o 
@@ -392,11 +392,11 @@ stages:
       size: 2176
     - path: outputs/language/model.onnx
       hash: md5
-      md5: df1653efa6e928490bc313982e6d4750
+      md5: af6693eb160db598cc901a7b065bb95a
       size: 1379265
     - path: outputs/language/out.npy
       hash: md5
-      md5: 3df51d20669442f08f329e887f9c707b
+      md5: a849d878c8a90902b58ba686ae655f79
       size: 2097280
     params:
       language/passes.yaml:
@@ -459,9 +459,9 @@ stages:
     outs:
     - path: outputs/language/streamlined.onnx
       hash: md5
-      md5: 0d26958071d4853dc408246f7ad0b925
+      md5: c4081123de9a3fcee6e609c8c67477a0
       size: 5819475
     - path: outputs/language/streamlined.onnx.pkl.xz
       hash: md5
-      md5: fb7ba1ce81a109e013d6e2746c7ab987
-      size: 653092
+      md5: 4cedcc73fc832224bbccc08f42ad4020
+      size: 652840

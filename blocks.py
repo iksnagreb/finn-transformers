@@ -111,6 +111,8 @@ class MLP(torch.nn.Module):
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits)] if bits else []),
             )
 
     def forward(self, x):
@@ -403,6 +405,8 @@ class Conv(torch.nn.Module):
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits)] if bits else []),
             )
 
     def forward(self, x):
