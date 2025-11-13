@@ -93,11 +93,18 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
         from brevitas.export import export_onnx_qcdq
         dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
+        # test: wird das Ergebnis (Accuracy) besser mit echten daten?
+        export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
+        inp, out, _ = next(iter(export_data))
+
+
+
+        
         export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
         simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
         export_onnx_qcdq(
             model_int8, 
-            (dummy_input,), 
+            (inp,),
             export_path=export_path,
             opset_version=17
         )

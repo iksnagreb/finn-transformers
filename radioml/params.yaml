@@ -121,7 +121,7 @@ dataset:
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 1
+  epochs: 30
   # Batch size for training
   batch_size: 512
   # Optimizer configuration
