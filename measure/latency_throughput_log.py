@@ -2,9 +2,6 @@ import json
 from pathlib import Path
 from collections import defaultdict
 
-LATENCY_PATH = Path("/home/hanna/git/measure-radioml/outputs/radioml/throughput/FP32/latency_results_batch.json")     
-THROUGHPUT_PATH = Path("/home/hanna/git/measure-radioml/outputs/radioml/throughput/FP32/throughput_results.json")
-OUT_PATH = Path("/home/hanna/git/measure-radioml/outputs/radioml/throughput/FP32/latency_throughput.json")
 
 def load_json(p):
     with open(p, "r") as f:

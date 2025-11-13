@@ -19,7 +19,7 @@ import dvc.api
 import model
 import subprocess
 import parse_tegrastats_to_json
-import power_averages
+import power_averages_log
 from datetime import datetime
 import throughput_power
 # import sys
@@ -487,42 +487,42 @@ if __name__ == "__main__":
     tegrastats_logs = []
 
     if FP16:
-        base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / "FP16"
         quant_type = "FP16"
     elif INT8:
-        base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / "INT8"
         quant_type = "INT8"
     else:
-        base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / "FP32"
         quant_type = "FP32"
-
-    print("Path: ", base_path)
+    energy_base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / quant_type
+    throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"throughput" / quant_type
+    print("Energy Path: ", energy_base_path)
+    print("Throughput Path: ", throughput_base_path)
 
     for batch_size in batch_sizes:
         if INT8:
             onnx_model_path = f"inputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
         input_info, output_info = get_model_io_info(onnx_model_path)
-        tegrastats_log = base_path / f"tegrastats_{batch_size}.log"
-        timestamps = base_path / f"timestamps_{batch_size}.json"
+        tegrastats_log = energy_base_path / f"tegrastats_{batch_size}.log"
+        timestamps = energy_base_path / f"timestamps_{batch_size}.json"
         accuracy = run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps)
         print(f"Accuracy for batch size {batch_size}: {accuracy:.4f}")
 
         tegrastats_logs.append((tegrastats_log, batch_size))
 
-    parse_tegrastats_to_json.parse_tegrastats(tegrastats_logs, base_path)
+    parse_tegrastats_to_json.parse_tegrastats(tegrastats_logs, energy_base_path)
     
-    energy_consumption_file = base_path / "energy_consumption.json" 
-    power_averages_file = base_path / "power_averages.json"
-    power_averages_file_baseline = base_path / "power_averages_baseline.json"
-    power_averages_difference_file = base_path / "power_averages_difference.json"
+    energy_consumption_file = energy_base_path / "energy_consumption.json" 
+    power_averages_file = energy_base_path / "power_averages.json"
+    power_averages_file_baseline = energy_base_path / "power_averages_baseline.json"
+    power_averages_difference_file = energy_base_path / "power_averages_difference.json"
 
-    power_averages.power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type)
-    power_averages.power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type)
-    power_averages.power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type)
+    power_averages_log.power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type)
+    power_averages_log.power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type)
+    power_averages_log.power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type)
 
-    power_throughput_path = f"/home/hanna/git/measure-radioml/outputs/radioml/throughput/{quant_type}/power_throughput.json"
-    throughput_path = f"/home/hanna/git/measure-radioml/outputs/radioml/throughput/{quant_type}/throughput_results.json"
-    power_path = base_path / "power_averages.json"
+
+    power_throughput_path = throughput_base_path/"power_throughput.json"
+    throughput_path = throughput_base_path/ "throughput_results.json"
+    power_path = energy_base_path / "power_averages.json"
 
     throughput_power.power_throughput(power_path, throughput_path, power_throughput_path)
 

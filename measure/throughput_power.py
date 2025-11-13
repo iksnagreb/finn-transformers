@@ -2,9 +2,6 @@ import json
 from pathlib import Path
 from collections import defaultdict
 
-# POWER_PATH = Path("/home/hanna/git/measure-radioml/outputs/radioml/energy_metrics/FP32/power_averages.json")    
-# THROUGHPUT_PATH = Path("/home/hanna/git/measure-radioml/outputs/radioml/throughput/FP32/throughput_results.json")
-# OUT_PATH = Path("/home/hanna/git/measure-radioml/outputs/radioml/throughput/FP32/power_throughput.json")
 
 def load_json(p):
     with open(p, "r") as f:
