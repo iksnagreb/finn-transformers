@@ -124,7 +124,7 @@ def print_latency(latency_ms, latency_synchronize, latency_datatransfer, end_tim
     print(f"Gesamtzeit: {end_time-start_time:.4f} s")
     print("num_batches", num_batches)
     print(f"Throughput: {throughput_batches:.4f} Batches/Sekunde")
-    print(f"Throughput: {throughput_images:.4f} Bilder/Sekunde")
+    print(f"Throughput : {throughput_images:.4f} Bilder/Sekunde")
 
 
 
