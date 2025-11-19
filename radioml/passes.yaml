@@ -5,12 +5,6 @@ imports: [ adhoc_passes ]
 reference:
   inp: [ outputs/radioml/inp.npy ]
   out: [ outputs/radioml/out.npy ]
-# Annotate layout assumptions and permutation/conversion for graph inputs
-layouts:
-  # Assume the input to be an image in channels-first layout "NCHW" which is
-  # permuted to channels-last layout "NHWC" matching the lowered convolution
-  inp:
-    - { assumes: [ N, C, H, W ], perm: [ 0, 2, 3, 1 ] }
 # Configuration of the model checker pass: Options according to the ONNX IR
 # reference: https://onnx.ai/ir-py/api/ir_passes_common.html
 model_checker:

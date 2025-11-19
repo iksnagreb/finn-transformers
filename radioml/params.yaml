@@ -21,7 +21,7 @@ model:
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: null
+    bits: 8
   # Configures the positional encoding layer in front of the first attention
   # block
   positional:
