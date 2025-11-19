@@ -451,7 +451,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
     for batch_size in batch_sizes:
         if INT8:
-            onnx_model_path=f"inputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
+            onnx_model_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
         test_loader = create_test_dataloader(RADIOML_PATH_NPZ, batch_size) 
         engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
         device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
@@ -548,11 +548,11 @@ if __name__ == "__main__":
     batch_sizes = params["batch_sizes"]
 
 
-    onnx_model_path = "inputs/radioml/model_dynamic_batchsize.onnx"
+    onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
 
 
     if INT8:
-        onnx_model_path = "inputs/radioml/model_brevitas_1_simpl.onnx" 
+        onnx_model_path = "outputs/radioml/model_brevitas_1_simpl.onnx"
 
 
 
