@@ -16,8 +16,10 @@ import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
 import dvc.api
-from radioml.model import model # schaue ob das passt
-from measure.latency_throughput_log import latency_throughput
+from ..radioml.model import model # schaue ob das passt
+from ..measure.latency_throughput_log import latency_throughput
+from dvclive import Live
+
 
 # import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -535,26 +537,13 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
 
 
 if __name__ == "__main__":
-    # muss in parameter datei:
 
-    
-    if FP16:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_16FP")
-    elif INT8:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_INT8_brevitas")
-    else:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_32FP")
-
-    batch_sizes = params["batch_sizes"]
-
+    batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
     onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
 
-
     if INT8:
         onnx_model_path = "outputs/radioml/model_brevitas_1_simpl.onnx"
-
-
 
     model = onnx.load(onnx_model_path)
 
@@ -609,45 +598,19 @@ if __name__ == "__main__":
 
     latency_throughput(latency_results_batch, throughput_results, latency_throughput_path)
 
+    with Live(save_dvc_exp=True, report="md") as live:
+        print("Starte DVC Live Bericht....", flush=True)
 
+        live.log_artifact(throughput_results, name="throughput_results")
+        live.log_artifact(throughput_results2, name="throughput_results2")
+        live.log_artifact(latency_results, name="latency_results")
+        live.log_artifact(latency_results_batch, name="latency_results_batch")
+        live.log_artifact(latency_throughput_path, name="latency_throughput_path")
+        live.log_artifact(accuracy_path, name="accuracy_result")
+        
+        live.next_step() 
 
-# Todo:
-# wieso ist die accuracy beim onnx modell schlechter als beim pt modell? -> mit eigenem test ist das pt modell genauso schlecht -> werden bei eval die daten vorverarbeitet? JA
-    # daten vorher vorverarbeiten, dann als npz speichern fertig, komisch: immer eine dimension zu viel, mit 1, Lösung: unsqueeze/ein mal expand weniger
-    # , dann nochmal testen fertig
-# bei int 8 ist die accuracy auch schlechter -> aber mir onnxruntime ist sie gut (60%)
+    print("DVC Live Bericht fertig!")
+    torch.cuda.empty_cache()
 
-
-
-# benutzer für sciebo erstellen - geht das überhupt? Sciebo ist ja mit uni accout verknüpft
-
-# import in neues repo - funktioniert auch nicht
-# (venv) hanna@ceg-420:~/git/Empty$ dvc pull
-# Collecting                                                                                                                                                                                                                                            |0.00 [00:00,    ?entry/s]
-# Fetching
-# Building workspace index                                                                                                                                                                                                                              |0.00 [00:00,    ?entry/s]
-# Comparing indexes                                                                                                                                                                                                                                    |1.00 [00:00, 7.03kentry/s]
-# Applying changes                                                                                                                                                                                                                                      |0.00 [00:00,     ?file/s]
-# Everything is up to date.
-# (venv) hanna@ceg-420:~/git/Empty$ dvc import https://github.com/Hanner123/train-radioml.git outputs/radioml/model_brevitas_1_simpl.onnx
-# Importing 'outputs/radioml/model_brevitas_1_simpl.onnx (https://github.com/Hanner123/train-radioml.git)' -> 'model_brevitas_1_simpl.onnx'
-# ERROR: unexpected error - [Errno 2] No storage files available: 'outputs/radioml/model_brevitas_1_simpl.onnx'                       
-# Having any troubles? Hit us up at https://dvc.org/support, we are always happy to help!
-
-
-# fp 32 power durchschnittlichen verbrauch abziehen - unterschiedliche darstellungen
-# falls 0 nicht mitzählen -> passt, da es die einträge nicht gibt (es gibt keien 0 Einträge)
-
-
-# Todo:
-
-# int 8 modell debuggen mit onnxpasses
-
-#  Das ist sehr wichtig!!!
-# sess_options.graph_optimization_level = (
-#     ort.GraphOptimizationLevel.ORT_DISABLE_ALL
-# )
-# wenn man das beim jetson bei der inferenz mit onnxruntime einfügt, dann ist die accuracy genauso wie beim PC!
-
-# onnxsim
 

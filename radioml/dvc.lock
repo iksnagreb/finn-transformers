@@ -131,7 +131,7 @@ stages:
     outs:
     - path: outputs/radioml/loss.yaml
       hash: md5
-      md5: f9ca0f6ae2114b48626a17bf10350eac
+      md5: 01c77c0e53468b74411ba517032d87f0
       size: 60
     - path: outputs/radioml/lr.yaml
       hash: md5
@@ -139,11 +139,11 @@ stages:
       size: 22
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: dc75cb8e26fb98944eff3e543af53624
+      md5: 669df4d439ba655b76cd11a9765e027a
       size: 71760
     - path: outputs/radioml/optimizer.pt
       hash: md5
-      md5: 3af0ef0983bd5d1d378cd0a2e50fd2b0
+      md5: c5618817f6a67d0a86026fcb4967e5ae
       size: 131129
   eval:
     cmd: bash run.sh python -m radioml.eval
@@ -174,7 +174,7 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: dc75cb8e26fb98944eff3e543af53624
+      md5: 669df4d439ba655b76cd11a9765e027a
       size: 71760
     - path: quant.py
       hash: md5
@@ -265,12 +265,12 @@ stages:
     outs:
     - path: outputs/radioml/accuracy.yaml
       hash: md5
-      md5: ed520fbaf3a23060652f8d801ca592d0
-      size: 22
+      md5: bc40fc168ef988981dc62728b1ad578c
+      size: 51
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: b862d25a9addbcda0084cb53c7e4e180
-      size: 46715
+      md5: 5bea6056bc0dc4a92a9baf1c7c1f25e7
+      size: 1415733
   export:
     cmd: python -m radioml.export
     deps:
@@ -300,7 +300,7 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: dc75cb8e26fb98944eff3e543af53624
+      md5: 669df4d439ba655b76cd11a9765e027a
       size: 71760
     - path: quant.py
       hash: md5
@@ -312,8 +312,8 @@ stages:
       size: 5248
     - path: radioml/export.py
       hash: md5
-      md5: 29881b8ba23bf16897649a373576088c
-      size: 5446
+      md5: bdeb282a6d91aeb2a7360a6a4e626361
+      size: 5646
     - path: radioml/model.py
       hash: md5
       md5: 5a4886e4c0c47cb50015452f29d3639b
@@ -429,19 +429,103 @@ stages:
     outs:
     - path: outputs/radioml/inp.npy
       hash: md5
-      md5: 35d5e614c7ef960d6c51bdc193c12e08
+      md5: 8ac06a52b0a2f3028dbc51ebb9ebf113
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: a76a4413995ffcbd84295455c2e8c159
+      md5: a8a442ac331eda6cf27a656aef625287
       size: 75075
+    - path: outputs/radioml/model_brevitas_1.onnx
+      hash: md5
+      md5: 18b754381c5749b624a02ce3a0471e4d
+      size: 57599
+    - path: outputs/radioml/model_brevitas_1024.onnx
+      hash: md5
+      md5: f66f473e72582991878707a35bfab919
+      size: 57601
+    - path: outputs/radioml/model_brevitas_1024_simpl.onnx
+      hash: md5
+      md5: f247e467efdf668ebf6f433b3738797a
+      size: 60840
+    - path: outputs/radioml/model_brevitas_128.onnx
+      hash: md5
+      md5: fcbd232ff6a54a5670288e2d3b5d8181
+      size: 57601
+    - path: outputs/radioml/model_brevitas_128_simpl.onnx
+      hash: md5
+      md5: 331a4d29727297f90868ebb89665455b
+      size: 60840
+    - path: outputs/radioml/model_brevitas_16.onnx
+      hash: md5
+      md5: 27f58d361f4ffab825122589fc2a4de6
+      size: 57599
+    - path: outputs/radioml/model_brevitas_16_simpl.onnx
+      hash: md5
+      md5: 8126b7b32e11586ce472939bc40263e5
+      size: 60764
+    - path: outputs/radioml/model_brevitas_2.onnx
+      hash: md5
+      md5: cf83a55524302ae922ef611bb75f3906
+      size: 57599
+    - path: outputs/radioml/model_brevitas_256.onnx
+      hash: md5
+      md5: 4d9685b5486f41a039c1d2c17c67af20
+      size: 57601
+    - path: outputs/radioml/model_brevitas_256_simpl.onnx
+      hash: md5
+      md5: c3622dbdca874e08603ef9322199599a
+      size: 60840
+    - path: outputs/radioml/model_brevitas_2_simpl.onnx
+      hash: md5
+      md5: 3ab44963b006214eeff05aa21b7f6c91
+      size: 60764
+    - path: outputs/radioml/model_brevitas_32.onnx
+      hash: md5
+      md5: b8571c273fa1dbf846f6ce948ce0be3f
+      size: 57599
+    - path: outputs/radioml/model_brevitas_32_simpl.onnx
+      hash: md5
+      md5: b6839962cdb11d16fa1b7ebcc038e32a
+      size: 60764
+    - path: outputs/radioml/model_brevitas_4.onnx
+      hash: md5
+      md5: 8945175b43b0e9fa59536825e6abd121
+      size: 57599
+    - path: outputs/radioml/model_brevitas_4_simpl.onnx
+      hash: md5
+      md5: ff3d561d33a5342d4f51bbdb2b467f08
+      size: 60764
+    - path: outputs/radioml/model_brevitas_512.onnx
+      hash: md5
+      md5: 2ea8750909ab14791eb43d774385585d
+      size: 57601
+    - path: outputs/radioml/model_brevitas_512_simpl.onnx
+      hash: md5
+      md5: 59438b66e7ae3199e1326a66f920475e
+      size: 60840
+    - path: outputs/radioml/model_brevitas_64.onnx
+      hash: md5
+      md5: 62ee2b29ecc0751dd143a5db0d35373d
+      size: 57599
+    - path: outputs/radioml/model_brevitas_64_simpl.onnx
+      hash: md5
+      md5: 35528d4c3d92b47f0795cab168df829d
+      size: 60764
+    - path: outputs/radioml/model_brevitas_8.onnx
+      hash: md5
+      md5: eb72d5d2002299ac6a07c5f807f69872
+      size: 57599
+    - path: outputs/radioml/model_brevitas_8_simpl.onnx
+      hash: md5
+      md5: ee7a70a2282955ed3ce4b0b6123638cf
+      size: 60764
     - path: outputs/radioml/model_dynamic_batchsize.onnx
       hash: md5
-      md5: 28ff5e32b3d381eb0923327ffd8329c0
+      md5: 252a8cbf390b9d5c4e705059f365a09e
       size: 87734
     - path: outputs/radioml/out.npy
       hash: md5
-      md5: cf634b3731aa6a02ce5215cbacea79ab
+      md5: 99fef7c7d02207b4280a1975a266b1ba
       size: 136
   measure_32FP:
     cmd: FP16=0 python radioml/measure.py
@@ -811,11 +895,11 @@ stages:
     outs:
     - path: outputs/radioml/model_int8.pt
       hash: md5
-      md5: 375215e78c8366644a77604f657bed1d
+      md5: f7dbf6158c64a30372f275c7521536a7
       size: 145653
     - path: outputs/radioml/optimizer_int8.pt
       hash: md5
-      md5: 1e46babc2b4903b0fc322077bcf59251
+      md5: 2e6096199c85e9cd82701d0ad09301ec
       size: 143129
   measure_INT8_brevitas:
     cmd: INT8=1 python radioml/measure.py

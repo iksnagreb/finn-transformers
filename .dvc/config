@@ -7,3 +7,5 @@
     url = webdavs://uni-paderborn.sciebo.de/public.php/webdav
     user = PcAbqNZSirnFKzH
     password = ""
+['remote "sciebo"']
+    url = webdavs://uni-paderborn.sciebo.de/remote.php/webdav
