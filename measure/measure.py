@@ -30,7 +30,7 @@ if FP16:
     print("FP16 enabled")
 elif INT8:
     dtype = torch.int8
-    print("INT8 enabled")
+    print("INT8 enabled ")
 else:
     dtype = torch.float32
     print("FP32")
