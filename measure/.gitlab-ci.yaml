@@ -27,7 +27,5 @@ hello_world_job:
   stage: test
   script:
     - echo "Runner läuft"
-  tags:
-    - jetson
   rules:
     - if: '$CI_COMMIT_BRANCH == "train-measure"'
