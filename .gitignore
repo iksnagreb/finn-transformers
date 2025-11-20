@@ -9,4 +9,5 @@ __pycache__
 /inp.npy
 /out.npy
 /build
+builds/
 
