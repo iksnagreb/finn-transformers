@@ -651,3 +651,33 @@ if __name__ == "__main__":
 
 # onnxsim
 
+
+# toml file anpassen, dass runner auf data zugreifen kann
+# sudo chown machen
+
+
+# concurrent = 1
+# check_interval = 0
+# connection_max_age = "15m0s"
+# shutdown_timeout = 0
+
+# [session_server]
+#   session_timeout = 1800
+
+# [[runners]]
+#   name = "jetson"
+#   url = "https://gitlab.com"
+#   id = 50444214
+#   token = "glrt-3CB0idaNRWg8OmIjuCYCBm86MQpwOjE5NW1vbwp0OjMKdTppaTVlMBg.01.1j1w3d0oh"
+#   token_obtained_at = 2025-11-06T13:14:07Z
+#   token_expires_at = 0001-01-01T00:00:00Z
+#   executor = "shell"
+#   user = "root"
+#   builds_dir = "/data/gitlab/builds"
+#   cache_dir = "/data/gitlab/cache"
+#   clean_environment = true
+#   [runners.cache]
+#     MaxUploadedArchiveSize = 0
+#     [runners.cache.s3]
+#     [runners.cache.gcs]
+#     [runners.cache.azure]
