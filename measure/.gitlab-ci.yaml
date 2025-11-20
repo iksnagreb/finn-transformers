@@ -26,6 +26,6 @@ stages:
 hello_world_job:
   stage: test
   script:
-    - echo "Runner läuft"
+    - echo "Runner läuft!"
   rules:
     - if: '$CI_COMMIT_BRANCH == "train-measure"'
