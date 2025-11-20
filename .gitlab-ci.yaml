@@ -1,0 +1,31 @@
+# stages:
+#   - test
+# hello_world_job:
+#   stage: test
+#   script:
+#     - source /home/hanna/git/measure-radioml/venv/bin/activate
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - eval $(ssh-agent -s)
+#     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+#     - mkdir -p ~/.ssh
+#     - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+#     - dvc remote list
+#     - dvc remote modify sciebo user $DVC_Sciebo_USER
+#     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
+#     - dvc pull
+#     - python mini_measure.py
+#     - dvc push
+#     - dvc exp push -r sciebo -f git@gitlab.com:hanner123-group/gitlab_runner.git
+#   tags:
+#     - jetson
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "train-measure"'
+
+stages:
+  - test
+hello_world_job:
+  stage: test
+  script:
+    - echo "Runner läuft!"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "train-measure"'
