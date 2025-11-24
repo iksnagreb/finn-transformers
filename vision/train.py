@@ -54,6 +54,8 @@ def train(model, batch_size, epochs, criterion, optimizer, loader,  # noqa
         transforms.ToTensor(),
         # Random horizontal flip in 50% of the cases
         transforms.RandomHorizontalFlip(),
+        # Radom crop of the image resized back to 32x32 pixels
+        transforms.RandomResizedCrop((32, 32)),
         # CIFAR-10 statistics on the whole training set
         transforms.Normalize([0.4914, 0.4822, 0.4465], [0.2470, 0.2435, 0.2616])
     ])

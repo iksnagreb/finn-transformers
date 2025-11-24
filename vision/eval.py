@@ -42,8 +42,6 @@ def evaluate(model, dataset, batch_size, loader):  # noqa: Shadows model
     tf = transforms.Compose([
         # Convert from PIL image to PyTorch tensors
         transforms.ToTensor(),
-        # Random horizontal flip in 50% of the cases
-        transforms.RandomHorizontalFlip(),
         # CIFAR-10 statistics on the whole training set
         transforms.Normalize([0.4914, 0.4822, 0.4465], [0.2470, 0.2435, 0.2616])
     ])

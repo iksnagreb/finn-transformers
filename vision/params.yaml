@@ -9,14 +9,14 @@ model:
   # Configuration of the initial patch-embedding layer
   embedding:
     # Number of patches to aggregate the feature map into
-    # "An Image is worth 16x16 words"...
-    patches: [ 16, 16 ]
+    # "An Image is worth 16x16 words"... or 8x8...
+    patches: [ 8, 8 ]
     # Kernel size for sliding windows generating the patches
-    kernel_size: [ 2, 2 ]
+    kernel_size: [ 4, 4 ]
     # Padding to the input width to ensure expected number of output patches
     padding: [ 0, 0 ]
     # Stride of the sliding windows
-    stride: [ 2, 2 ]
+    stride: [ 4, 4 ]
     # Activation functions to use after the convolution layer
     #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
@@ -37,15 +37,15 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 2
+  num_layers: 3
   # Number of attention heads
-  num_heads: 4
+  num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 64
+  emb_dim: 192
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 256
+  expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: 4
@@ -60,15 +60,15 @@ model:
   norm: batch-norm
   # Placement of the normalization layer: pre-norm or post-norm, if norm is not
   # none
-  norm_placement: post-norm
+  norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
-  dropout: 0.1
+  dropout: 0.5
 # Training/Validation dataset configuration
 dataset: ...
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 30
+  epochs: 100
   # Batch size for training
   batch_size: 256
   # Optimizer configuration
@@ -76,9 +76,9 @@ train:
     # Name of the optimization algorithm to use: adam or sgd
     algorithm: adam
     # (Initial) Learning rate
-    lr: 0.01
+    lr: 0.001
     # L2 regularization
-    weight_decay: 1.0e-5
+    weight_decay: 1.0e-3
     # Coefficients used for computing running averages of gradient and its
     # square.
     betas: [ 0.9, 0.999 ]
