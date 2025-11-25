@@ -78,7 +78,7 @@ class MLP(torch.nn.Module):
             # defined above
             ACTIVATIONS[activation](),
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
+            *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
             # Amount of dropout to apply at the sublayer output
             torch.nn.Dropout(p=dropout),
             # Quantized linear projection to the output embedding dimension
@@ -206,7 +206,7 @@ class Attention(torch.nn.Module):
             # Input and output quantization of the softmax normalization of the
             # attention weights
             softmax_input_quant=act_quantizer(bits),
-            softmax_output_quant=act_quantizer(bits),
+            softmax_output_quant=act_quantizer(bits, _signed=False),
             # Input, weight and bias quantization settings of output projection
             output_projection_input_quant=act_quantizer(bits),
             output_projection_weight_quant=weight_quantizer(bits),
@@ -369,7 +369,7 @@ class Conv(torch.nn.Module):
             # defined above
             ACTIVATIONS[activation](),
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
+            *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
             # Second quantized pointwise convolution to the embedding dimension
             LazyQuantConv2d(
                 emb_dim, bias=bias, kernel_size=(1, 1), **weight_quant
@@ -473,7 +473,7 @@ class Downsample(torch.nn.Module):
             # defined above
             ACTIVATIONS[activation](),
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
+            *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
             # Rearrange from channels-first back to channels-last
             # sequence-first layout
             Rearrange("b c ... -> b ... c"),
