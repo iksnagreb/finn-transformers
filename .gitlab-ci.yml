@@ -20,7 +20,7 @@ build:
     - pip install -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
     - python -c "import sys; print('Python version:', sys.version, flush = True)"
-    - python hello.py
+    # - python hello.py
   tags:
     - jetson
 
@@ -69,7 +69,8 @@ build:
 # kein cuda verfügbar! wahrscheinlic weil das environment nicht ganz gesäubert wurde -> gucken wo ich das einstellen kann (venv soll nicht übernommen werden von altem build!)
 # clean = true im toml setzen
 
-# irgendwie löscht er das nicht richtig -> manuell löschen?
+# irgendwie löscht er das nicht richtig -> manuell die inhalte der ordner löschen
+# dann runner restarten
 
 
 
