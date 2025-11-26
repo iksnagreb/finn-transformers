@@ -10,6 +10,8 @@ build:
   script:
     # 1. Verzeichnis anlegen
     - mkdir -p /data/gitlab/builds/runner
+    # falls es aus irgendeinem grund noch ein altes venv gibt
+    - rm -rf $VENV_PATH
     # 2. Virtuelle Umgebung erstellen
     - python3 -m venv $VENV_PATH
     # 3. venv aktivieren
