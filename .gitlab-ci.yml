@@ -20,7 +20,7 @@ build:
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
     - pip install --no-cache-dir -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
-    - python -c "import sys; print('Python version:', sys.version, flush = True)"
+    - python -c "import sys; print('Pytho version:', sys.version, flush = True)"
     - python hello.py
   tags:
     - jetson
@@ -73,6 +73,12 @@ build:
 # irgendwie löscht er das nicht richtig -> manuell die inhalte der ordner löschen
 # dann runner restarten
 
+# warum funktioniert cuda trotzdem nicht? noch nicht ganz gesäubert oder so... vielleicht doch noch alten runner austesten? Was war anders?
+# sudo usermod -aG video,render gitlab-runner
+
+
+
+
 
 
 
@@ -94,7 +100,7 @@ build:
 # git push origin main --force
 
 
-# training nicht neu mache, einfach vom main die models nehmen
+# training nicht                neu mache, einfach vom main die models nehmen
 
 # qcdq export parameter statt qonnx qcdq verwenden
 # def export(model, dataset, batch_size, format="qcdq", split_heads=False,) batch size 
