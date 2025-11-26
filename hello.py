@@ -22,13 +22,13 @@ def start_tegrastats(logfile_path: Path):
     return proc
 
 def stop_tegrastats(proc: subprocess.Popen):
-    print("trying t stop tegrastats")
+    print("trying to stop tegrastats")
     proc.terminate()  # schickt SIGTERM an tegrastats
     try:
         print("try")
         proc.wait(timeout=1)
     except subprocess.TimeoutExpired:
-        print("exce pt")
+        print("except")
         proc.kill()
 
 

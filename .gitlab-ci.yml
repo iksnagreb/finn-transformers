@@ -19,7 +19,7 @@ build:
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
     - pip install -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
-    - python -c "import sys; print('Python  version:', sys.version, flush = True)"
+    - python -c "import sys; print('Python version:', sys.version, flush = True)"
     - python hello.py
   tags:
     - jetson
@@ -64,8 +64,10 @@ build:
 # sudo chown -R gitlab-runner:gitlab-runner /data/gitlab/builds/runner/
 # probleme bei pycuda installation -> erstmal weglassen
 # es dauert wieder so lange bis der mirror aktualisiert ist... wieso? weil vorher ein richtiger commit gemacht wurde Funktiniert dann der pull mirror nicht mehr? -> force push und reset (ausversehen zu measure_jetson, noch richtig machen!!)
+# dauert schon wieder so lange? - hard reset
 
-
+# kein cuda verfügbar! wahrscheinlic weil das environment nicht ganz gesäubert wurde -> gucken wo ich das einstellen kann (venv soll nicht übernommen werden von altem build!)
+# clean = true im toml setzen
 
 # # Lokales Klonen des Mirror-Repos
 # git clone <mirror-repo-url> mirror-local
