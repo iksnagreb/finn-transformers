@@ -41,4 +41,6 @@ stop_tegrastats(tegra_proc)
 print("stopped tegrasta ts!")
 
 
-torch.cuda.empty_cache()
+
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
