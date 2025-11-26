@@ -20,7 +20,7 @@ build:
     - pip install -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
     - python -c "import sys; print('Python version:', sys.version, flush = True)"
-    # - python hello.py
+    - python hello.py
   tags:
     - jetson
 
@@ -91,3 +91,10 @@ build:
 
 # # Push zurück zum Mirror (force!)
 # git push origin main --force
+
+
+# training nicht neu mache, einfach vom main die models nehmen
+
+# qcdq export parameter statt qonnx qcdq verwenden
+# def export(model, dataset, batch_size, format="qcdq", split_heads=False,) batch size 
+# name immer model.onnx
