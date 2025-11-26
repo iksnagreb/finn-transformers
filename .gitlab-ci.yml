@@ -10,8 +10,6 @@ build:
   script:
     # 1. Verzeichnis anlegen
     - mkdir -p /data/gitlab/builds/runner
-    # falls es aus irgendeinem grund noch ein altes venv gibt
-    - rm -rf $VENV_PATH
     # 2. Virtuelle Umgebung erstellen
     - python3 -m venv $VENV_PATH
     # 3. venv aktivieren
@@ -70,6 +68,11 @@ build:
 
 # kein cuda verfügbar! wahrscheinlic weil das environment nicht ganz gesäubert wurde -> gucken wo ich das einstellen kann (venv soll nicht übernommen werden von altem build!)
 # clean = true im toml setzen
+
+# irgendwie löscht er das nicht richtig -> manuell löschen?
+
+
+
 
 # # Lokales Klonen des Mirror-Repos
 # git clone <mirror-repo-url> mirror-local
