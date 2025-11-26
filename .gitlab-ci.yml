@@ -1,3 +1,29 @@
+stages:
+  - build
+
+variables:
+  # Ort der virtuellen Umgebung
+  VENV_PATH: "/data/gitlab/builds/runner/.venv"
+
+build:
+  stage: build
+  script:
+    # 1. Verzeichnis anlegen
+    - mkdir -p /data/gitlab/builds/runner
+    # 2. Virtuelle Umgebung erstellen
+    - python3 -m venv $VENV_PATH
+    # 3. venv aktivieren
+    - source $VENV_PATH/bin/activate
+    # 4. pip upgraden und Dependencies installieren
+    - pip install --upgrade pip
+    - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
+    - pip install -r requirements.txt
+    # 5. Optional: testen, ob alles funktioniert
+    - python -c "import sys; print('Python version:', sys.version, flush = True)"
+    - python hello.py
+  tags:
+    - jetson
+
 # stages:
 #   - test
 # hello_world_job:
@@ -13,17 +39,25 @@
 #     - dvc remote modify sciebo user $DVC_Sciebo_USER
 #     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
 #     - dvc pull
-#     - python mini_measure.py
+#     - python measure/mini_measure.py
 #     - dvc push
 #     - dvc exp push -r sciebo -f git@gitlab.com:hanner123-group/gitlab_runner.git
 #   tags:
 #     - jetson
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH == "train-measure"'
 
-stages:
-  - test
-hello_world_job:
-  stage: test
-  script:
-    - echo "Runner läuft!!"
+# stages:
+#   - test
+# hello_world_job:
+#   stage: test
+#   script:
+#     - echo "Runner läuft!!"
+
+
+# wichtig: richtige uni git domain, nur ein runner im toml
+# runner restart mit: sudo systemctl restart gitlab-runner
+# toml bearbeiten: sudo nano /etc/gitlab-runner/config.toml
+# logs anschauen: sudo journalctl -u gitlab-runner -f
+# pipeline im train-measure branch manuell starten
+# kompliziertere pipeline testen
+# pipeline mit measure testen
+# dvc live einrichten
