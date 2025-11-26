@@ -11,13 +11,14 @@ build:
     # 1. Verzeichnis anlegen
     - mkdir -p /data/gitlab/builds/runner
     # 2. Virtuelle Umgebung erstellen
+    - rm -rf $VENV_PATH        # alte venv löschen
     - python3 -m venv $VENV_PATH
     # 3. venv aktivieren
     - source $VENV_PATH/bin/activate
     # 4. pip upgraden und Dependencies installieren
     - pip install --upgrade pip
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
-    - pip install -r requirements.txt
+    - pip install --no-cache-dir -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
     - python -c "import sys; print('Python version:', sys.version, flush = True)"
     - python hello.py
