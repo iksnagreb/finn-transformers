@@ -18,7 +18,8 @@ else:
 
 def start_tegrastats(logfile_path: Path):
     # tegrastats im Hintergrund starten, Ausgabe in Logdatei
-    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '1000'], stdout=open(logfile_path, 'w'))
+    # proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '1000'], stdout=open(logfile_path, 'w'))
+    proc = subprocess.Popen(['tegrastats', '--interval', '1000'], stdout=open(logfile_path, 'w'))
     return proc
 
 def stop_tegrastats(proc: subprocess.Popen):
