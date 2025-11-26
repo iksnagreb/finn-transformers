@@ -19,7 +19,7 @@ build:
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
     - pip install -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
-    - python -c "import sys; print('Python version:', sys.version, flush = True)"
+    - python -c "import sys; print('Python  version:', sys.version, flush = True)"
     - python hello.py
   tags:
     - jetson
@@ -57,7 +57,29 @@ build:
 # runner restart mit: sudo systemctl restart gitlab-runner
 # toml bearbeiten: sudo nano /etc/gitlab-runner/config.toml
 # logs anschauen: sudo journalctl -u gitlab-runner -f
-# pipeline im train-measure branch manuell starten
+# pipeline im train-measure branch manuell starten - manuell commit machen, damit die pipeline gefunden werden kann
 # kompliziertere pipeline testen
 # pipeline mit measure testen
 # dvc live einrichten
+# sudo chown -R gitlab-runner:gitlab-runner /data/gitlab/builds/runner/
+# probleme bei pycuda installation -> erstmal weglassen
+# es dauert wieder so lange bis der mirror aktualisiert ist... wieso? weil vorher ein richtiger commit gemacht wurde Funktiniert dann der pull mirror nicht mehr? -> force push und reset (ausversehen zu measure_jetson, noch richtig machen!!)
+
+
+
+# # Lokales Klonen des Mirror-Repos
+# git clone <mirror-repo-url> mirror-local
+# cd mirror-local
+
+# # Füge das GitHub-Repo als Remote hinzu
+# git remote add upstream <github-repo-url>
+
+# # Hole den aktuellen Stand vom GitHub-Repo
+# git fetch upstream
+
+# # Setze den Branch auf den GitHub-Stand
+# git checkout main
+# git reset --hard upstream/main
+
+# # Push zurück zum Mirror (force!)
+# git push origin main --force
