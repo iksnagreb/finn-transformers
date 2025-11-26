@@ -126,6 +126,8 @@ eval:
     drop_last: false
 # Model to ONNX export hyperparameters
 export:
+  # Format to export: qcdq (~ standard ONNX) or qonnx
+  format: qonnx
   # Explicitly splits all attention heads in the model graph to be parallel
   split_heads: true
   # Version of the default ONNX opset

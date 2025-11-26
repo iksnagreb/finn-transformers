@@ -10,7 +10,7 @@ import torch
 from torch.utils.data import DataLoader
 
 # Export brevitas quantized models to QONNX dialect
-from brevitas.export import export_qonnx
+from brevitas.export import export_qonnx, export_onnx_qcdq
 
 # The RadioML classification model
 from radioml.model import Model
@@ -24,10 +24,14 @@ from utils import seed, patch_missing_affine_norms
 # Path to the RadioML dataset
 RADIOML_PATH = os.environ["RADIOML_PATH"]
 
+# Export function mapping
+EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
+
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
-def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+def export(model, dataset, batch_size, format="qonnx", split_heads=False,
+           **kwargs):
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"
@@ -58,7 +62,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
         out = model(inp)
 
     # Export the model to ONNX using the input example
-    export_qonnx(model, (inp,), "outputs/radioml/model.onnx", **kwargs)
+    EXPORTERS[format](model, (inp,), "outputs/radioml/model.onnx", **kwargs)
 
     # Save the input and output data for verification purposes later
     np.save("outputs/radioml/inp.npy", inp.numpy())

@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
 # Export brevitas quantized models to QONNX dialect
-from brevitas.export import export_qonnx
+from brevitas.export import export_qonnx, export_onnx_qcdq
 
 # The Vision classification model
 from vision.model import Model
@@ -24,10 +24,14 @@ from utils import seed, patch_missing_affine_norms
 # Path to the CIFAR-10 dataset
 CIFAR10_ROOT = os.environ.setdefault("CIFAR10_ROOT", "data")
 
+# Export function mapping
+EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
+
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
-def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+def export(model, dataset, batch_size, format="qonnx", split_heads=False,
+           **kwargs):
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"
@@ -63,7 +67,6 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     # Create a batched and shuffled data loader the Vision validation split
     export_data = DataLoader(dataset, batch_size=batch_size)
 
-
     # Sample the first batch from the export dataset
     inp, cls = next(iter(export_data))
 
@@ -72,7 +75,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
         out = model(inp)
 
     # Export the model to ONNX using the input example
-    export_qonnx(model, (inp,), "outputs/vision/model.onnx", **kwargs)
+    EXPORTERS[format](model, (inp,), "outputs/vision/model.onnx", **kwargs)
 
     # Save the input and output data for verification purposes later
     np.save("outputs/vision/inp.npy", inp.numpy())

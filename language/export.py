@@ -8,7 +8,7 @@ import torch
 from torch.utils.data import DataLoader
 
 # Export brevitas quantized models to QONNX dialect
-from brevitas.export import export_qonnx
+from brevitas.export import export_qonnx, export_onnx_qcdq
 
 # Generic tokenizer for loading pretrained tokenizer and data collator creating
 # batches of masked sequence data
@@ -23,11 +23,14 @@ from attention import QuantMultiheadAttention
 # Seeding RNGs for reproducibility, affine parameter export patching
 from utils import seed, patch_missing_affine_norms
 
+# Export function mapping
+EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
+
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
 def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
-           context_length, split_heads=False, **kwargs):  # noqa
+           context_length, format="qonnx", split_heads=False, **kwargs):
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"
@@ -80,7 +83,7 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
         out = model(inp)
 
     # Export the model to ONNX using the input example
-    export_qonnx(model, (inp,), "outputs/language/model.onnx", **kwargs)
+    EXPORTERS[format](model, (inp,), "outputs/language/model.onnx", **kwargs)
 
     # Save the input and output data for verification purposes later
     np.save("outputs/language/inp.npy", inp.numpy())

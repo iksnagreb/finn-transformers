@@ -13,8 +13,8 @@ stages:
       size: 7516
     - path: benchmark/export.py
       hash: md5
-      md5: 9e1c3340298ece482025c86c6ed2ff38
-      size: 3848
+      md5: 99d7429f4d38437f982631ef992bac0a
+      size: 3988
     - path: benchmark/model.py
       hash: md5
       md5: ae4c43d6c9822d8d9d43e41395302b6e
@@ -53,6 +53,7 @@ stages:
           - 64
           - 32
         export:
+          format: qonnx
           split_heads: true
           opset_version: 18
           do_constant_folding: true

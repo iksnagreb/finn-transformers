@@ -290,8 +290,8 @@ stages:
       size: 2302
     - path: language/export.py
       hash: md5
-      md5: f423cc3f702ad6d2bee6bf9a45b915cd
-      size: 4627
+      md5: 16d5e6a52fb690d84c0f759a69720f94
+      size: 4747
     - path: language/model.py
       hash: md5
       md5: 020b05d35db2f2872aa6496d30b0a4d9
@@ -328,6 +328,7 @@ stages:
           - 0.1
           - 0.1
         export:
+          format: qonnx
           split_heads: true
           opset_version: 19
           do_constant_folding: true

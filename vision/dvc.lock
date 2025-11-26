@@ -259,8 +259,8 @@ stages:
       size: 4009
     - path: vision/export.py
       hash: md5
-      md5: 56a0b75a8029968a14530b1a0e8ffe7f
-      size: 3943
+      md5: 83d63216d2c22903f4c452b723fff8e4
+      size: 4073
     - path: vision/model.py
       hash: md5
       md5: 90c9ab4bc24ddeabf3a3b76c63c07e16
@@ -269,6 +269,7 @@ stages:
       vision/params.yaml:
         dataset: '...'
         export:
+          format: qonnx
           split_heads: true
           opset_version: 19
           do_constant_folding: true
