@@ -47,7 +47,7 @@ steps:
   - step_minimize_bit_width
   - step_generate_estimate_reports
   - step_insert_dwc
-#  - step_set_fifo_depths
+  - step_set_fifo_depths
   - step_hw_codegen
   - step_hw_ipgen
   - step_create_stitched_ip
@@ -96,3 +96,5 @@ split_large_fifos: true
 
 # Disable automatic FIFO-sizing: FIFO settings should be given in folding.yaml
 auto_fifo_depths: false
+# Enables experimental live FIFO sizing on the FPGA
+live_fifo_sizing: true

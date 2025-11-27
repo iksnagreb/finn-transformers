@@ -67,7 +67,7 @@ stages:
             encoding: learned
             bits: 8
           configuration: original
-          num_layers: 3
+          num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
@@ -76,7 +76,7 @@ stages:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
-          dropout: 0.5
+          dropout: 0.25
         seed: 12
         tag: quantized
         train:
@@ -104,19 +104,19 @@ stages:
     outs:
     - path: outputs/vision/loss.yaml
       hash: md5
-      md5: 07af05ae8edd0b2cf1aa3c227f2ecbf6
-      size: 5547
+      md5: ac13a1639368b818cdda803d4e9d4423
+      size: 5532
     - path: outputs/vision/lr.yaml
       hash: md5
-      md5: 812342e427441e29aa69ba736f639278
-      size: 1804
+      md5: 8804916d7d515597857a22c0a9a9dc4f
+      size: 1879
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 861a9835a4d35aff182a9302523af7ec
-      size: 2074649
+      md5: 7bdc70684b98b17340bb1f5595b84115
+      size: 2017113
     - path: outputs/vision/optimizer.pt
       hash: md5
-      md5: 1badbb55ec67692cea6ea2bfc9ebfdb4
+      md5: 947daa8a37a7ec45390c61e3b5ebac9e
       size: 3759960
   eval:
     cmd: PARTITION=gpu bash run.sh python -m vision.eval
@@ -147,8 +147,8 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 861a9835a4d35aff182a9302523af7ec
-      size: 2074649
+      md5: 7bdc70684b98b17340bb1f5595b84115
+      size: 2017113
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -197,7 +197,7 @@ stages:
             encoding: learned
             bits: 8
           configuration: original
-          num_layers: 3
+          num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
@@ -206,17 +206,17 @@ stages:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
-          dropout: 0.5
+          dropout: 0.25
         seed: 12
         tag: quantized
     outs:
     - path: outputs/vision/accuracy.yaml
       hash: md5
-      md5: 3fa4954d4303e63821d0a7c0053e762e
+      md5: cede4a4671b8c2e1a432e767c81be930
       size: 28
     - path: outputs/vision/classes.csv
       hash: md5
-      md5: 1466a832d2a1e9e45919572e8821ca82
+      md5: dab0f656763a2e305a2d0733a56091c6
       size: 40015
   export:
     cmd: PARTITION=normal bash run.sh python -m vision.export
@@ -247,8 +247,8 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 861a9835a4d35aff182a9302523af7ec
-      size: 2074649
+      md5: 7bdc70684b98b17340bb1f5595b84115
+      size: 2017113
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -298,7 +298,7 @@ stages:
             encoding: learned
             bits: 8
           configuration: original
-          num_layers: 3
+          num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
@@ -307,7 +307,7 @@ stages:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
-          dropout: 0.5
+          dropout: 0.25
         seed: 12
         tag: quantized
     outs:
@@ -321,11 +321,11 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 8c3c8250cb7b0f28357c7752cb8c1ffe
-      size: 1957482
+      md5: 09edab29cfce722135b71acdd1a9ae92
+      size: 1933926
     - path: outputs/vision/out.npy
       hash: md5
-      md5: 17b9cbcc5354c761a0da476accced36e
+      md5: aa65fee62b938b61d128d19a5a93772c
       size: 168
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c vision/passes.yaml -o 
@@ -345,11 +345,11 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 8c3c8250cb7b0f28357c7752cb8c1ffe
-      size: 1957482
+      md5: 09edab29cfce722135b71acdd1a9ae92
+      size: 1933926
     - path: outputs/vision/out.npy
       hash: md5
-      md5: 17b9cbcc5354c761a0da476accced36e
+      md5: aa65fee62b938b61d128d19a5a93772c
       size: 168
     params:
       vision/passes.yaml:
@@ -426,9 +426,9 @@ stages:
     outs:
     - path: outputs/vision/streamlined.onnx
       hash: md5
-      md5: 154e63795742f1f7c6fab16340acbc9f
-      size: 6751350
+      md5: e08917eaef8425a2e89247ecf8720450
+      size: 4716225
     - path: outputs/vision/streamlined.onnx.pkl.xz
       hash: md5
-      md5: 08488e1ab07352630fbdc3a0585e420c
+      md5: 4c1f8e8ac25ea6ed9d05fadf350834f1
       size: 12756

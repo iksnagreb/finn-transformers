@@ -37,7 +37,7 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 3
+  num_layers: 2
   # Number of attention heads
   num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
@@ -62,7 +62,7 @@ model:
   # none
   norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
-  dropout: 0.5
+  dropout: 0.25
 # Training/Validation dataset configuration
 dataset: ...
 # Training hyperparameters
