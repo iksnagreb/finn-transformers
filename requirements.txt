@@ -12,3 +12,4 @@ onnxruntime==1.16.3
 onnxsim
 onnxoptimizer==0.3.13
 pandas~=2.3.1
+tensorrt==10.3.0
