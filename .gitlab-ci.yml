@@ -24,14 +24,12 @@ build:
     - export LIBRARY_PATH=/usr/local/cuda/lib64
     - export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
     - ls -l /usr/local/cuda/include/cuda.h
-    - echo $CPLUS_INCLUDE_PATH
-    - echo $LD_LIBRARY_PATH
     - pip install --upgrade pip
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
     - pip install --no-cache-dir -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
     - python -c "import sys; print('Pytho version:', sys.version, flush = True)"
-    - python hello.py
+    - python measure/mini_measure.py
   tags:
     - jetson
 
