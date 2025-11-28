@@ -18,6 +18,13 @@ build:
     # 4. pip upgraden und Dependencies installieren
     - pip install --upgrade pip
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
+    - export LD_LIBRARY_PATH=$HOME/.local/lib/python3.10/site-packages/nvidia/cuda_nvrtc/lib:\
+      $HOME/.local/lib/python3.10/site-packages/nvidia/cuda_runtime/lib:\
+      $HOME/.local/lib/python3.10/site-packages/nvidia/cublas/lib:\
+      $HOME/.local/lib/python3.10/site-packages/nvidia/cudnn/lib:\
+      $HOME/.local/lib/python3.10/site-packages/nvidia/cufft/lib:\
+      $HOME/.local/lib/python3.10/site-packages/tensorrt_libs:\
+      $LD_LIBRARY_PATH
     - pip install --no-cache-dir -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
     - python -c "import sys; print('Pytho version:', sys.version, flush = True)"
@@ -75,9 +82,10 @@ build:
 
 # warum funktioniert cuda trotzdem nicht? noch nicht ganz gesäubert oder so... vielleicht doch noch alten runner austesten? Was war anders?
 # sudo usermod -aG video,render gitlab-runner
-
-
-
+# es funktioniert endlich! aber nach stop tegrastats läuft es trotzdem zu lange...
+# gitlab-runner ALL=(ALL) NOPASSWD:ALL war noch drin
+# test: tegrastats ohne sudo??
+# klappt endlich, jetzt: mehr requirements hinzufügen
 
 
 
