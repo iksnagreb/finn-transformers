@@ -35,7 +35,7 @@ build:
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
     - pip install --no-cache-dir -r requirements.txt
     # 5. Optional: testen, ob alles funktioniert
-    - python -c "import sys; print('Pytho version:', sys.version, flush = True)"
+    - python -c "import sys; print('Pytho versionn:', sys.version, flush = True)"
     - which python3
     - python3 --version
     - python3 -c "import sys; print(sys.path)"
