@@ -1,7 +1,7 @@
 # Experiment tag to help with aggregating and filtering experiment sweeps
 tag: quantized
 # Global seed to make evaluation reproducible
-seed: 12
+seed: 40
 # Model hyperparameters: ...
 model:
   # Number of output classes to predict (default 10 MNIST/CIFAR-10 classes)
@@ -10,13 +10,21 @@ model:
   embedding:
     # Number of patches to aggregate the feature map into
     # "An Image is worth 16x16 words"... or 8x8...
-    patches: [ 8, 8 ]
+    patches:
+    - 8
+    - 8
     # Kernel size for sliding windows generating the patches
-    kernel_size: [ 4, 4 ]
+    kernel_size:
+    - 4
+    - 4
     # Padding to the input width to ensure expected number of output patches
-    padding: [ 0, 0 ]
+    padding:
+    - 0
+    - 0
     # Stride of the sliding windows
-    stride: [ 4, 4 ]
+    stride:
+    - 4
+    - 4
     # Activation functions to use after the convolution layer
     #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
@@ -48,7 +56,7 @@ model:
   expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: 4
+  bits: 8
   # Number of quantization bits for weights and activations of the
   # output classification layer, null means no quantization
   cls_bits: 8
@@ -64,7 +72,7 @@ model:
   # Dropout: probability of an element to be zeroed during training
   dropout: 0.25
 # Training/Validation dataset configuration
-dataset: ...
+dataset: '...'
 # Training hyperparameters
 train:
   # Number of training epochs to run
@@ -81,7 +89,9 @@ train:
     weight_decay: 1.0e-3
     # Coefficients used for computing running averages of gradient and its
     # square.
-    betas: [ 0.9, 0.999 ]
+    betas:
+    - 0.9
+    - 0.999
     # Term added to the denominator to improve numerical stability
     eps: 1.0e-8
   # Loss function to use: cross-entropy or nll
