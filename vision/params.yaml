@@ -1,5 +1,5 @@
 # Experiment tag to help with aggregating and filtering experiment sweeps
-tag: quantized
+tag: baseline
 # Global seed to make evaluation reproducible
 seed: 12
 # Model hyperparameters: ...
@@ -22,7 +22,7 @@ model:
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: 8
+    bits: null
   # Configures the positional encoding layer in front of the first attention
   # block
   positional:
@@ -31,7 +31,7 @@ model:
     encoding: learned
     # Number of quantization bits for weights and activations of the encoding
     # layer, null means no quantization
-    bits: 8
+    bits: null
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
@@ -48,10 +48,10 @@ model:
   expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: 4
+  bits: null
   # Number of quantization bits for weights and activations of the
   # output classification layer, null means no quantization
-  cls_bits: 8
+  cls_bits: null
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
   activation: relu
