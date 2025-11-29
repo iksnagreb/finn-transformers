@@ -14,7 +14,7 @@ model:
   positional:
     # Type of positional encoding to use at the input (following the embedding)
     #   Options are: none, sinusoidal, binary, learned
-    encoding: binary
+    encoding: learned
     # Number of quantization bits for weights and activations of the encoding
     # layer, null means no quantization
     bits: 8
@@ -25,13 +25,13 @@ model:
   # above
   num_layers: 2
   # Number of attention heads
-  num_heads: 4
+  num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 64
+  emb_dim: 192
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 256
+  expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: 4
@@ -48,7 +48,7 @@ model:
   # none
   norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
-  dropout: 0.1
+  dropout: 0.25
 # Training/Validation dataset configuration
 dataset:
   # Path to the dataset (huggingface identifier)
@@ -70,7 +70,7 @@ tokenizer:
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 20
+  epochs: 50
   # Batch size for training
   batch_size: 256
   # Context length for training inputs
