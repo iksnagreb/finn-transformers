@@ -104,13 +104,13 @@ stages:
           num_heads: 3
           emb_dim: 96
           expansion_dim: 384
-          bits: 4
+          bits: 5
           cls_bits: 8
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
           dropout: 0.5
-        seed: 12
+        seed: 59
         tag: quantized
         train:
           epochs: 100
@@ -137,19 +137,19 @@ stages:
     outs:
     - path: outputs/radioml/loss.yaml
       hash: md5
-      md5: 99932c77ddc46df13420c6080b54c3de
-      size: 5496
+      md5: ba6b6c8db2487814147d85f0eb8ee4fa
+      size: 5525
     - path: outputs/radioml/lr.yaml
       hash: md5
-      md5: f1409607e731d139d0e4dc9c3155e39f
-      size: 1912
+      md5: 0108c90e443d662a4e5f8f540616ab49
+      size: 1894
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: b6fb66db61a28b82c9a2237fcaaa7c95
-      size: 580377
+      md5: f80ff18d120abca12eae31fa60cfa168
+      size: 604761
     - path: outputs/radioml/optimizer.pt
       hash: md5
-      md5: 3be62f4b4121b24542a0b87edcacf8fa
+      md5: 5584569f6318471e3aaabe474739d876
       size: 1006040
   eval:
     cmd: PARTITION=gpu bash run.sh python -m radioml.eval
@@ -180,8 +180,8 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: b6fb66db61a28b82c9a2237fcaaa7c95
-      size: 580377
+      md5: f80ff18d120abca12eae31fa60cfa168
+      size: 604761
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -267,23 +267,23 @@ stages:
           num_heads: 3
           emb_dim: 96
           expansion_dim: 384
-          bits: 4
+          bits: 5
           cls_bits: 8
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
           dropout: 0.5
-        seed: 12
+        seed: 59
         tag: quantized
     outs:
     - path: outputs/radioml/accuracy.yaml
       hash: md5
-      md5: e709f6b4cd4d4b7ad806ca6bd435ab63
+      md5: e914ef46a24444901e2540ce325d3298
       size: 52
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: 193c2b4a4cfa817758c40d63e460339d
-      size: 964302
+      md5: a577ee3e77ee141a517fd711428dbe4b
+      size: 964692
   export:
     cmd: PARTITION=normal bash run.sh python -m radioml.export
     deps:
@@ -313,8 +313,8 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: b6fb66db61a28b82c9a2237fcaaa7c95
-      size: 580377
+      md5: f80ff18d120abca12eae31fa60cfa168
+      size: 604761
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -401,30 +401,30 @@ stages:
           num_heads: 3
           emb_dim: 96
           expansion_dim: 384
-          bits: 4
+          bits: 5
           cls_bits: 8
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
           dropout: 0.5
-        seed: 12
+        seed: 59
         tag: quantized
     outs:
     - path: outputs/radioml/cls.npy
       hash: md5
-      md5: 8a11ddc41d156f1d5e9c3bf18c4995ef
+      md5: 6f6ad8855db562a804c48cfde8d276d8
       size: 136
     - path: outputs/radioml/inp.npy
       hash: md5
-      md5: 39082c5c0660898e20552f11940dab78
+      md5: 01047edebdedd3c5bfcd43aa596e9d6d
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: f18114ef5485a9349fe7f14edd8dec3a
-      size: 528846
+      md5: d0c2354747f7134007bb657487e4ab21
+      size: 528812
     - path: outputs/radioml/out.npy
       hash: md5
-      md5: 9488da60ce811e98c83b765e374dc732
+      md5: 1fcb303024a2ac4516a117673158ebe3
       size: 224
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c radioml/passes.yaml -o 
@@ -436,19 +436,19 @@ stages:
       size: 743
     - path: outputs/radioml/cls.npy
       hash: md5
-      md5: 8a11ddc41d156f1d5e9c3bf18c4995ef
+      md5: 6f6ad8855db562a804c48cfde8d276d8
       size: 136
     - path: outputs/radioml/inp.npy
       hash: md5
-      md5: 39082c5c0660898e20552f11940dab78
+      md5: 01047edebdedd3c5bfcd43aa596e9d6d
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: f18114ef5485a9349fe7f14edd8dec3a
-      size: 528846
+      md5: d0c2354747f7134007bb657487e4ab21
+      size: 528812
     - path: outputs/radioml/out.npy
       hash: md5
-      md5: 9488da60ce811e98c83b765e374dc732
+      md5: 1fcb303024a2ac4516a117673158ebe3
       size: 224
     params:
       radioml/passes.yaml:
@@ -513,9 +513,9 @@ stages:
     outs:
     - path: outputs/radioml/streamlined.onnx
       hash: md5
-      md5: a48a099dcad6aebd50eaa01462c59d39
-      size: 954235
+      md5: 1e400077919a22d8b17148f6c9e4884b
+      size: 1089807
     - path: outputs/radioml/streamlined.onnx.pkl.xz
       hash: md5
-      md5: 84b1ec91a6c7b3c589eba98df5b745ee
-      size: 15500
+      md5: fa00725baf37df4da2933da0f6a07234
+      size: 15592
