@@ -25,7 +25,7 @@ stages:
           - 0.8
           - 0.1
           - 0.1
-        seed: 12
+        seed: 2
         tag: quantized
         tokenizer:
           pretrained: bert-base-cased
@@ -34,8 +34,8 @@ stages:
     outs:
     - path: outputs/language/tokenizer
       hash: md5
-      md5: 1ff2205754bd3bbddd84f463cd124fd4.dir
-      size: 55434
+      md5: b4d825abf69b1df66d08ea5716786626.dir
+      size: 55432
       nfiles: 4
   train:
     cmd: PARTITION=gpu bash run.sh python -m language.train
@@ -78,8 +78,8 @@ stages:
       size: 5162
     - path: outputs/language/tokenizer
       hash: md5
-      md5: 1ff2205754bd3bbddd84f463cd124fd4.dir
-      size: 55434
+      md5: b4d825abf69b1df66d08ea5716786626.dir
+      size: 55432
       nfiles: 4
     - path: quant.py
       hash: md5
@@ -110,13 +110,13 @@ stages:
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
           dropout: 0.25
-        seed: 12
+        seed: 2
         tag: quantized
         train:
           epochs: 50
@@ -146,19 +146,19 @@ stages:
     outs:
     - path: outputs/language/loss.yaml
       hash: md5
-      md5: 6a378ee0206f5de336d9ce2d94f1a991
-      size: 2784
+      md5: 4c9b0298b7501779e406eaf013babbfd
+      size: 2742
     - path: outputs/language/lr.yaml
       hash: md5
-      md5: 96eee227b2bd5f0c92bbc2af803b1672
-      size: 910
+      md5: 8f752916cee751a89e8e5c2f4ba1c06b
+      size: 919
     - path: outputs/language/model.pt
       hash: md5
-      md5: 78f3a2f9fd4695365f081d6abaddea42
+      md5: 22b67763d2e963b0805211dd05559dd4
       size: 5303223
     - path: outputs/language/optimizer.pt
       hash: md5
-      md5: ff921dbdf12453381dfb9806945cfad0
+      md5: 66c7f55970bbf4bd328996fa57b8582e
       size: 10269665
   eval:
     cmd: PARTITION=gpu bash run.sh python -m language.eval
@@ -201,12 +201,12 @@ stages:
       size: 5162
     - path: outputs/language/model.pt
       hash: md5
-      md5: 78f3a2f9fd4695365f081d6abaddea42
+      md5: 22b67763d2e963b0805211dd05559dd4
       size: 5303223
     - path: outputs/language/tokenizer
       hash: md5
-      md5: 1ff2205754bd3bbddd84f463cd124fd4.dir
-      size: 55434
+      md5: b4d825abf69b1df66d08ea5716786626.dir
+      size: 55432
       nfiles: 4
     - path: quant.py
       hash: md5
@@ -248,19 +248,19 @@ stages:
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
           dropout: 0.25
-        seed: 12
+        seed: 2
         tag: quantized
     outs:
     - path: outputs/language/accuracy.yaml
       hash: md5
-      md5: 4d17b42adbd005d37fe5072bc9bfbb07
-      size: 52
+      md5: 69a6b6f7788fcd5694313354bdb87d2e
+      size: 51
   export:
     cmd: PARTITION=normal bash run.sh python -m language.export
     deps:
@@ -302,12 +302,12 @@ stages:
       size: 5162
     - path: outputs/language/model.pt
       hash: md5
-      md5: 78f3a2f9fd4695365f081d6abaddea42
+      md5: 22b67763d2e963b0805211dd05559dd4
       size: 5303223
     - path: outputs/language/tokenizer
       hash: md5
-      md5: 1ff2205754bd3bbddd84f463cd124fd4.dir
-      size: 55434
+      md5: b4d825abf69b1df66d08ea5716786626.dir
+      size: 55432
       nfiles: 4
     - path: quant.py
       hash: md5
@@ -350,30 +350,30 @@ stages:
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
           dropout: 0.25
-        seed: 12
+        seed: 2
         tag: quantized
     outs:
     - path: outputs/language/cls.npy
       hash: md5
-      md5: 7acec49591b401a10535bcb5525a056e
+      md5: 5f0ab8e010ce887d2663ccd6d2e80aa4
       size: 2176
     - path: outputs/language/inp.npy
       hash: md5
-      md5: 9d6a784b83ecf8621766c09387172446
+      md5: bd1d610819f707bf0e680bc2550ce82d
       size: 2176
     - path: outputs/language/model.onnx
       hash: md5
-      md5: 2146001cff1853d3639fcfb555baa41d
-      size: 5182727
+      md5: 961467c5e8251cbce4814ba3c284b1a0
+      size: 5181766
     - path: outputs/language/out.npy
       hash: md5
-      md5: 16c608f66ae17e2dc3f23f0aeee9528b
+      md5: bd7dc3035a399fa6505fb053a0590ee8
       size: 2097280
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c language/passes.yaml -o 
@@ -385,19 +385,19 @@ stages:
       size: 743
     - path: outputs/language/cls.npy
       hash: md5
-      md5: 7acec49591b401a10535bcb5525a056e
+      md5: 5f0ab8e010ce887d2663ccd6d2e80aa4
       size: 2176
     - path: outputs/language/inp.npy
       hash: md5
-      md5: 9d6a784b83ecf8621766c09387172446
+      md5: bd1d610819f707bf0e680bc2550ce82d
       size: 2176
     - path: outputs/language/model.onnx
       hash: md5
-      md5: 2146001cff1853d3639fcfb555baa41d
-      size: 5182727
+      md5: 961467c5e8251cbce4814ba3c284b1a0
+      size: 5181766
     - path: outputs/language/out.npy
       hash: md5
-      md5: 16c608f66ae17e2dc3f23f0aeee9528b
+      md5: bd7dc3035a399fa6505fb053a0590ee8
       size: 2097280
     params:
       language/passes.yaml:
@@ -460,9 +460,9 @@ stages:
     outs:
     - path: outputs/language/streamlined.onnx
       hash: md5
-      md5: e1867fa3c9ed723bda86fdee1ff722d9
-      size: 11604027
+      md5: fc2631a52c79cdbb4d91215c194abeb5
+      size: 19719550
     - path: outputs/language/streamlined.onnx.pkl.xz
       hash: md5
-      md5: d0e63f236a43014274759a30cefb7717
-      size: 652208
+      md5: cf69ae2009a98fc59d9872f59b4969ee
+      size: 816052
