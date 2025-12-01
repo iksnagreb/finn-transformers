@@ -1,7 +1,7 @@
 # Experiment tag to help with aggregating and filtering experiment sweeps
 tag: quantized
 # Global seed to make evaluation reproducible
-seed: 12
+seed: 33
 # Model hyperparameters: ...
 model:
   # Configuration of the quantized token embedding layer
@@ -34,7 +34,7 @@ model:
   expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: 4
+  bits: 3
   # Number of quantization bits for weights and activations of the
   # output classification layer, null means no quantization
   cls_bits: 8
@@ -54,12 +54,15 @@ dataset:
   # Path to the dataset (huggingface identifier)
   path: roneneldan/TinyStories
   # Name of the dataset subset
-  name: null
+  name:
   # Select the training split of the dataset
   split: train
   # Splits the dataset into train/validation/evaluation subsets
-  splits: [ 0.80, 0.10, 0.10 ]  # 80%, 10%, 10% splits
+  splits:                       # 80%, 10%, 10% splits
 # Tokenizer configuration
+  - 0.80
+  - 0.10
+  - 0.10
 tokenizer:
   # Pretrained base tokenizer used to train a custom tokenizer
   pretrained: bert-base-cased
@@ -89,7 +92,9 @@ train:
     weight_decay: 0.0
     # Coefficients used for computing running averages of gradient and its
     # square.
-    betas: [ 0.9, 0.999 ]
+    betas:
+    - 0.9
+    - 0.999
     # Term added to the denominator to improve numerical stability
     eps: 1.0e-8
   # Loss function to use: cross-entropy or nll
