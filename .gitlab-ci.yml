@@ -36,14 +36,26 @@ build:
     - ls -l /usr/local/cuda/include/cuda.h
     - pip install --upgrade pip
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
-    - pip install --no-cache-dir -r requirements.txt
+    - pip install -r requirements.txt
     
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
-    # davor: dvc pull, damit alle models da sind - kann ich vom mirror aus die models aus dem finn transformers repo holen?
+    # davor: dvc pull, damit alle models da sind - kann ich vom mirror aus die models aus dem finn transformers repo holen?, selber exportieren, pt laden
+    # dvc pull: zustand vom main branch holen (merge in train-measure branch)
+    - dvc pull
     - python3 -m measure.mini_measure
 
   tags:
     - jetson
+
+
+# merge machen
+# pull machen
+# export pfade in runner config schreiben
+
+
+
+
+
 
 # stages:
 #   - test

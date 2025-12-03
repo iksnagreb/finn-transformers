@@ -13,4 +13,5 @@ __pycache__
 data/
 # Plots produced by dvc from pipeline outputs
 dvc_plots/builds/
+builds/
 
