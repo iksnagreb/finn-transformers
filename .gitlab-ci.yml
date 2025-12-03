@@ -25,7 +25,7 @@ build:
     - export C_INCLUDE_PATH=/usr/local/cuda/include
     - export CPLUS_INCLUDE_PATH=/usr/local/cuda/include
     - export LIBRARY_PATH=/usr/local/cuda/lib64
-     # - export PYTHONPATH=/usr/lib/python3.10/dist-packages:$PYTHONPATH
+    - export PYTHONPATH=/usr/lib/python3.10/dist-packages:$PYTHONPATH   # notwendig für tensorrt
     # Modell wird nicht richtig geladen
     # - export PYTHONPATH=/data/gitlab/builds/ggOHaiaWY/0/haka/mirror-finn-transformers:$PYTHONPATH
     - export LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
