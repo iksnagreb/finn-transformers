@@ -29,7 +29,7 @@ model:
     encoding: learned
     # Number of quantization bits for weights and activations of the encoding
     # layer, null means no quantization
-    bits: 8
+    bits: null
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
@@ -78,7 +78,13 @@ model_int8:
     bits: 8
   # Type of positional encoding to use at the input (following the embedding)
   #   Options are: none, sinusoidal, binary, learned
-  positional: binary
+  positional:
+    # Type of positional encoding to use at the input (following the embedding)
+    #   Options are: none, sinusoidal, binary, learned
+    encoding: learned
+    # Number of quantization bits for weights and activations of the encoding
+    # layer, null means no quantization
+    bits: 8
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
