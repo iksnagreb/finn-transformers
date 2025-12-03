@@ -10,7 +10,7 @@ import torch
 from torch.utils.data import DataLoader
 
 # Export brevitas quantized models to QONNX dialect
-from brevitas.export import export_qonnx
+from brevitas.export import export_qonnx, export_onnx_qcdq
 
 # The RadioML classification model
 from radioml.model import Model
@@ -18,21 +18,34 @@ from radioml.model import Model
 from radioml.dataset import get_datasets
 # Quantized custom implementation of multihead attention
 from attention import QuantMultiheadAttention
+<<<<<<< HEAD
 # Seeding RNGs for reproducibility
 from utils import seed
 import onnx
 from onnxsim import simplify
 
+=======
+# Seeding RNGs for reproducibility, affine parameter export patching
+from utils import seed, patch_missing_affine_norms
+>>>>>>> origin/main
 
 # Path to the RadioML dataset
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
+# Export function mapping
+EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
+
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
+<<<<<<< HEAD
 def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+=======
+def export(model, dataset, batch_size, format="qonnx", split_heads=False,
+           **kwargs):
+>>>>>>> origin/main
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"
@@ -58,18 +71,23 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
 
     # Load the RadioML dataset splits as configured
     _, _, eval_data = get_datasets(path=RADIOML_PATH, **dataset)
-    # Create a batched and shuffled data loader the ImageNet validation split
+    # Create a batched and shuffled data loader the RadioML validation split
     export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
 
     # Sample the first batch from the export dataset
-    inp, out, _ = next(iter(export_data))
+    inp, cls, _ = next(iter(export_data))
+
+    # Also save the model output predictions (probabilities)
+    with torch.no_grad():
+        out = model(inp)
 
     # Export the model to ONNX using the input example
-    export_qonnx(model, (inp,), "outputs/radioml/model.onnx", **kwargs)
+    EXPORTERS[format](model, (inp,), "outputs/radioml/model.onnx", **kwargs)
 
     # Save the input and output data for verification purposes later
     np.save("outputs/radioml/inp.npy", inp.numpy())
     np.save("outputs/radioml/out.npy", out.numpy())
+    np.save("outputs/radioml/cls.npy", cls.numpy())
 
     # Standard ONNX export for reference - works with dynamic batch sizes
     onnx_path = "outputs/radioml/model_dynamic_batchsize.onnx"
@@ -134,6 +152,12 @@ if __name__ == "__main__":
     
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/radioml/model.pt"))
+<<<<<<< HEAD
     model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt"))
+=======
+    # Prevent export and streamlining issues for missing affine normalization
+    # parameters
+    model = patch_missing_affine_norms(model)
+>>>>>>> origin/main
     # Pass the model and the export configuration to the evaluation loop
     export(model, model_int8, dataset=params["dataset"], **params["export"])

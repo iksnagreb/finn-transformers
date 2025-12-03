@@ -59,13 +59,13 @@ class MLP(torch.nn.Module):
             # Normalization layer preceding the main branch if configured as
             # pre-norm
             *(torch.nn.Sequential(
-                # RadioML data comes in with sequence (temporal) dimension
+                # Transformer data comes in with sequence (temporal) dimension
                 # before channels but is treated as an image in channels-first
                 # layout
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm2d(),
+                torch.nn.LazyBatchNorm1d(affine=False),
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
@@ -78,7 +78,7 @@ class MLP(torch.nn.Module):
             # defined above
             ACTIVATIONS[activation](),
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
+            *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
             # Amount of dropout to apply at the sublayer output
             torch.nn.Dropout(p=dropout),
             # Quantized linear projection to the output embedding dimension
@@ -101,20 +101,28 @@ class MLP(torch.nn.Module):
         # post-norm
         if norm_placement == "post-norm" and norm is not None:
             self.post_norm = torch.nn.Sequential(
-                # RadioML data comes in with sequence (temporal) dimension
+                # Transformer data comes in with sequence (temporal) dimension
                 # before channels but is treated as an image in channels-first
                 # layout
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm2d(),
+                torch.nn.LazyBatchNorm1d(affine=False),
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits)] if bits else []),
             )
 
     def forward(self, x):
-        return self.post_norm(self.quant(self.mlp(x)) + self.quant(x))
+        # Pack multiple sequence/spatial dimensions into a single sequence
+        # dimension
+        x, ps = pack([x], "b * d")
+        # Quantized MLP block with residual connection and normalization
+        y = self.post_norm(self.quant(self.mlp(x)) + self.quant(x))
+        # Unpack the tensor to continue with the original layer
+        return unpack(y, ps, "b * d")[0]
 
 
 # Multihead Self Attention block according to Vaswani et al. 2017. Comprises a
@@ -137,6 +145,9 @@ class Attention(torch.nn.Module):
             bits=None,
             # Dropout: probability of an element to be zeroed during training
             dropout=0.0,
+            # Inserts an additional input quantizer, e.g. when the block is used
+            # as the first block of the model
+            input_quant=False,
             # Catches all remaining, unused configuration options...
             **_
     ):
@@ -144,6 +155,12 @@ class Attention(torch.nn.Module):
 
         # Not support for other than batch normalization for now...
         assert norm in {"batch-norm", "none", None}, f"Unsupported norm: {norm}"
+
+        # Optional input quantizer in front of the entire block
+        self.input_quant = torch.nn.Identity()
+
+        if input_quant and bits is not None:
+            self.input_quant = QuantIdentity(bit_width=bits)
 
         # Default identity pre-norm will be overwritten below if configured
         self.pre_norm = torch.nn.Identity()
@@ -156,7 +173,7 @@ class Attention(torch.nn.Module):
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm1d(),
+                torch.nn.LazyBatchNorm1d(affine=False),
                 # Insert optional activation quantizer if enabled
                 *([QuantIdentity(bit_width=bits)] if bits else []),
                 # Rearrange from channels-first back to channels-last
@@ -189,7 +206,7 @@ class Attention(torch.nn.Module):
             # Input and output quantization of the softmax normalization of the
             # attention weights
             softmax_input_quant=act_quantizer(bits),
-            softmax_output_quant=act_quantizer(bits),
+            softmax_output_quant=act_quantizer(bits, _signed=False),
             # Input, weight and bias quantization settings of output projection
             output_projection_input_quant=act_quantizer(bits),
             output_projection_weight_quant=weight_quantizer(bits),
@@ -220,7 +237,7 @@ class Attention(torch.nn.Module):
                 Rearrange("b ... c -> b c ..."),
                 # Batch normalization inferring the size of the embedding
                 # dimension
-                torch.nn.LazyBatchNorm1d(),
+                torch.nn.LazyBatchNorm1d(affine=False),
                 # Insert optional activation quantizer if enabled
                 *([QuantIdentity(bit_width=bits)] if bits else []),
                 # Rearrange from channels-first back to channels-last
@@ -231,7 +248,7 @@ class Attention(torch.nn.Module):
     def forward(self, x):
         # Pack multiple sequence/spatial dimensions into a single sequence
         # dimension
-        x, ps = pack([x], "b * d")
+        x, ps = pack([self.input_quant(x)], "b * d")
         # Apply pre-norm normalization once on the query, key and value input
         # before forking
         y = self.pre_norm(x)
@@ -304,7 +321,7 @@ class Conv(torch.nn.Module):
         # CNN block of three convolution layers as the main branch of the
         # residual block
         self.cnn = torch.nn.Sequential(
-            # RadioML data comes in with sequence (temporal) dimension
+            # Transformer data comes in with sequence (temporal) dimension
             # before channels but is treated as an image in channels-first
             # layout
             Rearrange("b ... c -> b c ..."),
@@ -352,7 +369,7 @@ class Conv(torch.nn.Module):
             # defined above
             ACTIVATIONS[activation](),
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
+            *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
             # Second quantized pointwise convolution to the embedding dimension
             LazyQuantConv2d(
                 emb_dim, bias=bias, kernel_size=(1, 1), **weight_quant
@@ -378,7 +395,7 @@ class Conv(torch.nn.Module):
         # post-norm
         if norm_placement == "post-norm" and norm is not None:
             self.post_norm = torch.nn.Sequential(
-                # RadioML data comes in with sequence (temporal) dimension
+                # Transformer data comes in with sequence (temporal) dimension
                 # before channels but is treated as an image in channels-first
                 # layout
                 Rearrange("b ... c -> b c ..."),
@@ -388,6 +405,8 @@ class Conv(torch.nn.Module):
                 # Rearrange from channels-first back to channels-last
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits)] if bits else []),
             )
 
     def forward(self, x):
@@ -424,7 +443,7 @@ class Downsample(torch.nn.Module):
 
         # Convolution downsampling followed by a quantized activation function
         self.conv = torch.nn.Sequential(
-            # RadioML data comes in with sequence (temporal) dimension
+            # Transformer data comes in with sequence (temporal) dimension
             # before channels but is treated as an image in channels-first
             # layout
             Rearrange("b ... c -> b c ..."),
@@ -454,7 +473,7 @@ class Downsample(torch.nn.Module):
             # defined above
             ACTIVATIONS[activation](),
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
+            *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
             # Rearrange from channels-first back to channels-last
             # sequence-first layout
             Rearrange("b c ... -> b ... c"),
@@ -468,3 +487,13 @@ class Downsample(torch.nn.Module):
 BLOCKS = {
     "attention": Attention, "mlp": MLP, "conv": Conv, "downsample": Downsample
 }
+
+# Original configuration of the Transformer-encoder according to Vaswani et al.
+# 2017
+ORIGINAL = ("attention", "mlp")
+# Conformer configuration of the Transformer-encoder according to Gulati et al.
+# 2020
+CONFORMER = ("mlp", "attention", "conv", "mlp")
+
+# Maps string identifiers to Transformer block configurations
+TRANSFORMER_CONFIGURATIONS = {"original": ORIGINAL, "conformer": CONFORMER}

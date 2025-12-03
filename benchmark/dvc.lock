@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   export:
-    cmd: python -m benchmark.export
+    cmd: PARTITION=normal bash run.sh python -m benchmark.export
     deps:
     - path: activations.py
       hash: md5
@@ -13,24 +13,24 @@ stages:
       size: 7516
     - path: benchmark/export.py
       hash: md5
-      md5: b3b92fc8486edab34e4330eba75260ac
-      size: 3644
+      md5: 99d7429f4d38437f982631ef992bac0a
+      size: 3988
     - path: benchmark/model.py
       hash: md5
       md5: ae4c43d6c9822d8d9d43e41395302b6e
       size: 136
     - path: blocks.py
       hash: md5
-      md5: 61cb22fba566aa9cc8c9ca39c43cf496
-      size: 21569
+      md5: 94b955d3c734cb1e5c007c9e9e356f29
+      size: 23056
     - path: embedding.py
       hash: md5
-      md5: 7ed092ae5710f20058b64ebbd7215126
-      size: 2698
+      md5: 88f9614ba3b485145a40fa3ef9c4bb17
+      size: 3923
     - path: encoding.py
       hash: md5
-      md5: 481854c553f5991907217d8981931d6c
-      size: 8840
+      md5: 08ba618cce0e47e68014ac1c9ee77b05
+      size: 8835
     - path: lazy.py
       hash: md5
       md5: dc8537c6a3615ea74c2d1db381974a55
@@ -41,8 +41,8 @@ stages:
       size: 1221
     - path: utils.py
       hash: md5
-      md5: f84dabfd10a04e1bb70b41d6be638042
-      size: 381
+      md5: 750a14e619ab121477a341d90669b078
+      size: 4009
     params:
       benchmark/params.yaml:
         dataset:
@@ -53,6 +53,7 @@ stages:
           - 64
           - 32
         export:
+          format: qonnx
           split_heads: true
           opset_version: 18
           do_constant_folding: true
@@ -67,6 +68,7 @@ stages:
           norm: batch-norm
           norm_placement: post-norm
           bits: 8
+          input_quant: true
         seed: 12
         tag: benchmark
     outs:
@@ -76,9 +78,93 @@ stages:
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: 1a9b8511c7575e78363c82af492f1e2b
-      size: 34687
+      md5: f394b43fb00bcc93458602d5253f5614
+      size: 34913
     - path: outputs/benchmark/out.npy
       hash: md5
-      md5: 5214433e4a4f1d1127896c8f37516497
+      md5: 3472b667213d7d22b329fdc31f315071
       size: 8320
+  streamline:
+    cmd: PARTITION=normal bash run.sh onnx-passes -c benchmark/passes.yaml -o 
+      outputs/benchmark/streamlined.onnx outputs/benchmark/model.onnx
+    deps:
+    - path: adhoc_passes.py
+      hash: md5
+      md5: 03d4a11676b8bc4a0407ca1de9037d34
+      size: 743
+    - path: outputs/benchmark/inp.npy
+      hash: md5
+      md5: 49980be4347b64945d293ff16f5babe2
+      size: 8320
+    - path: outputs/benchmark/model.onnx
+      hash: md5
+      md5: f394b43fb00bcc93458602d5253f5614
+      size: 34913
+    - path: outputs/benchmark/out.npy
+      hash: md5
+      md5: 3472b667213d7d22b329fdc31f315071
+      size: 8320
+    params:
+      benchmark/passes.yaml:
+        imports:
+        - adhoc_passes
+        logging:
+          verbose: false
+          checkpoint: false
+          keep_intermediates: false
+        model_checker:
+          full_check: true
+        onnxruntime:
+          providers:
+          - - CPUExecutionProvider
+            - {}
+          full_context_dump: false
+        passes:
+        - import-qonnx
+        - shape-inference
+        - checker
+        - verify
+        - inline-qonnx
+        - inline-batchnorm
+        - inline-gemm
+        - lower-conv
+        - lower-pooling
+        - shape-inference
+        - checker
+        - verify
+        - streamline-thresholds
+        - streamline
+        - checker
+        - verify
+        - decompose-thresholds
+        - tidyup
+        - MoveMulPastTranspose
+        - tidyup
+        - MoveSplitPastElementwise
+        - tidyup
+        - unbroadcast
+        - tidyup
+        - checker
+        - verify
+        reference:
+          inp:
+          - outputs/benchmark/inp.npy
+          out:
+          - outputs/benchmark/out.npy
+        shape_inference: {}
+        verify:
+          tolerance:
+            atol: 0.001
+          metrics:
+            max_abs_error:
+            - 0.0
+            - 0.01
+    outs:
+    - path: outputs/benchmark/streamlined.onnx
+      hash: md5
+      md5: 93ee17494d6ab4607cc0fe93f4131cd0
+      size: 367226
+    - path: outputs/benchmark/streamlined.onnx.pkl.xz
+      hash: md5
+      md5: a9f7460dce3783aba5e9cd06c8cf8ee9
+      size: 6960

@@ -15,8 +15,8 @@ from torch.utils.data import DataLoader
 from radioml.model import Model
 # The RadioML modulation classification dataset
 from radioml.dataset import get_datasets
-# Seeding RNGs for reproducibility
-from utils import seed
+# Seeding RNGs for reproducibility, configuration of optimizer and loss
+from utils import seed, get_optimizer, get_criterion
 
 # Path to the RadioML dataset
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
@@ -25,32 +25,6 @@ RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024
 INT8 = os.getenv("INT8", "0")  # Default = "0"
 if INT8 == "1":
     print("INT8-Modus aktiviert")
-
-# Gets an optimizer instance according to configuration and register the model
-# parameters
-def get_optimizer(algorithm, parameters, **kwargs):
-    # Supported optimizer algorithms
-    algorithms = {
-        "adam": torch.optim.Adam, "sgd": torch.optim.SGD
-    }
-    # The configured algorithm must be among the supported ones
-    assert algorithm in algorithms, f"Optimizer {algorithm} is not supported"
-    # Create the optimizer instance forwarding additional arguments and
-    # registering the model parameters
-    return algorithms[algorithm](parameters, **kwargs)
-
-
-# Gets the loss functions instance according to configuration
-def get_criterion(criterion, **kwargs):
-    # Supported optimization criteria
-    criteria = {
-        "cross-entropy": torch.nn.CrossEntropyLoss, "nll": torch.nn.NLLLoss
-    }
-    # The configured criterion must be among the supported ones
-    assert criterion in criteria, f"Criterion {criterion} is not supported"
-    # Create the loss function instance forwarding additional arguments
-    return criteria[criterion](**kwargs)
-
 
 # Main training loop: Takes a model, loads the dataset and sets up the
 # optimizer. Runs the configured number of training epochs

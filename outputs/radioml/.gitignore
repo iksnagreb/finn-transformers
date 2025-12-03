@@ -2,5 +2,5 @@
 /optimizer.pt
 /inp.npy
 /out.npy
-/model_int8.pt
-/optimizer_int8.pt
+/cls.npy
+/streamlined.onnx.pkl.xz

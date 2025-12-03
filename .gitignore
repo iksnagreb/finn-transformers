@@ -9,5 +9,8 @@ __pycache__
 /inp.npy
 /out.npy
 /build
-builds/
+# Local folder for datasets
+data/
+# Plots produced by dvc from pipeline outputs
+dvc_plots/builds/
 

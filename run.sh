@@ -19,7 +19,7 @@ if [ "$RUN_VIA_SLURM" = 1 ]; then
   #   Note: Hardcode this to 1, there is no need for more GPUs right now
   if [[ "$PARTITION" = "-p gpu" ]] || [[ "$PARTITION" = "-p dgx" ]]; then
     #   Note: Hardcode this to 1, there is no need for more GPUs right now
-    GPUS="--gres=gpu:${GPUS:=a100:1}"
+    GPUS="--gres=gpu:${GPUS:=h100:1}"
   fi;
   # Group all sbatch command line arguments into one string
   ARGS="$JOB_NAME $TIME_LIMIT $NUM_CPUS $MEM $PARTITION $MAIL $GPUS"

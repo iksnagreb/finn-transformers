@@ -1,5 +1,5 @@
 # Experiment tag to help with aggregating and filtering experiment sweeps
-tag: baseline
+tag: quantized
 # Global seed to make evaluation reproducible
 seed: 12
 # Model hyperparameters: ...
@@ -15,15 +15,23 @@ model:
     kernel_size: [ 1, 16 ]
     # Stride of the sliding windows
     stride: [ 1, 16 ]
+    # Padding to the input width to ensure expected number of output patches
+    padding: [ 0, 0 ]
     # Activation functions to use after the convolution layer
     #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: null
-  # Type of positional encoding to use at the input (following the embedding)
-  #   Options are: none, sinusoidal, binary, learned
-  positional: binary
+    bits: 8
+  # Configures the positional encoding layer in front of the first attention
+  # block
+  positional:
+    # Type of positional encoding to use at the input (following the embedding)
+    #   Options are: none, sinusoidal, binary, learned
+    encoding: learned
+    # Number of quantization bits for weights and activations of the encoding
+    # layer, null means no quantization
+    bits: 8
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
@@ -31,16 +39,19 @@ model:
   # above
   num_layers: 1
   # Number of attention heads
-  num_heads: 4
+  num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 32
+  emb_dim: 96
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 128
+  expansion_dim: 384
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: null
+  bits: 4
+  # Number of quantization bits for weights and activations of the
+  # output classification layer, null means no quantization
+  cls_bits: 8
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
   activation: relu
@@ -49,9 +60,9 @@ model:
   norm: batch-norm
   # Placement of the normalization layer: pre-norm or post-norm, if norm is not
   # none
-  norm_placement: post-norm
+  norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
-  dropout: 0.0
+  dropout: 0.5
 # Training/Validation dataset configuration
 model_int8:
   # Number of output classes to predict (default 24 RadioML classes)
@@ -112,7 +123,7 @@ dataset:
     -6, -4, -2, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
   ]
   # Splits the dataset into train/validation/evaluation subsets
-  splits: [ 0.70, 0.15, 0.15 ]  # 70%, 15%, 15% splits
+  splits: [ 0.80, 0.10, 0.10 ]  # 80%, 10%, 10% splits
   # Seed used for reproducible splitting of datasets
   seed: 12
   # Reshape the dataset to fit the expected embedding dimension of the model
@@ -131,10 +142,10 @@ train:
     # (Initial) Learning rate
     lr: 0.001
     # L2 regularization
-    weight_decay: 0.0
+    weight_decay: 1.0e-5
     # Coefficients used for computing running averages of gradient and its
     # square.
-    betas: [ 0.9, 0.98 ]
+    betas: [ 0.9, 0.999 ]
     # Term added to the denominator to improve numerical stability
     eps: 1.0e-8
   # Loss function to use: cross-entropy or nll
@@ -142,10 +153,10 @@ train:
   # Learning rate scheduler (ReduceLROnPlateau) configuration
   scheduler:
     # Reduce learning rate by  this factor if the loss stops improving
-    factor: 0.1
+    factor: 0.5
     # Number of epochs without improvement to wait before reducing the
     # learning rate
-    patience: 10
+    patience: 5
   # DataLoader keyword arguments
   loader:
     # Reshuffle data every epoch
@@ -168,19 +179,23 @@ eval:
   # DataLoader keyword arguments
   loader:
     # Number of workers to use for loading the data in parallel
-    num_workers: 8
+    num_workers: 32
     # Number of batches loaded in advance by each worker
-    prefetch_factor: 8
+    prefetch_factor: 4
+    # Keep worker processes alive after consuming the dataset once
+    persistent_workers: false
     # Load tensors into device pinned memory
     pin_memory: true
     # Do not drop the last batch if it is incomplete
     drop_last: false
 # Model to ONNX export hyperparameters
 export:
+  # Format to export: qcdq (~ standard ONNX) or qonnx
+  format: qonnx
   # Explicitly splits all attention heads in the model graph to be parallel
-  split_heads: false
+  split_heads: true
   # Version of the default ONNX opset
-  opset_version: 18
+  opset_version: 19
   # Apply the constant-folding optimization
   do_constant_folding: true
   # Export batch size - allows to provide more verification samples

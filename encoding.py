@@ -172,8 +172,8 @@ class QuantBinaryPositionalEncoding(torch.nn.Module):
 from quant import act_quantizer
 
 
-# Constructs a positional encoding layer by key and quantization settings
-def get_positional(key, bits=None, return_quant_tensor=False):
+# Constructs a positional encoding layer by encoding key and quantization
+def get_positional(encoding, bits=None, return_quant_tensor=False):
     # Cannot return the quantized tensor if there is no quantization...
     return_quant_tensor = return_quant_tensor and (bits is not None)
     # Look up named positional encoding layers and insert quantizer
@@ -183,12 +183,12 @@ def get_positional(key, bits=None, return_quant_tensor=False):
             act_quantizer(bits), return_quant_tensor=return_quant_tensor
         ),
         "sinusoidal": QuantSinusoidalPositionalEncoding(
-            act_quantizer(bits), None, return_quant_tensor=return_quant_tensor
+            act_quantizer(bits), act_quantizer(bits), return_quant_tensor
         ),
         "binary": QuantBinaryPositionalEncoding(
-            act_quantizer(bits), None, return_quant_tensor=return_quant_tensor
+            act_quantizer(bits), act_quantizer(bits), return_quant_tensor
         ),
         "learned": LazyQuantLearnedPositionalEncoding(
-            act_quantizer(bits), None, return_quant_tensor=return_quant_tensor
+            act_quantizer(bits), act_quantizer(bits), return_quant_tensor
         ),
-    }[key]
+    }[encoding]

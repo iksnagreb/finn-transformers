@@ -10,25 +10,30 @@ import numpy as np
 import torch
 
 # Export brevitas quantized models to QONNX dialect
-from brevitas.export import export_qonnx
+from brevitas.export import export_qonnx, export_onnx_qcdq
 
 # The benchmark model
 from benchmark.model import Model
 # Quantized custom implementation of multihead attention
 from attention import QuantMultiheadAttention
-# Seeding RNGs for reproducibility
-from utils import seed
+# Seeding RNGs for reproducibility, affine parameter export patching
+from utils import seed, patch_missing_affine_norms
+
+# Export function mapping
+EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
 
 
 # Generates "training" data for quantizer/norm layer calibration
 def get_data(range, shape, num):  # noqa: Shadows "range"...
     # Generate uniformly spaced, batched inputs over the range
-    return torch.linspace(*range, num).reshape((-1, *[1 for _ in shape])) * torch.ones(1, *shape)
+    return torch.linspace(*range, num).reshape(
+        (-1, *[1 for _ in shape])) * torch.ones(1, *shape)
 
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
-def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+def export(model, dataset, batch_size, format="qonnx", split_heads=False,
+           **kwargs):
     # No gradient accumulation for calibration passes required
     with torch.no_grad():
         # Check whether GPU training is available and select the appropriate
@@ -58,6 +63,10 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
                 # Marks to take the split path next forward call
                 module.split_heads = True
 
+    # Prevent export and streamlining issues for missing affine normalization
+    # parameters
+    model = patch_missing_affine_norms(model)
+
     # No gradient accumulation for export passes required
     with torch.no_grad():
         # Generate input data for model verification
@@ -66,7 +75,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
         out = model(inp)
 
     # Export the model to ONNX using the input example
-    export_qonnx(model, (inp,), "outputs/benchmark/model.onnx", **kwargs)
+    EXPORTERS[format](model, (inp,), "outputs/benchmark/model.onnx", **kwargs)
 
     # Save the input and output data for verification purposes later
     np.save("outputs/benchmark/inp.npy", inp.numpy())

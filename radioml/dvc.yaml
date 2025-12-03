@@ -1,19 +1,22 @@
-# List experiment stages, i.e., the jobs to be run
 stages:
-  # Model training stage: Runs training of a classifier on the RadioML dataset
+  # RadioML model training stage training a ViT-like model on the RadioML
+  # dataset from scratch
   train:
-    # Run the stage relative to the project root directory
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
     wdir: ..
-    # Stage runs the training script as the command
-    cmd: bash run.sh python -m radioml.train
-    # Data and code dependencies of this stage to determine when it needs to be
-    # rerun
+    # This stage runs the training script as a module, potentially scheduled via
+    # SLURM by the run.sh script
+    # Note: Training needs GPUs, schedule to GPU partition if via SLURM.
+    cmd: PARTITION=gpu bash run.sh python -m radioml.train
+    # Stage dependencies (code and data) determining when to rerun the stage
     deps:
-      # RadioML case study source files
+      # Dataset configuration, loading and preprocessing and model and training
+      # code
       - radioml/model.py
       - radioml/train.py
       - radioml/dataset.py
-      # General source files shared by other experiments
+      # Model building block shared by all case studies
       - activations.py
       - attention.py
       - blocks.py
@@ -21,17 +24,13 @@ stages:
       - encoding.py
       - lazy.py
       - quant.py
+      # General utilities, such as seeding RNGs
       - utils.py
-    # Parameters from params.yaml used by this stage, changing any of these
-    # triggers a rerun
+    # Stage parameters determining when to rerun the stage
     params:
-      - radioml/params.yaml:
-          - tag
-          - seed
-          - model
-          - dataset
-          - train
-    # Outputs produced which should be tracked and passed on to the next stages
+      - radioml/params.yaml: [ tag, seed, model, dataset, train ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
     outs:
       - outputs/radioml/model.pt
       - outputs/radioml/optimizer.pt
@@ -53,53 +52,23 @@ stages:
           title: "RadioML Learning Rate per Epoch"
           # Track via git, not dvc cache
           cache: false
-  train_INT8:
-    # Run the stage relative to the project root directory
-    wdir: ..
-    # Stage runs the training script as the command
-    cmd: INT8=1 bash run.sh python -m radioml.train
-    # Data and code dependencies of this stage to determine when it needs to be
-    # rerun
-    deps:
-      # RadioML case study source files
-      - radioml/model.py
-      - radioml/train.py
-      - radioml/dataset.py
-      # General source files shared by other experiments
-      - activations.py
-      - attention.py
-      - blocks.py
-      - embedding.py
-      - encoding.py
-      - lazy.py
-      - quant.py
-      - utils.py
-    # Parameters from params.yaml used by this stage, changing any of these
-    # triggers a rerun
-    params:
-      - radioml/params.yaml:
-          - tag
-          - seed
-          - model_int8
-          - dataset
-          - train
-    # Outputs produced which should be tracked and passed on to the next stages
-    outs:
-      - outputs/radioml/model_int8.pt
-      - outputs/radioml/optimizer_int8.pt
+  # RadioML model evaluation stage evaluating the model trained in the
+  # training stage on the evaluation split of the RadioML dataset
   eval:
-    # Run the stage relative to the project root directory
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
     wdir: ..
-    # Stage runs the evaluation script as the command
-    cmd: bash run.sh python -m radioml.eval
-    # Data and code dependencies of this stage to determine when it needs to be
-    # rerun
+    # This stage runs the evaluation script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Evaluation needs GPUs, schedule to GPU partition if via SLURM.
+    cmd: PARTITION=gpu bash run.sh python -m radioml.eval
+    # Stage dependencies (code and data) determining when to rerun the stage
     deps:
-      # RadioML case study source files
+      # Dataset configuration, loading and preprocessing, model and eval code
       - radioml/model.py
       - radioml/eval.py
       - radioml/dataset.py
-      # General source files shared by other experiments
+      # Model building block shared by all case studies
       - activations.py
       - attention.py
       - blocks.py
@@ -107,19 +76,15 @@ stages:
       - encoding.py
       - lazy.py
       - quant.py
+      # General utilities, such as seeding RNGs
       - utils.py
-      # The model checkpoint produced by the training stage
+      # Model trained by the previous stage
       - outputs/radioml/model.pt
-    # Parameters from params.yaml used by this stage, changing any of these
-    # triggers a rerun
+    # Stage parameters determining when to rerun the stage
     params:
-      - radioml/params.yaml:
-          - tag
-          - seed
-          - model
-          - dataset
-          - eval
-    # Metrics produced by this stage
+      - radioml/params.yaml: [ tag, seed, model, dataset, eval ]
+    # Metric files produced by the stage which should be tracked to be compared
+    # and summarized between/across revisions/experiments
     metrics:
       # Classification accuracy over the evaluation dataset
       - outputs/radioml/accuracy.yaml:
@@ -142,18 +107,20 @@ stages:
   # Model export stage: Exports the trained classifier to ONNX format alongside
   # some verification samples from the RadioML dataset
   export:
-    # Run the stage relative to the project root directory
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
     wdir: ..
-    # Stage runs the export script as the command
-    cmd: python -m radioml.export
-    # Data and code dependencies of this stage to determine when it needs to be
-    # rerun
+    # This stage runs the export script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Never use a GPU node for exporting, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh python -m radioml.export
+    # Stage dependencies (code and data) determining when to rerun the stage
     deps:
-      # RadioML case study source files
+      # Dataset configuration, loading and preprocessing, model and export code
       - radioml/model.py
       - radioml/export.py
       - radioml/dataset.py
-      # General source files shared by other experiments
+      # Model building block shared by all case studies
       - activations.py
       - attention.py
       - blocks.py
@@ -161,47 +128,48 @@ stages:
       - encoding.py
       - lazy.py
       - quant.py
+      # General utilities, such as seeding RNGs
       - utils.py
-      # The model checkpoint produced by the training stage
+      # Model trained by the previous stage
       - outputs/radioml/model.pt
-    # Parameters from params.yaml used by this stage, changing any of these
-    # triggers a rerun
+    # Stage parameters determining when to rerun the stage
     params:
-      - radioml/params.yaml:
-          - tag
-          - seed
-          - model
-          - model_int8
-          - dataset
-          - export
-          - batch_sizes
-    # Outputs produced which should be tracked and passed on to the next stages
+      - radioml/params.yaml: [ tag, seed, model, dataset, export ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
     outs:
-      # Trained model exported to the ONNX format
       - outputs/radioml/model.onnx
       # Model verification input/output samples from the RadioML dataset
       - outputs/radioml/inp.npy
       - outputs/radioml/out.npy
-      - outputs/radioml/model_dynamic_batchsize.onnx
-      # - outputs/radioml/model_brevitas_1_simpl.onnx   # extra getracked für import
-      - outputs/radioml/model_brevitas_1.onnx
-      - outputs/radioml/model_brevitas_2_simpl.onnx
-      - outputs/radioml/model_brevitas_2.onnx
-      - outputs/radioml/model_brevitas_4_simpl.onnx
-      - outputs/radioml/model_brevitas_4.onnx
-      - outputs/radioml/model_brevitas_8_simpl.onnx
-      - outputs/radioml/model_brevitas_8.onnx
-      - outputs/radioml/model_brevitas_16_simpl.onnx
-      - outputs/radioml/model_brevitas_16.onnx
-      - outputs/radioml/model_brevitas_32_simpl.onnx
-      - outputs/radioml/model_brevitas_32.onnx
-      - outputs/radioml/model_brevitas_64_simpl.onnx
-      - outputs/radioml/model_brevitas_64.onnx
-      - outputs/radioml/model_brevitas_128_simpl.onnx
-      - outputs/radioml/model_brevitas_128.onnx
-      - outputs/radioml/model_brevitas_256_simpl.onnx
-      - outputs/radioml/model_brevitas_256.onnx
-      - outputs/radioml/model_brevitas_512_simpl.onnx
-      - outputs/radioml/model_brevitas_512.onnx
-      - outputs/radioml/model_brevitas_1024_simpl.onnx
-      - outputs/radioml/model_brevitas_1024.onnx
+      - outputs/radioml/cls.npy
+  # Model streamlining stage to optimize the ONNX graph and prepare for building
+  # the FPGA dataflow accelerator using FINN
+  streamline:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the onnx-passes module, potentially scheduled via SLURM by
+    # the run.sh script
+    # Note: Never use a GPU node for streamlining, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh onnx-passes -c radioml/passes.yaml
+      -o outputs/radioml/streamlined.onnx outputs/radioml/model.onnx
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Trained and exported ONNX model
+      - outputs/radioml/model.onnx
+      # Model verification input/output samples from the RadioML dataset
+      - outputs/radioml/inp.npy
+      - outputs/radioml/out.npy
+      - outputs/radioml/cls.npy
+      # Custom and ad hoc streamlining passes
+      - adhoc_passes.py
+    # Stage parameters determining when to rerun the stage
+    params:
+      - radioml/passes.yaml:
+        # Track everything from the passes configuration
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/radioml/streamlined.onnx
+      - outputs/radioml/streamlined.onnx.pkl.xz

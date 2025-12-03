@@ -1,0 +1,173 @@
+stages:
+  # Vision model training stage training a ViT-like model on the dataset from
+  # scratch
+  train:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the training script as a module, potentially scheduled via
+    # SLURM by the run.sh script
+    # Note: Training needs GPUs, schedule to GPU partition if via SLURM.
+    cmd: PARTITION=gpu bash run.sh python -m vision.train
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Dataset configuration, loading and preprocessing and model and training
+      # code
+      - vision/model.py
+      - vision/train.py
+      # Model building block shared by all case studies
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      # General utilities, such as seeding RNGs
+      - utils.py
+    # Stage parameters determining when to rerun the stage
+    params:
+      - vision/params.yaml: [ tag, seed, model, dataset, train ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/vision/model.pt
+      - outputs/vision/optimizer.pt
+    # Plots produced by this stage
+    plots:
+      # Curves of training and validation loss per epoch
+      - outputs/vision/loss.yaml:
+          # Explicitly plot the validation loss
+          y: valid
+          # Give a more readable title to the plot
+          title: "Vision Validation Loss per Epoch"
+          # Track via git, not dvc cache
+          cache: false
+      # Curves of learning rate per epoch
+      - outputs/vision/lr.yaml:
+          # Explicitly plot the learning rate at the start of the epoch
+          y: last
+          # Give a more readable title to the plot
+          title: "Vision Learning Rate per Epoch"
+          # Track via git, not dvc cache
+          cache: false
+  # Vision model evaluation stage evaluating the model trained in the
+  # training stage on the evaluation split of the dataset
+  eval:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the evaluation script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Evaluation needs GPUs, schedule to GPU partition if via SLURM.
+    cmd: PARTITION=gpu bash run.sh python -m vision.eval
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Dataset configuration, loading and preprocessing, model and eval code
+      - vision/model.py
+      - vision/eval.py
+      # Model building block shared by all case studies
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      # General utilities, such as seeding RNGs
+      - utils.py
+      # Model trained by the previous stage
+      - outputs/vision/model.pt
+    # Stage parameters determining when to rerun the stage
+    params:
+      - vision/params.yaml: [ tag, seed, model, dataset, eval ]
+    # Metric files produced by the stage which should be tracked to be compared
+    # and summarized between/across revisions/experiments
+    metrics:
+      # Classification accuracy over the evaluation dataset
+      - outputs/vision/accuracy.yaml:
+          # Track via git, not dvc cache
+          cache: false
+    # Plots produced by this stage
+    plots:
+      # Confusion matrix of predicted vs. true classes
+      - outputs/vision/classes.csv:
+          # Use true class label as x-axis
+          x: cls
+          # Use the predicted class label as y-axis
+          y: prediction
+          # Use the confusion matrix plot template
+          template: confusion
+          # Give a more readable title to the plot
+          title: "Vision Confusion Matrix"
+          # Track via git, not dvc cache
+          cache: false
+  # Model export stage: Exports the trained classifier to ONNX format alongside
+  # some verification samples from the dataset
+  export:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the export script as a module, potentially scheduled
+    # via SLURM by the run.sh script
+    # Note: Never use a GPU node for exporting, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh python -m vision.export
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Dataset configuration, loading and preprocessing, model and export code
+      - vision/model.py
+      - vision/export.py
+      # Model building block shared by all case studies
+      - activations.py
+      - attention.py
+      - blocks.py
+      - embedding.py
+      - encoding.py
+      - lazy.py
+      - quant.py
+      # General utilities, such as seeding RNGs
+      - utils.py
+      # Model trained by the previous stage
+      - outputs/vision/model.pt
+    # Stage parameters determining when to rerun the stage
+    params:
+      - vision/params.yaml: [ tag, seed, model, dataset, export ]
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/vision/model.onnx
+      # Model verification input/output samples from the dataset
+      - outputs/vision/inp.npy
+      - outputs/vision/out.npy
+      - outputs/vision/cls.npy
+  # Model streamlining stage to optimize the ONNX graph and prepare for building
+  # the FPGA dataflow accelerator using FINN
+  streamline:
+    # Pipeline definitions (multiple dvc.yaml) are in each case study directory,
+    # but the overall repro command is run from the project root
+    wdir: ..
+    # This stage runs the onnx-passes module, potentially scheduled via SLURM by
+    # the run.sh script
+    # Note: Never use a GPU node for streamlining, this is a CPU task!
+    cmd: PARTITION=normal bash run.sh onnx-passes -c vision/passes.yaml
+      -o outputs/vision/streamlined.onnx outputs/vision/model.onnx
+    # Stage dependencies (code and data) determining when to rerun the stage
+    deps:
+      # Trained and exported ONNX model
+      - outputs/vision/model.onnx
+      # Model verification input/output samples from the Vision dataset
+      - outputs/vision/inp.npy
+      - outputs/vision/out.npy
+      - outputs/vision/cls.npy
+      # Custom and ad hoc streamlining passes
+      - adhoc_passes.py
+    # Stage parameters determining when to rerun the stage
+    params:
+      - vision/passes.yaml:
+        # Track everything from the passes configuration
+    # Output files produced by the stage which should be tracked and passed on
+    # to the next stages as dependencies
+    outs:
+      - outputs/vision/streamlined.onnx
+      - outputs/vision/streamlined.onnx.pkl.xz
+

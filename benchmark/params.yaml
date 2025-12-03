@@ -20,6 +20,9 @@ model:
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: 8
+  # Insert a quantizer at the input of the block: As the attention block is
+  # tested in isolation there is no other quantizer before this
+  input_quant: true
 # Calibration dataset configuration
 dataset:
   # Range for input values
@@ -28,6 +31,8 @@ dataset:
   shape: [ 64, 32 ]
 # Model to ONNX export hyperparameters
 export:
+  # Format to export: qcdq (~ standard ONNX) or qonnx
+  format: qonnx
   # Explicitly splits all attention heads in the model graph to be parallel
   split_heads: true
   # Version of the default ONNX opset
