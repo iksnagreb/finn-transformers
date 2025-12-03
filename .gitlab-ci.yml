@@ -9,12 +9,17 @@ build:
   stage: build
   script:
     # 1. Verzeichnis anlegen
-    - mkdir -p /data/gitlab/builds/runner
+    # - mkdir -p /data/gitlab/builds/runner
     # 2. Virtuelle Umgebung erstellen
-    - rm -rf $VENV_PATH        # alte venv löschen
-    - python3 -m venv $VENV_PATH
+
+    # venv path relativ setzen
+    # - rm -rf $VENV_PATH        # alte venv löschen
+
+    - export PIP_CACHE_DIR=$CI_PROJECT_DIR/.cache/pip
+    - mkdir -p $PIP_CACHE_DIR
+    - python3 -m venv .venv
     # 3. venv aktivieren
-    - source $VENV_PATH/bin/activate
+    - source .venv/bin/activate
     # 4. pip upgraden und Dependencies installieren
     - whoami
     - echo $SHELL
@@ -25,9 +30,8 @@ build:
     - export C_INCLUDE_PATH=/usr/local/cuda/include
     - export CPLUS_INCLUDE_PATH=/usr/local/cuda/include
     - export LIBRARY_PATH=/usr/local/cuda/lib64
-    - export PYTHONPATH=/usr/lib/python3.10/dist-packages:${CI_PROJECT_DIR}:$PYTHONPATH   # notwendig für tensorrt {CI_PROJECT_DIR} für interne imports
-    # Modell wird nicht richtig geladen
-    # - export PYTHONPATH=/data/gitlab/builds/ggOHaiaWY/0/haka/mirror-finn-transformers:$PYTHONPATH
+    - export PYTHONPATH=/usr/lib/python3.10/dist-packages:${CI_PROJECT_DIR}:$PYTHONPATH   # notwendig für tensorrt {CI_PROJECT_DIR} für interne imports, in runnner config?
+
     - export LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
     - ls -l /usr/local/cuda/include/cuda.h
     - pip install --upgrade pip
@@ -35,7 +39,9 @@ build:
     - pip install --no-cache-dir -r requirements.txt
     
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
+    # davor: dvc pull, damit alle models da sind - kann ich vom mirror aus die models aus dem finn transformers repo holen?
     - python3 -m measure.mini_measure
+
   tags:
     - jetson
 
@@ -132,3 +138,7 @@ build:
 # pip3 cache purge
 # sudo -u gitlab-runner pip3 cache purge  
 # sudo rm -rf /home/gitlab-runner/.cache/pip --> es wird wieder speicherplatz frei
+
+# pip cache auf der sd karte ablegen
+# export PIP_CACHE_DIR=/data/gitlab/cache/pip ??
+# pip cache dir env variable setzen
