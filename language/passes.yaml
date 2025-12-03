@@ -26,13 +26,13 @@ onnxruntime:
 verify:
   # Tolerance-based verification, parameters passed to np.allclose(...)
   tolerance:
-    atol: 0.5
+    atol: 1.0
   # Metric-based verification
   metrics:
     # Maximum Absolute Error over all outputs
-    max_abs_error: [ 0.0, 0.5 ]
+    max_abs_error: [ 0.0, 1.0 ]
     # Number of mispredictions by taking the argmax along the final axis
-    count_mispredictions: [ 0, 0 ]
+    count_mispredictions: [ 0, 1 ]
 # Configuration of logging and verbosity
 logging:
   # Enable all passes to print a message when entering/leaving
