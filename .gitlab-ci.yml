@@ -27,27 +27,13 @@ build:
     - export LIBRARY_PATH=/usr/local/cuda/lib64
     - export PYTHONPATH=/usr/lib/python3.10/dist-packages:$PYTHONPATH
     - export LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
-  # sudo -u gitlab-runner bash -c 'echo "export PYTHONPATH=/usr/lib/python3.10/dist-packages:\$PYTHONPATH" >> ~/.bashrc'
-# sudo -u gitlab-runner bash -c 'echo "export LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu:\$LD_LIBRARY_PATH" >> ~/.bashrc'
-
-
-
-
-    # - export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-    # - export LD_LIBRARY_PATH="/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH"
-    # - export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
-    # - export PYTHONPATH="/usr/lib/python3/dist-packages:/usr/lib/python3.8/dist-packages:$PYTHONPATH"
     - ls -l /usr/local/cuda/include/cuda.h
     - pip install --upgrade pip
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
     - pip install --no-cache-dir -r requirements.txt
-    # 5. Optional: testen, ob alles funktioniert
-    - python -c "import sys; print('Pytho versionn:', sys.version, flush = True)"
-    - which python3
-    - python3 --version
-    - python3 -c "import sys; print(sys.path)"
+    
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
-    - python3 measure/mini_measure.py
+    - python3 -m measure.mini_measure
   tags:
     - jetson
 
