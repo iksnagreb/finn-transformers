@@ -25,6 +25,7 @@ from attention import QuantMultiheadAttention
 from utils import seed
 import onnx
 from onnxsim import simplify
+import yaml
 
 
 # Path to the RadioML dataset
@@ -127,8 +128,13 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
 # Script entrypoint
 if __name__ == "__main__":
     # Load the stage parameters from the parameters file
-    params = dvc.api.params_show()
-    batch_sizes = params["batch_sizes"]
+    # params = dvc.api.params_show()
+    # measure/params.yaml
+    
+
+    with open("measure/params.yaml", "r") as f:
+        params = yaml.safe_load(f)
+        print(params)
     # Seed all RNGs
     seed(params["seed"])
     # Create a new model instance according to the configuration
