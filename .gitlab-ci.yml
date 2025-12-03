@@ -42,6 +42,8 @@ build:
     # davor: dvc pull, damit alle models da sind - kann ich vom mirror aus die models aus dem finn transformers repo holen?, selber exportieren, pt laden
     # dvc pull: zustand vom main branch holen (merge in train-measure branch)
     - dvc pull
+    # export laufen lassen
+    - python3 -m measure.export.py
     - python3 -m measure.mini_measure
 
   tags:
