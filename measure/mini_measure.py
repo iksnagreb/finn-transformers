@@ -16,7 +16,7 @@ import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
 import dvc.api
-from radioml.model import model
+from radioml.model import Model
 from measure.latency_throughput_log import latency_throughput
 from dvclive import Live
 
