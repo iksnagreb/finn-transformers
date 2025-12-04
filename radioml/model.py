@@ -3,9 +3,6 @@ import torch
 # Brevitas quantized equivalents of PyTorch layers
 from brevitas.nn import QuantIdentity
 
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Lazy initialization versions of Brevitas layers
 from lazy import LazyQuantLinear
 # Quantized positional encoding variants

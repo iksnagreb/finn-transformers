@@ -42,10 +42,10 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     device = "cpu"
     # Move the model to the training device
     model = model.to(device)  # noqa: Shadows model...
-    model_int8 = model_int8.to(device)  # noqa: Shadows model...
+    # model_int8 = model_int8.to(device)  # noqa: Shadows model...
     # Set model to evaluation mode
     model = model.eval()  # noqa: Shadows model...
-    model_int8 = model_int8.eval()  # noqa: Shadows model...
+    # model_int8 = model_int8.eval()  # noqa: Shadows model...
 
     # Explicitly splits all attention heads in the model graph to be parallel
     if split_heads:
@@ -55,10 +55,10 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
             if isinstance(module, QuantMultiheadAttention):
                 # Marks to take the split path next forward call
                 module.split_heads = True
-        for name, module in model_int8.named_modules():
-            if isinstance(module, QuantMultiheadAttention):
-                # Marks to take the split path next forward call
-                module.split_heads = True
+        # for name, module in model_int8.named_modules():
+        #     if isinstance(module, QuantMultiheadAttention):
+        #         # Marks to take the split path next forward call
+        #         module.split_heads = True
 
     # Load the RadioML dataset splits as configured
     _, _, eval_data = get_datasets(path=RADIOML_PATH, **dataset)
@@ -94,35 +94,35 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     # Brevitas 8Bit export - problem: nicht möglich mit dynamischen batch-sizes, 
     # wenn man es im nachinein patched sind die reshapes noch statisch -> funktioniert nicht mit tensorrt
 
-    for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
-        from brevitas.export import export_onnx_qcdq
-        dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
-        # test: wird das Ergebnis (Accuracy) besser mit echten daten?
-        export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
-        inp, out, _ = next(iter(export_data))
+    # for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
+    #     from brevitas.export import export_onnx_qcdq
+    #     dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
+    #     # test: wird das Ergebnis (Accuracy) besser mit echten daten?
+    #     export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
+    #     inp, out, _ = next(iter(export_data))
 
 
 
         
-        export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
-        simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
-        export_onnx_qcdq(
-            model_int8, 
-            (inp,),
-            export_path=export_path,
-            opset_version=17
-        )
-        print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+    #     export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
+    #     simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
+    #     export_onnx_qcdq(
+    #         model_int8, 
+    #         (inp,),
+    #         export_path=export_path,
+    #         opset_version=17
+    #     )
+    #     print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
-        # Lade ONNX-Modell
-        model = onnx.load(export_path)
-        # Simplify mit onnxsim
-        model_simplified, check = simplify(model)
-        if not check:
-            print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
-            continue
-        onnx.save(model_simplified, simplified_path)
-        print(f"Simplified gespeichert: {simplified_path}")
+    #     # Lade ONNX-Modell
+    #     model = onnx.load(export_path)
+    #     # Simplify mit onnxsim
+    #     model_simplified, check = simplify(model)
+    #     if not check:
+    #         print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+    #         continue
+    #     onnx.save(model_simplified, simplified_path)
+    #     print(f"Simplified gespeichert: {simplified_path}")
 
 
 # Script entrypoint
@@ -130,19 +130,24 @@ if __name__ == "__main__":
     # Load the stage parameters from the parameters file
     # params = dvc.api.params_show()
     # measure/params.yaml
-    
-
     with open("measure/params.yaml", "r") as f:
         params = yaml.safe_load(f)
-        print(params)
     # Seed all RNGs
     seed(params["seed"])
     # Create a new model instance according to the configuration
     model = Model(**params["model"])
-    model_int8 = Model(**params["model_int8"])
+    print("Created model instance.")
+    for key, value in params["model"].items():
+        print(f"{key}: {value}")
+    print("int 8:")
+    # for key, value in params["model_int8"].items():
+    #     print(f"{key}: {value}")
+    model_int8 = Model(**params["model"])
+    print("Created model int8 instance.")
     
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/radioml/model.pt"))
-    model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt"))
+    print("loaded")
+    # model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt"))
     # Pass the model and the export configuration to the evaluation loop
     export(model, model_int8, dataset=params["dataset"], **params["export"])

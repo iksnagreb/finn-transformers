@@ -14,5 +14,3 @@ data/
 # Plots produced by dvc from pipeline outputs
 dvc_plots/builds/
 builds/
-inputs/radioml/*.hdf5
-inputs/radioml/*.npy
