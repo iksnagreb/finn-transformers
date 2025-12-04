@@ -586,6 +586,8 @@ if __name__ == "__main__":
         latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "latency_results_batch.json"
         latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "latency_throughput.json"
     else:
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32" / "throughput_results.json"
+        os.makedirs(os.path.dirname(throughput_results), exist_ok=True)
         throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "throughput_results.json"
         throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "throughput_results_2.json"
         latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_results.json"
