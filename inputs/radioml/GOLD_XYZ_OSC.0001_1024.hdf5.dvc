@@ -1,0 +1,5 @@
+outs:
+- md5: 513ad7b73f56c33e0b1816bebb5b217f
+  size: 2254438400
+  hash: md5
+  path: GOLD_XYZ_OSC.0001_1024.hdf5
