@@ -21,8 +21,6 @@ build:
     # 3. venv aktivieren
     - source .venv/bin/activate
     # 4. pip upgraden und Dependencies installieren
-    - whoami
-    - echo $SHELL
     - echo $PATH
     - export CUDA_ROOT=/usr/local/cuda
     - export CFLAGS="-I/usr/local/cuda/include"
