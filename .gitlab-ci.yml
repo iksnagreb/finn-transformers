@@ -44,6 +44,8 @@ build:
     # - dvc push # forbidden to push
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
+    - echo "PASSWORD LENGTH=${#DVC_Sciebo_PASSWORD}"
+    - echo "USER='$DVC_Sciebo_USER'"
     # - eval $(ssh-agent -s)
     # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     # - mkdir -p ~/.ssh
