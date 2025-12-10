@@ -43,7 +43,7 @@ build:
     # export laufen lassen
     - python3 -m measure.export
     - python3 -m measure.mini_measure
-    - dvc push
+    # - dvc push # forbidden to push
     - dvc exp push origin #-f git@gitlab.com:hanner123-group/gitlab_runner.git #  -r sciebo
 
   tags:
