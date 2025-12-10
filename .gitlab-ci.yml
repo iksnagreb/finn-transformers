@@ -44,6 +44,7 @@ build:
     - python3 -m measure.mini_measure
     # - dvc push # forbidden to push
     - echo $DVC_Sciebo_USER
+    - echo $DVC_Sciebo_PASSWORD
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
     - dvc exp push sciebo #-f git@gitlab.com:hanner123-group/gitlab_runner.git #  -r sciebo
