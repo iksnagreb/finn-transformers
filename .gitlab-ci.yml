@@ -44,10 +44,13 @@ build:
     # - dvc push # forbidden to push
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    # - eval $(ssh-agent -s)
+    # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    # - mkdir -p ~/.ssh
+    # - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - git config --global user.email "ci@example.com"
+    - git config --global user.name "CI Runner"
+    - git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
     - dvc exp push -r sciebo -f git@github.com:iksnagreb/finn-transformers.git    # sollte automatisch im richtigen branch landen
   tags:
     - jetson
