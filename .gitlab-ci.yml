@@ -51,7 +51,7 @@ build:
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI Runner"
     - git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
-    - dvc exp push -r sciebo -f git@github.com:iksnagreb/finn-transformers.git    # sollte automatisch im richtigen branch landen
+    - dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git
   tags:
     - jetson
 
