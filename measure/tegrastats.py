@@ -526,5 +526,19 @@ if __name__ == "__main__":
 
     throughput_power.power_throughput(power_path, throughput_path, power_throughput_path)
 
+    with Live(save_dvc_exp=True, report="md") as live:
+        print("Starte DVC Live Bericht....", flush=True)
+
+        live.log_artifact(tegrastats_log, name="tegrastats_log")
+        live.log_artifact(energy_consumption_file, name="energy_consumption_file")
+        live.log_artifact(power_averages_file, name="power_averages_file")
+        live.log_artifact(power_averages_file_baseline, name="power_averages_file_baseline")
+        live.log_artifact(power_averages_difference_file, name="power_averages_difference_file")
+        live.log_artifact(power_throughput_path, name="power_throughput_path")
+        live.log_artifact(power_path, name="power_path")
+        
+        live.next_step() 
+
+    print("DVC Live Bericht fertig!")
 
 

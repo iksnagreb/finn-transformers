@@ -41,6 +41,10 @@ build:
     # export laufen lassen
     - python3 -m measure.export
     - python3 -m measure.mini_measure
+    # tegrastate einbauen
+    - python3 -m measure.tegrastats
+
+
     # - dvc push # forbidden to push
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
