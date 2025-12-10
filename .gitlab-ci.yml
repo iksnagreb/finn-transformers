@@ -14,10 +14,6 @@ build:
 
     # venv path relativ setzen
     # - rm -rf $VENV_PATH        # alte venv löschen
-    - echo $DVC_Sciebo_USER
-    - dvc remote modify sciebo user $DVC_Sciebo_USER
-    - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
-
     - export PIP_CACHE_DIR=$CI_PROJECT_DIR/.cache/pip
     - mkdir -p $PIP_CACHE_DIR
     - python3 -m venv .venv
