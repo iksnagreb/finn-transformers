@@ -20,7 +20,6 @@ build:
     # 3. venv aktivieren
     - source .venv/bin/activate
     # 4. pip upgraden und Dependencies installieren
-    - echo $PATH
     - export CUDA_ROOT=/usr/local/cuda
     - export CFLAGS="-I/usr/local/cuda/include"
     - export CXXFLAGS="-I/usr/local/cuda/include"
@@ -43,7 +42,6 @@ build:
     - python3 -m measure.export
     - python3 -m measure.mini_measure
     # - dvc push # forbidden to push
-    - echo $DVC_Sciebo_USER
     - echo $DVC_Sciebo_PASSWORD
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
