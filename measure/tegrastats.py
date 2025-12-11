@@ -16,12 +16,14 @@ import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
 import dvc.api
-import model
-import subprocess
-import parse_tegrastats_to_json
-import power_averages_log
 from datetime import datetime
-import throughput_power
+import subprocess
+
+from measure.latency_throughput_log import latency_throughput
+from radioml.model import Model 
+from measure.parse_tegrastats_to_json import parse_tegrastats
+from measure.power_averages_log import power_averages, power_averages_baseline, power_averages_difference
+from measure.throughput_power import power_throughput
 # import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # tensorrt, datasets(hugging face), pycuda
@@ -429,7 +431,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
 
     
         
-    for i in range(10):
+    for i in range(5):
         _, _, _, accuracy = run_inference(
                     context=context,
                     test_loader=test_loader,
@@ -470,14 +472,16 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
 if __name__ == "__main__":
 
     
-    if FP16:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_16FP")
-    elif INT8:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_INT8_brevitas")
-    else:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_32FP")
+    # if FP16:
+    #     params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_16FP")
+    # elif INT8:
+    #     params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_INT8_brevitas")
+    # else:
+    #     params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_32FP")
 
-    batch_sizes = params["batch_sizes"]
+    
+
+    # batch_sizes = params["batch_sizes"]
 
     batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
@@ -508,23 +512,23 @@ if __name__ == "__main__":
 
         tegrastats_logs.append((tegrastats_log, batch_size))
 
-    parse_tegrastats_to_json.parse_tegrastats(tegrastats_logs, energy_base_path)
+    parse_tegrastats(tegrastats_logs, energy_base_path)
     
     energy_consumption_file = energy_base_path / "energy_consumption.json" 
     power_averages_file = energy_base_path / "power_averages.json"
     power_averages_file_baseline = energy_base_path / "power_averages_baseline.json"
     power_averages_difference_file = energy_base_path / "power_averages_difference.json"
 
-    power_averages_log.power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type)
-    power_averages_log.power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type)
-    power_averages_log.power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type)
+    power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type)
+    power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type)
+    power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type)
 
 
     power_throughput_path = throughput_base_path/"power_throughput.json"
     throughput_path = throughput_base_path/ "throughput_results.json"
     power_path = energy_base_path / "power_averages.json"
 
-    throughput_power.power_throughput(power_path, throughput_path, power_throughput_path)
+    power_throughput(power_path, throughput_path, power_throughput_path)
 
     with Live(save_dvc_exp=True, report="md") as live:
         print("Starte DVC Live Bericht....", flush=True)

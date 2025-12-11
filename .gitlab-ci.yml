@@ -57,7 +57,7 @@ build:
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI Runner"
     - git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
-    - dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git
+    - dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git   # klappt noch nicht...
   tags:
     - jetson
 
@@ -168,3 +168,12 @@ build:
 # pip cache auf der sd karte ablegen
 # export PIP_CACHE_DIR=/data/gitlab/cache/pip ??
 # pip cache dir env variable setzen
+
+
+
+# $ git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
+# $ dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git
+# Pushed experiment reeky-gobs to Git remote 
+# 'https://oauth2:[MASKED]@github.com/iksnagreb/fi
+# nn-transformers.git'.
+# ERROR: failed to push cache: received 401 (Unauthorized): Client error '401 Unauthorized' for url 'https://uni-paderborn.sciebo.de/remote.php/webdav/files/md5/00'
