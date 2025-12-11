@@ -41,7 +41,6 @@ build:
     # export laufen lassen
     - python3 -m measure.export
     - python3 -m measure.mini_measure
-    # tegrastate einbauen
     - python3 -m measure.tegrastats
 
 

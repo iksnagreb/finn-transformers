@@ -12,7 +12,6 @@ def parse_tegrastats(input_logs, base_path):
     output_json_simple2 = base_path / "ram_metrics_2.json"
     output_json_energy = base_path / "energy_consumption.json" 
     output_json_energy2 = base_path / "energy_consumption_2.json"
-
     def parse_tegrastats_line(line):
         try:
             data = {}
@@ -80,7 +79,6 @@ def parse_tegrastats(input_logs, base_path):
                     parsed_data.append(parsed)
 
                     # Start und Endzeit in Json eintragen
-                    print(parsed["timestamp"])
                     fmt = "%Y-%m-%dT%H:%M:%S"
                     t1 = datetime.strptime(parsed["timestamp"], "%Y-%m-%dT%H:%M:%S")
 
@@ -116,7 +114,6 @@ def parse_tegrastats(input_logs, base_path):
 
                     # Energy-Daten in einzelne Objekte splitten
                     if all(k in parsed for k in ["vdd_gpu_soc_current", "vdd_cpu_cv_current", "vin_sys_5v0_current"]):
-                        print("all keys present")
                         energy_data.extend([
                             {
                                 "timestamp": parsed["timestamp"],

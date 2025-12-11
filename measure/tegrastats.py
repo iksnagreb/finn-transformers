@@ -18,6 +18,7 @@ import onnxruntime as ort
 import dvc.api
 from datetime import datetime
 import subprocess
+from dvclive import Live
 
 from measure.latency_throughput_log import latency_throughput
 from radioml.model import Model 
