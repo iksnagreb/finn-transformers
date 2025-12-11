@@ -1,0 +1,5 @@
+outs:
+- md5: 59b97bf8cc8135d6415d882effafcc40
+  size: 13810
+  hash: md5
+  path: tegrastats_1024.log

@@ -13,3 +13,17 @@ artifacts:
     path: outputs/radioml/throughput/FP32/latency_throughput.json
   accuracy_result:
     path: outputs/radioml/eval_results/accuracy_FP32.json
+  tegrastats_log:
+    path: outputs/radioml/energy_metrics/FP32/tegrastats_1024.log
+  energy_consumption_file:
+    path: outputs/radioml/energy_metrics/FP32/energy_consumption.json
+  power_averages_file:
+    path: outputs/radioml/energy_metrics/FP32/power_averages.json
+  power_averages_file_baseline:
+    path: outputs/radioml/energy_metrics/FP32/power_averages_baseline.json
+  power_averages_difference_file:
+    path: outputs/radioml/energy_metrics/FP32/power_averages_difference.json
+  power_throughput_path:
+    path: outputs/radioml/throughput/FP32/power_throughput.json
+  power_path:
+    path: outputs/radioml/energy_metrics/FP32/power_averages.json
