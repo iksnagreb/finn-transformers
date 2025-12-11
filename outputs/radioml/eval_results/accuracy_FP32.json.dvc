@@ -1,0 +1,5 @@
+outs:
+- md5: 61ebb037b8a07eb60ce20b5a9087d1a7
+  size: 56
+  hash: md5
+  path: accuracy_FP32.json
