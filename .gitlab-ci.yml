@@ -21,8 +21,8 @@ build:
     - source .venv/bin/activate
 
     # zum test: funktioniert die ssh verbindung?
-    # - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    # - eval $(ssh-agent -s)
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
@@ -66,7 +66,7 @@ build:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
     - ssh-keyscan github.com >> ~/.ssh/known_hosts
 
