@@ -63,7 +63,7 @@ build:
     # braucht man das dann noch?
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI Runner"
-    - dvc push
+    - dvc push -r sciebo
     - dvc exp push -r sciebo -f git@github.com:iksnagreb/finn-transformers.git
 
 

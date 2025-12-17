@@ -1,0 +1,14 @@
+[
+    {
+    "batch_size": 512,
+    "power_total": 8198.4,
+    "throughput_images_per_s": 12775.35142448484,
+    "throughput_per_power": 1.3582737393253365
+  },
+  {
+    "batch_size": 1024,
+    "power_total": 8198.4,
+    "throughput_images_per_s": 12775.35142448484,
+    "throughput_per_power": 1.5582737393253365
+  }
+]
