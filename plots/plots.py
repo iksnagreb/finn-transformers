@@ -5,6 +5,7 @@ from collections import defaultdict
 from datetime import datetime
 # Legende mit Balkenart und Voltage Type
 from matplotlib.patches import Patch
+from Pathlib import Path
 
 
 def throughput_batch_plot(json_path, output_path):
@@ -309,27 +310,62 @@ def power_bar_plot(json_path, output_path):
     plt.close(fig)
 
 # echte pfade ergänzen (erstmal FP32)
-latency_throughput_path = "outputs/radioml/throughput/FP32/latency_throughput.json"
+# outputs/*MODEL*/plot/*QUANT_TYPE*/*NAME*  --> passende dateien mit passenden namen müssen noch erstellt werden
 
 
+if __name__ == "__main__":
+    latency_throughput_path = "outputs/radioml/throughput/FP32/latency_throughput.json"
 
-throughput_batch_plot("jsons/throughput_results.json", "images/throughput_batch_plot.png")
-throughput_images_plot("jsons/throughput_results.json", "images/throughput_images_plot.png")
-latency_plot("jsons/latency_results.json", "images/latency_plot.png")
-throughput_per_power_plot("jsons/power_throughput.json", "images/throughput_per_power_plot.png")
-latency_per_throughput_plot(latency_throughput_path, "images/latency_per_throughput_plot.png")
-accuracies_plot("jsons/accuracy.json", "images/accuracies_plot.png")
-energy_consumption_plot("jsons/energy_consumption.json", "images/energy_consumption_plot.png")
+    quant_type = "FP32"
 
-power_bar_plot("jsons/average_power_per_batch_size.json", "images/power_bar_plot.png")
+    latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type / "latency_throughput.json"
+    latency_throughput_output = "images/latency_per_throughput_plot.png"
+    latency_throughput_output = "outputs/radioml/plot/FP32/latency_per_throughput_plot.png"
+    latency_per_throughput_plot(latency_throughput_path, latency_throughput_output)
 
-# mit dvc exp hochladen
-    with Live(save_dvc_exp=True, report="md") as live:
-        print("Starte DVC Live Bericht....", flush=True)
 
-        live.log_artifact(latency_throughput_path, name="latency_throughput")
-        
-        
-        live.next_step() 
+    throughput_results_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type / "throughput_results.json"
+    throughput_results_output_batch = "images/throughput_batch_plot.png"
+    throughput_batch_plot(throughput_results_path, throughput_results_output_batch)
 
-    print("DVC Live Bericht fertig!")
+    throughput_results_output_images = "images/throughput_images_plot.png"
+    throughput_images_plot(throughput_results_path, throughput_results_output_images)
+
+    latency_results_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type / "latency_results_batch.json"
+    latency_results_output = "images/latency_plot.png"
+    latency_plot(latency_results_path, latency_results_output)
+
+    power_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "power_throughput.json"
+    power_throughput_output = "images/throughput_per_power_plot.png"
+    throughput_per_power_plot(power_throughput_path, power_throughput_output)
+
+    energy_consumption_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "energy_consumption.json" 
+    energy_consumption_output = "images/energy_consumption_plot.png"
+    energy_consumption_plot(energy_consumption_path, energy_consumption_output)
+
+    power_bar_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "power_averages_baseline_inference.json"
+    power_bar_output = "images/power_bar_plot.png"
+    power_bar_plot(power_bar_path, power_bar_output)
+
+    # eigentlich nicht bei jeder Quantisierung plotten, sondern am ende
+    accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / "accuracy.json"
+    accuracy_output = "images/accuracies_plot.png"
+    accuracies_plot(accuracy_path, accuracy_output)
+
+    # mit dvc exp hochladen
+        with Live(save_dvc_exp=True, report="md") as live:
+            print("Starte DVC Live Bericht....", flush=True)
+
+            live.log_artifact(latency_throughput_output, name="latency_throughput")
+            live.log_artifact(throughput_results_output_batch, name="throughput_batch")
+            live.log_artifact(throughput_results_output_images, name="throughput_images")
+            live.log_artifact(latency_results_output, name="latency")
+            live.log_artifact(power_throughput_output, name="throughput_per_power")
+            live.log_artifact(accuracy_output, name="accuracies")
+            live.log_artifact(energy_consumption_output, name="energy_consumption")
+            live.log_artifact(power_bar_output, name="power_bar")
+
+
+            live.next_step()
+
+        print("DVC Live Bericht fertig!")

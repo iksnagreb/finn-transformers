@@ -43,23 +43,16 @@ build:
     - python3 -m measure.export
     - python3 -m measure.mini_measure
     - python3 -m measure.tegrastats
+    - python3 -m measure.accuracy_comparison
+    - python3 -m plots.plots.py
 
-
-    # - dvc push # forbidden to push
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
-    - mkdir -p .dvc
-
-    - cat > .dvc/config.local <<EOF
-      ['remote "sciebo"']
-          url = https://uni-paderborn.sciebo.de/remote.php/webdav/<folder>
-          user = $DVC_Sciebo_USER
-          password = $DVC_Sciebo_PASSWORD
-      EOF
 
 
-    - echo "PASSWORD LENGTH=${#DVC_Sciebo_PASSWORD}"
-    - echo "USER='$DVC_Sciebo_USER'"
+
+    # - echo "PASSWORD LENGTH=${#DVC_Sciebo_PASSWORD}"
+    # - echo "USER='$DVC_Sciebo_USER'"
 
     # ssh verbindung zu github (um später dvc push zu machen)
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'

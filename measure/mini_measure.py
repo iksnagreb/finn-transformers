@@ -575,27 +575,26 @@ if __name__ == "__main__":
     throughput_log, latency_log, latency_log_batch = calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info=input_info, output_info=output_info)
     if FP16:
         throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16" / "throughput_results.json"
-        throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "throughput_results_2.json"
+        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "throughput_results_2.json"
         latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "latency_results.json"
         latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "latency_results_batch.json"
         latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "latency_throughput.json"
     elif INT8:
         throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8" / "throughput_results.json"
-        throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "throughput_results_2.json"
+        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "throughput_results_2.json"
         latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "latency_results.json"
         latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "latency_results_batch.json"
         latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "latency_throughput.json"
     else:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32" / "throughput_results.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP32" / "throughput_results.json"
         os.makedirs(os.path.dirname(throughput_results), exist_ok=True)
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "throughput_results.json"
-        throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "throughput_results_2.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_throughput.json"
+        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "throughput_results_2.json"
+        # latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_results.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP32"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP32"/ "latency_throughput.json"
     save_json(throughput_log, throughput_results)
-    save_json(throughput_log, throughput_results2)
-    save_json(latency_log, latency_results)
+    #save_json(throughput_log, throughput_results2)
+    # save_json(latency_log, latency_results)
     save_json(latency_log_batch, latency_results_batch)
 
     latency_throughput(latency_results_batch, throughput_results, latency_throughput_path)
@@ -604,11 +603,10 @@ if __name__ == "__main__":
         print("Starte DVC Live Bericht....", flush=True)
 
         live.log_artifact(throughput_results, name="throughput_results")
-        live.log_artifact(throughput_results2, name="throughput_results2")
-        live.log_artifact(latency_results, name="latency_results")
+        # live.log_artifact(latency_results, name="latency_results")
         live.log_artifact(latency_results_batch, name="latency_results_batch")
         live.log_artifact(latency_throughput_path, name="latency_throughput_path")
-        live.log_artifact(accuracy_path, name="accuracy_result")
+        # live.log_artifact(accuracy_path, name="accuracy_result")
         
         live.next_step() 
 

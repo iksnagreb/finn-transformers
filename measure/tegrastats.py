@@ -516,15 +516,17 @@ if __name__ == "__main__":
 
     parse_tegrastats(tegrastats_logs, energy_base_path)
     
-    energy_consumption_file = energy_base_path / "energy_consumption.json" 
+    energy_consumption_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "energy_consumption.json" 
     power_averages_file = energy_base_path / "power_averages.json"
     power_averages_file_baseline = energy_base_path / "power_averages_baseline.json"
     power_averages_difference_file = energy_base_path / "power_averages_difference.json"
+    power_averages_file_baseline_inference = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "power_averages_baseline_inference.json"
 
     power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type)
     power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type)
     power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type)
 
+    power_averages_baseline_inference(power_averages_file_baseline, power_averages_file, power_averages_file_baseline_inference)
 
     power_throughput_path = throughput_base_path/"power_throughput.json"
     throughput_path = throughput_base_path/ "throughput_results.json"
@@ -535,11 +537,13 @@ if __name__ == "__main__":
     with Live(save_dvc_exp=True, report="md") as live:
         print("Starte DVC Live Bericht....", flush=True)
 
-        live.log_artifact(tegrastats_log, name="tegrastats_log")
         live.log_artifact(energy_consumption_file, name="energy_consumption_file")
+
+        # noch zusammenfassen
         live.log_artifact(power_averages_file, name="power_averages_file")
         live.log_artifact(power_averages_file_baseline, name="power_averages_file_baseline")
-        live.log_artifact(power_averages_difference_file, name="power_averages_difference_file")
+
+        # live.log_artifact(power_averages_difference_file, name="power_averages_difference_file")
         live.log_artifact(power_throughput_path, name="power_throughput_path")
         live.log_artifact(power_path, name="power_path")
         
