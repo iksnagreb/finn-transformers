@@ -19,6 +19,18 @@ build:
     - python3 -m venv .venv
     # 3. venv aktivieren
     - source .venv/bin/activate
+
+    # zum test: funktioniert die ssh verbindung?
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - ssh -T git@github.com
+
+
+
     # 4. pip upgraden und Dependencies installieren
     - export CUDA_ROOT=/usr/local/cuda
     - export CFLAGS="-I/usr/local/cuda/include"
@@ -49,14 +61,24 @@ build:
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
     - echo "PASSWORD LENGTH=${#DVC_Sciebo_PASSWORD}"
     - echo "USER='$DVC_Sciebo_USER'"
-    # - eval $(ssh-agent -s)
-    # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    # - mkdir -p ~/.ssh
-    # - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+
+    # ssh verbindung zu github (um später dvc push zu machen)
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+
+    # braucht man das dann noch?
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI Runner"
-    - git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
-    - dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git   # klappt noch nicht...
+    - dvc push
+    - dvc exp push -r sciebo -f git@github.com:iksnagreb/finn-transformers.git
+
+
+    #- git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
+    #- dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git   # klappt noch nicht...
   tags:
     - jetson
 
