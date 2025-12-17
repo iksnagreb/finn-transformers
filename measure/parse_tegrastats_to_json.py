@@ -1,4 +1,4 @@
-def parse_tegrastats(input_logs, base_path):
+def parse_tegrastats(input_logs, base_path, plot_base_path):
     # input logs besteht aus tegrastats_log, batch_size tuples
     # in jedem eintrag der output dateien soll als zusätzlicher key der batch_size wert stehen
     import re
@@ -10,7 +10,7 @@ def parse_tegrastats(input_logs, base_path):
     output_json_full = base_path /"energy_metrics.json"
     output_json_simple = base_path / "ram_metrics.json"
     output_json_simple2 = base_path / "ram_metrics_2.json"
-    output_json_energy = base_path / "energy_consumption.json" 
+    output_json_energy = plot_base_path / "energy_consumption.json" 
     output_json_energy2 = base_path / "energy_consumption_2.json"
     def parse_tegrastats_line(line):
         try:

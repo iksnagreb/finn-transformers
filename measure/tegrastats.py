@@ -499,7 +499,7 @@ if __name__ == "__main__":
     else:
         quant_type = "FP32"
     energy_base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / quant_type
-    throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"throughput" / quant_type
+    throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type
     print("Energy Path: ", energy_base_path)
     print("Throughput Path: ", throughput_base_path)
 
@@ -514,7 +514,7 @@ if __name__ == "__main__":
 
         tegrastats_logs.append((tegrastats_log, batch_size))
 
-    parse_tegrastats(tegrastats_logs, energy_base_path)
+    parse_tegrastats(tegrastats_logs, energy_base_path, throughput_base_path)
     
     energy_consumption_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "energy_consumption.json" 
     power_averages_file = energy_base_path / "power_averages.json"
@@ -531,6 +531,8 @@ if __name__ == "__main__":
     power_throughput_path = throughput_base_path/"power_throughput.json"
     throughput_path = throughput_base_path/ "throughput_results.json"
     power_path = energy_base_path / "power_averages.json"
+
+    
 
     power_throughput(power_path, throughput_path, power_throughput_path)
 
