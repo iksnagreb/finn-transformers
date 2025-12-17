@@ -308,6 +308,7 @@ def power_bar_plot(json_path, output_path):
     plt.savefig(output_path, dpi=300)
     plt.close(fig)
 
+# echte pfade ergänzen (erstmal FP32)
 latency_throughput_path = "outputs/radioml/throughput/FP32/latency_throughput.json"
 
 
@@ -321,3 +322,14 @@ accuracies_plot("jsons/accuracy.json", "images/accuracies_plot.png")
 energy_consumption_plot("jsons/energy_consumption.json", "images/energy_consumption_plot.png")
 
 power_bar_plot("jsons/average_power_per_batch_size.json", "images/power_bar_plot.png")
+
+# mit dvc exp hochladen
+    with Live(save_dvc_exp=True, report="md") as live:
+        print("Starte DVC Live Bericht....", flush=True)
+
+        live.log_artifact(latency_throughput_path, name="latency_throughput")
+        
+        
+        live.next_step() 
+
+    print("DVC Live Bericht fertig!")
