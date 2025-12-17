@@ -23,7 +23,7 @@ from dvclive import Live
 from measure.latency_throughput_log import latency_throughput
 from radioml.model import Model 
 from measure.parse_tegrastats_to_json import parse_tegrastats
-from measure.power_averages_log import power_averages, power_averages_baseline, power_averages_difference
+from measure.power_averages_log import power_averages, power_averages_baseline, power_averages_difference, power_averages_baseline_inference
 from measure.throughput_power import power_throughput
 # import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
