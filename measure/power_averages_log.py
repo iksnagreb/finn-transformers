@@ -188,6 +188,10 @@ def power_averages_difference(batch_sizes, power_averages_file, power_averages_b
         json.dump(difference_data, f, indent=2)
 
 def power_averages_baseline_inference(idle_path, inference_path, output_path):
+    import re
+    import json
+    from datetime import datetime
+    from pathlib import Path
     # JSON-Dateien laden
     with open(idle_path, "r") as f:
         idle_data = json.load(f)
