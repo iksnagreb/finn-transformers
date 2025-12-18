@@ -1,0 +1,193 @@
+stages:
+  - build
+
+variables:
+  # Ort der virtuellen Umgebung
+  VENV_PATH: "/data/gitlab/builds/runner/.venv"
+
+build:
+  stage: build
+  script:
+    # 1. Verzeichnis anlegen
+    # - mkdir -p /data/gitlab/builds/runner
+    # 2. Virtuelle Umgebung erstellen
+
+    # venv path relativ setzen
+    # - rm -rf $VENV_PATH        # alte venv löschen
+    - export PIP_CACHE_DIR=$CI_PROJECT_DIR/.cache/pip
+    - mkdir -p $PIP_CACHE_DIR
+    - python3 -m venv .venv
+    # 3. venv aktivieren
+    - source .venv/bin/activate
+
+    # 4. pip upgraden und Dependencies installieren
+    - export CUDA_ROOT=/usr/local/cuda
+    - export CFLAGS="-I/usr/local/cuda/include"
+    - export CXXFLAGS="-I/usr/local/cuda/include"
+    - export C_INCLUDE_PATH=/usr/local/cuda/include
+    - export CPLUS_INCLUDE_PATH=/usr/local/cuda/include
+    - export LIBRARY_PATH=/usr/local/cuda/lib64
+    - export PYTHONPATH=/usr/lib/python3.10/dist-packages:${CI_PROJECT_DIR}:$PYTHONPATH   # notwendig für tensorrt {CI_PROJECT_DIR} für interne imports, in runnner config?
+
+    - export LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
+    - ls -l /usr/local/cuda/include/cuda.h
+    - pip install --upgrade pip
+    - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
+    - pip install -r requirements.txt
+    
+    - python3 -c "import tensorrt; print(tensorrt.__version__)"
+    # davor: dvc pull, damit alle models da sind - kann ich vom mirror aus die models aus dem finn transformers repo holen?, selber exportieren, pt laden
+    # dvc pull: zustand vom main branch holen (merge in train-measure branch)
+    - dvc pull --allow-missing    # damit nicht nach dvc dateien gesucht wird, die ich noch nicht gepusht habe
+    # export laufen lassen
+    - python3 -m measure.export
+    - python3 -m measure.mini_measure
+    - python3 -m measure.tegrastats
+    - python3 -m measure.accuracy_comparison
+    - python3 -m plots.plots.py
+
+    - dvc remote modify sciebo user $DVC_Sciebo_USER
+    - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
+
+
+
+    # - echo "PASSWORD LENGTH=${#DVC_Sciebo_PASSWORD}"
+    # - echo "USER='$DVC_Sciebo_USER'"
+
+    # ssh verbindung zu github (um später dvc push zu machen)
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
+    # - ssh -T git@github.com || true -->  Hi Hanner123! You've successfully authenticated, but GitHub does not provide shell access.
+
+    # braucht man das dann noch?
+    - git config --global user.email "ci@example.com"
+    - git config --global user.name "CI Runner"
+    - dvc push -r sciebo    # das hat funktioniert
+    - dvc exp push -r sciebo -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
+
+
+    #- git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
+    #- dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git   # klappt noch nicht...
+  tags:
+    - jetson
+
+
+# merge machen
+# pull machen
+# export pfade in runner config schreiben
+
+
+
+
+
+
+# stages:
+#   - test
+# hello_world_job:
+#   stage: test
+#   script:
+#     - source /home/hanna/git/measure-radioml/venv/bin/activate
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - eval $(ssh-agent -s)
+#     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+#     - mkdir -p ~/.ssh
+#     - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+#     - dvc remote list
+#     - dvc remote modify sciebo user $DVC_Sciebo_USER
+#     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
+#     - dvc pull
+#     - python measure/mini_measure.py
+#     - dvc push
+#     - dvc exp push -r sciebo -f git@gitlab.com:hanner123-group/gitlab_runner.git
+#   tags:
+#     - jetson
+
+# stages:
+#   - test
+# hello_world_job:
+#   stage: test
+#   script:
+#     - echo "Runner läuft!!"
+
+
+# wichtig: richtige uni git domain, nur ein runner im toml
+# runner restart mit: sudo systemctl restart gitlab-runner
+# toml bearbeiten: sudo nano /etc/gitlab-runner/config.toml
+# logs anschauen: sudo journalctl -u gitlab-runner -f
+# pipeline im train-measure branch manuell starten - manuell commit machen, damit die pipeline gefunden werden kann
+# kompliziertere pipeline testen
+# pipeline mit measure testen
+# dvc live einrichten
+# sudo chown -R gitlab-runner:gitlab-runner /data/gitlab/builds/runner/
+# probleme bei pycuda installation -> erstmal weglassen
+# es dauert wieder so lange bis der mirror aktualisiert ist... wieso? weil vorher ein richtiger commit gemacht wurde Funktiniert dann der pull mirror nicht mehr? -> force push und reset (ausversehen zu measure_jetson, noch richtig machen!!)
+# dauert schon wieder so lange? - hard reset
+
+# kein cuda verfügbar! wahrscheinlic weil das environment nicht ganz gesäubert wurde -> gucken wo ich das einstellen kann (venv soll nicht übernommen werden von altem build!)
+# clean = true im toml setzen
+
+# irgendwie löscht er das nicht richtig -> manuell die inhalte der ordner löschen
+# dann runner restarten
+
+# warum funktioniert cuda trotzdem nicht? noch nicht ganz gesäubert oder so... vielleicht doch noch alten runner austesten? Was war anders?
+# sudo usermod -aG video,render gitlab-runner
+# es funktioniert endlich! aber nach stop tegrastats läuft es trotzdem zu lange...
+# gitlab-runner ALL=(ALL) NOPASSWD:ALL war noch drin
+# test: tegrastats ohne sudo??
+# klappt endlich, jetzt: mehr requirements hinzufügen
+
+
+
+
+# # Lokales Klonen des Mirror-Repos
+# git clone <mirror-repo-url> mirror-local
+# cd mirror-local
+
+# # Füge das GitHub-Repo als Remote hinzu
+# git remote add upstream <github-repo-url>
+
+# # Hole den aktuellen Stand vom GitHub-Repo
+# git fetch upstream
+
+# # Setze den Branch auf den GitHub-Stand
+# git checkout main
+# git reset --hard upstream/main
+
+# # Push zurück zum Mirror (force!)
+# git push origin main --force
+
+
+# training nicht                neu mache, einfach vom main die models nehmen
+
+# qcdq export parameter statt qonnx qcdq verwenden
+# def export(model, dataset, batch_size, format="qcdq", split_heads=False,) batch size 
+# name immer model.onnx
+
+
+
+# jetson trotzdem wieder kein speicherplatz->
+#   environment = ["TMPDIR=/data/tmp"]   # Pip / andere Tools legen temporäre Dateien hier ab
+# sudo mkdir -p /data/gitlab/builds /data/gitlab/cache /data/tmp
+# sudo chown -R gitlab-runner:gitlab-runner /data/gitlab
+
+
+# pip3 cache purge
+# sudo -u gitlab-runner pip3 cache purge  
+# sudo rm -rf /home/gitlab-runner/.cache/pip --> es wird wieder speicherplatz frei
+
+# pip cache auf der sd karte ablegen
+# export PIP_CACHE_DIR=/data/gitlab/cache/pip ??
+# pip cache dir env variable setzen
+
+
+
+# $ git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
+# $ dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git
+# Pushed experiment reeky-gobs to Git remote 
+# 'https://oauth2:[MASKED]@github.com/iksnagreb/fi
+# nn-transformers.git'.
+# ERROR: failed to push cache: received 401 (Unauthorized): Client error '401 Unauthorized' for url 'https://uni-paderborn.sciebo.de/remote.php/webdav/files/md5/00'
