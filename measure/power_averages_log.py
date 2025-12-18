@@ -123,17 +123,17 @@ def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption
         power_averages.append({
             "batch_size": batch_size,
             "type": "vdd_gpu_avg",
-            "value": vdd_gpu_avg,
+            "idle_value": vdd_gpu_avg,
         })
         power_averages.append({
             "batch_size": batch_size,
             "type": "vdd_cpu_avg",
-            "value": vdd_cpu_avg,
+            "idle_value": vdd_cpu_avg,
         })
         power_averages.append({
             "batch_size": batch_size,
             "type": "vin_sys_avg",
-            "value": vin_sys_avg,
+            "idle_value": vin_sys_avg,
         })
 
     with open(power_averages_file, "w") as f:

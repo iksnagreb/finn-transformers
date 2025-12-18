@@ -266,7 +266,7 @@ def power_bar_plot(json_path, output_path):
     for bs in batch_sizes:
         for t in types:
             idle = sum(d["idle_value"] for d in data if d["batch_size"]==bs and d["type"]==t)
-            inf = sum(d["inference_value"] for d in data if d["batch_size"]==bs and d["type"]==t)
+            inf = sum(d["value"] for d in data if d["batch_size"]==bs and d["type"]==t)
             idle_values[bs].append(idle)
             inference_values[bs].append(inf)
 
