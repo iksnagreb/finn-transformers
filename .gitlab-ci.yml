@@ -34,14 +34,18 @@ setup-job:
     
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
     - dvc pull --allow-missing    # damit nicht nach dvc dateien gesucht wird, die ich noch nicht gepusht habe
-
+  tags:
+    - jetson
+    
 export:
   stage: export
   script:
   # umgebungsvariablen für unterschiedliche Models
   # hier measure.export für alle skripte starten
     - python3 -m measure.export
-  
+  tags:
+    - jetson
+
 measure:
   stage: measure
   script:
@@ -53,16 +57,22 @@ tegrastats:
   script:
   # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
     - python3 -m measure.tegrastats
+  tags:
+    - jetson
 
 accuracy_comparison:
   stage: measure
   script:
     - python3 -m measure.accuracy_comparison
+  tags:
+    - jetson
 
 plots:
   stage: plots
   script:
     - python3 -m plots.plots.py
+  tags:
+    - jetson
 
 publish:
   stage: publish
