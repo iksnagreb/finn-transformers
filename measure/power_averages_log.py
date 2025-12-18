@@ -157,7 +157,7 @@ def power_averages_difference(batch_sizes, power_averages_file, power_averages_b
 
     # Baseline-Werte in ein Dictionary für schnellen Zugriff umwandeln
     baseline_dict = {
-        (entry['batch_size'], entry['type']): entry['value']
+        (entry['batch_size'], entry['type']): entry['idle_value']
         for entry in baseline_data
     }
 
