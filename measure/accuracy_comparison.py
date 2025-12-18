@@ -33,7 +33,7 @@ if __name__ == "__main__":
     print(f"Zusammengefasste Datei gespeichert unter: {output_path}")
 
     with Live(save_dvc_exp=True, report="md") as live:
-            print("Starte DVC Live Bericht....", flush=True)
-            live.log_artifact(output_path, name="accuracy_result")
-            live.next_step() 
+        print("Starte DVC Live Bericht....", flush=True)
+        live.log_artifact(output_path, name="accuracy_result")
+        live.next_step() 
         print("DVC Live Bericht fertig!")
