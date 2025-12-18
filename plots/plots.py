@@ -5,7 +5,7 @@ from collections import defaultdict
 from datetime import datetime
 # Legende mit Balkenart und Voltage Type
 from matplotlib.patches import Patch
-from Pathlib import Path
+from pathlib import Path
 
 
 def throughput_batch_plot(json_path, output_path):
@@ -353,19 +353,19 @@ if __name__ == "__main__":
     accuracies_plot(accuracy_path, accuracy_output)
 
     # mit dvc exp hochladen
-        with Live(save_dvc_exp=True, report="md") as live:
-            print("Starte DVC Live Bericht....", flush=True)
+    with Live(save_dvc_exp=True, report="md") as live:
+        print("Starte DVC Live Bericht....", flush=True)
 
-            live.log_artifact(latency_throughput_output, name="latency_throughput")
-            live.log_artifact(throughput_results_output_batch, name="throughput_batch")
-            live.log_artifact(throughput_results_output_images, name="throughput_images")
-            live.log_artifact(latency_results_output, name="latency")
-            live.log_artifact(power_throughput_output, name="throughput_per_power")
-            live.log_artifact(accuracy_output, name="accuracies")
-            live.log_artifact(energy_consumption_output, name="energy_consumption")
-            live.log_artifact(power_bar_output, name="power_bar")
+        live.log_artifact(latency_throughput_output, name="latency_throughput")
+        live.log_artifact(throughput_results_output_batch, name="throughput_batch")
+        live.log_artifact(throughput_results_output_images, name="throughput_images")
+        live.log_artifact(latency_results_output, name="latency")
+        live.log_artifact(power_throughput_output, name="throughput_per_power")
+        live.log_artifact(accuracy_output, name="accuracies")
+        live.log_artifact(energy_consumption_output, name="energy_consumption")
+        live.log_artifact(power_bar_output, name="power_bar")
 
 
-            live.next_step()
+        live.next_step()
 
-        print("DVC Live Bericht fertig!")
+    print("DVC Live Bericht fertig!")
