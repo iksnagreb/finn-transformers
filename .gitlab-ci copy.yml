@@ -1,5 +1,9 @@
 stages:
   - setup
+  - export
+  - measure
+  - plots
+  - publish
 
 variables:
   # Ort der virtuellen Umgebung
@@ -29,22 +33,55 @@ setup-job:
     - pip install -r requirements.txt
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
     - dvc pull --allow-missing    # damit nicht nach dvc dateien gesucht wird, die ich noch nicht gepusht habe
+  tags:
+    - jetson
 
+export:
+  stage: export
+  script:
+    - source .venv/bin/activate
   # umgebungsvariablen für unterschiedliche Models
   # hier measure.export für alle skripte starten
     - python3 -m measure.export model=radioml
+  tags:
+    - jetson
 
+measure:
+  stage: measure
+  script:
+    - source .venv/bin/activate
   # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
     - python3 -m measure.mini_measure
 
-
+tegrastats:
+  stage: measure
+  script:
+    - source .venv/bin/activate
   # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
     - python3 -m measure.tegrastats
- 
+  tags:
+    - jetson
+
+accuracy_comparison:
+  stage: measure
+  script:
+    - source .venv/bin/activate
     - python3 -m measure.accuracy_comparison
+  tags:
+    - jetson
 
+plots:
+  stage: plots
+  script:
+    - source .venv/bin/activate
     - python3 -m plots.plots.py
+  tags:
+    - jetson
 
+publish:
+  stage: publish
+  script:
+    - source .venv/bin/activate
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
 
