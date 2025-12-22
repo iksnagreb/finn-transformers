@@ -341,7 +341,7 @@ if __name__ == "__main__":
     latency_results_output = base_path / "latency_plot.png"
     latency_plot(latency_results_path, latency_results_output)
 
-    power_throughput_path = Pbase_path / "power_throughput.json"
+    power_throughput_path = base_path / "power_throughput.json"
     power_throughput_output = base_path / "throughput_per_power_plot.png"
     throughput_per_power_plot(power_throughput_path, power_throughput_output)
 
