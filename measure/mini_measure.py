@@ -574,6 +574,7 @@ if __name__ == "__main__":
 
     throughput_log, latency_log, latency_log_batch = calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info=input_info, output_info=output_info)
     if FP16:
+        # global variables, can be changed on other files somehow??
         throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP16" / "throughput_results.json"
         #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "throughput_results_2.json"
         latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP16"/ "latency_results.json"
@@ -606,7 +607,7 @@ if __name__ == "__main__":
         print(throughput_results)
         live.log_artifact(throughput_results, name="throughput_results")
         print("latency batch result:")
-        print(latency_reslts_batch)
+        print(latency_results_batch)
         # live.log_artifact(latency_results, name="latency_results")
         live.log_artifact(latency_results_batch, name="latency_results_batch")
         print("latency throughput result: ")
