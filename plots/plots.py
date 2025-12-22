@@ -343,7 +343,6 @@ if __name__ == "__main__":
 
     power_throughput_path = Pbase_path / "power_throughput.json"
     power_throughput_output = base_path / "throughput_per_power_plot.png"
-    power_throughput_output = 
     throughput_per_power_plot(power_throughput_path, power_throughput_output)
 
     energy_consumption_path = base_path / "energy_consumption.json" 
