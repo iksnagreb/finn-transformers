@@ -42,7 +42,7 @@ setup-job:
  
     - python3 -m measure.accuracy_comparison
 
-    - python3 -m plots.plots.py
+    - python3 -m plots.plots
 
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
