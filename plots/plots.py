@@ -6,6 +6,7 @@ from datetime import datetime
 # Legende mit Balkenart und Voltage Type
 from matplotlib.patches import Patch
 from pathlib import Path
+from dvclive import Live
 
 
 def throughput_batch_plot(json_path, output_path):
