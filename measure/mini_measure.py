@@ -601,11 +601,16 @@ if __name__ == "__main__":
     latency_throughput(latency_results_batch, throughput_results, latency_throughput_path) # hat in richtige datei geschrieben
 
     with Live(save_dvc_exp=True, report="md") as live:
-        print("Starte DVC Live Bericht....", flush=True)
-
+        print("Starte DVC Live Bericht.... mini measure", flush=True)
+        print("throughput result: ")
+        print(throughput_results)
         live.log_artifact(throughput_results, name="throughput_results")
+        print("latency batch result:")
+        print(latency_reslts_batch)
         # live.log_artifact(latency_results, name="latency_results")
         live.log_artifact(latency_results_batch, name="latency_results_batch")
+        print("latency throughput result: ")
+        print(latency_throughput_path)
         live.log_artifact(latency_throughput_path, name="latency_throughput_path")      # nicht da in "throughput" - wieso wird das überhaupt versucht? eigentlich ist das ein "plot" pfad...
         # live.log_artifact(accuracy_path, name="accuracy_result")
         

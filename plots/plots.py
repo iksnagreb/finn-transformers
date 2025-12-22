@@ -314,43 +314,49 @@ def power_bar_plot(json_path, output_path):
 
 
 if __name__ == "__main__":
-    latency_throughput_path = "outputs/radioml/throughput/FP32/latency_throughput.json"
 
     quant_type = "FP32"
 
-    latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type / "latency_throughput.json"
-    latency_throughput_output = "images/latency_per_throughput_plot.png"
-    latency_throughput_output = "outputs/radioml/plot/FP32/latency_per_throughput_plot.png"
+    base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type 
+
+    latency_throughput_path = base_path / "latency_throughput.json"
+    #latency_throughput_output = "images/latency_per_throughput_plot.png"
+    #latency_throughput_output = "outputs/radioml/plot/FP32/latency_per_throughput_plot.png"
+    latency_throughput_output = base_path / "latency_per_throughput_plot.png"
+
     latency_throughput_output.parent.mkdir(parents=True, exist_ok=True)
     latency_per_throughput_plot(latency_throughput_path, latency_throughput_output)
 
 
-    throughput_results_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type / "throughput_results.json"
-    throughput_results_output_batch = "images/throughput_batch_plot.png"
+    throughput_results_path = base_path / "throughput_results.json"
+    # throughput_results_output_batch = "images/throughput_batch_plot.png"
+    throughput_results_output_batch =  base_path / "throughput_batch_plot.png"
     throughput_batch_plot(throughput_results_path, throughput_results_output_batch)
 
-    throughput_results_output_images = "images/throughput_images_plot.png"
+    throughput_results_output_images =  base_path / "throughput_images_plot.png"
     throughput_images_plot(throughput_results_path, throughput_results_output_images)
 
-    latency_results_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type / "latency_results_batch.json"
-    latency_results_output = "images/latency_plot.png"
+    latency_results_path = base_path / "latency_results_batch.json"
+    # latency_results_output = "images/latency_plot.png"
+    latency_results_output = base_path / "latency_plot.png"
     latency_plot(latency_results_path, latency_results_output)
 
-    power_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "power_throughput.json"
-    power_throughput_output = "images/throughput_per_power_plot.png"
+    power_throughput_path = Pbase_path / "power_throughput.json"
+    power_throughput_output = base_path / "throughput_per_power_plot.png"
+    power_throughput_output = 
     throughput_per_power_plot(power_throughput_path, power_throughput_output)
 
-    energy_consumption_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "energy_consumption.json" 
-    energy_consumption_output = "images/energy_consumption_plot.png"
+    energy_consumption_path = base_path / "energy_consumption.json" 
+    energy_consumption_output = base_path / "energy_consumption_plot.png"
     energy_consumption_plot(energy_consumption_path, energy_consumption_output)
 
-    power_bar_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "power_averages_baseline_inference.json"
-    power_bar_output = "images/power_bar_plot.png"
+    power_bar_path = base_path / "power_averages_baseline_inference.json"
+    power_bar_output = base_path / "power_bar_plot.png"
     power_bar_plot(power_bar_path, power_bar_output)
 
     # eigentlich nicht bei jeder Quantisierung plotten, sondern am ende
     accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / "accuracy.json"
-    accuracy_output = "images/accuracies_plot.png"
+    accuracy_output = base_path / "accuracies_plot.png"
     accuracies_plot(accuracy_path, accuracy_output)
 
     # mit dvc exp hochladen
