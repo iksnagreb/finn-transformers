@@ -43,4 +43,5 @@ def latency_throughput(LATENCY_PATH, THROUGHPUT_PATH, OUT_PATH):
     print("Wrote", OUT_PATH, "entries:", len(summary))
 
 if __name__ == "__main__":
-    latency_throughput(LATENCY_PATH, THROUGHPUT_PATH, OUT_PATH)
+    #latency_throughput(LATENCY_PATH, THROUGHPUT_PATH, OUT_PATH)
+    print("main latency throughput??")

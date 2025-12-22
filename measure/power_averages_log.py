@@ -220,19 +220,20 @@ def power_averages_baseline_inference(idle_path, inference_path, output_path):
 
 
 if __name__ == "__main__":
-    import re
-    import json
-    from datetime import datetime
-    from pathlib import Path
-    base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics"
-    energy_consumption_file = base_path / "energy_consumption.json" 
-    power_averages_file = base_path / "power_averages.json"
-    power_averages_baseline_file = base_path / "power_averages_baseline.json"
-    power_difference_file = base_path / "power_averages_difference.json"
+    # import re
+    # import json
+    # from datetime import datetime
+    # from pathlib import Path
+    # base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics"
+    # energy_consumption_file = base_path / "energy_consumption.json" 
+    # power_averages_file = base_path / "power_averages.json"
+    # power_averages_baseline_file = base_path / "power_averages_baseline.json"
+    # power_difference_file = base_path / "power_averages_difference.json"
 
 
-    batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
-    difference_baseline_inference(batch_sizes, power_averages_file, power_averages_baseline_file, power_difference_file)
+    # batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+    # difference_baseline_inference(batch_sizes, power_averages_file, power_averages_baseline_file, power_difference_file)
+    print("main: power_averages_log???")
 
 
     # power_averages(batch_sizes, power_averages_file, energy_consumption_file)

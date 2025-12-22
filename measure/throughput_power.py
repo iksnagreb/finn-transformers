@@ -46,4 +46,5 @@ def power_throughput(POWER_PATH, THROUGHPUT_PATH, OUT_PATH):
     print("Wrote", OUT_PATH, "entries:", len(summary))
 
 if __name__ == "__main__":
-    power_throughput(POWER_PATH, THROUGHPUT_PATH, OUT_PATH)
+    # power_throughput(POWER_PATH, THROUGHPUT_PATH, OUT_PATH)
+    print("main: power_throughput????")
