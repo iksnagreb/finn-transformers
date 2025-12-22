@@ -11,7 +11,7 @@ def power_throughput(POWER_PATH, THROUGHPUT_PATH, OUT_PATH):
     OUT_PATH = Path(OUT_PATH)
 
     power = load_json(POWER_PATH)
-    thr = load_json(THROUGHPUT_PATH)
+    thr = load_json(THROUGHPUT_PATH)        # didnt exist
 
     # sum power parts per batch_size
     power_sum = defaultdict(float)

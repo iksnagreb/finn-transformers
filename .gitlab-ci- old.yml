@@ -20,6 +20,7 @@ build:
     # 3. venv aktivieren
     - source .venv/bin/activate
 
+
     # 4. pip upgraden und Dependencies installieren
     - export CUDA_ROOT=/usr/local/cuda
     - export CFLAGS="-I/usr/local/cuda/include"
@@ -48,8 +49,6 @@ build:
 
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
-
-
 
     # - echo "PASSWORD LENGTH=${#DVC_Sciebo_PASSWORD}"
     # - echo "USER='$DVC_Sciebo_USER'"

@@ -353,6 +353,7 @@ if __name__ == "__main__":
     accuracies_plot(accuracy_path, accuracy_output)
 
     # mit dvc exp hochladen
+    # log image
     with Live(save_dvc_exp=True, report="md") as live:
         print("Starte DVC Live Bericht....", flush=True)
 

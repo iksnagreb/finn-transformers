@@ -13,3 +13,4 @@ onnxsim
 onnxoptimizer==0.3.13
 pandas~=2.3.1
 dvclive
+matplotlib

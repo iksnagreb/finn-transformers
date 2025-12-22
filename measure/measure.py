@@ -7,7 +7,7 @@ import json
 import torch
 import onnx
 #from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
-from Pathlib import Path
+from pathlib import Path
 from torch.utils.data import TensorDataset, DataLoader
 import pycuda.driver as cuda
 # import pycuda.autoinit
