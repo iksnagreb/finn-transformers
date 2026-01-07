@@ -1,0 +1,5 @@
+outs:
+- md5: 73c877026e81e195ca890c05ae88cb0b
+  size: 224461
+  hash: md5
+  path: energy_consumption_plot.png

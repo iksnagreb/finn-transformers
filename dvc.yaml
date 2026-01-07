@@ -12,6 +12,34 @@ artifacts:
   latency_throughput_path:
     path: outputs/radioml/plot/FP32/latency_throughput.json
   accuracy_result:
-    path: outputs/radioml/eval_results/accuracy_FP32.json
+    path: outputs/radioml/plot/accuracy.json
   power_bar_plot:
     path: outputs/radioml/plot/FP32/power_bar_plot.png
+  throughput_results:
+    path: outputs/radioml/plot/FP32/throughput_results.json
+  latency_results_batch:
+    path: outputs/radioml/plot/FP32/latency_results_batch.json
+  energy_consumption_file:
+    path: outputs/radioml/plot/FP32/energy_consumption.json
+  power_averages_file:
+    path: outputs/radioml/energy_metrics/FP32/power_averages.json
+  power_averages_file_baseline:
+    path: outputs/radioml/energy_metrics/FP32/power_averages_baseline.json
+  power_throughput_path:
+    path: outputs/radioml/plot/FP32/power_throughput.json
+  power_path:
+    path: outputs/radioml/energy_metrics/FP32/power_averages.json
+  latency_throughput_plot:
+    path: outputs/radioml/plot/FP32/latency_per_throughput_plot.png
+  throughput_batch_plot:
+    path: outputs/radioml/plot/FP32/throughput_batch_plot.png
+  throughput_images_plot:
+    path: outputs/radioml/plot/FP32/throughput_images_plot.png
+  latency_plot:
+    path: outputs/radioml/plot/FP32/latency_plot.png
+  throughput_per_power_plot:
+    path: outputs/radioml/plot/FP32/throughput_per_power_plot.png
+  accuracies_plot:
+    path: outputs/radioml/plot/FP32/accuracies_plot.png
+  energy_consumption_plot:
+    path: outputs/radioml/plot/FP32/energy_consumption_plot.png

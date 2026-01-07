@@ -1,0 +1,5 @@
+outs:
+- md5: 06190ada6c0ff6220e93e2d5e38a0fb0
+  size: 158346
+  hash: md5
+  path: power_bar_plot.png
