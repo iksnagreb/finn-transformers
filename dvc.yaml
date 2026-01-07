@@ -1,15 +1,17 @@
 metrics:
 - dvclive/metrics.json
-# artifacts:
-#   throughput_results:
-#     path: outputs/radioml/throughput/FP32/throughput_results.json
-#   throughput_results2:
-#     path: outputs/radioml/throughput/FP32/throughput_results_2.json
-#   latency_results:
-#     path: outputs/radioml/throughput/FP32/latency_results.json
-#   latency_results_batch:
-#     path: outputs/radioml/throughput/FP32/latency_results_batch.json
-#   latency_throughput_path:
-#     path: outputs/radioml/plot/FP32/latency_throughput.json
-#   accuracy_result:
-#     path: outputs/radioml/eval_results/accuracy_FP32.json
+artifacts:
+  # throughput_results:
+  #   path: outputs/radioml/plot/FP32/throughput_results.json
+  # throughput_results2:
+  #   path: outputs/radioml/plot/FP32/throughput_results_2.json
+  # latency_results:
+  #   path: outputs/radioml/plot/FP32/latency_results.json
+  # latency_results_batch:
+  #   path: outputs/radioml/plot/FP32/latency_results_batch.json
+  latency_throughput_path:
+    path: outputs/radioml/plot/FP32/latency_throughput.json
+  accuracy_result:
+    path: outputs/radioml/eval_results/accuracy_FP32.json
+  power_bar_plot:
+    path: outputs/radioml/plot/FP32/power_bar_plot.png

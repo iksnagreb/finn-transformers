@@ -36,7 +36,7 @@ setup-job:
 
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
-    - dvc exp remove --all      #  damit dvc nicht nach dieser alten datei sucht
+   # - dvc exp remove --all      #  damit dvc nicht nach dieser alten datei sucht
 
   # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
     - python3 -m measure.mini_measure
