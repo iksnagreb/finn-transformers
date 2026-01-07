@@ -58,7 +58,8 @@ setup-job:
 
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI Runner"
-    - dvc push -r sciebo  
+    - dvc push -r sciebo  # 14 files pushed
+    # no experiments to push???
     - dvc exp push -r sciebo -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
 
     #- git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
