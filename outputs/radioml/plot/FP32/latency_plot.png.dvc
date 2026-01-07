@@ -1,0 +1,5 @@
+outs:
+- md5: 9f608863a73eec9c7fd79a6ecdbc2bf7
+  size: 70208
+  hash: md5
+  path: latency_plot.png
