@@ -15,3 +15,7 @@ artifacts:
     path: outputs/radioml/eval_results/accuracy_FP32.json
   power_bar_plot:
     path: outputs/radioml/plot/FP32/power_bar_plot.png
+  throughput_results:
+    path: outputs/radioml/plot/FP32/throughput_results.json
+  latency_results_batch:
+    path: outputs/radioml/plot/FP32/latency_results_batch.json
