@@ -539,15 +539,15 @@ if __name__ == "__main__":
     with Live(save_dvc_exp=True, report="md") as live:
         print("Starte DVC Live Bericht....", flush=True)
 
-        live.log_artifact(energy_consumption_file, name="energy_consumption_file")
+        live.log_artifact(energy_consumption_file, name="energy_consumption")
 
         # noch zusammenfassen
-        live.log_artifact(power_averages_file, name="power_averages_file")
-        live.log_artifact(power_averages_file_baseline, name="power_averages_file_baseline")
+        live.log_artifact(power_averages_file, name="power_averages_")
+        live.log_artifact(power_averages_file_baseline, name="power_averages_baseline")
 
-        # live.log_artifact(power_averages_difference_file, name="power_averages_difference_file")
-        live.log_artifact(power_throughput_path, name="power_throughput_path")
-        live.log_artifact(power_path, name="power_path")
+        live.log_artifact(power_averages_difference_file, name="power_averages_difference")
+        live.log_artifact(power_throughput_path, name="power_throughput")
+        live.log_artifact(power_path, name="power_averages")
         
         live.next_step() 
 

@@ -37,7 +37,7 @@ else:
     dtype = torch.float32
     print("FP32")
 
-
+# todo: richtigen Pfad für Daten angeben
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
@@ -75,6 +75,7 @@ def save_json(log, filepath):
 
 
 def parse_shape(shape, batch_value):
+    # muss wahrscheinlich für vision angepasst werden
     """Ersetzt 'batch_size' durch batch_value in der shape-Liste."""
     print("shape:", shape)
     return tuple(
@@ -154,6 +155,7 @@ def create_test_dataloader(RADIOML_PATH_NPZ, batch_size):
     :param batch_size: Die Batchgröße.
     :return: DataLoader-Objekt für die Testdaten.
     """
+    # muss wahrscheinlich für vision angepasst werden
     data = np.load(RADIOML_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
@@ -453,6 +455,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
     for batch_size in batch_sizes:
         if INT8:
+            # todo: richtigen onnx pfad angeben
             onnx_model_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
         test_loader = create_test_dataloader(RADIOML_PATH_NPZ, batch_size) 
         engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
@@ -540,10 +543,10 @@ if __name__ == "__main__":
 
     batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
-    onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
+    onnx_model_path = "outputs/vision/model_dynamic_batchsize.onnx"
 
     if INT8:
-        onnx_model_path = "outputs/radioml/model_brevitas_1_simpl.onnx"
+        onnx_model_path = "outputs/vision/model_brevitas_1_simpl.onnx"
 
     model = onnx.load(onnx_model_path)
 
@@ -554,13 +557,13 @@ if __name__ == "__main__":
     print(f"Accuracy : {accuracy:.2%}")
 
     if FP16:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "eval_results" /"accuracy_FP16.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "eval_results" /"accuracy_FP16.json"
         quantisation_type = "FP16"
     elif INT8:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "eval_results" /"accuracy_INT8.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "eval_results" /"accuracy_INT8.json"
         quantisation_type = "INT8"
     else:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "eval_results" /"accuracy_FP32.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "eval_results" /"accuracy_FP32.json"
         quantisation_type = "FP32"
 
  
@@ -568,6 +571,7 @@ if __name__ == "__main__":
         "quantisation_type": quantisation_type,
         "value": accuracy
     }
+    # pfad anpassen für vision
     save_json(accuracy_result, accuracy_path)
     
 
@@ -575,24 +579,21 @@ if __name__ == "__main__":
     throughput_log, latency_log, latency_log_batch = calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info=input_info, output_info=output_info)
     if FP16:
         # global variables, can be changed on other files somehow??
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP16" / "throughput_results.json"
-        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "throughput_results_2.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP16"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP16"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP16"/ "latency_throughput.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP16" / "throughput_results.json"
+        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP16"/ "latency_results.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP16"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP16"/ "latency_throughput.json"
     elif INT8:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "INT8" / "throughput_results.json"
-        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "throughput_results_2.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "INT8"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "INT8"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "INT8"/ "latency_throughput.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "INT8" / "throughput_results.json"
+        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "throughput" / "INT8"/ "throughput_results_2.json"
+        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "INT8"/ "latency_results.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "INT8"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "INT8"/ "latency_throughput.json"
     else:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP32" / "throughput_results.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP32" / "throughput_results.json"
         os.makedirs(os.path.dirname(throughput_results), exist_ok=True)
-        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "throughput_results_2.json"
-        # latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP32"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / "FP32"/ "latency_throughput.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP32"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP32"/ "latency_throughput.json"
 
     save_json(throughput_log, throughput_results)
     #save_json(throughput_log, throughput_results2)
@@ -608,12 +609,10 @@ if __name__ == "__main__":
         live.log_artifact(throughput_results, name="throughput_results")
         print("latency batch result:")
         print(latency_results_batch)
-        # live.log_artifact(latency_results, name="latency_results")
         live.log_artifact(latency_results_batch, name="latency_results_batch")
         print("latency throughput result: ")
         print(latency_throughput_path)
-        live.log_artifact(latency_throughput_path, name="latency_throughput_path")      # nicht da in "throughput" - wieso wird das überhaupt versucht? eigentlich ist das ein "plot" pfad...
-        # live.log_artifact(accuracy_path, name="accuracy_result")
+        live.log_artifact(latency_throughput_path, name="latency_throughput_path")      
         
         live.next_step() 
 

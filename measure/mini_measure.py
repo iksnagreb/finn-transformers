@@ -608,12 +608,10 @@ if __name__ == "__main__":
         live.log_artifact(throughput_results, name="throughput_results")
         print("latency batch result:")
         print(latency_results_batch)
-        # live.log_artifact(latency_results, name="latency_results")
         live.log_artifact(latency_results_batch, name="latency_results_batch")
         print("latency throughput result: ")
         print(latency_throughput_path)
-        live.log_artifact(latency_throughput_path, name="latency_throughput_path")      # nicht da in "throughput" - wieso wird das überhaupt versucht? eigentlich ist das ein "plot" pfad...
-        # live.log_artifact(accuracy_path, name="accuracy_result")
+        live.log_artifact(latency_throughput_path, name="latency_throughput_path")      
         
         live.next_step() 
 

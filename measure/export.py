@@ -32,7 +32,7 @@ import yaml
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
-
+# cifar 10 selber downloaden
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
