@@ -36,6 +36,6 @@ np.savez_compressed(
     labels=labels_all
 )
 
-print(f"✔ Gespeichert: {OUT_FILE}")
+print(f"✔ Gespeichert:  {OUT_FILE}")
 print("Shape images:", images_all.shape)
 print("Shape labels:", labels_all.shape)
