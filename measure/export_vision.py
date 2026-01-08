@@ -40,7 +40,7 @@ RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_
 
 
 # Path to the CIFAR-10 dataset
-CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
+CIFAR10_ROOT = R"/data/gitlab"
 
 
 # Exports the model to ONNX in conjunction with an input-output pair for
@@ -80,6 +80,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     dataset = datasets.CIFAR10(CIFAR10_ROOT, False, download=True, transform=tf)
     # Create a batched and shuffled data loader the Vision validation split
     export_data = DataLoader(dataset, batch_size=batch_size)
+    print("data now in ", CIFAR10_ROOT)
 
     # Sample the first batch from the export dataset
     inp, cls = next(iter(export_data))
