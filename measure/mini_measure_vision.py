@@ -16,7 +16,7 @@ import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
 import dvc.api
-from radioml.model import Model
+from vision.model import Model
 from measure.latency_throughput_log import latency_throughput
 from dvclive import Live
 
@@ -40,7 +40,8 @@ else:
 # todo: richtigen Pfad für Daten angeben
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
-
+CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
+CIFAR10_PATH_NPZ = R"/data/gitlab/cifar-10-batches-py/cifar10.npz"
 
 def to_device(data,device):
     if isinstance(data, (list,tuple)): 
@@ -148,7 +149,7 @@ def print_latency(latency_ms, latency_synchronize, latency_datatransfer, end_tim
     print(f"Throughput: {throughput_images:.4f} Bilder/Sekunde")
 
 
-def create_test_dataloader(RADIOML_PATH_NPZ, batch_size):
+def create_test_dataloader(CIFAR10_PATH_NPZ, batch_size):
     """
     Erstellt den DataLoader für die Testdaten.
     :param RADIOML_PATH: Pfad zur Testdaten-Datei.
@@ -156,7 +157,7 @@ def create_test_dataloader(RADIOML_PATH_NPZ, batch_size):
     :return: DataLoader-Objekt für die Testdaten.
     """
     # muss wahrscheinlich für vision angepasst werden
-    data = np.load(RADIOML_PATH_NPZ)
+    data = np.load(CIFAR10_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
     print("Keys in NPZ file:", key_list)
@@ -457,7 +458,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         if INT8:
             # todo: richtigen onnx pfad angeben
             onnx_model_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
-        test_loader = create_test_dataloader(RADIOML_PATH_NPZ, batch_size) 
+        test_loader = create_test_dataloader(CIFAR10_PATH_NPZ, batch_size) 
         engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
         device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
 
@@ -518,8 +519,8 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     return throughput_log, latency_log, latency_log_batch
 
 
-def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path):
-    test_loader = create_test_dataloader(RADIOML_PATH_NPZ, 1)
+def run_accuracy_eval(batch_size, input_info, output_info, CIFAR10_PATH_NPZ, onnx_model_path):
+    test_loader = create_test_dataloader(CIFAR10_PATH_NPZ, 1)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
     _, _, _, accuracy = run_inference(
@@ -553,7 +554,7 @@ if __name__ == "__main__":
     input_info, output_info = get_model_io_info(onnx_model_path)
 
     batch_size = 1
-    accuracy = run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path)
+    accuracy = run_accuracy_eval(batch_size, input_info, output_info, CIFAR10_PATH_NPZ, onnx_model_path)
     print(f"Accuracy : {accuracy:.2%}")
 
     if FP16:

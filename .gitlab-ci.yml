@@ -32,38 +32,42 @@ setup-job:
 
   # umgebungsvariablen für unterschiedliche Models
   # hier measure.export für alle skripte starten
-    - python3 -m measure.export model=radioml
+    #- python3 -m measure.export model=radioml
+    - python3 -m measure.export_vision
+    - python3 measure/data_to_numpy.py
+
 
     - dvc remote modify sciebo user $DVC_Sciebo_USER
     - dvc remote modify sciebo password $DVC_Sciebo_PASSWORD
    # - dvc exp remove --all      #  damit dvc nicht nach dieser alten datei sucht
 
   # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
-    - python3 -m measure.mini_measure
+    # - python3 -m measure.mini_measure
+    - python3 -m measure.mini_measure_vision
 
-  # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
-    - python3 -m measure.tegrastats
+
+
+
+# erstmal weglassen
+    # - python3 -m measure.tegrastats
  
-    - python3 -m measure.accuracy_comparison
+    # - python3 -m measure.accuracy_comparison
 
-    - python3 -m plots.plots
+    # - python3 -m plots.plots
 
 
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
-    - chmod 600 ~/.ssh/id_ed25519
-    - ssh-keyscan github.com >> ~/.ssh/known_hosts
+    # - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    # - eval $(ssh-agent -s)
+    # - mkdir -p ~/.ssh
+    # - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
+    # - chmod 600 ~/.ssh/id_ed25519
+    # - ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - git config --global user.email "ci@example.com"
-    - git config --global user.name "CI Runner"
-    - dvc push -r sciebo  # 14 files pushed
-    # no experiments to push???
-    - dvc exp push -r sciebo -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
+    # - git config --global user.email "ci@example.com"
+    # - git config --global user.name "CI Runner"
+    # - dvc push -r sciebo  # 14 files pushed
+    # - dvc exp push -r sciebo -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
 
-    #- git remote set-url origin https://oauth2:${GITLAB_PAT}@github.com:iksnagreb/finn-transformers.git
-    #- dvc exp push -r sciebo -f https://oauth2:${GITLAB_PAT}@github.com/iksnagreb/finn-transformers.git   # klappt noch nicht...
   tags:
     - jetson
 

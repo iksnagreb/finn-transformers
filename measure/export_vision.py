@@ -38,8 +38,9 @@ import yaml
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
+
 # Path to the CIFAR-10 dataset
-CIFAR10_ROOT = os.environ.setdefault("CIFAR10_ROOT", "data")
+CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
 
 
 # Exports the model to ONNX in conjunction with an input-output pair for
@@ -89,6 +90,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
 
 
     # Export the model to ONNX using the input example
+    print(kwargs)
     export_qonnx(model, (inp,), "outputs/vision/model.onnx", **kwargs)
 
     # Save the input and output data for verification purposes later
@@ -96,6 +98,9 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     np.save("outputs/vision/out.npy", out.numpy())
     np.save("outputs/vision/cls.npy", cls.numpy())
 
+
+    # Unsupported model IR version: 10, max supported IR version: 9
+    # node not valid mit opset 17
     # Standard ONNX export for reference - works with dynamic batch sizes
     onnx_path = "outputs/vision/model_dynamic_batchsize.onnx"
     torch.onnx.export(
@@ -103,7 +108,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
         (inp,),
         onnx_path,
         export_params=True,
-        opset_version=17,
+        opset_version=18,
         do_constant_folding=True,
         input_names=['input'],
         output_names=['output'],
@@ -141,4 +146,5 @@ if __name__ == "__main__":
     model = patch_missing_affine_norms(model)
     # model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt")) # model_int8.pt müsste noch hochgeladen werden
     # Pass the model and the export configuration to the evaluation loop
+    params["export"].pop("format", None)
     export(model, model_int8, dataset=params["dataset"], **params["export"])
