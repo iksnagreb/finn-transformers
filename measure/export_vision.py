@@ -109,7 +109,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     # brevitas qcdq export
     # jeder commit -> eine variante (quantisiert) testen
     # immer brevitas export nehmen
-    export_qonnx(
+    export_onnx_qcdq(
         model,
         (inp,),
         onnx_path,
