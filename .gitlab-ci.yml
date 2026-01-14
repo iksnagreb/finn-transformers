@@ -45,6 +45,7 @@ setup-job:
     - python3 -m measure.mini_measure
     #- MODEL_TYPE=vision python3 -m measure.mini_measure_vision
     #- python3 -m measure.tegrastats_vision
+    # 30000 * 10 = 300000
 
 
 
@@ -56,7 +57,6 @@ setup-job:
 
     - python3 -m plots.plots
 
-
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
@@ -66,8 +66,8 @@ setup-job:
 
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI Runner"
-    - dvc push -r public  # 14 files pushed
-    - dvc exp push -r public -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
+    - dvc push -r upload  # 14 files pushed
+    - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
 
   tags:
     - jetson
