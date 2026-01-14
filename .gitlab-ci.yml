@@ -44,6 +44,7 @@ setup-job:
   # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
     # - python3 -m measure.mini_measure
     - python3 -m measure.mini_measure_vision
+    - python3 -m measure.tegrastats_vision
 
 
 

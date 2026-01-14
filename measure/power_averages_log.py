@@ -64,7 +64,7 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
             "type": "vin_sys_avg",
             "value": vin_sys_avg,
         })
-
+    power_averages_file.parent.mkdir(parents=True, exist_ok=True)
     with open(power_averages_file, "w") as f:
         json.dump(power_averages, f, indent=2)
 
@@ -135,7 +135,7 @@ def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption
             "type": "vin_sys_avg",
             "idle_value": vin_sys_avg,
         })
-
+    power_averages_file.parent.mkdir(parents=True, exist_ok=True)
     with open(power_averages_file, "w") as f:
         json.dump(power_averages, f, indent=2)
 
@@ -184,6 +184,7 @@ def power_averages_difference(batch_sizes, power_averages_file, power_averages_b
                 print(f"⚠️ Kein Baseline-Wert für batch_size {batch_size} und type {type_} gefunden.")
 
     # In die Ausgabedatei schreiben
+    power_difference_file.parent.mkdir(parents=True, exist_ok=True)
     with open(power_difference_file, 'w') as f:
         json.dump(difference_data, f, indent=2)
 
@@ -193,6 +194,7 @@ def power_averages_baseline_inference(idle_path, inference_path, output_path):
     from datetime import datetime
     from pathlib import Path
     # JSON-Dateien laden
+    
     with open(idle_path, "r") as f:
         idle_data = json.load(f)
 
@@ -215,6 +217,7 @@ def power_averages_baseline_inference(idle_path, inference_path, output_path):
             print(f"Warnung: Kein Idle-Wert gefunden für {key}")
 
     # Ergebnis speichern
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w") as f:
         json.dump(merged_data, f, indent=4)
 

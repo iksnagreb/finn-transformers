@@ -75,8 +75,6 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
         transforms.Normalize([0.4914, 0.4822, 0.4465], [0.2470, 0.2435, 0.2616])
     ])
 
-    # Load the Vision test split (should already be in CIFAR10_ROOT, otherwise
-    # download)
     dataset = datasets.CIFAR10(CIFAR10_ROOT, False, download=True, transform=tf)
     # Create a batched and shuffled data loader the Vision validation split
     export_data = DataLoader(dataset, batch_size=batch_size)
@@ -109,8 +107,8 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
         (inp,),
         onnx_path,
         export_params=True,
-        opset_version=18,
-        do_constant_folding=True,
+        opset_version=18,           # test 19
+        # do_constant_folding=True, # test without constant folding
         input_names=['input'],
         output_names=['output'],
         dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
