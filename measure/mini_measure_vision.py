@@ -100,13 +100,14 @@ def save_json(log, filepath):
 
 def parse_shape(shape, batch_value):
     """Ersetzt 'batch_size' durch batch_value in der shape-Liste."""
-    # print("shape:", shape)
+    print("shape:", shape)
     return tuple(
         batch_value if d == "batch_size"
-        else 1 if (i == 1 and INT8)  # zweite Dimension immer 1 im INT8-Modus
+        else 1 if (i == 1 and INT8 and MODEL_TYPE=="radioml")  # zweite Dimension immer 1 im INT8-Modus
         else batch_value if (i == 0 and INT8)
         else 128 if d == "sequence_length"
         else 64 if d == "Muloutput_dim_2"
+        else 3 if d == "channels"
         else d
         for i, d in enumerate(shape)
     )
@@ -137,10 +138,11 @@ def get_model_io_info(model_path):
     Liest Input- und Output-Infos aus einem ONNX-Modell.
     Gibt Listen von Dictionaries mit Name, Shape und Dtype zurück.
     """
+    # vielleicht nicht ort nutzen (nicht kompatibel mit brevitas ohne qcdq)
     sess_options = ort.SessionOptions()
 
     sess_options.intra_op_num_threads = 8
-    session = ort.InferenceSession(model_path, sess_options)
+    session = ort.InferenceSession(model_path, sess_options)    # problem for brevitas model
     input_info = [
         {
             "name": inp.name,
