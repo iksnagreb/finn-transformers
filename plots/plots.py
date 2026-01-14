@@ -321,8 +321,6 @@ if __name__ == "__main__":
     base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type 
 
     latency_throughput_path = base_path / "latency_throughput.json"
-    #latency_throughput_output = "images/latency_per_throughput_plot.png"
-    #latency_throughput_output = "outputs/radioml/plot/FP32/latency_per_throughput_plot.png"
     latency_throughput_output = base_path / "latency_per_throughput_plot.png"
 
     latency_throughput_output.parent.mkdir(parents=True, exist_ok=True)

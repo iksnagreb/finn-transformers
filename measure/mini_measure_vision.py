@@ -71,6 +71,7 @@ def load_params():
 def save_json(log, filepath):
     filepath = Path(filepath)
     filepath.parent.parent.mkdir(parents=True, exist_ok=True)
+    filepath.parent.mkdir(parents=True, exist_ok=True)
     with open(filepath, "w") as f:
         json.dump(log, f, indent=4)
 

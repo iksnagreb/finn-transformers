@@ -1,3 +1,14 @@
+from pathlib import Path
+import json
+
+def save_json(log, filepath):
+    filepath = Path(filepath)
+    filepath.parent.parent.mkdir(parents=True, exist_ok=True)
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    with open(filepath, "w") as f:
+        json.dump(log, f, indent=2)
+
+
 def parse_tegrastats(input_logs, base_path, plot_base_path):
     # input logs besteht aus tegrastats_log, batch_size tuples
     # in jedem eintrag der output dateien soll als zusätzlicher key der batch_size wert stehen
@@ -138,21 +149,16 @@ def parse_tegrastats(input_logs, base_path, plot_base_path):
                             }
                         ])
 
-    # Speichern
-    with open(output_json_full, "w") as f:
-        json.dump(parsed_data, f, indent=2)
+    # Speicher
+    save_json(parsed_data, output_json_full)
     print(f"{len(parsed_data)} Einträge in '{output_json_full.name}' gespeichert .")
 
-    with open(output_json_simple, "w") as f:
-        json.dump(simple_data, f, indent=2)
-    with open(output_json_simple2, "w") as f:
-        json.dump(simple_data, f, indent=2)
+    save_json(simple_data, output_json_simple)
+    save_json(simple_data, output_json_simple2)
     print(f"{len(simple_data)} Einträge in '{output_json_simple.name}' gespeichert (vereinfacht).")
 
-    with open(output_json_energy, "w") as f:
-        json.dump(energy_data, f, indent=2)
-    with open(output_json_energy2, "w") as f:
-        json.dump(energy_data, f, indent=2)
+    save_json(energy_data, output_json_energy)    
+    save_json(energy_data, output_json_energy2)
         
     print(f"{len(energy_data)} Einträge in '{output_json_energy.name}' gespeichert  (Energieverbrauch).")
 
