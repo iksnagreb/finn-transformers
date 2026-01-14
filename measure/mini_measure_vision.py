@@ -26,7 +26,23 @@ from torchvision import datasets, transforms
 # tensorrt, datasets(hugging face), pycuda
 FP16 = os.environ.get("FP16", "0") == "1"
 INT8 = os.environ.get("INT8", "0") == "1"
-INT8 = True  # an params ablesen später
+
+MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
+if MODEL_TYPE != "radioml" and MODEL_TYPE != "language" and MODEL_TYPE != "vision":
+    MODEL_TYPE = "vision"
+    print("Defaulting Model Type to vision model.")
+
+# look up quantisation type from params
+with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
+    cfg = yaml.safe_load(f)
+
+bits = cfg["model"]["embedding"].get("bits", 0)
+INT8 = (bits == 8)
+
+
+# falls INT8 false: FP16 und FP32 testen
+# Modell mit umgebungsvariabe wählen:
+
 
 if FP16:
     dtype = torch.float16
@@ -43,6 +59,11 @@ RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
 CIFAR10_PATH_NPZ = R"/data/gitlab/cifar-10-batches-py/cifar10.npz"
+
+if MODEL_TYPE == "radioml":
+    DATA_PATH_NPZ = RADIOML_PATH_NPZ
+if MODEL_TYPE == "vision":
+    DATA_PATH_NPZ = CIFAR10_PATH_NPZ
 
 def to_device(data,device):
     if isinstance(data, (list,tuple)): 
@@ -78,7 +99,6 @@ def save_json(log, filepath):
 
 
 def parse_shape(shape, batch_value):
-    # muss wahrscheinlich für vision angepasst werden
     """Ersetzt 'batch_size' durch batch_value in der shape-Liste."""
     # print("shape:", shape)
     return tuple(
@@ -151,15 +171,14 @@ def print_latency(latency_ms, latency_synchronize, latency_datatransfer, end_tim
     print(f"Throughput: {throughput_images:.4f} Bilder/Sekunde")
 
 
-def create_test_dataloader(CIFAR10_PATH_NPZ, batch_size):
+def create_test_dataloader(DATA_PATH_NPZ, batch_size):
     """
     Erstellt den DataLoader für die Testdaten.
     :param RADIOML_PATH: Pfad zur Testdaten-Datei.
     :param batch_size: Die Batchgröße.
     :return: DataLoader-Objekt für die Testdaten.
     """
-    # muss wahrscheinlich für vision angepasst werden
-    data = np.load(CIFAR10_PATH_NPZ)
+    data = np.load(DATA_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
     print("Keys in NPZ file:", key_list)
@@ -419,7 +438,6 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             # print("Labels and Predictions:")
             print("Prediction (Raw): ", output[0])
             print("Labels: ", yb.numpy()[0])
-            # tdodo: anpassen für vision
             pred = output.argmax(axis=-1) 
             correct = (pred == yb.numpy()).sum()
             total = len(yb)
@@ -459,9 +477,8 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     for batch_size in batch_sizes:
         print("Measuring for batch size:", batch_size)
         if INT8:
-            # todo: richtigen onnx pfad angeben
-            onnx_model_path=f"outputs/vision/model_brevitas_{batch_size}_simpl.onnx"
-        test_loader = create_test_dataloader(CIFAR10_PATH_NPZ, batch_size) 
+            onnx_model_path=f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simpl.onnx"
+        test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size) 
         engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
         device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
 
@@ -523,8 +540,8 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     return throughput_log, latency_log, latency_log_batch
 
 
-def run_accuracy_eval(batch_size, input_info, output_info, CIFAR10_PATH_NPZ, onnx_model_path):
-    test_loader = create_test_dataloader(CIFAR10_PATH_NPZ, 1)
+def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path):
+    test_loader = create_test_dataloader(DATA_PATH_NPZ, 1)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
     _, _, _, accuracy = run_inference(
@@ -549,27 +566,27 @@ if __name__ == "__main__":
     batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
     batch_sizes = [1]
 
-    onnx_model_path = "outputs/vision/model_dynamic_batchsize.onnx"
+    onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     if INT8:
-        onnx_model_path = "outputs/vision/model_brevitas_1_simpl.onnx"
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simpl.onnx"
 
     model = onnx.load(onnx_model_path)
 
     input_info, output_info = get_model_io_info(onnx_model_path)
 
     batch_size = 1
-    accuracy = run_accuracy_eval(batch_size, input_info, output_info, CIFAR10_PATH_NPZ, onnx_model_path)
+    accuracy = run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path)
     print(f"Accuracy : {accuracy:.2%}")
 
     if FP16:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "eval_results" /"accuracy_FP16.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_FP16.json"
         quantisation_type = "FP16"
     elif INT8:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "eval_results" /"accuracy_INT8.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_INT8.json"
         quantisation_type = "INT8"
     else:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "eval_results" /"accuracy_FP32.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_FP32.json"
         quantisation_type = "FP32"
 
  
@@ -585,21 +602,21 @@ if __name__ == "__main__":
     throughput_log, latency_log, latency_log_batch = calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info=input_info, output_info=output_info)
     if FP16:
         # global variables, can be changed on other files somehow??
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP16" / "throughput_results.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP16"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP16"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP16"/ "latency_throughput.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16" / "throughput_results.json"
+        latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_throughput.json"
     elif INT8:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "INT8" / "throughput_results.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8" / "throughput_results.json"
         #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "throughput" / "INT8"/ "throughput_results_2.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "INT8"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "INT8"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "INT8"/ "latency_throughput.json"
+        latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_results.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_throughput.json"
     else:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP32" / "throughput_results.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP32" / "throughput_results.json"
         os.makedirs(os.path.dirname(throughput_results), exist_ok=True)
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP32"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "plot" / "FP32"/ "latency_throughput.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP32"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP32"/ "latency_throughput.json"
 
     save_json(throughput_log, throughput_results)
     #save_json(throughput_log, throughput_results2)

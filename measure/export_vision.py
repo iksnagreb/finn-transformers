@@ -119,7 +119,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
         input_names=['input'],
         output_names=['output'],
         #dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
-        batch_size: 1
+        batch_size=1
     )
     print(f"Modell als ONNX exportiert: {onnx_path}")
 
