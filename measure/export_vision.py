@@ -89,6 +89,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
 
 
     # Export the model to ONNX using the input example
+    # model ist wahrscheinlich schon quantisiert
     print(kwargs)
     export_qonnx(model, (inp,), "outputs/vision/model.onnx", **kwargs)
 
@@ -102,16 +103,23 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     # node not valid mit opset 17
     # Standard ONNX export for reference - works with dynamic batch sizes
     onnx_path = "outputs/vision/model_dynamic_batchsize.onnx"
-    torch.onnx.export(
+    onnx_path = "outputs/vision/model_brevitas_1_simpl.onnx"
+
+    
+    # brevitas qcdq export
+    # jeder commit -> eine variante (quantisiert) testen
+    # immer brevitas export nehmen
+    export_qonnx(
         model,
         (inp,),
         onnx_path,
         export_params=True,
-        opset_version=18,           # test 19
-        # do_constant_folding=True, # test without constant folding
+        opset_version=18,          
+        do_constant_folding=True, 
         input_names=['input'],
         output_names=['output'],
-        dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
+        #dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
+        batch_size: 1
     )
     print(f"Modell als ONNX exportiert: {onnx_path}")
 
@@ -143,7 +151,7 @@ if __name__ == "__main__":
     print("loaded")
 
     model = patch_missing_affine_norms(model)
-    # model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt")) # model_int8.pt müsste noch hochgeladen werden
+    # model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt")) 
     # Pass the model and the export configuration to the evaluation loop
     params["export"].pop("format", None)
     export(model, model_int8, dataset=params["dataset"], **params["export"])

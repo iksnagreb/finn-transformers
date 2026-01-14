@@ -26,7 +26,8 @@ from torchvision import datasets, transforms
 # tensorrt, datasets(hugging face), pycuda
 FP16 = os.environ.get("FP16", "0") == "1"
 INT8 = os.environ.get("INT8", "0") == "1"
-For Batch Size:
+INT8 = True  # an params ablesen später
+
 if FP16:
     dtype = torch.float16
     print("FP16 enabled")
@@ -546,6 +547,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, CIFAR10_PATH_NPZ, onn
 if __name__ == "__main__":
 
     batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+    batch_sizes = [1]
 
     onnx_model_path = "outputs/vision/model_dynamic_batchsize.onnx"
 
