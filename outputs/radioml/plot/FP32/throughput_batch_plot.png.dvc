@@ -1,0 +1,5 @@
+outs:
+- md5: f4ac0085ff523dbfb1c0169cfa48fb93
+  size: 73600
+  hash: md5
+  path: throughput_batch_plot.png

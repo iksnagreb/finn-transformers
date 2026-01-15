@@ -1,0 +1,5 @@
+outs:
+- md5: 80b3ca8de6033a96b81da411d8720192
+  size: 76353
+  hash: md5
+  path: throughput_per_power_plot.png

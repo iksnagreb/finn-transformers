@@ -1,0 +1,5 @@
+outs:
+- md5: 6ba66f55ffbb6e8c2ba510c19ad73bc2
+  size: 61018
+  hash: md5
+  path: accuracies_plot.png
