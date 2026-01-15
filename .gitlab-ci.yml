@@ -48,8 +48,6 @@ setup-job:
     # 30000 * 10 = 300000
 
 
-
-
 # erstmal weglassen
     - python3 -m measure.tegrastats
  
@@ -66,7 +64,6 @@ setup-job:
 
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI Runner"
-    - dvc remote show upload
     - dvc push -r upload  # 14 files pushed
     - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
 
