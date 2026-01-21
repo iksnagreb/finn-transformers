@@ -144,9 +144,9 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
         print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
     # Lade ONNX-Modell
-        model = onnx.load(export_path)
+        onnx_model = onnx.load(export_path)
         # Simplify mit onnxsim
-        model_simplified, check = simplify(model)
+        model_simplified, check = simplify(onnx_model)
         if not check:
             print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
             continue
