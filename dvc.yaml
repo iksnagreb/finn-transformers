@@ -20,23 +20,22 @@ artifacts:
     path: outputs/radioml/plot/FP32/power_throughput.json
   power_averages:
     path: outputs/radioml/plot/FP32/power_averages.json
-plots:
-  latency_throughput_plot:
-    path: outputs/radioml/plot/FP32/latency_per_throughput_plot.png
-  throughput_batch_plot:
-    path: outputs/radioml/plot/FP32/throughput_batch_plot.png
-  throughput_images_plot:
-    path: outputs/radioml/plot/FP32/throughput_images_plot.png
-  latency_plot:
-    path: outputs/radioml/plot/FP32/latency_plot.png
-  throughput_per_power_plot:
-    path: outputs/radioml/plot/FP32/throughput_per_power_plot.png
-  accuracies_plot:
-    path: outputs/radioml/plot/accuracies_plot.png
-  energy_consumption_plot:
-    path: outputs/radioml/plot/FP32/energy_consumption_plot.png
-  power_bar_plot:
-    path: outputs/radioml/plot/FP32/power_bar_plot.png
+  # latency_throughput_plot:
+  #   path: outputs/radioml/plot/FP32/latency_per_throughput_plot.png
+  # throughput_batch_plot:
+  #   path: outputs/radioml/plot/FP32/throughput_batch_plot.png
+  # throughput_images_plot:
+  #   path: outputs/radioml/plot/FP32/throughput_images_plot.png
+  # latency_plot:
+  #   path: outputs/radioml/plot/FP32/latency_plot.png
+  # throughput_per_power_plot:
+  #   path: outputs/radioml/plot/FP32/throughput_per_power_plot.png
+  # accuracies_plot:
+  #   path: outputs/radioml/plot/accuracies_plot.png
+  # energy_consumption_plot:
+  #   path: outputs/radioml/plot/FP32/energy_consumption_plot.png
+  # power_bar_plot:
+  #   path: outputs/radioml/plot/FP32/power_bar_plot.png
 
 
     # alle artifacts hier hinzugefügt - aber eigentlich sollte push experiments reichen (mit korrektem remote)

@@ -362,14 +362,14 @@ if __name__ == "__main__":
     with Live(save_dvc_exp=True, report="md") as live:
         print("Starte DVC Live Bericht....", flush=True)
 
-        live.log_artifact(latency_throughput_output, name="latency_throughput_plot")
-        live.log_artifact(throughput_results_output_batch, name="throughput_batch_plot")
-        live.log_artifact(throughput_results_output_images, name="throughput_images_plot")
-        live.log_artifact(latency_results_output, name="latency_plot")
-        live.log_artifact(power_throughput_output, name="throughput_per_power_plot")
-        live.log_artifact(accuracy_output, name="accuracies_plot")
-        live.log_artifact(energy_consumption_output, name="energy_consumption_plot")
-        live.log_artifact(power_bar_output, name="power_bar_plot")
+        live.log_image("latency_throughput_plot.png", latency_throughput_output)
+        live.log_image("throughput_batch_plot.png", throughput_results_output_batch)
+        live.log_image("throughput_images_plot.png", throughput_results_output_images)
+        live.log_image("latency_plot.png", latency_results_output)
+        live.log_image("throughput_per_power_plot.png", power_throughput_output)
+        live.log_image("accuracies_plot.png", accuracy_output)
+        live.log_image("energy_consumption_plot.png", energy_consumption_output)
+        live.log_image("power_bar_plot.png", power_bar_output)
 
 
         live.next_step()
