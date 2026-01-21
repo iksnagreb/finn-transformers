@@ -34,6 +34,19 @@ from torchvision import datasets, transforms
 FP16 = os.environ.get("FP16", "0") == "1"
 INT8 = os.environ.get("INT8", "0") == "1"
 
+MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
+
+if MODEL_TYPE != "radioml" and MODEL_TYPE != "language" and MODEL_TYPE != "vision":
+    MODEL_TYPE = "vision"
+    print("Defaulting Model Type to vision model.")
+
+
+with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
+    cfg = yaml.safe_load(f)
+
+bits = cfg["model"]["embedding"].get("bits", 0)
+INT8 = (bits == 8)
+
 if FP16:
     dtype = torch.float16
     print("FP16 enabled")
@@ -501,6 +514,7 @@ if __name__ == "__main__":
         quant_type = "INT8"
     else:
         quant_type = "FP32"
+
     energy_base_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" /"energy_metrics" / quant_type
     throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" /"plot" / quant_type
     print("Energy Path: ", energy_base_path)
