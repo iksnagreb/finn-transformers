@@ -34,7 +34,7 @@ artifacts:
   #   path: outputs/radioml/plot/accuracies_plot.png
   # energy_consumption_plot:
   #   path: outputs/radioml/plot/FP32/energy_consumption_plot.png
-  # power_bar_plot:
+  # power_bar_plot
   #   path: outputs/radioml/plot/FP32/power_bar_plot.png
 
 
