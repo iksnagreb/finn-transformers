@@ -366,6 +366,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
     total_predictions = 0
     correct_predictions = 0
+    do_prints=True
 
     for batch in test_loader: 
         # je nach Aufbau des Modells: mit Attention Mask oder ohne
@@ -437,14 +438,17 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         iterations += 1
 
         if accuracy_flag:
-            # print("Labels and Predictions:")
-            print("Prediction (Raw): ", output[0])
-            print("Labels: ", yb.numpy()[0])
             pred = output.argmax(axis=-1) 
             correct = (pred == yb.numpy()).sum()
             total = len(yb)
             correct_predictions += correct
             total_predictions += total
+
+        if accuracy_flag and do_prints==True:
+            print("Prediction (Raw): ", output[0])
+            print("Labels: ", yb.numpy()[0])
+            print("predicted label: ", pred[0])
+            print = False
 
     accuracy = 0
     if accuracy_flag:
