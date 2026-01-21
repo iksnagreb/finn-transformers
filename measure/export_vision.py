@@ -14,7 +14,6 @@ from torch.utils.data import DataLoader
 
 # Export brevitas quantized models to QONNX dialect
 from brevitas.export import export_qonnx
-
 from torchvision import datasets, transforms
 
 # Export brevitas quantized models to QONNX dialect
@@ -109,6 +108,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     # brevitas qcdq export
     # jeder commit -> eine variante (quantisiert) testen
     # immer brevitas export nehmen ???mit qcdq???
+    from brevitas.export import export_onnx_qcdq
     export_onnx_qcdq(
         model,
         (inp,),
@@ -124,7 +124,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     print(f"Modell als ONNX exportiert: {onnx_path}")
 
     for batch_size in [1, 2, 4]:
-        from brevitas.export import export_onnx_qcdq
+        # from brevitas.export import export_onnx_qcdq
         dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
         # test: wird das Ergebnis (Accuracy) besser mit echten daten?
         export_data = DataLoader(dataset, batch_size=batch_size)
