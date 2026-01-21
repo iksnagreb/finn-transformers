@@ -32,24 +32,25 @@ setup-job:
 
   # umgebungsvariablen für unterschiedliche Models
   # hier measure.export für alle skripte starten
-    - python3 -m measure.export
-    # - python3 -m measure.export_vision
-    # - python3 measure/data_to_numpy.py
+    # - python3 -m measure.export
+    - python3 -m measure.export_vision
+    - python3 measure/data_to_numpy.py    # noch nötig?
 
     - dvc remote modify upload user $DVC_Sciebo_Upload_USER
     - dvc remote modify upload password $DVC_Sciebo_Upload_PASSWORD
     # - dvc exp remove --all      #  damit dvc nicht nach dieser alten datei sucht
 
     # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
-    - python3 -m measure.mini_measure
-    #- MODEL_TYPE=vision python3 -m measure.mini_measure_vision
-    #- python3 -m measure.tegrastats_vision
+    # - python3 -m measure.mini_measure
+    - MODEL_TYPE=vision python3 -m measure.mini_measure_vision
 
-    - python3 -m measure.tegrastats
+    - python3 -m measure.tegrastats_vision
+
+    # - python3 -m measure.tegrastats
  
-    - python3 -m measure.accuracy_comparison
+    # - python3 -m measure.accuracy_comparison
 
-    - python3 -m plots.plots
+    # - python3 -m plots.plots
 
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
@@ -62,6 +63,9 @@ setup-job:
     - git config --global user.name "CI Runner"
     - dvc push -r upload  # 14 files pushed
     - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
+    # - git remote add github git@github.com:iksnagreb/finn-transformers.git
+    # - dvc exp branch wrong-bate experiments
+    # - git push github experiments --force
 
   tags:
     - jetson

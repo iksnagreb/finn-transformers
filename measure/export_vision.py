@@ -123,6 +123,24 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     )
     print(f"Modell als ONNX exportiert: {onnx_path}")
 
+    for batch_size in [1, 2, 4]:
+        from brevitas.export import export_onnx_qcdq
+        dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
+        # test: wird das Ergebnis (Accuracy) besser mit echten daten?
+        export_data = DataLoader(dataset, batch_size=batch_size)
+        print("data now in ", CIFAR10_ROOT)
+
+        # Sample the first batch from the export dataset
+        inp, cls = next(iter(export_data))
+        export_path=f"outputs/vision/model_brevitas_{batch_size}.onnx"
+        export_onnx_qcdq(
+            model, 
+            (inp,),
+            export_path=export_path,
+            opset_version=17
+        )
+        print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+
 
 
 # Script entrypoint
