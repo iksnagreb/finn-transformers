@@ -25,7 +25,12 @@ setup-job:
     - source .venv/bin/activate
     - ls -l /usr/local/cuda/include/cuda.h
     - pip install --upgrade pip
-    - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
+    # - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
+
+    - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
+    
+
+
     - pip install -r requirements.txt
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
     - dvc pull --allow-missing    # damit nicht nach dvc dateien gesucht wird, die ich noch nicht gepusht habe
@@ -62,10 +67,10 @@ setup-job:
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI Runner"
     - dvc push -r upload  # 14 files pushed
-    - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    # zweiter Teil funktioniert noch nicht
+    - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
     # - git remote add github git@github.com:iksnagreb/finn-transformers.git
     # - dvc exp branch wrong-bate experiments
-    # - git push github experiments --force
+    # - git push github experiments_branch # problem: new branch needed everytime
 
   tags:
     - jetson
