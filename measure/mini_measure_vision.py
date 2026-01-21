@@ -479,7 +479,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     for batch_size in batch_sizes:
         print("Measuring for batch size:", batch_size)
         if INT8:
-            onnx_model_path=f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simpl.onnx"
+            onnx_model_path=f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
         test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size) 
         engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
         device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
@@ -571,7 +571,7 @@ if __name__ == "__main__":
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     if INT8:
-        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simpl.onnx"
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
 
     model = onnx.load(onnx_model_path)
 

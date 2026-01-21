@@ -133,6 +133,8 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
         # Sample the first batch from the export dataset
         inp, cls = next(iter(export_data))
         export_path=f"outputs/vision/model_brevitas_{batch_size}.onnx"
+        simplified_path=f"outputs/vision/model_brevitas_{batch_size}_simple.onnx"
+
         export_onnx_qcdq(
             model, 
             (inp,),
@@ -140,6 +142,16 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
             opset_version=17
         )
         print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+
+    # Lade ONNX-Modell
+        model = onnx.load(export_path)
+        # Simplify mit onnxsim
+        model_simplified, check = simplify(model)
+        if not check:
+            print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+            continue
+        onnx.save(model_simplified, simplified_path)
+        print(f"Simplified gespeichert: {simplified_path}")
 
 
 
