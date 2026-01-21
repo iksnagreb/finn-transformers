@@ -153,3 +153,6 @@ if __name__ == "__main__":
     # model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt")) # model_int8.pt müsste noch hochgeladen werden
     # Pass the model and the export configuration to the evaluation loop
     export(model, model_int8, dataset=params["dataset"], **params["export"])
+
+# sudo truncate -s 0 /var/log/kern.log
+# sudo truncate -s 0 /var/log/syslog

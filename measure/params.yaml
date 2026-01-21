@@ -22,7 +22,7 @@ model:
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: 8
+    bits: 8 # 0 ohne quantisierung
   # Configures the positional encoding layer in front of the first attention
   # block
   positional:
@@ -203,7 +203,7 @@ export:
   # Export batch size - allows to provide more verification samples
   batch_size: 1
   # Need to use dynamo export to allow exporting torch.compiled graphs
-  dynamo: false
+  dynamo: false   # dynamo true verwenden, auch mit optimierung probieren
   # Keep parameters as part of the model ONNX file
   external_data: false
   # Enables dynamo export model optimization

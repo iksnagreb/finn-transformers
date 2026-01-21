@@ -5,6 +5,9 @@ import numpy as np
 CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
 OUT_FILE = os.path.join(CIFAR10_ROOT, "cifar10.npz")
 
+
+
+
 def load_batch(path):
     with open(path, "rb") as f:
         batch = pickle.load(f, encoding="bytes")
@@ -39,3 +42,5 @@ np.savez_compressed(
 print(f"✔ Gespeichert:  {OUT_FILE}")
 print("Shape images:", images_all.shape)
 print("Shape labels:", labels_all.shape)
+
+

@@ -190,3 +190,14 @@ build:
 # 'https://oauth2:[MASKED]@github.com/iksnagreb/fi
 # nn-transformers.git'.
 # ERROR: failed to push cache: received 401 (Unauthorized): Client error '401 Unauthorized' for url 'https://uni-paderborn.sciebo.de/remote.php/webdav/files/md5/00'
+
+
+
+# speicher aus build ordner löschen (4 GB):
+# sudo systemctl stop gitlab-runner
+# sudo rm -rf /home/gitlab-runner/builds/*
+# sudo du -xh /home/gitlab-runner --max-depth=1 | sort -h
+# sudo systemctl stop gitlab-runner
+
+
+# var ordner hat 17 GB!

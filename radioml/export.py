@@ -18,16 +18,8 @@ from radioml.model import Model
 from radioml.dataset import get_datasets
 # Quantized custom implementation of multihead attention
 from attention import QuantMultiheadAttention
-<<<<<<< HEAD
-# Seeding RNGs for reproducibility
-from utils import seed
-import onnx
-from onnxsim import simplify
-
-=======
 # Seeding RNGs for reproducibility, affine parameter export patching
 from utils import seed, patch_missing_affine_norms
->>>>>>> origin/main
 
 # Path to the RadioML dataset
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
@@ -40,12 +32,7 @@ EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
-<<<<<<< HEAD
 def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):  # noqa
-=======
-def export(model, dataset, batch_size, format="qonnx", split_heads=False,
-           **kwargs):
->>>>>>> origin/main
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"

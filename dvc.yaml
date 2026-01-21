@@ -20,7 +20,7 @@ artifacts:
     path: outputs/radioml/plot/FP32/power_throughput.json
   power_averages:
     path: outputs/radioml/plot/FP32/power_averages.json
-# plots
+plots:
   latency_throughput_plot:
     path: outputs/radioml/plot/FP32/latency_per_throughput_plot.png
   throughput_batch_plot:
