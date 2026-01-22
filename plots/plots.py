@@ -328,8 +328,10 @@ def power_bar_plot(json_path, output_path):
 
 
 if __name__ == "__main__":
-
-    quant_type = "FP32"
+    if INT8 == True:
+        quant_type = "INT8"
+    else:
+        quant_type = "FP32"
 
     base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type 
 

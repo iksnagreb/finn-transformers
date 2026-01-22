@@ -567,7 +567,7 @@ if __name__ == "__main__":
         live.log_artifact(energy_consumption_file, name="energy_consumption")
 
         # noch zusammenfassen
-        live.log_artifact(power_averages_file, name="power_averages_")
+        live.log_artifact(power_averages_file, name="power_averages")
         live.log_artifact(power_averages_file_baseline, name="power_averages_baseline")
 
         live.log_artifact(power_averages_difference_file, name="power_averages_difference")

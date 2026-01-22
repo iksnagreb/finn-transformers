@@ -39,7 +39,7 @@ setup-job:
   # hier measure.export für alle skripte starten
     # - python3 -m measure.export
     - python3 -m measure.export_vision
-    - python3 measure/data_to_numpy.py    # noch nötig?
+    - python3 measure/data_to_numpy.py    
 
     - dvc remote modify upload user $DVC_Sciebo_Upload_USER
     - dvc remote modify upload password $DVC_Sciebo_Upload_PASSWORD
@@ -49,7 +49,7 @@ setup-job:
     # - python3 -m measure.mini_measure
     - MODEL_TYPE=vision python3 -m measure.mini_measure_vision
 
-    - python3 -m measure.tegrastats_vision
+    - MODEL_TYPE=vision python3 -m measure.tegrastats_vision
 
     # - python3 -m measure.tegrastats
  
