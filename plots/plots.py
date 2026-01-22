@@ -8,7 +8,7 @@ from matplotlib.patches import Patch
 from pathlib import Path
 from dvclive import Live
 import os
-
+import yaml
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
 if MODEL_TYPE != "radioml" and MODEL_TYPE != "language" and MODEL_TYPE != "vision":
