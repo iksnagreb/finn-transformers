@@ -53,9 +53,9 @@ setup-job:
 
     # - python3 -m measure.tegrastats
  
-    # - python3 -m measure.accuracy_comparison
+    #- python3 -m measure.accuracy_comparison
 
-    # - python3 -m plots.plots
+    - MODEL_TYPE=vision python3 -m plots.plots
 
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)

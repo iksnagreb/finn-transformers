@@ -9,6 +9,19 @@ from pathlib import Path
 from dvclive import Live
 
 
+
+MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
+if MODEL_TYPE != "radioml" and MODEL_TYPE != "language" and MODEL_TYPE != "vision":
+    MODEL_TYPE = "vision"
+    print("Defaulting Model Type to vision model.")
+
+# look up quantisation type from params
+with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
+    cfg = yaml.safe_load(f)
+
+bits = cfg["model"]["embedding"].get("bits", 0)
+INT8 = (bits == 8)
+
 def throughput_batch_plot(json_path, output_path):
     with open(json_path, "r") as f:  # Name deiner Datei anpassen
         data = json.load(f)
