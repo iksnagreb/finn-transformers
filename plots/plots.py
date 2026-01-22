@@ -7,7 +7,7 @@ from datetime import datetime
 from matplotlib.patches import Patch
 from pathlib import Path
 from dvclive import Live
-
+import os
 
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
@@ -331,7 +331,7 @@ if __name__ == "__main__":
 
     quant_type = "FP32"
 
-    base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "plot" / quant_type 
+    base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type 
 
     latency_throughput_path = base_path / "latency_throughput.json"
     latency_throughput_output = base_path / "latency_per_throughput_plot.png"
@@ -366,7 +366,7 @@ if __name__ == "__main__":
     power_bar_plot(power_bar_path, power_bar_output)
 
     # eigentlich nicht bei jeder Quantisierung plotten, sondern am ende
-    accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / "accuracy.json"
+    accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / "accuracy.json"
     accuracy_output = base_path / "accuracies_plot.png"
     accuracies_plot(accuracy_path, accuracy_output)
 
