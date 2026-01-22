@@ -21,7 +21,7 @@ import subprocess
 from dvclive import Live
 
 from measure.latency_throughput_log import latency_throughput
-from vision.model import Model 
+
 from measure.parse_tegrastats_to_json import parse_tegrastats
 from measure.power_averages_log import power_averages, power_averages_baseline, power_averages_difference, power_averages_baseline_inference
 from measure.throughput_power import power_throughput
@@ -36,10 +36,16 @@ INT8 = os.environ.get("INT8", "0") == "1"
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
 
-if MODEL_TYPE != "radioml" and MODEL_TYPE != "language" and MODEL_TYPE != "vision":
-    MODEL_TYPE = "vision"
+if MODEL_TYPE not in ("radioml", "language", "vision"):
     print("Defaulting Model Type to vision model.")
+    MODEL_TYPE = "vision"
 
+if MODEL_TYPE == "vision":
+    from vision.model import Model
+elif MODEL_TYPE == "radioml":
+    from radioml.model import Model
+elif MODEL_TYPE == "language":
+    from language.model import Model
 
 with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
     cfg = yaml.safe_load(f)
@@ -516,8 +522,8 @@ if __name__ == "__main__":
     else:
         quant_type = "FP32"
 
-    energy_base_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" /"energy_metrics" / quant_type
-    throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / "vision" /"plot" / quant_type
+    energy_base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"energy_metrics" / quant_type
+    throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / quant_type
     print("Energy Path: ", energy_base_path)
     print("Throughput Path: ", throughput_base_path)
 
@@ -535,15 +541,15 @@ if __name__ == "__main__":
 
     parse_tegrastats(tegrastats_logs, energy_base_path, throughput_base_path)
     
-    energy_consumption_file = Path(__file__).resolve().parent.parent / "outputs" / "vision" /"plot" / quant_type / "energy_consumption.json" 
+    energy_consumption_file = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / quant_type / "energy_consumption.json" 
     power_averages_file = energy_base_path / "power_averages.json"
     power_averages_file_baseline = energy_base_path / "power_averages_baseline.json"
     power_averages_difference_file = energy_base_path / "power_averages_difference.json"
-    power_averages_file_baseline_inference = Path(__file__).resolve().parent.parent / "outputs" / "vision" /"plot" / quant_type / "power_averages_baseline_inference.json"
+    power_averages_file_baseline_inference = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / quant_type / "power_averages_baseline_inference.json"
 
-    power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type)
-    power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type)
-    power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type)
+    power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type, MODEL_TYPE)
+    power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type, MODEL_TYPE)
+    power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type, MODEL_TYPE)
 
     power_averages_baseline_inference(power_averages_file_baseline, power_averages_file, power_averages_file_baseline_inference)
 

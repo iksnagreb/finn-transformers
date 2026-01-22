@@ -1,4 +1,4 @@
-def power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type):
+def power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type, model_type):
     # input logs besteht aus tegrastats_log, batch_size tuples
     # in jedem eintrag der output dateien soll als zusätzlicher key der batch_size wert stehen
     import re
@@ -13,7 +13,7 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
             energy_consumption = json.load(f)
 
     for batch_size in batch_sizes:
-        start_end_time_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / quant_type / f"timestamps_{batch_size}.json"
+        start_end_time_file = Path(__file__).resolve().parent.parent / "outputs" / model_type /"energy_metrics" / quant_type / f"timestamps_{batch_size}.json"
         with open(start_end_time_file, "r") as f:
             timestamps = json.load(f)
         start_iso = timestamps["start_time"]
@@ -72,7 +72,7 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
 
 
 
-def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption_file, quant_type):
+def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption_file, quant_type, model_type):
     # input logs besteht aus tegrastats_log, batch_size tuples
     # in jedem eintrag der output dateien soll als zusätzlicher key der batch_size wert stehen
     import re
@@ -86,7 +86,7 @@ def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption
             energy_consumption = json.load(f)
 
     for batch_size in batch_sizes:
-        start_end_time_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / quant_type / f"timestamps_{batch_size}.json"
+        start_end_time_file = Path(__file__).resolve().parent.parent / "outputs" / model_type /"energy_metrics" / quant_type / f"timestamps_{batch_size}.json"
         with open(start_end_time_file, "r") as f:
             timestamps = json.load(f)
         start_iso = timestamps["start_time"]
@@ -141,7 +141,7 @@ def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption
 
     print(f"{len(power_averages)} Einträge in '{power_averages_file.name}' gespeichert (Durchschnittswerte).")
 
-def power_averages_difference(batch_sizes, power_averages_file, power_averages_baseline_file, power_difference_file, quant_type):
+def power_averages_difference(batch_sizes, power_averages_file, power_averages_baseline_file, power_difference_file, quant_type, model_type):
     # input logs besteht aus tegrastats_log, batch_size tuples
     import re
     import json
@@ -170,7 +170,7 @@ def power_averages_difference(batch_sizes, power_averages_file, power_averages_b
 
         # Nur berechnen, wenn batch_size in der gewünschten Liste ist
         if batch_size in batch_sizes:
-            start_end_time_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / quant_type / f"timestamps_{batch_size}.json"
+            start_end_time_file = Path(__file__).resolve().parent.parent / "outputs" / model_type /"energy_metrics" / quant_type / f"timestamps_{batch_size}.json"
             baseline_value = baseline_dict.get((batch_size, type_))
 
             if baseline_value is not None:
