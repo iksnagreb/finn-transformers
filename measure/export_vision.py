@@ -188,8 +188,8 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
                 continue
             onnx.save(model_simplified, simplified_path)
             print(f"Simplified gespeichert: {simplified_path}")
-        it = iter(export_data)
-        predict(it)
+            it = iter(export_data)
+            predict(it)
     else:
         print("No quantisation -> export with qonnx")
         onnx_path = "outputs/vision/model_dynamic_batchsize.onnx"
