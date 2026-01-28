@@ -204,9 +204,9 @@ def energy_consumption_plot(json_path, output_path):
     with open(json_path, "r") as f:
         data = json.load(f)
 
-    data = [d for d in data if d.get("batch_size") == 256]
+    data = [d for d in data if d.get("batch_size") == 2]
     if not data:
-        print("Keine Daten für batch_size = 256 gefunden.")
+        print("Keine Daten für batch_size = 2 gefunden.")
         return
     # Zeitstempel sammeln (einzigartige, sortierte)
     timestamps = sorted(list(set(d["timestamp"] for d in data)))
@@ -260,6 +260,7 @@ def energy_consumption_plot(json_path, output_path):
 
     # plt.show()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print("save: ", output_path)
 
 
 def power_bar_plot(json_path, output_path):
