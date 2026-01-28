@@ -368,9 +368,9 @@ if __name__ == "__main__":
     power_bar_plot(power_bar_path, power_bar_output)
 
     # eigentlich nicht bei jeder Quantisierung plotten, sondern am ende
-    accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / "accuracy.json"
-    accuracy_output = base_path / "accuracies_plot.png"
-    accuracies_plot(accuracy_path, accuracy_output)
+    # accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / "accuracy.json"
+    # accuracy_output = base_path / "accuracies_plot.png"
+    # accuracies_plot(accuracy_path, accuracy_output)
 
     # mit dvc exp hochladen
     # log image
@@ -382,7 +382,7 @@ if __name__ == "__main__":
         live.log_image("throughput_images_plot.png", throughput_results_output_images)
         live.log_image("latency_plot.png", latency_results_output)
         live.log_image("throughput_per_power_plot.png", power_throughput_output)
-        live.log_image("accuracies_plot.png", accuracy_output)
+        # live.log_image("accuracies_plot.png", accuracy_output)
         live.log_image("energy_consumption_plot.png", energy_consumption_output)
         live.log_image("power_bar_plot.png", power_bar_output)
 
