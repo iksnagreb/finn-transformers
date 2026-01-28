@@ -87,14 +87,19 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     print("data now in ", CIFAR10_ROOT)
 
     # accuracy on pt model
-    images, labels = next(iter(export_data))  
-    images = images.to(device)
-    labels = labels.to(device)
+    it = iter(export_data)
     with torch.no_grad():
-        outputs = model(images)   # shape: [batch_size, 10]
-        preds = outputs.argmax(dim=1)
-    print("Predictions:", preds[:10].tolist())
-    print("Labels:     ", labels[:10].tolist())
+        for i in range(20):
+            images, labels = next(it)
+            images = images.to(device)
+            labels = labels.to(device)
+
+            outputs = model(images)
+            preds = outputs.argmax(dim=1)
+
+            print(f"Batch {i}:")
+            print("  pred :", preds[:10].tolist())
+            print("  label:", labels[:10].tolist())
 
     # Sample the first batch from the export dataset
     inp, cls = next(iter(export_data))
