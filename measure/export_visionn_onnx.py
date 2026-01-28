@@ -28,7 +28,7 @@ from utils import seed, patch_missing_affine_norms
 import onnx
 from onnxsim import simplify
 import yaml
-import onnxruntime as ort
+
 
 # Path to the RadioML dataset
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
@@ -46,40 +46,6 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
-
-
-def predict(it):
-    onnx_path = "outputs/vision/model_brevitas_1_simple.onnx"
-    sess = ort.InferenceSession(
-        onnx_path,
-        providers=["TensorrtExecutionProvider"] # tensorrt execution provider 
-        #CUDAExecutionProvider, CPUExecutionProvider, TensorrtExecutionProvider: all perform similar
-    )
-    # Input- und Output-Namen auslesen
-    input_name = sess.get_inputs()[0].name
-    output_name = sess.get_outputs()[0].name
-    print("ONNX input name :", input_name)
-    print("ONNX output name:", output_name)
-    correct_preds = 0
-    num_preds = 0
-    for i in range(100):
-        inp, cls = next(it)
-        # ONNX erwartet numpy arrays
-        inp_np = inp.cpu().numpy()
-        outputs = sess.run(
-            [output_name],
-            {input_name: inp_np}
-        )[0]
-        pred = np.argmax(outputs, axis=1)
-
-        # print("Raw output :", outputs)
-        # print("Prediction :", pred.item())
-        # print("Label      :", cls.item())
-        if pred==cls:
-            correct_preds = correct_preds + 1
-        num_preds = num_preds + 1
-    print("Accuracy: ")
-    print(correct_preds/num_preds)
 
 
 # Exports the model to ONNX in conjunction with an input-output pair for
@@ -168,7 +134,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
 
             # Sample the first batch from the export dataset
             inp, cls = next(iter(export_data))
-            export_path=f"outputs/vision/model_brevitas_{batch_size}.onnx"
+            export_path=f"outputs/vision/model_brevitas_{batch_size}_simple.onnx"
             simplified_path=f"outputs/vision/model_brevitas_{batch_size}_simple.onnx"
 
             export_onnx_qcdq(
@@ -180,16 +146,14 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
             print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
         
-            onnx_model = onnx.load(export_path)
-            # Simplify mit onnxsim
-            model_simplified, check = simplify(onnx_model)
-            if not check:
-                print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
-                continue
-            onnx.save(model_simplified, simplified_path)
-            print(f"Simplified gespeichert: {simplified_path}")
-        it = iter(export_data)
-        predict(it)
+            # onnx_model = onnx.load(export_path)
+            # # Simplify mit onnxsim
+            # model_simplified, check = simplify(onnx_model)
+            # if not check:
+            #     print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+            #     continue
+            # onnx.save(model_simplified, simplified_path)
+            # print(f"Simplified gespeichert: {simplified_path}")
     else:
         print("No quantisation -> export with qonnx")
         onnx_path = "outputs/vision/model_dynamic_batchsize.onnx"
