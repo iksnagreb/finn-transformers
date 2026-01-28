@@ -374,7 +374,7 @@ if __name__ == "__main__":
 
     # mit dvc exp hochladen
     # log image
-    with Live(save_dvc_exp=True, cache_images = false, report="md") as live:
+    with Live(save_dvc_exp=True, cache_images = False, report="md") as live:
         print("Starte DVC Live Bericht....", flush=True)
 
         live.log_image("latency_throughput_plot.png", latency_throughput_output)

@@ -446,7 +446,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
         if accuracy_flag and do_prints==True:
             print("Prediction (Raw): ", output[0])
-            print("Labels: ", yb.numpy()[0])
+            print("Label: ", yb.numpy()[0])
             print("predicted label: ", pred[0])
             do_prints = False
 
