@@ -13,7 +13,6 @@ import torch
 from torch.utils.data import DataLoader
 
 # Export brevitas quantized models to QONNX dialect
-from brevitas.export import export_qonnx
 from torchvision import datasets, transforms
 
 # Export brevitas quantized models to QONNX dialect
@@ -40,11 +39,19 @@ RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_
 
 # Path to the CIFAR-10 dataset
 CIFAR10_ROOT = R"/data/gitlab"
+MODEL_TYPE = "vision"
+
+with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
+    cfg = yaml.safe_load(f)
+
+bits = cfg["model"]["embedding"].get("bits", 0)
+INT8 = (bits == 8)
 
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
 def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+    from brevitas.export import export_qonnx, export_onnx_qcdq
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"
@@ -79,6 +86,16 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     export_data = DataLoader(dataset, batch_size=batch_size)
     print("data now in ", CIFAR10_ROOT)
 
+    # accuracy on pt model
+    images, labels = next(iter(export_data))  
+    images = images.to(device)
+    labels = labels.to(device)
+    with torch.no_grad():
+        outputs = model(images)   # shape: [batch_size, 10]
+        preds = outputs.argmax(dim=1)
+    print("Predictions:", preds[:10].tolist())
+    print("Labels:     ", labels[:10].tolist())
+
     # Sample the first batch from the export dataset
     inp, cls = next(iter(export_data))
 
@@ -101,57 +118,55 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     # Unsupported model IR version: 10, max supported IR version: 9
     # node not valid mit opset 17
     # Standard ONNX export for reference - works with dynamic batch sizes
-    onnx_path = "outputs/vision/model_dynamic_batchsize.onnx"
-    onnx_path = "outputs/vision/model_brevitas_1_simpl.onnx"
+    if INT8 == True:
+        print("quantisation -> export with qcdq")
+
+        for batch_size in [1, 2, 4]:
+            dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
+            # test: wird das Ergebnis (Accuracy) besser mit echten daten?
+            export_data = DataLoader(dataset, batch_size=batch_size)
+            print("data now in ", CIFAR10_ROOT)
+
+            # Sample the first batch from the export dataset
+            inp, cls = next(iter(export_data))
+            export_path=f"outputs/vision/model_brevitas_{batch_size}.onnx"
+            simplified_path=f"outputs/vision/model_brevitas_{batch_size}_simple.onnx"
+
+            export_onnx_qcdq(
+                model, 
+                (inp,),
+                export_path=export_path,
+                opset_version=17
+            )
+            print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+
+        
+            onnx_model = onnx.load(export_path)
+            # Simplify mit onnxsim
+            model_simplified, check = simplify(onnx_model)
+            if not check:
+                print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+                continue
+            onnx.save(model_simplified, simplified_path)
+            print(f"Simplified gespeichert: {simplified_path}")
+    else:
+        print("No quantisation -> export with qonnx")
+        onnx_path = "outputs/vision/model_dynamic_batchsize.onnx"
+        export_qonnx(
+            model,
+            (inp,),
+            onnx_path,
+            export_params=True,
+            opset_version=18,          
+            do_constant_folding=True, 
+            input_names=['input'],
+            output_names=['output'],
+            dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
+        )
+        print(f"Modell als ONNX exportiert: {onnx_path}")
 
     
-    # brevitas qcdq export
-    # jeder commit -> eine variante (quantisiert) testen
-    # immer brevitas export nehmen ???mit qcdq???
-    from brevitas.export import export_onnx_qcdq
-    export_onnx_qcdq(
-        model,
-        (inp,),
-        onnx_path,
-        export_params=True,
-        opset_version=18,          
-        do_constant_folding=True, 
-        input_names=['input'],
-        output_names=['output'],
-        #dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
-        batch_size=1
-    )
-    print(f"Modell als ONNX exportiert: {onnx_path}")
-
-    for batch_size in [1, 2, 4]:
-        # from brevitas.export import export_onnx_qcdq
-        dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
-        # test: wird das Ergebnis (Accuracy) besser mit echten daten?
-        export_data = DataLoader(dataset, batch_size=batch_size)
-        print("data now in ", CIFAR10_ROOT)
-
-        # Sample the first batch from the export dataset
-        inp, cls = next(iter(export_data))
-        export_path=f"outputs/vision/model_brevitas_{batch_size}.onnx"
-        simplified_path=f"outputs/vision/model_brevitas_{batch_size}_simple.onnx"
-
-        export_onnx_qcdq(
-            model, 
-            (inp,),
-            export_path=export_path,
-            opset_version=17
-        )
-        print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
-
-    # Lade ONNX-Modell
-        onnx_model = onnx.load(export_path)
-        # Simplify mit onnxsim
-        model_simplified, check = simplify(onnx_model)
-        if not check:
-            print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
-            continue
-        onnx.save(model_simplified, simplified_path)
-        print(f"Simplified gespeichert: {simplified_path}")
+    
 
 
 

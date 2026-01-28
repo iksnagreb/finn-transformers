@@ -37,6 +37,7 @@ RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
 def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+    from brevitas.export import export_qonnx, export_onnx_qcdq
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"
