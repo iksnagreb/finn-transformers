@@ -3,12 +3,11 @@
 artifacts:
 # minimeasure
   throughput_results:
-    path: outputs/radioml/plot/FP32/throughput_results.json
+    path: outputs/vision/plot/INT8/throughput_results.json
   latency_results_batch:
-    path: outputs/radioml/plot/FP32/latency_results_batch.json
+    path: outputs/vision/plot/INT8/latency_results_batch.json
   latency_throughput_path:
-    path: outputs/radioml/plot/FP32/latency_throughput.json
-# accuracy comparison    
+    path: outputs/vision/plot/INT8/latency_throughput.json
   accuracy_result:
     path: outputs/radioml/plot/accuracy.json
 # tegrastats
@@ -39,3 +38,5 @@ artifacts:
 
 
     # alle artifacts hier hinzugefügt - aber eigentlich sollte push experiments reichen (mit korrektem remote)
+metrics:
+- dvclive/metrics.json
