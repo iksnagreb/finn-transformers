@@ -36,7 +36,7 @@ RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
-def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
     device = "cpu"
@@ -96,43 +96,36 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     # Brevitas 8Bit export - problem: nicht möglich mit dynamischen batch-sizes, 
     # wenn man es im nachinein patched sind die reshapes noch statisch -> funktioniert nicht mit tensorrt
 
-    # for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
-    #     from brevitas.export import export_onnx_qcdq
-    #     dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
-    #     # test: wird das Ergebnis (Accuracy) besser mit echten daten?
-    #     export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
-    #     inp, out, _ = next(iter(export_data))
-
-
-
+    for batch_size in [1, 2, 4]:
+        dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
+        # test: wird das Ergebnis (Accuracy) besser mit echten daten?
+        export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
+        inp, out, _ = next(iter(export_data))
         
-    #     export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
-    #     simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
-    #     export_onnx_qcdq(
-    #         model_int8, 
-    #         (inp,),
-    #         export_path=export_path,
-    #         opset_version=17
-    #     )
-    #     print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+        export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
+        simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simple.onnx"
+        export_onnx_qcdq(
+            model, 
+            (inp,),
+            export_path=export_path,
+            opset_version=17
+        )
+        print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
-    #     # Lade ONNX-Modell
-    #     model = onnx.load(export_path)
-    #     # Simplify mit onnxsim
-    #     model_simplified, check = simplify(model)
-    #     if not check:
-    #         print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
-    #         continue
-    #     onnx.save(model_simplified, simplified_path)
-    #     print(f"Simplified gespeichert: {simplified_path}")
+        model = onnx.load(export_path)
+        # Simplify mit onnxsim
+        model_simplified, check = simplify(model)
+        if not check:
+            print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+            continue
+        onnx.save(model_simplified, simplified_path)
+        print(f"Simplified gespeichert: {simplified_path}")
 
 
 # Script entrypoint
 if __name__ == "__main__":
-    # Load the stage parameters from the parameters file
-    # params = dvc.api.params_show()
-    # measure/params.yaml
-    with open("measure/params.yaml", "r") as f:
+
+    with open("radioml/params.yaml", "r") as f:
         params = yaml.safe_load(f)
     # Seed all RNGs
     seed(params["seed"])
@@ -141,18 +134,9 @@ if __name__ == "__main__":
     print("Created model instance.")
     for key, value in params["model"].items():
         print(f"{key}: {value}")
-    print("int 8:")
-    # for key, value in params["model_int8"].items():
-    #     print(f"{key}: {value}")
-    model_int8 = Model(**params["model"])
-    print("Created model int8 instance.")
     
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/radioml/model.pt"))
     print("loaded")
-    # model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt")) # model_int8.pt müsste noch hochgeladen werden
-    # Pass the model and the export configuration to the evaluation loop
-    export(model, model_int8, dataset=params["dataset"], **params["export"])
+    export(model, dataset=params["dataset"], **params["export"])
 
-# sudo truncate -s 0 /var/log/kern.log
-# sudo truncate -s 0 /var/log/syslog
