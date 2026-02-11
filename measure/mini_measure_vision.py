@@ -59,11 +59,14 @@ RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
 CIFAR10_PATH_NPZ = R"/data/gitlab/cifar-10-batches-py/cifar10.npz"
+LANG_PATH_NPZ = R"/data/gitlab/language.npz"
 
 if MODEL_TYPE == "radioml":
     DATA_PATH_NPZ = RADIOML_PATH_NPZ
 if MODEL_TYPE == "vision":
     DATA_PATH_NPZ = CIFAR10_PATH_NPZ
+if MODEL_TYPE == "language":
+    DATA_PATH_NPZ = LANG_PATH_NPZ
 
 def to_device(data,device):
     if isinstance(data, (list,tuple)): 

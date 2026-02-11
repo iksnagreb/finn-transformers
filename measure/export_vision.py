@@ -48,38 +48,6 @@ bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
 
 
-def predict(it):
-    onnx_path = "outputs/vision/model_brevitas_1_simple.onnx"
-    sess = ort.InferenceSession(
-        onnx_path,
-        providers=["TensorrtExecutionProvider"] # tensorrt execution provider 
-        #CUDAExecutionProvider, CPUExecutionProvider, TensorrtExecutionProvider: all perform similar
-    )
-    # Input- und Output-Namen auslesen
-    input_name = sess.get_inputs()[0].name
-    output_name = sess.get_outputs()[0].name
-    print("ONNX input name :", input_name)
-    print("ONNX output name:", output_name)
-    correct_preds = 0
-    num_preds = 0
-    for i in range(100):
-        inp, cls = next(it)
-        # ONNX erwartet numpy arrays
-        inp_np = inp.cpu().numpy()
-        outputs = sess.run(
-            [output_name],
-            {input_name: inp_np}
-        )[0]
-        pred = np.argmax(outputs, axis=1)
-
-        # print("Raw output :", outputs)
-        # print("Prediction :", pred.item())
-        # print("Label      :", cls.item())
-        if pred==cls:
-            correct_preds = correct_preds + 1
-        num_preds = num_preds + 1
-    print("Accuracy: ")
-    print(correct_preds/num_preds)
 
 
 # Exports the model to ONNX in conjunction with an input-output pair for
@@ -131,9 +99,9 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
             outputs = model(images)
             preds = outputs.argmax(dim=1)
 
-            print(f"Batch {i}:")
-            print("  pred :", preds[:10].tolist())
-            print("  label:", labels[:10].tolist())
+            # print(f"Batch {i}:")
+            # print("  pred :", preds[:10].tolist())
+            # print("  label:", labels[:10].tolist())
 
     # Sample the first batch from the export dataset
     inp, cls = next(iter(export_data))
@@ -188,8 +156,6 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
                 continue
             onnx.save(model_simplified, simplified_path)
             print(f"Simplified gespeichert: {simplified_path}")
-            it = iter(export_data)
-            predict(it)
     else:
         print("No quantisation -> export with qonnx")
         onnx_path = "outputs/vision/model_dynamic_batchsize.onnx"

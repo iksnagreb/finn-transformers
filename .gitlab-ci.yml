@@ -38,8 +38,9 @@ setup-job:
   # umgebungsvariablen für unterschiedliche Models
   # hier measure.export für alle skripte starten
     # - python3 -m measure.export
-    - python3 -m measure.export_vision
-    - python3 measure/data_to_numpy.py    
+    #- python3 -m measure.export_vision
+    #- python3 measure/data_to_numpy.py    
+    - python3 -m measure.export_language
 
     - dvc remote modify upload user $DVC_Sciebo_Upload_USER
     - dvc remote modify upload password $DVC_Sciebo_Upload_PASSWORD
@@ -47,15 +48,15 @@ setup-job:
 
     # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
     # - python3 -m measure.mini_measure
-    - MODEL_TYPE=vision python3 -m measure.mini_measure_vision
+    - MODEL_TYPE=language python3 -m measure.mini_measure_vision
 
-    - MODEL_TYPE=vision python3 -m measure.tegrastats_vision
+    - MODEL_TYPE=language python3 -m measure.tegrastats_vision
 
     # - python3 -m measure.tegrastats
  
     #- python3 -m measure.accuracy_comparison
 
-    - MODEL_TYPE=vision python3 -m plots.plots
+    - MODEL_TYPE=language python3 -m plots.plots
 
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)

@@ -64,8 +64,18 @@ else:
     print("FP32")
 
 
+RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
 CIFAR10_PATH_NPZ = R"/data/gitlab/cifar-10-batches-py/cifar10.npz"
+LANG_PATH_NPZ = R"/data/gitlab/language.npz"
+
+if MODEL_TYPE == "radioml":
+    DATA_PATH_NPZ = RADIOML_PATH_NPZ
+if MODEL_TYPE == "vision":
+    DATA_PATH_NPZ = CIFAR10_PATH_NPZ
+if MODEL_TYPE == "language":
+    DATA_PATH_NPZ = LANG_PATH_NPZ
 
 
 
@@ -164,14 +174,14 @@ def get_model_io_info(model_path):
 
 
 
-def create_test_dataloader(CIFAR10_PATH_NPZ, batch_size):
+def create_test_dataloader(DATA_PATH_NPZ, batch_size):
     """
     Erstellt den DataLoader für die Testdaten.
     :param CIFAR10_PATH: Pfad zur Testdaten-Datei.
     :param batch_size: Die Batchgröße.
     :return: DataLoader-Objekt für die Testdaten.
     """
-    data = np.load(CIFAR10_PATH_NPZ)
+    data = np.load(DATA_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
     if len(input_info) == 2:
@@ -435,8 +445,8 @@ def stop_tegrastats(proc: subprocess.Popen):
     except subprocess.TimeoutExpired:
         proc.kill()
 
-def run_accuracy_eval(batch_size, input_info, output_info, CIFAR10_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
-    test_loader = create_test_dataloader(CIFAR10_PATH_NPZ, batch_size)
+def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
+    test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
 
@@ -511,7 +521,7 @@ if __name__ == "__main__":
     batch_sizes = [1, 2, 4]
 
 
-    onnx_model_path = "outputs/vision/model_dynamic_batchsize.onnx"
+    onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
 
     tegrastats_logs = []
 
@@ -534,7 +544,7 @@ if __name__ == "__main__":
         input_info, output_info = get_model_io_info(onnx_model_path)
         tegrastats_log = energy_base_path / f"tegrastats_{batch_size}.log"
         timestamps = energy_base_path / f"timestamps_{batch_size}.json"
-        accuracy = run_accuracy_eval(batch_size, input_info, output_info, CIFAR10_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps)
+        accuracy = run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps)
         print(f"Accuracy for batch size {batch_size}: {accuracy:.4f}")
 
         tegrastats_logs.append((tegrastats_log, batch_size))

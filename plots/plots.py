@@ -375,6 +375,7 @@ if __name__ == "__main__":
 
     # mit dvc exp hochladen
     # log image
+    # hash -> im git als ref finden, oder irgendwie apply machen
     with Live(save_dvc_exp=True, cache_images = False, report="md") as live:
         print("Starte DVC Live Bericht....", flush=True)
 
