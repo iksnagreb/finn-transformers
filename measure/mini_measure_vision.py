@@ -313,9 +313,11 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     logger = trt.Logger(trt.Logger.WARNING)
     builder = trt.Builder(logger)
     print("Anzahl DLA Cores:", builder.num_DLA_cores)
+    for i in range(builder.num_DLA_cores):
+        print(f"DLA Core {i} Version: {builder.get_DLA_core_version(i)}")
     network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
     parser = trt.OnnxParser(network, logger)
-    # parser.set_flag(trt.OnnxParserFlag.IMPORT_UINT8_QUANTIZATION)  #flag setzen
+    parser.set_flag(trt.OnnxParserFlag.kIMPORT_UINT8_QUANTIZATION)  #flag setzen
 
     with open(onnx_model_path, 'rb') as f:
         if not parser.parse(f.read()):
