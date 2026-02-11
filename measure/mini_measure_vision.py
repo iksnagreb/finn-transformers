@@ -314,6 +314,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     builder = trt.Builder(logger)
     network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
     parser = trt.OnnxParser(network, logger)
+    parser.set_flag(trt.OnnxParserFlag.IMPORT_UINT8_QUANTIZATION)  #flag setzen
 
     with open(onnx_model_path, 'rb') as f:
         if not parser.parse(f.read()):
@@ -323,6 +324,10 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config = builder.create_builder_config()
     
+    config.default_device_type = trt.DeviceType.DLA
+    config.DLA_core = 0  # 0 oder 1
+    config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
+
     config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
 
     if FP16 == True:
@@ -330,22 +335,23 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     if INT8 == True:
         config.set_flag(trt.BuilderFlag.INT8)
 
-    profile = builder.create_optimization_profile()
+    if INT8 == False:       # no optimization for DLA
+        profile = builder.create_optimization_profile()
 
-    for inp in input_info:
-        name = inp["name"]
-        shape = inp["shape"]
-        min_shape = parse_shape(shape, min_bs)
-        opt_shape = parse_shape(shape, opt_bs)
-        max_shape = parse_shape(shape, max_bs)
-        profile.set_shape(name, min_shape, opt_shape, max_shape)
+        for inp in input_info:
+            name = inp["name"]
+            shape = inp["shape"]
+            min_shape = parse_shape(shape, min_bs)
+            opt_shape = parse_shape(shape, opt_bs)
+            max_shape = parse_shape(shape, max_bs)
+            profile.set_shape(name, min_shape, opt_shape, max_shape)
 
-    config.add_optimization_profile(profile)
+        config.add_optimization_profile(profile)
 
-    print(f"Optimization profile for input '{name}':")
-    print(f"  min_shape: {min_shape}")
-    print(f"  opt_shape: {opt_shape}")
-    print(f"  max_shape: {max_shape}")
+        print(f"Optimization profile for input '{name}':")
+        print(f"  min_shape: {min_shape}")
+        print(f"  opt_shape: {opt_shape}")
+        print(f"  max_shape: {max_shape}")
 
     serialized_engine = builder.build_serialized_network(network, config)
     if serialized_engine is None:
