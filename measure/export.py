@@ -90,8 +90,8 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
         dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
     )
     print(f"Modell als ONNX exportiert: {onnx_path}")
-    model = onnx.load(onnx_path)
-    print("IR version:", model.ir_version)
+    # model = onnx.load(onnx_path)
+    # print("IR version:", model.ir_version)
 
 
     # Brevitas 8Bit export - problem: nicht möglich mit dynamischen batch-sizes, 
