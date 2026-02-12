@@ -317,7 +317,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
     parser = trt.OnnxParser(network, logger)
-    parser.set_flag(trt.OnnxParserFlag.kIMPORT_UINT8_QUANTIZATION)  #flag setzen
+    #parser.set_flag(trt.OnnxParserFlag.kIMPORT_UINT8_QUANTIZATION)  #flag setzen - wird nicht erkannt...
 
     with open(onnx_model_path, 'rb') as f:
         if not parser.parse(f.read()):
@@ -327,7 +327,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config = builder.create_builder_config()
     
-    config.default_device_type = trt.DeviceType.DLA
+    config.default_device_type = trt.DeviceType.DLA # DLA nutzen
     config.DLA_core = 0  # 0 oder 1
     config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
 
@@ -336,6 +336,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
     if INT8 == True:
+        print("int 8 builder flag gesetzt")
         config.set_flag(trt.BuilderFlag.INT8)
 
     if INT8 == False:       # no optimization for DLA
@@ -661,3 +662,9 @@ if __name__ == "__main__":
     torch.cuda.empty_cache()
 
 
+
+
+# yaml für jedes modell schreiben, 
+# dateien umbenennen, dokumentieren
+# fp 32 und fp 16 möglich machen
+# was darf für dla zwischen dequantize & Quantize sein? Sotmax, Matmul, ...?
