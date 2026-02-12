@@ -577,12 +577,12 @@ if __name__ == "__main__":
         live.log_artifact(energy_consumption_file, name="energy_consumption")
 
         # noch zusammenfassen
-        live.log_artifact(power_averages_file, name="power_averages")
-        live.log_artifact(power_averages_file_baseline, name="power_averages_baseline")
+        live.log_artifact(power_averages_file, name=f"power_averages_{quant_type}_{MODEL_TYPE}")
+        live.log_artifact(power_averages_file_baseline, name=f"power_averages_baseline_{quant_type}_{MODEL_TYPE}")
 
-        live.log_artifact(power_averages_difference_file, name="power_averages_difference")
-        live.log_artifact(power_throughput_path, name="power_throughput")
-        live.log_artifact(power_path, name="power_averages")
+        live.log_artifact(power_averages_difference_file, name=f"power_averages_difference_{quant_type}_{MODEL_TYPE}")
+        live.log_artifact(power_throughput_path, name=f"power_throughput_{quant_type}_{MODEL_TYPE}")
+        live.log_artifact(power_path, name=f"power_averages_{quant_type}_{MODEL_TYPE}")
         
         live.next_step() 
 

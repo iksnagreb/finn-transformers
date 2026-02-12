@@ -16,8 +16,10 @@ import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
 import dvc.api
-from radioml.model import model 
+from vision.model import Model
 from measure.latency_throughput_log import latency_throughput
+from dvclive import Live
+from torchvision import datasets, transforms
 
 # import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -25,20 +27,46 @@ from measure.latency_throughput_log import latency_throughput
 FP16 = os.environ.get("FP16", "0") == "1"
 INT8 = os.environ.get("INT8", "0") == "1"
 
+MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
+if MODEL_TYPE != "radioml" and MODEL_TYPE != "language" and MODEL_TYPE != "vision":
+    MODEL_TYPE = "vision"
+    print("Defaulting Model Type to vision model.")
+
+# look up quantisation type from params
+with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
+    cfg = yaml.safe_load(f)
+
+bits = cfg["model"]["embedding"].get("bits", 0)
+INT8 = (bits == 8)
+
+
+# falls INT8 false: FP16 und FP32 testen
+# Modell mit umgebungsvariabe wählen:
+
+
 if FP16:
     dtype = torch.float16
     print("FP16 enabled")
 elif INT8:
     dtype = torch.int8
-    print("INT8 enabled ")
+    print("INT8 enabled")
 else:
     dtype = torch.float32
     print("FP32")
 
-
+# todo: richtigen Pfad für Daten angeben
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
+CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
+CIFAR10_PATH_NPZ = R"/data/gitlab/cifar-10-batches-py/cifar10.npz"
+LANG_PATH_NPZ = R"/data/gitlab/language.npz"
 
+if MODEL_TYPE == "radioml":
+    DATA_PATH_NPZ = RADIOML_PATH_NPZ
+if MODEL_TYPE == "vision":
+    DATA_PATH_NPZ = CIFAR10_PATH_NPZ
+if MODEL_TYPE == "language":
+    DATA_PATH_NPZ = LANG_PATH_NPZ
 
 def to_device(data,device):
     if isinstance(data, (list,tuple)): 
@@ -68,6 +96,7 @@ def load_params():
 def save_json(log, filepath):
     filepath = Path(filepath)
     filepath.parent.parent.mkdir(parents=True, exist_ok=True)
+    filepath.parent.mkdir(parents=True, exist_ok=True)
     with open(filepath, "w") as f:
         json.dump(log, f, indent=4)
 
@@ -77,10 +106,11 @@ def parse_shape(shape, batch_value):
     print("shape:", shape)
     return tuple(
         batch_value if d == "batch_size"
-        else 1 if (i == 1 and INT8)  # zweite Dimension immer 1 im INT8-Modus
+        else 1 if (i == 1 and INT8 and MODEL_TYPE=="radioml")  # zweite Dimension immer 1 im INT8-Modus
         else batch_value if (i == 0 and INT8)
         else 128 if d == "sequence_length"
         else 64 if d == "Muloutput_dim_2"
+        else 3 if d == "channels"
         else d
         for i, d in enumerate(shape)
     )
@@ -111,10 +141,11 @@ def get_model_io_info(model_path):
     Liest Input- und Output-Infos aus einem ONNX-Modell.
     Gibt Listen von Dictionaries mit Name, Shape und Dtype zurück.
     """
+    # vielleicht nicht ort nutzen (nicht kompatibel mit brevitas ohne qcdq)
     sess_options = ort.SessionOptions()
 
     sess_options.intra_op_num_threads = 8
-    session = ort.InferenceSession(model_path, sess_options)
+    session = ort.InferenceSession(model_path, sess_options)    # problem for brevitas model
     input_info = [
         {
             "name": inp.name,
@@ -145,14 +176,14 @@ def print_latency(latency_ms, latency_synchronize, latency_datatransfer, end_tim
     print(f"Throughput: {throughput_images:.4f} Bilder/Sekunde")
 
 
-def create_test_dataloader(RADIOML_PATH_NPZ, batch_size):
+def create_test_dataloader(DATA_PATH_NPZ, batch_size):
     """
     Erstellt den DataLoader für die Testdaten.
     :param RADIOML_PATH: Pfad zur Testdaten-Datei.
     :param batch_size: Die Batchgröße.
     :return: DataLoader-Objekt für die Testdaten.
     """
-    data = np.load(RADIOML_PATH_NPZ)
+    data = np.load(DATA_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
     print("Keys in NPZ file:", key_list)
@@ -281,8 +312,12 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         
     logger = trt.Logger(trt.Logger.WARNING)
     builder = trt.Builder(logger)
+    print("Anzahl DLA Cores:", builder.num_DLA_cores)
+
+
     network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
     parser = trt.OnnxParser(network, logger)
+    #parser.set_flag(trt.OnnxParserFlag.kIMPORT_UINT8_QUANTIZATION)  #flag setzen - wird nicht erkannt...
 
     with open(onnx_model_path, 'rb') as f:
         if not parser.parse(f.read()):
@@ -292,29 +327,35 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config = builder.create_builder_config()
     
+    config.default_device_type = trt.DeviceType.DLA # DLA nutzen
+    config.DLA_core = 0  # 0 oder 1
+    config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
+
     config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
 
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
     if INT8 == True:
+        print("int 8 builder flag gesetzt")
         config.set_flag(trt.BuilderFlag.INT8)
 
-    profile = builder.create_optimization_profile()
+    if INT8 == False:       # no optimization for DLA
+        profile = builder.create_optimization_profile()
 
-    for inp in input_info:
-        name = inp["name"]
-        shape = inp["shape"]
-        min_shape = parse_shape(shape, min_bs)
-        opt_shape = parse_shape(shape, opt_bs)
-        max_shape = parse_shape(shape, max_bs)
-        profile.set_shape(name, min_shape, opt_shape, max_shape)
+        for inp in input_info:
+            name = inp["name"]
+            shape = inp["shape"]
+            min_shape = parse_shape(shape, min_bs)
+            opt_shape = parse_shape(shape, opt_bs)
+            max_shape = parse_shape(shape, max_bs)
+            profile.set_shape(name, min_shape, opt_shape, max_shape)
 
-    config.add_optimization_profile(profile)
+        config.add_optimization_profile(profile)
 
-    print(f"Optimization profile for input '{name}':")
-    print(f"  min_shape: {min_shape}")
-    print(f"  opt_shape: {opt_shape}")
-    print(f"  max_shape: {max_shape}")
+        print(f"Optimization profile for input '{name}':")
+        print(f"  min_shape: {min_shape}")
+        print(f"  opt_shape: {opt_shape}")
+        print(f"  max_shape: {max_shape}")
 
     serialized_engine = builder.build_serialized_network(network, config)
     if serialized_engine is None:
@@ -338,6 +379,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
     total_predictions = 0
     correct_predictions = 0
+    do_prints=True
 
     for batch in test_loader: 
         # je nach Aufbau des Modells: mit Attention Mask oder ohne
@@ -409,15 +451,17 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         iterations += 1
 
         if accuracy_flag:
-            #print("Labels and Predictions:")
-            #print("Prediction (Raw): ", output)
-            pred = output.argmax(axis=-1)  # [batch, seq_len]
-            #print("Prediction: ", pred)
-            #print("Ground Truth: ", yb.numpy())
+            pred = output.argmax(axis=-1) 
             correct = (pred == yb.numpy()).sum()
             total = len(yb)
             correct_predictions += correct
             total_predictions += total
+
+        if accuracy_flag and do_prints==True:
+            print("Prediction (Raw): ", output[0])
+            print("Label: ", yb.numpy()[0])
+            print("predicted label: ", pred[0])
+            do_prints = False
 
     accuracy = 0
     if accuracy_flag:
@@ -450,9 +494,10 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     latency_log_batch = []
 
     for batch_size in batch_sizes:
+        print("Measuring for batch size:", batch_size)
         if INT8:
-            onnx_model_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
-        test_loader = create_test_dataloader(RADIOML_PATH_NPZ, batch_size) 
+            onnx_model_path=f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
+        test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size) 
         engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
         device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
 
@@ -463,6 +508,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         lantency_datatransfer_sum = 0
         total_time_sum = 0
         num_executions = 10
+        num_executions = 1 # da vision so lange dauert
         for i in range(num_executions):
             start_time = time.time()
             latency_ms, latency_synchronize, latency_datatransfer, _ = run_inference(
@@ -513,8 +559,8 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     return throughput_log, latency_log, latency_log_batch
 
 
-def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path):
-    test_loader = create_test_dataloader(RADIOML_PATH_NPZ, 1)
+def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path):
+    test_loader = create_test_dataloader(DATA_PATH_NPZ, 1)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
     _, _, _, accuracy = run_inference(
@@ -535,43 +581,31 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
 
 
 if __name__ == "__main__":
-    # muss in parameter datei:
 
-    
-    if FP16:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_16FP")
-    elif INT8:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_INT8_brevitas")
-    else:
-        params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_32FP")
+    batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+    batch_sizes = [1, 2, 4]
 
-    batch_sizes = params["batch_sizes"]
-
-
-    onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
-
+    onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     if INT8:
-        onnx_model_path = "outputs/radioml/model_brevitas_1_simpl.onnx"
-
-
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
 
     model = onnx.load(onnx_model_path)
 
     input_info, output_info = get_model_io_info(onnx_model_path)
 
     batch_size = 1
-    accuracy = run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path)
+    accuracy = run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path)
     print(f"Accuracy : {accuracy:.2%}")
 
     if FP16:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "eval_results" /"accuracy_FP16.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_FP16.json"
         quantisation_type = "FP16"
     elif INT8:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "eval_results" /"accuracy_INT8.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_INT8.json"
         quantisation_type = "INT8"
     else:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "eval_results" /"accuracy_FP32.json"
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_FP32.json"
         quantisation_type = "FP32"
 
  
@@ -579,105 +613,57 @@ if __name__ == "__main__":
         "quantisation_type": quantisation_type,
         "value": accuracy
     }
+    # pfad anpassen für vision
     save_json(accuracy_result, accuracy_path)
     
 
 
     throughput_log, latency_log, latency_log_batch = calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info=input_info, output_info=output_info)
     if FP16:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16" / "throughput_results.json"
-        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "throughput_results_2.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP16"/ "latency_throughput.json"
+        # global variables, can be changed on other files somehow??
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16" / "throughput_results.json"
+        latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_throughput.json"
     elif INT8:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8" / "throughput_results.json"
-        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "throughput_results_2.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "INT8"/ "latency_throughput.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8" / "throughput_results.json"
+        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "throughput" / "INT8"/ "throughput_results_2.json"
+        latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_results.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_throughput.json"
     else:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "throughput_results.json"
-        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "throughput_results_2.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" / "throughput" / "FP32"/ "latency_throughput.json"
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP32" / "throughput_results.json"
+        os.makedirs(os.path.dirname(throughput_results), exist_ok=True)
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP32"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP32"/ "latency_throughput.json"
+
     save_json(throughput_log, throughput_results)
-    # save_json(throughput_log, throughput_results2)
-    save_json(latency_log, latency_results)
+    #save_json(throughput_log, throughput_results2)
+    # save_json(latency_log, latency_results)
     save_json(latency_log_batch, latency_results_batch)
 
-    latency_throughput(latency_results_batch, throughput_results, latency_throughput_path)
+    latency_throughput(latency_results_batch, throughput_results, latency_throughput_path) # hat in richtige datei geschrieben
+
+    with Live(save_dvc_exp=True, report="md") as live:
+        print("Starte DVC Live Bericht.... mini measure", flush=True)
+        print("throughput result: ")
+        print(throughput_results)
+        live.log_artifact(throughput_results, name=f"throughput_results_{quantisation_type}_{MODEL_TYPE}")
+        print("latency batch result:")
+        print(latency_results_batch)
+        live.log_artifact(latency_results_batch, name=f"latency_results_batch_{quantisation_type}_{MODEL_TYPE}")
+        print("latency throughput result: ")
+        print(latency_throughput_path)
+        live.log_artifact(latency_throughput_path, name=f"latency_throughput_{quantisation_type}_{MODEL_TYPE}")      
+        
+        live.next_step() 
+
+    print("DVC Live Bericht fertig!")
+    torch.cuda.empty_cache()
 
 
 
-# Todo:
-# wieso ist die accuracy beim onnx modell schlechter als beim pt modell? -> mit eigenem test ist das pt modell genauso schlecht -> werden bei eval die daten vorverarbeitet? JA
-    # daten vorher vorverarbeiten, dann als npz speichern fertig, komisch: immer eine dimension zu viel, mit 1, Lösung: unsqueeze/ein mal expand weniger
-    # , dann nochmal testen fertig
-# bei int 8 ist die accuracy auch schlechter -> aber mir onnxruntime ist sie gut (60%)
-
-
-
-# benutzer für sciebo erstellen - geht das überhupt? Sciebo ist ja mit uni accout verknüpft
-
-# import in neues repo - funktioniert auch nicht
-# (venv) hanna@ceg-420:~/git/Empty$ dvc pull
-# Collecting                                                                                                                                                                                                                                            |0.00 [00:00,    ?entry/s]
-# Fetching
-# Building workspace index                                                                                                                                                                                                                              |0.00 [00:00,    ?entry/s]
-# Comparing indexes                                                                                                                                                                                                                                    |1.00 [00:00, 7.03kentry/s]
-# Applying changes                                                                                                                                                                                                                                      |0.00 [00:00,     ?file/s]
-# Everything is up to date.
-# (venv) hanna@ceg-420:~/git/Empty$ dvc import https://github.com/Hanner123/train-radioml.git outputs/radioml/model_brevitas_1_simpl.onnx
-# Importing 'outputs/radioml/model_brevitas_1_simpl.onnx (https://github.com/Hanner123/train-radioml.git)' -> 'model_brevitas_1_simpl.onnx'
-# ERROR: unexpected error - [Errno 2] No storage files available: 'outputs/radioml/model_brevitas_1_simpl.onnx'                       
-# Having any troubles? Hit us up at https://dvc.org/support, we are always happy to help!
-
-
-# fp 32 power durchschnittlichen verbrauch abziehen - unterschiedliche darstellungen
-# falls 0 nicht mitzählen -> passt, da es die einträge nicht gibt (es gibt keien 0 Einträge)
-
-
-# Todo:
-
-# int 8 modell debuggen mit onnxpasses
-
-#  Das ist sehr wichtig!!!
-# sess_options.graph_optimization_level = (
-#     ort.GraphOptimizationLevel.ORT_DISABLE_ALL
-# )
-# wenn man das beim jetson bei der inferenz mit onnxruntime einfügt, dann ist die accuracy genauso wie beim PC!
-
-# onnxsim
-
-
-# toml file anpassen, dass runner auf data zugreifen kann
-# sudo chown machen
-
-
-# concurrent = 1
-# check_interval = 0
-# connection_max_age = "15m0s"
-# shutdown_timeout = 0
-
-# [session_server]
-#   session_timeout = 1800
-
-# [[runners]]
-#   name = "jetson"
-#   url = "https://gitlab.com"
-#   id = 50444214
-#   token = "glrt-3CB0idaNRWg8OmIjuCYCBm86MQpwOjE5NW1vbwp0OjMKdTppaTVlMBg.01.1j1w3d0oh"
-#   token_obtained_at = 2025-11-06T13:14:07Z
-#   token_expires_at = 0001-01-01T00:00:00Z
-#   executor = "shell"
-#   user = "root"
-#   builds_dir = "/data/gitlab/builds"
-#   cache_dir = "/data/gitlab/cache"
-#   clean_environment = true
-#   [runners.cache]
-#     MaxUploadedArchiveSize = 0
-#     [runners.cache.s3]
-#     [runners.cache.gcs]
-#     [runners.cache.azure]
+# alle models in einem yaml? -> ja, mit auskommentieren
+# dateien umbenennen, dokumentieren
+# fp 32 und fp 16 möglich machen
+# was darf für dla zwischen dequantize & Quantize sein? Sotmax, Matmul, ...?
