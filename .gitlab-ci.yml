@@ -37,9 +37,9 @@ setup-job:
 
   # umgebungsvariablen für unterschiedliche Models
   # hier measure.export für alle skripte starten
-    # - python3 -m measure.export
-    - python3 -m measure.export_vision
-    - python3 measure/data_to_numpy.py    
+    - python3 -m measure.export
+    # - python3 -m measure.export_vision
+    # - python3 measure/data_to_numpy.py    
     #- python3 -m measure.export_language
 
     - dvc remote modify upload user $DVC_Sciebo_Upload_USER
