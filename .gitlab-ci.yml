@@ -2,11 +2,11 @@ stages:
   - setup
 
 variables:
-  # Ort der virtuellen Umgebung
   VENV_PATH: "/data/gitlab/builds/runner/.venv"
 
 default:
   before_script:
+   - export MODEL_TYPE=vision  # radioml, language, vision
    - export CUDA_ROOT=/usr/local/cuda
    - export CFLAGS="-I/usr/local/cuda/include"
    - export CXXFLAGS="-I/usr/local/cuda/include"
@@ -24,39 +24,30 @@ setup-job:
     - python3 -m venv .venv
     - source .venv/bin/activate
     - ls -l /usr/local/cuda/include/cuda.h
+
     - pip install --upgrade pip
-    # - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu126 -q
-
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
-    
-
-
     - pip install -r requirements.txt
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
-    - dvc pull --allow-missing    # damit nicht nach dvc dateien gesucht wird, die ich noch nicht gepusht habe
 
-  # umgebungsvariablen für unterschiedliche Models
-  # hier measure.export für alle skripte starten
-    - python3 -m measure.export
-    # - python3 -m measure.export_vision
-    # - python3 measure/data_to_numpy.py    
-    #- python3 -m measure.export_language
-
+    - dvc pull --allow-missing    
     - dvc remote modify upload user $DVC_Sciebo_Upload_USER
     - dvc remote modify upload password $DVC_Sciebo_Upload_PASSWORD
-    # - dvc exp remove --all      #  damit dvc nicht nach dieser alten datei sucht
 
-    # umgebungsvariablen für unterschiedliche models und quantisierungsmethoden
+    - python3 -m measure.export_wrapper
+
+    - python3 -m measure.measure
+
+    - python3 -m measure.tegrastats
+
+    - python3 -m plots.plots
+
     # - python3 -m measure.mini_measure
-    - MODEL_TYPE=radioml python3 -m measure.measure
-
-    - MODEL_TYPE=radioml python3 -m measure.tegrastats_vision
-
+    # - python3 -m measure.export_vision
+    # - python3 measure/data_to_numpy.py    
+    # - python3 -m measure.export_language
     # - python3 -m measure.tegrastats
- 
-    #- python3 -m measure.accuracy_comparison
-
-    - MODEL_TYPE=radioml python3 -m plots.plots
+    # - python3 -m measure.accuracy_comparison   - wird nicht mehr gebraucht
 
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
@@ -65,19 +56,11 @@ setup-job:
     - chmod 600 ~/.ssh/id_ed25519
     - ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - git config --global user.email "ci@examplee.com"
+    - git config --global user.email "jetson@runner.com"
     - git config --global user.name "CI Runner"
-    - dvc push -r upload  # 14 files pushed
-    - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
-    # - git remote add github git@github.com:iksnagreb/finn-transformers.git
-    # - dvc exp branch wrong-bate experiments
-    # - git push github experiments_branch # problem: new branch needed everytime
 
+    - dvc push -r upload  
+    - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
   tags:
     - jetson
 
-
-# weiter mit vision and language
-
-# ERROR: failed to transfer '2146001cff1853d3639fcfb555baa41d' - [Errno 9] Bad file descriptor: [Errno 9] Bad file descriptor
-# ERROR: unexpected error - [Errno 2] No such file or directory: '/data/gitlab/builds/ggOHaiaWY/0/haka/mirror-finn-transformers/.dvc/cache/files/md5/21/.kBiZzxZ82oHueZhekjmXkg.tmp'

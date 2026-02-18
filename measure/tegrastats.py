@@ -21,10 +21,11 @@ import subprocess
 from dvclive import Live
 
 from measure.latency_throughput_log import latency_throughput
-from radioml.model import Model 
+
 from measure.parse_tegrastats_to_json import parse_tegrastats
 from measure.power_averages_log import power_averages, power_averages_baseline, power_averages_difference, power_averages_baseline_inference
 from measure.throughput_power import power_throughput
+from torchvision import datasets, transforms
 # import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # tensorrt, datasets(hugging face), pycuda
@@ -32,6 +33,25 @@ from measure.throughput_power import power_throughput
 
 FP16 = os.environ.get("FP16", "0") == "1"
 INT8 = os.environ.get("INT8", "0") == "1"
+
+MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
+
+if MODEL_TYPE not in ("radioml", "language", "vision"):
+    print("Defaulting Model Type to vision model.")
+    MODEL_TYPE = "vision"
+
+if MODEL_TYPE == "vision":
+    from vision.model import Model
+elif MODEL_TYPE == "radioml":
+    from radioml.model import Model
+elif MODEL_TYPE == "language":
+    from language.model import Model
+
+with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
+    cfg = yaml.safe_load(f)
+
+bits = cfg["model"]["embedding"].get("bits", 0)
+INT8 = (bits == 8)
 
 if FP16:
     dtype = torch.float16
@@ -46,6 +66,17 @@ else:
 
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
+CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
+CIFAR10_PATH_NPZ = R"/data/gitlab/cifar-10-batches-py/cifar10.npz"
+LANG_PATH_NPZ = R"/data/gitlab/language.npz"
+
+if MODEL_TYPE == "radioml":
+    DATA_PATH_NPZ = RADIOML_PATH_NPZ
+if MODEL_TYPE == "vision":
+    DATA_PATH_NPZ = CIFAR10_PATH_NPZ
+if MODEL_TYPE == "language":
+    DATA_PATH_NPZ = LANG_PATH_NPZ
+
 
 
 def to_device(data,device):
@@ -84,7 +115,7 @@ def parse_shape(shape, batch_value):
     """Ersetzt 'batch_size' durch batch_value in der shape-Liste."""
     return tuple(
         batch_value if d == "batch_size"
-        else 1 if (i == 1 and INT8)  # zweite Dimension immer 1 im INT8-Modus
+        else 1 if (i == 1 and INT8 and MODEL_TYPE=="radioml")
         else batch_value if (i == 0 and INT8)
         else 128 if d == "sequence_length"
         else 64 if d == "Muloutput_dim_2"
@@ -118,10 +149,11 @@ def get_model_io_info(model_path):
     Liest Input- und Output-Infos aus einem ONNX-Modell.
     Gibt Listen von Dictionaries mit Name, Shape und Dtype zurück.
     """
+    # vielleicht nicht ort nutzen (nicht kompatibel mit brevitas ohne qcdq)
     sess_options = ort.SessionOptions()
 
     sess_options.intra_op_num_threads = 8
-    session = ort.InferenceSession(model_path, sess_options)
+    session = ort.InferenceSession(model_path, sess_options)    # problem for brevitas model
     input_info = [
         {
             "name": inp.name,
@@ -142,14 +174,14 @@ def get_model_io_info(model_path):
 
 
 
-def create_test_dataloader(RADIOML_PATH_NPZ, batch_size):
+def create_test_dataloader(DATA_PATH_NPZ, batch_size):
     """
     Erstellt den DataLoader für die Testdaten.
-    :param RADIOML_PATH: Pfad zur Testdaten-Datei.
+    :param CIFAR10_PATH: Pfad zur Testdaten-Datei.
     :param batch_size: Die Batchgröße.
     :return: DataLoader-Objekt für die Testdaten.
     """
-    data = np.load(RADIOML_PATH_NPZ)
+    data = np.load(DATA_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
     if len(input_info) == 2:
@@ -413,8 +445,8 @@ def stop_tegrastats(proc: subprocess.Popen):
     except subprocess.TimeoutExpired:
         proc.kill()
 
-def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
-    test_loader = create_test_dataloader(RADIOML_PATH_NPZ, batch_size)
+def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
+    test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
 
@@ -475,20 +507,21 @@ if __name__ == "__main__":
 
     
     # if FP16:
-    #     params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_16FP")
+    #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_16FP")
     # elif INT8:
-    #     params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_INT8_brevitas")
+    #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_INT8_brevitas")
     # else:
-    #     params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_32FP")
+    #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_32FP")
 
     
 
     # batch_sizes = params["batch_sizes"]
 
     batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+    batch_sizes = [1, 2, 4]
 
 
-    onnx_model_path = "outputs/radioml/model_dynamic_batchsize.onnx"
+    onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
 
     tegrastats_logs = []
 
@@ -498,33 +531,35 @@ if __name__ == "__main__":
         quant_type = "INT8"
     else:
         quant_type = "FP32"
-    energy_base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"energy_metrics" / quant_type
-    throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type
+
+    energy_base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"energy_metrics" / quant_type
+    throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / quant_type
     print("Energy Path: ", energy_base_path)
     print("Throughput Path: ", throughput_base_path)
 
     for batch_size in batch_sizes:
+        print("Batch size: ", batch_size)
         if INT8:
-            onnx_model_path = f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
+            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx" 
         input_info, output_info = get_model_io_info(onnx_model_path)
         tegrastats_log = energy_base_path / f"tegrastats_{batch_size}.log"
         timestamps = energy_base_path / f"timestamps_{batch_size}.json"
-        accuracy = run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps)
+        accuracy = run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps)
         print(f"Accuracy for batch size {batch_size}: {accuracy:.4f}")
 
         tegrastats_logs.append((tegrastats_log, batch_size))
 
     parse_tegrastats(tegrastats_logs, energy_base_path, throughput_base_path)
     
-    energy_consumption_file = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "energy_consumption.json" 
+    energy_consumption_file = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / quant_type / "energy_consumption.json" 
     power_averages_file = energy_base_path / "power_averages.json"
     power_averages_file_baseline = energy_base_path / "power_averages_baseline.json"
     power_averages_difference_file = energy_base_path / "power_averages_difference.json"
-    power_averages_file_baseline_inference = Path(__file__).resolve().parent.parent / "outputs" / "radioml" /"plot" / quant_type / "power_averages_baseline_inference.json"
+    power_averages_file_baseline_inference = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / quant_type / "power_averages_baseline_inference.json"
 
-    power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type)
-    power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type)
-    power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type)
+    power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type, MODEL_TYPE)
+    power_averages_baseline(batch_sizes, power_averages_file_baseline, energy_consumption_file, quant_type, MODEL_TYPE)
+    power_averages_difference(batch_sizes, power_averages_file , power_averages_file_baseline, power_averages_difference_file, quant_type, MODEL_TYPE)
 
     power_averages_baseline_inference(power_averages_file_baseline, power_averages_file, power_averages_file_baseline_inference)
 
@@ -542,12 +577,12 @@ if __name__ == "__main__":
         live.log_artifact(energy_consumption_file, name="energy_consumption")
 
         # noch zusammenfassen
-        #live.log_artifact(power_averages_file, name="power_averages")
-        live.log_artifact(power_averages_file_baseline, name="power_averages_baseline")
+        live.log_artifact(power_averages_file, name=f"power_averages_{quant_type}_{MODEL_TYPE}")
+        live.log_artifact(power_averages_file_baseline, name=f"power_averages_baseline_{quant_type}_{MODEL_TYPE}")
 
-        live.log_artifact(power_averages_difference_file, name="power_averages_difference")
-        live.log_artifact(power_throughput_path, name="power_throughput")
-        live.log_artifact(power_path, name="power_averages")
+        live.log_artifact(power_averages_difference_file, name=f"power_averages_difference_{quant_type}_{MODEL_TYPE}")
+        live.log_artifact(power_throughput_path, name=f"power_throughput_{quant_type}_{MODEL_TYPE}")
+        live.log_artifact(power_path, name=f"power_averages_{quant_type}_{MODEL_TYPE}")
         
         live.next_step() 
 
