@@ -322,18 +322,20 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
             raise RuntimeError("ONNX Parsing failed")
 
     config = builder.create_builder_config()
-    
+    print("config created")
     config.default_device_type = trt.DeviceType.DLA # DLA nutzen
+    print("use dla")
     config.DLA_core = 0  # 0 oder 1
     config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
+    print("fallback: gpu")
 
     config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
 
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
     if INT8 == True:
-        print("int 8 builder flag gesetzt")
         config.set_flag(trt.BuilderFlag.INT8)
+        print("int 8 builder flag gesetzt")
 
     if INT8 == False:       # no optimization for DLA
         profile = builder.create_optimization_profile()

@@ -438,11 +438,8 @@ def start_tegrastats(logfile_path: Path):
     return proc
 
 def stop_tegrastats(proc: subprocess.Popen):
-    proc.terminate()  # schickt SIGTERM an tegrastats
-    try:
-        proc.wait(timeout=1)
-    except subprocess.TimeoutExpired:
         proc.kill()
+        print("killed tegrastats process")
 
 def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
     test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size)
