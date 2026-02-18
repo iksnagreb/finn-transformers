@@ -61,6 +61,7 @@ setup-job:
 
     - dvc push -r upload  
     - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
+    - ssh-agent -k
   tags:
     - jetson
 
