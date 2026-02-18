@@ -17,3 +17,4 @@ builds/
 outputs/**/*.json
 outputs/**/*.log
 outputs/**/*.md
+!outputs/language/tokenizer/tokenizer_config.json
