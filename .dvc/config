@@ -3,10 +3,10 @@
 ['remote "upload"']
     url = webdavs://uni-paderborn.sciebo.de/public.php/webdav
     user = DptWnPajKaa3gEB
+    password = 8XtFGJgfqM
 ['remote "public"']
     url = webdavs://uni-paderborn.sciebo.de/public.php/webdav
     user = PcAbqNZSirnFKzH
     password = ""
 ['remote "sciebo"']
     url = webdavs://uni-paderborn.sciebo.de/remote.php/webdav
-
