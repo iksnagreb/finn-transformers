@@ -64,7 +64,7 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
 
     # Preprocess evaluation dataset as configured (context length is allowed to
     # deviate from training)
-    export_data = preprocess(export_data, tokenizer, context_length)
+    export_data = preprocess(export_data, tokenizer, context_length)    # wird gesplitted falls seq. len zu lang, aber nicht gepadded
 
     print(export_data.column_names)
 
@@ -72,68 +72,49 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
     # maybe upload that to dvc
 
 
-    max_len = 256  # Länge auf die alle Sequenzen gekürzt werden
-    input_ids = []
-    token_type_ids = []
-    attention_mask = []
+    # max_len = 256  # Länge auf die alle Sequenzen gekürzt werden
+    # input_ids = []
+    # token_type_ids = []
+    # attention_mask = []
 
-    expected_len = context_length  # oder max_len, je nach Logik
-    too_long = 0
-    too_short = 0
+    # for i in range(len(export_data["input_ids"])):
 
-    for i in range(len(export_data["input_ids"])):
-        seq_len = len(export_data["input_ids"][i])
-        if seq_len > expected_len:
-            print(f"[!] Sequence {i} too long: {seq_len} (expected {expected_len})")
-            too_long += 1
-        elif seq_len < expected_len:
-            print(f"[!] Sequence {i} too short: {seq_len} (expected {expected_len})")
-            too_short += 1
+    #     ids = export_data["input_ids"][i]
+    #     tt_ids = export_data["token_type_ids"][i]
+    #     attn = export_data["attention_mask"][i]
 
-    print(f"\nSummary:")
-    print(f"Too long : {too_long}")
-    print(f"Too short: {too_short}")
+    #     # pad mit 0 falls kürzer
+    #     pad_len = max_len - len(ids)
+    #     ids = ids + [0] * pad_len
+    #     tt_ids = tt_ids + [0] * pad_len
+    #     attn = attn + [0] * pad_len
 
-    for i in range(len(export_data["input_ids"])):
-        # ids = export_data["input_ids"][i][:max_len]  # kürzen
-        # tt_ids = export_data["token_type_ids"][i][:max_len]
-        # attn = export_data["attention_mask"][i][:max_len]
+    #     input_ids.append(ids)
+    #     token_type_ids.append(tt_ids)
+    #     attention_mask.append(attn)
 
-        ids = export_data["input_ids"][i]
-        tt_ids = export_data["token_type_ids"][i]
-        attn = export_data["attention_mask"][i]
+    # # in NumPy-Arrays konvertieren
+    # input_ids = np.array(input_ids, dtype=np.int32)
+    # token_type_ids = np.array(token_type_ids, dtype=np.int32)
+    # attention_mask = np.array(attention_mask, dtype=np.int32)
 
-        # pad mit 0 falls kürzer
-        pad_len = max_len - len(ids)
-        ids = ids + [0] * pad_len
-        tt_ids = tt_ids + [0] * pad_len
-        attn = attn + [0] * pad_len
-
-        input_ids.append(ids)
-        token_type_ids.append(tt_ids)
-        attention_mask.append(attn)
-
-    # in NumPy-Arrays konvertieren
-    input_ids = np.array(input_ids, dtype=np.int32)
-    token_type_ids = np.array(token_type_ids, dtype=np.int32)
-    attention_mask = np.array(attention_mask, dtype=np.int32)
-
-    # speichern
-    np.savez(R"/data/gitlab/language",
-            input_ids=input_ids,
-            token_type_ids=token_type_ids,
-            attention_mask=attention_mask)
+    # # speichern
+    # np.savez(R"/data/gitlab/language",
+    #         input_ids=input_ids,
+    #         token_type_ids=token_type_ids,
+    #         attention_mask=attention_mask)
 
 
-    print("Dataset gespeichert: /data/gitlab/language.npz")
-    print("Shapes:", input_ids.shape, token_type_ids.shape, attention_mask.shape)
+    # print("Dataset gespeichert: /data/gitlab/language.npz")
+    # print("Shapes:", input_ids.shape, token_type_ids.shape, attention_mask.shape)
 
 
 
     # Data collator turning sample sequences of tokens into batches of masked
     # and padded tokens as PyTorch tensors, used by each DataLoader worker
+    # added padding
     collator = DataCollatorForLanguageModeling(
-        tokenizer, mlm=mlm, mlm_probability=mlm_probability
+        tokenizer, mlm=mlm, mlm_probability=mlm_probability, pad_to_multiple_of=256
     )
 
     def collate(samples):
@@ -142,15 +123,35 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
         batch = collator(samples)
         # Extract masked input tokens and target labels and rearrange into
         # batch-first layout (collator yields sequence-first)
-        return batch["input_ids"], batch["labels"]
+        return batch["input_ids"], batch["attention_mask"], batch["labels"]
 
     # Create a batched and shuffled data loader for the preprocessed dataset
     export_data_load = DataLoader(
         export_data, batch_size, collate_fn=collate, shuffle=True
     )
 
+    print("Token type ids benötigt?")
+    print(model.forward.__code__.co_varnames)
+
     # Sample the first batch from the export dataset
-    inp, cls = next(iter(export_data_load))
+    inp, att, cls = next(iter(export_data_load))
+
+    input_ids = inp.numpy()
+    attention_mask = att.numpy()
+    labels = cls.numpy()
+
+    # in NumPy-Arrays konvertieren
+    input_ids = np.array(input_ids, dtype=np.int32)
+    attention_mask = np.array(attention_mask, dtype=np.int32)
+
+    # speichern
+    np.savez(R"/data/gitlab/language",
+            input_ids=input_ids,
+            attention_mask=attention_mask)
+
+
+    print("Dataset gespeichert: /data/gitlab/language.npz")
+    print("Shapes:", input_ids.shape, token_type_ids.shape, attention_mask.shape)
 
     # Also save the model output predictions (probabilities)
     with torch.no_grad():
@@ -214,7 +215,7 @@ if __name__ == "__main__":
     # Seed all RNGs
     seed(params["seed"])
     # Load the already trained tokenizer
-    tokenizer = AutoTokenizer.from_pretrained("outputs/language/tokenizer")
+    tokenizer = AutoTokenizer.from_pretrained("outputs/language/tokenizer") #padding?
 
     # Create a new model instance according to the configuration (vocabulary
     # size from the tokenizer in case this deviates from the configured)
