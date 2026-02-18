@@ -77,10 +77,31 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
     token_type_ids = []
     attention_mask = []
 
+    expected_len = context_length  # oder max_len, je nach Logik
+    too_long = 0
+    too_short = 0
+
     for i in range(len(export_data["input_ids"])):
-        ids = export_data["input_ids"][i][:max_len]  # kürzen
-        tt_ids = export_data["token_type_ids"][i][:max_len]
-        attn = export_data["attention_mask"][i][:max_len]
+        seq_len = len(export_data["input_ids"][i])
+        if seq_len > expected_len:
+            print(f"[!] Sequence {i} too long: {seq_len} (expected {expected_len})")
+            too_long += 1
+        elif seq_len < expected_len:
+            print(f"[!] Sequence {i} too short: {seq_len} (expected {expected_len})")
+            too_short += 1
+
+    print(f"\nSummary:")
+    print(f"Too long : {too_long}")
+    print(f"Too short: {too_short}")
+
+    for i in range(len(export_data["input_ids"])):
+        # ids = export_data["input_ids"][i][:max_len]  # kürzen
+        # tt_ids = export_data["token_type_ids"][i][:max_len]
+        # attn = export_data["attention_mask"][i][:max_len]
+
+        ids = export_data["input_ids"][i]
+        tt_ids = export_data["token_type_ids"][i]
+        attn = export_data["attention_mask"][i]
 
         # pad mit 0 falls kürzer
         pad_len = max_len - len(ids)
