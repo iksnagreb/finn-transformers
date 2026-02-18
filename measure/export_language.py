@@ -183,7 +183,7 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
             export_path=f"outputs/language/model_brevitas_{batch_size}.onnx"
             simplified_path=f"outputs/language/model_brevitas_{batch_size}_simple.onnx"
 
-            # uint-> int
+            # uint-> int ?
             export_onnx_qcdq(
                 model, 
                 (inp,),

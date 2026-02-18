@@ -32,7 +32,6 @@ from torchvision import datasets, transforms
 
 
 FP16 = os.environ.get("FP16", "0") == "1"
-INT8 = os.environ.get("INT8", "0") == "1"
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
 
@@ -53,12 +52,12 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
 
-if FP16:
-    dtype = torch.float16
-    print("FP16 enabled")
-elif INT8:
+if INT8:
     dtype = torch.int8
     print("INT8 enabled")
+elif FP16:
+    dtype = torch.float16
+    print("FP16 enabled")
 else:
     dtype = torch.float32
     print("FP32")
@@ -525,10 +524,11 @@ if __name__ == "__main__":
 
     tegrastats_logs = []
 
-    if FP16:
-        quant_type = "FP16"
-    elif INT8:
+
+    if INT8:
         quant_type = "INT8"
+    elif FP16:
+        quant_type = "FP16"
     else:
         quant_type = "FP32"
 

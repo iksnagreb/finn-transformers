@@ -25,7 +25,6 @@ from torchvision import datasets, transforms
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # tensorrt, datasets(hugging face), pycuda
 FP16 = os.environ.get("FP16", "0") == "1"
-INT8 = os.environ.get("INT8", "0") == "1"
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
 if MODEL_TYPE != "radioml" and MODEL_TYPE != "language" and MODEL_TYPE != "vision":
@@ -41,15 +40,12 @@ INT8 = (bits == 8)
 
 
 # falls INT8 false: FP16 und FP32 testen
-# Modell mit umgebungsvariabe wählen:
-
-
-if FP16:
-    dtype = torch.float16
-    print("FP16 enabled")
-elif INT8:
+if INT8:
     dtype = torch.int8
     print("INT8 enabled")
+elif FP16:
+    dtype = torch.float16
+    print("FP16 enabled")
 else:
     dtype = torch.float32
     print("FP32")

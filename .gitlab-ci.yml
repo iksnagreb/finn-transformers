@@ -7,6 +7,7 @@ variables:
 default:
   before_script:
    - export MODEL_TYPE=language  # radioml, language, vision
+   - export FP16=false # true or false, only relevant if the model is not quantized already
    - export CUDA_ROOT=/usr/local/cuda
    - export CFLAGS="-I/usr/local/cuda/include"
    - export CXXFLAGS="-I/usr/local/cuda/include"
@@ -62,6 +63,9 @@ setup-job:
     - dvc push -r upload  
     - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
     - ssh-agent -k
+    - echo "=== PROCESSES ==="
+    - ps -ef
+    - echo "=== DONE ==="
   tags:
     - jetson
 
