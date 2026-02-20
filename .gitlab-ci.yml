@@ -67,10 +67,6 @@ setup-job:
     - echo "=== PROCESSES ==="
     - ps -ef
     - echo "=== DONE ==="
-    - sudo killall tegrastats
-    - echo "=== PROCESSES ==="
-    - ps -ef
-    - echo "=== DONE ==="
   tags:
     - jetson
 
