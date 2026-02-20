@@ -517,7 +517,6 @@ if __name__ == "__main__":
     # batch_sizes = params["batch_sizes"]
 
     batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
-    batch_sizes = [1, 2, 4]
 
 
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"

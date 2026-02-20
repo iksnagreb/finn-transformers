@@ -97,7 +97,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     # Brevitas 8Bit export - problem: nicht möglich mit dynamischen batch-sizes, 
     # wenn man es im nachinein patched sind die reshapes noch statisch -> funktioniert nicht mit tensorrt
 
-    for batch_size in [1, 2, 4]:
+    for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
         dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
         # test: wird das Ergebnis (Accuracy) besser mit echten daten?
         export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)

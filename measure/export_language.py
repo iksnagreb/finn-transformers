@@ -172,7 +172,7 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
         seq_len = tokens.shape[1]
 
 
-        for batch_size in [1, 2, 4, 8]:
+        for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]: 
 
             # test: wird das Ergebnis (Accuracy) besser mit echten daten?
             export_data_batch= DataLoader(

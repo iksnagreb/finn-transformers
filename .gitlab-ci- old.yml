@@ -201,3 +201,13 @@ build:
 
 
 # var ordner hat 17 GB!
+
+
+
+
+    # - python3 -m measure.mini_measure
+    # - python3 -m measure.export_vision
+    # - python3 measure/data_to_numpy.py    
+    # - python3 -m measure.export_language
+    # - python3 -m measure.tegrastats
+    # - python3 -m measure.accuracy_comparison   - wird nicht mehr gebraucht

@@ -128,7 +128,7 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
     if INT8 == True:
         print("quantisation -> export with qcdq")
 
-        for batch_size in [1, 2, 4]:
+        for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
             dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
             # test: wird das Ergebnis (Accuracy) besser mit echten daten?
             export_data = DataLoader(dataset, batch_size=batch_size)
