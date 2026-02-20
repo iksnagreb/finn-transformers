@@ -19,7 +19,7 @@ import dvc.api
 from datetime import datetime
 import subprocess
 from dvclive import Live
-
+import signal
 from measure.latency_throughput_log import latency_throughput
 
 from measure.parse_tegrastats_to_json import parse_tegrastats
