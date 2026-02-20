@@ -434,11 +434,14 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 def start_tegrastats(logfile_path: Path):
     # tegrastats im Hintergrund starten, Ausgabe in Logdatei
     logfile_path.parent.mkdir(parents=True, exist_ok=True)
-    proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '1000'], stdout=open(logfile_path, 'w'))
+    # proc = subprocess.Popen(['sudo', 'tegrastats', '--interval', '1000'], stdout=open(logfile_path, 'w'))
+    proc = subprocess.Popen(['tegrastats', '--interval', '1000'], stdout=open(logfile_path, 'w'),
+    preexec_fn=os.setsid)  # Startet den Prozess in einer neuen Session, damit er leichter gestoppt werden kann
     return proc
 
 def stop_tegrastats(proc: subprocess.Popen):
-        proc.kill()
+        # proc.kill()
+        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
         print("killed tegrastats process")
 
 def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
