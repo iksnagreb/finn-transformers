@@ -61,7 +61,7 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
     # Load the language modeling dataset splits as configured (training and
     # validation dataset are not used here)
     _, _, export_data = get_datasets(**dataset)
-
+    export_data = export_data.shuffle(seed=42).select(range(10000))
     # Preprocess evaluation dataset as configured (context length is allowed to
     # deviate from training)
     export_data = preprocess(export_data, tokenizer, context_length)
@@ -88,7 +88,7 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
 
     def safe_dataset_to_npz(export_data_load):
         # Sample the first batch from the export dataset
-        max_samples = 3000
+        max_samples = 10000
         all_inputs = []
         all_labels = []
 
@@ -104,19 +104,16 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
         input_ids = np.concatenate(all_inputs, axis=0)[:max_samples]
         labels = np.concatenate(all_labels, axis=0)[:max_samples]
         # speichern
-        np.savez(R"/home/hanna/git/finn-transformers/data/language.npz",
+        np.savez(R"/data/gitlab/language.npz",
                 input_ids=input_ids,
                 labels=labels)
-        print("Dataset gespeichert: /home/hanna/git/finn-transformers/data/language.npz")
+        print("Dataset gespeichert: /data/gitlab/language.npz")
         print("Shapes:", input_ids.shape, labels.shape)
     
     safe_dataset_to_npz(export_data_load)
-    # Also save the model output predictions (probabilities)
     
     inp, cls = next(iter(export_data_load))
 
-
-    # Also save the model output predictions (probabilities)
     with torch.no_grad():
         out = model(inp)
 
