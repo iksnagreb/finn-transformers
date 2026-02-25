@@ -52,7 +52,7 @@ INT8 = (bits == 8)
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
-def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):  # noqa
+def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     from brevitas.export import export_qonnx, export_onnx_qcdq
     # Do the forward pass for generating verification data and tracing the model
     # for export on CPU only
@@ -192,18 +192,12 @@ if __name__ == "__main__":
     print("Created model instance.")
     for key, value in params["model"].items():
         print(f"{key}: {value}")
-    print("int 8:")
-    # for key, value in params["model_int8"].items():
-    #     print(f"{key}: {value}")
-    model_int8 = Model(**params["model"])
-    print("Created model int8 instance.")
     
     # Load the trained model parameters
-    model.load_state_dict(torch.load("outputs/vision/model.pt"))
-    print("loaded")
+    # model.load_state_dict(torch.load("outputs/vision/model.pt"))
+    model.load_state_dict(torch.load("outputs/vision/model_.pt"))
 
     model = patch_missing_affine_norms(model)
-    # model_int8.load_state_dict(torch.load("outputs/radioml/model_int8.pt")) 
     # Pass the model and the export configuration to the evaluation loop
     params["export"].pop("format", None)
-    export(model, model_int8, dataset=params["dataset"], **params["export"])
+    export(model, dataset=params["dataset"], **params["export"])
