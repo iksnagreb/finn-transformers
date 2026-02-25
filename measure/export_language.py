@@ -86,24 +86,35 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
     )
 
 
+    def safe_dataset_to_npz(export_data_load):
+        # Sample the first batch from the export dataset
+        max_samples = 3000
+        all_inputs = []
+        all_labels = []
 
-    # Sample the first batch from the export dataset
+        num_collected = 0
+        for inp, cls in export_data_load:
+            all_inputs.append(inp.numpy())
+            all_labels.append(cls.numpy())
+            num_collected += inp.shape[0]
+            if num_collected >= max_samples:
+                break
+
+        # Concatenate batches
+        input_ids = np.concatenate(all_inputs, axis=0)[:max_samples]
+        labels = np.concatenate(all_labels, axis=0)[:max_samples]
+        # speichern
+        np.savez(R"/home/hanna/git/finn-transformers/data/language.npz",
+                input_ids=input_ids,
+                labels=labels)
+        print("Dataset gespeichert: /home/hanna/git/finn-transformers/data/language.npz")
+        print("Shapes:", input_ids.shape, labels.shape)
+    
+    safe_dataset_to_npz(export_data_load)
+    # Also save the model output predictions (probabilities)
+    
     inp, cls = next(iter(export_data_load))
 
-    input_ids = inp.numpy()
-    labels = cls.numpy()
-
-    # in NumPy-Arrays konvertieren
-    input_ids = np.array(input_ids, dtype=np.int32)
-    labels = np.array(labels, dtype=np.int32)
-
-    # speichern
-    np.savez(R"/data/gitlab/language",
-            input_ids=input_ids,
-            labels=labels)
-
-    print("Dataset gespeichert: /data/gitlab/language.npz")
-    print("Shapes:", input_ids.shape, labels.shape)
 
     # Also save the model output predictions (probabilities)
     with torch.no_grad():
@@ -181,43 +192,3 @@ if __name__ == "__main__":
     export(model, dataset=params["dataset"], tokenizer=tokenizer,
            **params["export"])
 
-
-
-    # maybe upload that to dvc
-
-
-    # max_len = 256  # Länge auf die alle Sequenzen gekürzt werden
-    # input_ids = []
-    # token_type_ids = []
-    # attention_mask = []
-
-    # for i in range(len(export_data["input_ids"])):
-
-    #     ids = export_data["input_ids"][i]
-    #     tt_ids = export_data["token_type_ids"][i]
-    #     attn = export_data["attention_mask"][i]
-
-    #     # pad mit 0 falls kürzer
-    #     pad_len = max_len - len(ids)
-    #     ids = ids + [0] * pad_len
-    #     tt_ids = tt_ids + [0] * pad_len
-    #     attn = attn + [0] * pad_len
-
-    #     input_ids.append(ids)
-    #     token_type_ids.append(tt_ids)
-    #     attention_mask.append(attn)
-
-    # # in NumPy-Arrays konvertieren
-    # input_ids = np.array(input_ids, dtype=np.int32)
-    # token_type_ids = np.array(token_type_ids, dtype=np.int32)
-    # attention_mask = np.array(attention_mask, dtype=np.int32)
-
-    # # speichern
-    # np.savez(R"/data/gitlab/language",
-    #         input_ids=input_ids,
-    #         token_type_ids=token_type_ids,
-    #         attention_mask=attention_mask)
-
-
-    # print("Dataset gespeichert: /data/gitlab/language.npz")
-    # print("Shapes:", input_ids.shape, token_type_ids.shape, attention_mask.shape)

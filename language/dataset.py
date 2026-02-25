@@ -30,11 +30,12 @@ def preprocess(dataset, tokenizer, context_length):
     # Splits any sequence into non overlapping chunks of context length,
     # allowing the last chunk to be shorter
     def split(sequence):
-        return np.array_split(
-            sequence, range(context_length, len(sequence), context_length)
-        )
-        # # Alternative: Overlapping sliding windows
-        # sliding_window_view(value, context_length)
+        full_chunks = []
+        for start in range(0, len(sequence), context_length):
+            end = start + context_length
+            if end <= len(sequence):  # do not allow the last chunk to be shorter
+                full_chunks.append(sequence[start:end])
+        return full_chunks
 
     # Preprocess the dataset: Tokenize and split long sequences into chunks of
     # the maximum sequence length (context length)
