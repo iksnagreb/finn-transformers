@@ -78,7 +78,6 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
         batch = collator(samples)
         # Extract masked input tokens and target labels and rearrange into
         # batch-first layout (collator yields sequence-first)
-        print(batch.keys())
         return batch["input_ids"], batch["labels"]
 
     # Create a batched and shuffled data loader for the preprocessed dataset

@@ -378,6 +378,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     total_predictions = 0
     correct_predictions = 0
     do_prints=True
+    print("for batch in test_loader:", len(test_loader))
 
     for batch in test_loader: 
         # je nach Aufbau des Modells: mit Attention Mask oder ohne
