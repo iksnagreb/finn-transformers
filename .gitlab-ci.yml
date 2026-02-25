@@ -1,5 +1,5 @@
 stages:
-  - setup
+  - measure
 
 variables:
   VENV_PATH: "/data/gitlab/builds/runner/.venv"
@@ -7,7 +7,7 @@ variables:
 default:
   before_script:
    - export MODEL_TYPE=language  # radioml, language, vision
-   - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decid es if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
+   - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
 
    - export CUDA_ROOT=/usr/local/cuda
    - export CFLAGS="-I/usr/local/cuda/include"
@@ -19,12 +19,12 @@ default:
    - export LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
    - export PIP_CACHE_DIR=$CI_PROJECT_DIR/.cache/pip
 
-setup-job:
-  stage: setup
+measure-job:
+  stage: measure
   script:
     - mkdir -p $PIP_CACHE_DIR
-    - python3 -m venv .venv
-    - source .venv/bin/activate
+    - python3 -m venv .venv   #   - python3 -m venv $VENV_PATH
+    - source .venv/bin/activate   #   - source $VENV_PATH/bin/activate
     - ls -l /usr/local/cuda/include/cuda.h
 
     - pip install --upgrade pip
@@ -43,7 +43,6 @@ setup-job:
     - python3 -m measure.tegrastats
 
     - python3 -m plots.plots
-
 
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
