@@ -36,6 +36,10 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
+if INT8:
+    print("Export mit INT8 Quantisierung")
+else:
+    print("Export ohne Quantisierung")
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
@@ -196,7 +200,7 @@ if __name__ == "__main__":
     # size from the tokenizer in case this deviates from the configured)
     model = Model(**params["model"], vocab_size=tokenizer.vocab_size)
     # Load the trained model parameters
-    model.load_state_dict(torch.load("outputs/language/model.pt"))      # doesn't work for not quantized params
+    model.load_state_dict(torch.load("outputs/language/model.pt"))      # doesn't work for not quantized params -> model.pt is not te correct unquantized one
     # Prevent export and streamlining issues for missing affine normalization
     # parameters
     model = patch_missing_affine_norms(model)
