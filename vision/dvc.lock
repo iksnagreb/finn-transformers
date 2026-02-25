@@ -62,17 +62,17 @@ stages:
             - 4
             - 4
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -192,17 +192,17 @@ stages:
             - 4
             - 4
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -293,17 +293,17 @@ stages:
             - 4
             - 4
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -321,11 +321,11 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 09edab29cfce722135b71acdd1a9ae92
-      size: 1933926
+      md5: cd11d2590a35427367898cdcafd669ed
+      size: 3662919
     - path: outputs/vision/out.npy
       hash: md5
-      md5: aa65fee62b938b61d128d19a5a93772c
+      md5: e3cd90c46bf28de408cdc67e094b9bf7
       size: 168
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c vision/passes.yaml -o 
@@ -345,11 +345,11 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 09edab29cfce722135b71acdd1a9ae92
-      size: 1933926
+      md5: cd11d2590a35427367898cdcafd669ed
+      size: 3662919
     - path: outputs/vision/out.npy
       hash: md5
-      md5: aa65fee62b938b61d128d19a5a93772c
+      md5: e3cd90c46bf28de408cdc67e094b9bf7
       size: 168
     params:
       vision/passes.yaml:
