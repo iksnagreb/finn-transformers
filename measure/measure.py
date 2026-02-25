@@ -452,7 +452,10 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         if accuracy_flag:
             pred = output.argmax(axis=-1) 
             correct = (pred == yb.numpy()).sum()
-            total = len(yb)
+            if MODEL_TYPE == "language":
+                total = np.prod(yb.shape)
+            else:
+                total = yb.shape[0]
             correct_predictions += correct
             total_predictions += total
 

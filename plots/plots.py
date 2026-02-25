@@ -260,7 +260,6 @@ def energy_consumption_plot(json_path, output_path):
 
     # plt.show()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print("save: ", output_path)
 
 
 def power_bar_plot(json_path, output_path):

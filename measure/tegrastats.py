@@ -418,7 +418,10 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         if accuracy_flag:
             pred = output.argmax(axis=-1)  # [batch, seq_len]
             correct = (pred == yb.numpy()).sum()
-            total = len(yb)
+            if MODEL_TYPE == "language":
+                total = np.prod(yb.shape)
+            else:
+                total = yb.shape[0]
             correct_predictions += correct
             total_predictions += total
             
@@ -426,6 +429,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     accuracy = 0
     if accuracy_flag:
         accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0
+        print("correct: ", correct_predictions, "total: ", total_predictions)
 
 
     return 0, 0, 0, accuracy
@@ -485,6 +489,8 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
     timestamp = time.time()
     end_iso = datetime.fromtimestamp(timestamp).isoformat(timespec='milliseconds')
 
+    print("Endzeit:: ", time.time())
+
     time.sleep(10)
     
 
@@ -505,7 +511,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
 if __name__ == "__main__":
 
     
-    # if FP16:
+    # if FP16: 
     #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_16FP")
     # elif INT8:
     #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_INT8_brevitas")
