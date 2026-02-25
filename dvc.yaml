@@ -13,7 +13,7 @@ artifacts:
     path: outputs/radioml/plot/accuracy.json
 # tegrastats
   energy_consumption:
-    path: outputs/radioml/plot/FP32/energy_consumption.json
+    path: outputs/language/plot/FP32/energy_consumption.json
   power_averages_difference:
     path: outputs/radioml/plot/FP32/power_averages_difference.json
   power_throughput:
@@ -39,3 +39,19 @@ artifacts:
 
 
     # alle artifacts hier hinzugefügt - aber eigentlich sollte push experiments reichen (mit korrektem remote)
+  throughput_results_FP32_language:
+    path: outputs/language/plot/FP32/throughput_results.json
+  latency_results_batch_FP32_language:
+    path: outputs/language/plot/FP32/latency_results_batch.json
+  latency_throughput_FP32_language:
+    path: outputs/language/plot/FP32/latency_throughput.json
+  power_averages_FP32_language:
+    path: outputs/language/energy_metrics/FP32/power_averages.json
+  power_averages_baseline_FP32_language:
+    path: outputs/language/energy_metrics/FP32/power_averages_baseline.json
+  power_averages_difference_FP32_language:
+    path: outputs/language/energy_metrics/FP32/power_averages_difference.json
+  power_throughput_FP32_language:
+    path: outputs/language/plot/FP32/power_throughput.json
+metrics:
+- dvclive/metrics.json
