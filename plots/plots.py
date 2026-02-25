@@ -21,6 +21,8 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
+FP16 = os.environ.get("FP16", "0") == "1"
+
 
 def throughput_batch_plot(json_path, output_path):
     with open(json_path, "r") as f:  # Name deiner Datei anpassen
@@ -330,6 +332,8 @@ def power_bar_plot(json_path, output_path):
 if __name__ == "__main__":
     if INT8 == True:
         quant_type = "INT8"
+    elif FP16 == True:
+        quant_type = "FP16"
     else:
         quant_type = "FP32"
 

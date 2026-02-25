@@ -224,9 +224,8 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size):
             pin_memory=True,
             drop_last=True
         )
-
-
     num_samples = len(test_dataset)
+    print(f"Anzahl Test-Samples: {num_samples}")
     return test_loader
 
 def test_data(context, batch_size, input_info, output_info):
