@@ -165,6 +165,21 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
                 continue
             onnx.save(model_simplified, simplified_path)
             print(f"Simplified gespeichert: {simplified_path}")
+    else:
+        print("No quantisation -> export with qonnx")
+        onnx_path = "outputs/language/model_dynamic_batchsize.onnx"
+        EXPORTERS[format](
+            model,
+            (inp,),
+            onnx_path,
+            export_params=True,
+            opset_version=17,
+            do_constant_folding=True,
+            input_names=['input'],
+            output_names=['output'],
+            dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
+            )
+        print(f"Modell als ONNX exportiert: {onnx_path}")
 
 
 # Script entrypoint
