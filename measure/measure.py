@@ -323,7 +323,8 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config = builder.create_builder_config()
     print("config created")
-    if INT8 and (MODEL_TYPE == "language" or MODEL_TYPE == "vision"): # radioml: Failed to create DLA runtime context. Hint: You can load at most 16 DLA loadables simultaneously per core
+    if INT8 :  #and (MODEL_TYPE == "language" or MODEL_TYPE == "vision") radioml: Failed to create DLA runtime context. Hint: You can load at most 16 DLA loadables simultaneously per core
+    # 568218 Segmentation fault (core dumped) tensorrt
         config.default_device_type = trt.DeviceType.DLA # DLA nutzen
         print("use dla")
         config.DLA_core = 0  # 0 oder 1
@@ -478,6 +479,10 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     average_latency_synchronize = (total_time_synchronize / iterations) * 1000  # In Millisekunden
     average_latency_datatransfer = (total_time_datatransfer / iterations) * 1000  # In Millisekunden
 
+    del context
+    stream.synchronize()
+    del stream
+
 
     return average_latency, average_latency_synchronize, average_latency_datatransfer, accuracy
 
@@ -562,6 +567,9 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         latency_log.extend([log_latency_inteference, log_latency_synchronize, log_latency_datatransfer])
         latency_log_batch.extend([log_latency_inteference_batch, log_latency_synchronize_batch, log_latency_datatransfer_batch])
         print_latency(latency_avg, latency_synchronize_avg+latency_avg, latency_datatransfer_avg+latency_synchronize_avg+latency_avg, end_time, start_time, num_batches, throughput_batches, throughput_images, batch_size)
+
+        del engine
+        del Runtime
 
     return throughput_log, latency_log, latency_log_batch
 
