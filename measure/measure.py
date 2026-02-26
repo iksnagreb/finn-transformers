@@ -197,11 +197,11 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size):
         output_key = key_list[1]
     
     input_ids = torch.from_numpy(data[input_key])
-    # print("input_ids.shape:", input_ids.shape)
+    print("input_ids.shape:", input_ids.shape)
 
     #input_ids = input_ids.reshape(-1, 1, 1024, 2)
-    # input_ids = input_ids.unsqueeze(1)
-    # print("input_ids.shape nach unsqueeze:", input_ids.shape)
+    input_ids = input_ids.unsqueeze(1)
+    print("input_ids.shape nach unsqueeze:", input_ids.shape)
 
 
     attention_mask = torch.from_numpy(data[attention_mask_key]) if attention_mask_key else None
@@ -565,6 +565,11 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
 
 def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path):
+    print("batch_size", batch_size)
+    print(" input_info", input_info)
+    print("output_info", output_info)
+    print("DATA_PATH_NPZ", DATA_PATH_NPZ)
+    print("onnx_model_path", onnx_model_path)
     test_loader = create_test_dataloader(DATA_PATH_NPZ, 1)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)

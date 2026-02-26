@@ -111,7 +111,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
             inp, out, _ = next(iter(export_data))
             
-            export_path=f"outputs/radioml/model_brevitas_{batch_size}_simple.onnx"
+            export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
             simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simple.onnx"
             export_onnx_qcdq(
                 model, 
@@ -121,14 +121,14 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             )
             print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
-            # model_load = onnx.load(export_path)
-            # # Simplify mit onnxsim
-            # model_simplified, check = simplify(model_load)
-            # if not check:
-            #     print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
-            #     continue
-            # onnx.save(model_simplified, simplified_path)
-            # print(f"Simplified gespeichert: {simplified_path}")
+            model_load = onnx.load(export_path)
+            # Simplify mit onnxsim
+            model_simplified, check = simplify(model_load)
+            if not check:
+                print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+                continue
+            onnx.save(model_simplified, simplified_path)
+            print(f"Simplified gespeichert: {simplified_path}")
 
 
 # Script entrypoint
