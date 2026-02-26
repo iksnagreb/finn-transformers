@@ -196,12 +196,12 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size):
         attention_mask_key = None
         output_key = key_list[1]
 
-    if MODEL_TYPE == "radioml":
-        input_ids = torch.from_numpy(data[input_key])
-        print("input_ids.shape:", input_ids.shape)
-        input_ids = input_ids.reshape(-1, 1, 1024, 2)
-        input_ids = input_ids.unsqueeze(1)
-        print("input_ids.shape nach unsqueeze:", input_ids.shape)
+    # if MODEL_TYPE == "radioml":
+    #     input_ids = torch.from_numpy(data[input_key])
+    #     print("input_ids.shape:", input_ids.shape)
+    #     input_ids = input_ids.reshape(-1, 1, 1024, 2)
+    #     input_ids = input_ids.unsqueeze(1)
+    #     print("input_ids.shape nach unsqueeze:", input_ids.shape)
 
 
     attention_mask = torch.from_numpy(data[attention_mask_key]) if attention_mask_key else None

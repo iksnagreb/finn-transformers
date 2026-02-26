@@ -145,7 +145,7 @@ if __name__ == "__main__":
         print(f"{key}: {value}")
     
     # Load the trained model parameters
-    model.load_state_dict(torch.load("outputs/radioml/model.pt"))
+    model.load_state_dict(torch.load("outputs/radioml/model_.pt"))
     print("loaded")
     export(model, dataset=params["dataset"], **params["export"])
 
