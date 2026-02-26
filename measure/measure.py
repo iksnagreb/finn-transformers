@@ -350,9 +350,9 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
-    if INT8 == True: 
-        config.set_flag(trt.BuilderFlag.INT8)
-        print("int 8 builder flag gesetzt")
+    # if INT8 == True: 
+    #     config.set_flag(trt.BuilderFlag.INT8)
+    #     print("int 8 builder flag gesetzt")
 
     print("Serialized engine: ")
 
