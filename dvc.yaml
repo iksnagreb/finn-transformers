@@ -39,3 +39,11 @@ artifacts:
 
 
     # alle artifacts hier hinzugefügt - aber eigentlich sollte push experiments reichen (mit korrektem remote)
+  throughput_results_FP16_vision:
+    path: outputs/vision/plot/FP16/throughput_results.json
+  latency_results_batch_FP16_vision:
+    path: outputs/vision/plot/FP16/latency_results_batch.json
+  latency_throughput_FP16_vision:
+    path: outputs/vision/plot/FP16/latency_throughput.json
+metrics:
+- dvclive/metrics.json
