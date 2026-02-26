@@ -22,7 +22,7 @@ model:
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: null
+    bits: 8
   # Configures the positional encoding layer in front of the first attention
   # block
   positional:
@@ -31,7 +31,7 @@ model:
     encoding: learned
     # Number of quantization bits for weights and activations of the encoding
     # layer, null means no quantization
-    bits: null
+    bits: 8
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
@@ -48,10 +48,10 @@ model:
   expansion_dim: 384
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: null
+  bits: 4
   # Number of quantization bits for weights and activations of the
   # output classification layer, null means no quantization
-  cls_bits: null
+  cls_bits: 8
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
   activation: relu
@@ -80,7 +80,7 @@ model_int8:
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: null
+    bits: 8
   # Type of positional encoding to use at the input (following the embedding)
   #   Options are: none, sinusoidal, binary, learned
   positional: binary
@@ -100,7 +100,7 @@ model_int8:
   expansion_dim: 128
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: null
+  bits: 8
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
   activation: relu

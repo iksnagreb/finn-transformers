@@ -505,12 +505,21 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         latency_log_batch.extend([log_latency_inteference_batch, log_latency_synchronize_batch, log_latency_datatransfer_batch])
         print_latency(latency_avg, latency_synchronize_avg+latency_avg, latency_datatransfer_avg+latency_synchronize_avg+latency_avg, end_time, start_time, num_batches, throughput_batches, throughput_images, batch_size)
 
+        del context
+        del engine
+        del runtime
+
+        torch.cuda.synchronize()
+        torch.cuda.empty_cache()
+        import gc
+        gc.collect()
+
     return throughput_log, latency_log, latency_log_batch
 
 
 def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onnx_model_path):
     test_loader = create_test_dataloader(RADIOML_PATH_NPZ, 1)
-    engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
+    engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)    # in radioml int 8 ist context null
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
     _, _, _, accuracy = run_inference(
                 context=context,
@@ -530,8 +539,6 @@ def run_accuracy_eval(batch_size, input_info, output_info, RADIOML_PATH_NPZ, onn
 
 
 if __name__ == "__main__":
-    # muss in parameter datei:
-
     
     if FP16:
         params = dvc.api.params_show(stages="radioml/dvc.yaml:measure_16FP")
