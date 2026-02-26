@@ -196,6 +196,8 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size):
         attention_mask_key = None
         output_key = key_list[1]
 
+    input_ids = torch.from_numpy(data[input_key])
+
     # if MODEL_TYPE == "radioml":
     #     input_ids = torch.from_numpy(data[input_key])
     #     print("input_ids.shape:", input_ids.shape)
