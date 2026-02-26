@@ -338,7 +338,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         config.set_flag(trt.BuilderFlag.INT8)
         print("int 8 builder flag gesetzt")
 
-    if INT8 == False:       # no optimization for DLA
+    if INT8 == False or (MODEL_TYPE == "radioml"):       # no optimization for DLA
         profile = builder.create_optimization_profile()
 
         for inp in input_info:
