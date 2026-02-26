@@ -197,13 +197,10 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size):
         output_key = key_list[1]
     
     input_ids = torch.from_numpy(data[input_key])
-
     # input_ids = input_ids.reshape(-1, 1, 1024, 2)
-
 
     attention_mask = torch.from_numpy(data[attention_mask_key]) if attention_mask_key else None
     labels = torch.from_numpy(data[output_key])
-
 
     # Nur das erste Sample auswählen
     if len(input_info) > 1:
