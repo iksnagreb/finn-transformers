@@ -6,7 +6,7 @@ variables:
 
 default:
   before_script:
-   - export MODEL_TYPE=vision  # radioml, language, vision
+   - export MODEL_TYPE=radioml  # radioml, language, vision
    - export FP16=1 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
 
    - export CUDA_ROOT=/usr/local/cuda
