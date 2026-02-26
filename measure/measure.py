@@ -308,8 +308,6 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         
     logger = trt.Logger(trt.Logger.WARNING)
     builder = trt.Builder(logger)
-    print("Anzahl DLA Cores:", builder.num_DLA_cores)
-
 
     network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
     parser = trt.OnnxParser(network, logger)
@@ -330,6 +328,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
         print("fallback: gpu")
     else:       # no optimization for DLA
+        config.default_device_type = trt.DeviceType.GPU
         profile = builder.create_optimization_profile()
         for inp in input_info:
             name = inp["name"]
@@ -350,7 +349,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
-    if INT8 == True and (MODEL_TYPE == "language" or MODEL_TYPE == "vision"): 
+    if INT8 == True: 
         config.set_flag(trt.BuilderFlag.INT8)
         print("int 8 builder flag gesetzt")
 
