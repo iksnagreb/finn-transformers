@@ -32,7 +32,16 @@ import yaml
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
-# cifar 10 selber downloaden
+
+with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
+    cfg = yaml.safe_load(f)
+
+bits = cfg["model"]["embedding"].get("bits", 0)
+INT8 = (bits == 8)
+if INT8:
+    print("Export mit INT8 Quantisierung")
+else:
+    print("Export ohne Quantisierung")
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
@@ -94,33 +103,31 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     # print("IR version:", model.ir_version)
 
 
-    # Brevitas 8Bit export - problem: nicht möglich mit dynamischen batch-sizes, 
-    # wenn man es im nachinein patched sind die reshapes noch statisch -> funktioniert nicht mit tensorrt
+    if INT8:
+        for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
+            dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
+            # test: wird das Ergebnis (Accuracy) besser mit echten daten?
+            export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
+            inp, out, _ = next(iter(export_data))
+            
+            export_path=f"outputs/radioml/model_brevitas_{batch_size}_simple.onnx"
+            simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simple.onnx"
+            export_onnx_qcdq(
+                model, 
+                (inp,),
+                export_path=export_path,
+                opset_version=17
+            )
+            print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
-    for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
-        dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
-        # test: wird das Ergebnis (Accuracy) besser mit echten daten?
-        export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
-        inp, out, _ = next(iter(export_data))
-        
-        export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
-        simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simple.onnx"
-        export_onnx_qcdq(
-            model, 
-            (inp,),
-            export_path=export_path,
-            opset_version=17
-        )
-        print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
-
-        model_load = onnx.load(export_path)
-        # Simplify mit onnxsim
-        model_simplified, check = simplify(model_load)
-        if not check:
-            print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
-            continue
-        onnx.save(model_simplified, simplified_path)
-        print(f"Simplified gespeichert: {simplified_path}")
+            # model_load = onnx.load(export_path)
+            # # Simplify mit onnxsim
+            # model_simplified, check = simplify(model_load)
+            # if not check:
+            #     print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+            #     continue
+            # onnx.save(model_simplified, simplified_path)
+            # print(f"Simplified gespeichert: {simplified_path}")
 
 
 # Script entrypoint
