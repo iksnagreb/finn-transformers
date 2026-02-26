@@ -329,6 +329,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         print("fallback: gpu")
     else:       # no optimization for DLA
         config.default_device_type = trt.DeviceType.GPU
+        print("config.default_device_type = trt.DeviceType.GPU")
         profile = builder.create_optimization_profile()
         for inp in input_info:
             name = inp["name"]
@@ -345,7 +346,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         print(f"  opt_shape: {opt_shape}")
         print(f"  max_shape: {max_shape}")
 
-    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 30)
+    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
 
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
