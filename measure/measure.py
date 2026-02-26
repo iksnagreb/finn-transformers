@@ -323,7 +323,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config = builder.create_builder_config()
     print("config created")
-    if INT8:
+    if INT8 and (MODEL_TYPE == "language" or MODEL_TYPE == "vision"): # radioml: Failed to create DLA runtime context. Hint: You can load at most 16 DLA loadables simultaneously per core
         config.default_device_type = trt.DeviceType.DLA # DLA nutzen
         print("use dla")
         config.DLA_core = 0  # 0 oder 1
