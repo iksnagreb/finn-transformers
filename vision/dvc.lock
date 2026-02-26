@@ -62,17 +62,17 @@ stages:
             - 4
             - 4
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -192,17 +192,17 @@ stages:
             - 4
             - 4
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -293,17 +293,17 @@ stages:
             - 4
             - 4
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 2
           num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
