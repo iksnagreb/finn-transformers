@@ -1,0 +1,5 @@
+outs:
+- md5: 78d78af6064dbe45f9c5b7d13effd0ad
+  size: 1628
+  hash: md5
+  path: throughput_results.json
