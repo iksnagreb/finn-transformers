@@ -329,18 +329,8 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         config.DLA_core = 0  # 0 oder 1
         config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
         print("fallback: gpu")
-
-    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
-
-    if FP16 == True:
-        config.set_flag(trt.BuilderFlag.FP16)
-    if INT8 == True:
-        config.set_flag(trt.BuilderFlag.INT8)
-        print("int 8 builder flag gesetzt")
-
-    if INT8 == False or (MODEL_TYPE == "radioml"):       # no optimization for DLA
+    else:       # no optimization for DLA
         profile = builder.create_optimization_profile()
-
         for inp in input_info:
             name = inp["name"]
             shape = inp["shape"]
@@ -356,14 +346,27 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         print(f"  opt_shape: {opt_shape}")
         print(f"  max_shape: {max_shape}")
 
+    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 30)
+
+    if FP16 == True:
+        config.set_flag(trt.BuilderFlag.FP16)
+    if INT8 == True:
+        config.set_flag(trt.BuilderFlag.INT8)
+        print("int 8 builder flag gesetzt")
+
+    print("Serialized engine: ")
+
     serialized_engine = builder.build_serialized_network(network, config)
     if serialized_engine is None:
         raise RuntimeError("Fehler beim Bauen der TensorRT-Engine: serialized_engine ist None.")
 
+    print("Logger:")
     runtime = trt.Runtime(logger)
+    print("engine ")
     engine = runtime.deserialize_cuda_engine(serialized_engine)
+    print("context: ")
     context = engine.create_execution_context()
-
+    print("after context:")
     return engine, context
 
 
