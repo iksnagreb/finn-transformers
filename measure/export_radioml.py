@@ -132,6 +132,18 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
                 continue
             onnx.save(model_simplified, simplified_path)
             print(f"Simplified gespeichert: {simplified_path}")
+            # Zusätzlich: Erzeuge eine _fixed.onnx, in der quantisierte
+            # Initialisierer dequantisiert sind (float statt int8). Das hilft
+            # TensorRT-Importer, der quantisierte Konstanten nur vor DQ/PLUGIN
+            # erlaubt.
+            try:
+                from measure.fix_qcdq_constants import dequantize_initializers
+                fixed_path = export_path.replace('.onnx', '_fixed.onnx')
+                n = dequantize_initializers(export_path, fixed_path)
+                if n:
+                    print(f"Fixed ONNX geschrieben: {fixed_path} (replaced {n} inits)")
+            except Exception as e:
+                print('Failed to create fixed ONNX:', e)
 
 
 # Script entrypoint

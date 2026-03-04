@@ -223,6 +223,9 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size):
         )
     num_samples = len(test_dataset)
     print(f"Anzahl Test-Samples: {num_samples}")
+    batch = next(iter(test_loader))
+    print([x.shape for x in batch])
+    print([x.dtype for x in batch])
     return test_loader
 
 def test_data(context, batch_size, input_info, output_info):
@@ -541,8 +544,10 @@ if __name__ == "__main__":
     for batch_size in batch_sizes:
         print("Batch size: ", batch_size)
         if INT8:
-            # Unsimplified QCDQ-Modell verwenden (stabiler für TRT-INT8)
-            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}.onnx"
+            # Prefer fixed ONNX if available (dequantized initializers)
+            fixed = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_fixed.onnx"
+            normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}.onnx"
+            onnx_model_path = fixed if os.path.exists(fixed) else normal
         input_info, output_info = get_model_io_info(onnx_model_path)
         tegrastats_log = energy_base_path / f"tegrastats_{batch_size}.log"
         timestamps = energy_base_path / f"timestamps_{batch_size}.json"
