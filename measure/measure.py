@@ -99,17 +99,43 @@ def save_json(log, filepath):
 
 def parse_shape(shape, batch_value):
     """Ersetzt 'batch_size' durch batch_value in der shape-Liste."""
-    print("shape:", shape)
-    return tuple(
-        batch_value if d == "batch_size"
-        else 1 if (i == 1 and INT8 and MODEL_TYPE=="radioml")  # zweite Dimension immer 1 im INT8-Modus
-        else batch_value if (i == 0 and INT8)
-        else 128 if d == "sequence_length"
-        else 64 if d == "Muloutput_dim_2"
-        else 3 if d == "channels"
-        else d
-        for i, d in enumerate(shape)
-    )
+    # Alte Implementierung (zur Referenz):
+    # print("shape:", shape)
+    # return tuple(
+    #     batch_value if d == "batch_size"
+    #     else 1 if (i == 1 and INT8 and MODEL_TYPE=="radioml")  # zweite Dimension immer 1 im INT8-Modus
+    #     else batch_value if (i == 0 and INT8)
+    #     else 128 if d == "sequence_length"
+    #     else 64 if d == "Muloutput_dim_2"
+    #     else 3 if d == "channels"
+    #     else d
+    #     for i, d in enumerate(shape)
+    # )
+
+    # WICHTIG: Keine INT8-spezifischen Shape-Overrides erzwingen.
+    # TensorRT soll die echten ONNX-Formen sehen (insb. bei Q/DQ-Modellen).
+    resolved = []
+    for i, d in enumerate(shape):
+        # Symbolische ONNX-Dimensionen
+        if isinstance(d, str):
+            if d == "batch_size" or i == 0:
+                resolved.append(batch_value)
+            elif d == "sequence_length":
+                resolved.append(128)
+            elif d == "Muloutput_dim_2":
+                resolved.append(64)
+            elif d == "channels":
+                resolved.append(3)
+            else:
+                # Unbekanntes Symbol: konservativer Fallback
+                resolved.append(1)
+        # ONNX kann dynamische Dims auch als None liefern
+        elif d is None:
+            resolved.append(batch_value if i == 0 else 1)
+        else:
+            resolved.append(int(d))
+
+    return tuple(resolved)
 
 
 ONNX_TO_TORCH_DTYPE = {
@@ -172,7 +198,7 @@ def print_latency(latency_ms, latency_synchronize, latency_datatransfer, end_tim
     print(f"Throughput: {throughput_images:.4f} Bilder/Sekunde")
 
 
-def create_test_dataloader(DATA_PATH_NPZ, batch_size):
+def create_test_dataloader(DATA_PATH_NPZ, batch_size, onnx_model_path):
     """
     Erstellt den DataLoader für die Testdaten.
     :param RADIOML_PATH: Pfad zur Testdaten-Datei.
@@ -517,10 +543,16 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
     for batch_size in batch_sizes:
         print("Measuring for batch size:", batch_size)
+        current_onnx_model_path = onnx_model_path
         if INT8:
-            onnx_model_path=f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
-        test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size) 
-        engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
+            # onnx_model_path=f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
+            current_onnx_model_path=f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}.onnx"
+
+        # Nach Pfadwechsel IO-Infos immer neu laden (wichtig für batch-spezifische INT8-ONNX-Dateien)
+        input_info, output_info = get_model_io_info(current_onnx_model_path)
+
+        test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size, current_onnx_model_path)
+        engine, context = build_tensorrt_engine(current_onnx_model_path, test_loader, batch_size, input_info)
         device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
 
         
@@ -600,7 +632,9 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
     print("output_info", output_info)
     print("DATA_PATH_NPZ", DATA_PATH_NPZ)
     print("onnx_model_path", onnx_model_path)
-    test_loader = create_test_dataloader(DATA_PATH_NPZ, 1)
+    # Sicherstellen, dass IO-Metadaten zum gewählten ONNX-Pfad passen
+    input_info, output_info = get_model_io_info(onnx_model_path)
+    test_loader = create_test_dataloader(DATA_PATH_NPZ, 1, onnx_model_path)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
     
@@ -639,7 +673,8 @@ if __name__ == "__main__":
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     if INT8:
-        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1.onnx"
 
     model = onnx.load(onnx_model_path)
 
