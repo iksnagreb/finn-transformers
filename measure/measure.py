@@ -323,16 +323,21 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config = builder.create_builder_config()
     print("config created")
-    if INT8 :  #and (MODEL_TYPE == "language" or MODEL_TYPE == "vision") radioml: Failed to create DLA runtime context. Hint: You can load at most 16 DLA loadables simultaneously per core
-    # 568218 Segmentation fault (core dumped) tensorrt
-        config.default_device_type = trt.DeviceType.DLA # DLA nutzen
+    
+    # DLA configuration for INT8 - disabled by default due to 16 loadables limit on Jetson
+    USE_DLA = os.environ.get("USE_DLA", "0") == "1"
+    if INT8 and USE_DLA:
+        config.default_device_type = trt.DeviceType.DLA
         print("use dla")
         config.DLA_core = 0  # 0 oder 1
         config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
         print("fallback: gpu")
-    else:       # no optimization for DLA
+        # DLA doesn't need optimization profile
+    else:
+        # GPU mode - needs optimization profile for dynamic shapes
         config.default_device_type = trt.DeviceType.GPU
         print("config.default_device_type = trt.DeviceType.GPU")
+        
         profile = builder.create_optimization_profile()
         for inp in input_info:
             name = inp["name"]
@@ -367,8 +372,13 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     runtime = trt.Runtime(logger)
     print("engine ")
     engine = runtime.deserialize_cuda_engine(serialized_engine)
+    if engine is None:
+        raise RuntimeError("Failed to deserialize TensorRT engine")
+    
     print("context: ")
     context = engine.create_execution_context()
+    if context is None:
+        raise RuntimeError("Failed to create execution context. If using DLA, you may have hit the 16 loadables per core limit. Try setting USE_DLA=0 environment variable.")
     print("after context:")
     return engine, context
 
@@ -568,8 +578,18 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         latency_log_batch.extend([log_latency_inteference_batch, log_latency_synchronize_batch, log_latency_datatransfer_batch])
         print_latency(latency_avg, latency_synchronize_avg+latency_avg, latency_datatransfer_avg+latency_synchronize_avg+latency_avg, end_time, start_time, num_batches, throughput_batches, throughput_images, batch_size)
 
+        # Clean up TensorRT resources to avoid DLA loadables limit
+        torch_stream.synchronize()
+        del device_input
+        del device_output
+        if device_attention_mask is not None:
+            del device_attention_mask
+        if device_token_type is not None:
+            del device_token_type
+        del context
         del engine
-        del Runtime
+        torch.cuda.empty_cache()
+        print(f"Cleaned up resources for batch size {batch_size}")
 
     return throughput_log, latency_log, latency_log_batch
 
@@ -583,6 +603,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
     test_loader = create_test_dataloader(DATA_PATH_NPZ, 1)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
     device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
+    
     _, _, _, accuracy = run_inference(
                 context=context,
                 test_loader=test_loader,
@@ -597,6 +618,17 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
                 output_info=output_info,
                 accuracy_flag=True
             )
+    
+    # Clean up resources
+    torch_stream.synchronize()
+    del device_input, device_output
+    if device_attention_mask is not None:
+        del device_attention_mask
+    if device_token_type is not None:
+        del device_token_type
+    del context, engine
+    torch.cuda.empty_cache()
+    
     return accuracy
 
 
