@@ -490,8 +490,8 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     average_latency_datatransfer = (total_time_datatransfer / iterations) * 1000  # In Millisekunden
 
     del context
-    stream.synchronize()
-    del stream
+    torch_stream.synchronize()
+    del torch_stream
 
 
     return average_latency, average_latency_synchronize, average_latency_datatransfer, accuracy
