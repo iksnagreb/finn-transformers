@@ -195,7 +195,7 @@ if __name__ == "__main__":
     
     # Load the trained model parameters
     # model.load_state_dict(torch.load("outputs/vision/model.pt"))
-    model.load_state_dict(torch.load("outputs/vision/model_.pt"))
+    model.load_state_dict(torch.load("outputs/vision/model.pt"))
 
     model = patch_missing_affine_norms(model)
     # Pass the model and the export configuration to the evaluation loop
