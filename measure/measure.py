@@ -549,6 +549,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
             fixed = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_fixed.onnx"
             normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
             current_onnx_model_path = fixed if __import__('os').path.exists(fixed) else normal
+            print(f"Using ONNX model for batch size {batch_size}: {current_onnx_model_path}")
 
         # Nach Pfadwechsel IO-Infos immer neu laden (wichtig für batch-spezifische INT8-ONNX-Dateien)
         input_info, output_info = get_model_io_info(current_onnx_model_path)
@@ -633,7 +634,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
     print(" input_info", input_info)
     print("output_info", output_info)
     print("DATA_PATH_NPZ", DATA_PATH_NPZ)
-    print("onnx_model_path", onnx_model_path)
+    print("onnx_model_path for accuracy validation", onnx_model_path)
     # Sicherstellen, dass IO-Metadaten zum gewählten ONNX-Pfad passen
     input_info, output_info = get_model_io_info(onnx_model_path)
     test_loader = create_test_dataloader(DATA_PATH_NPZ, 1, onnx_model_path)
@@ -675,8 +676,8 @@ if __name__ == "__main__":
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     if INT8:
-        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
-        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1.onnx"
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1.onnx"
 
     model = onnx.load(onnx_model_path)
 
