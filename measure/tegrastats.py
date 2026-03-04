@@ -546,7 +546,7 @@ if __name__ == "__main__":
         if INT8:
             # Prefer fixed ONNX if available (dequantized initializers)
             fixed = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_fixed.onnx"
-            normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}.onnx"
+            normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
             onnx_model_path = fixed if os.path.exists(fixed) else normal
         input_info, output_info = get_model_io_info(onnx_model_path)
         tegrastats_log = energy_base_path / f"tegrastats_{batch_size}.log"

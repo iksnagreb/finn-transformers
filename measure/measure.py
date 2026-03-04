@@ -547,7 +547,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         if INT8:
             # Prefer fixed ONNX if available (dequantized initializers)
             fixed = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_fixed.onnx"
-            normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}.onnx"
+            normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
             current_onnx_model_path = fixed if __import__('os').path.exists(fixed) else normal
 
         # Nach Pfadwechsel IO-Infos immer neu laden (wichtig für batch-spezifische INT8-ONNX-Dateien)
