@@ -541,7 +541,8 @@ if __name__ == "__main__":
     for batch_size in batch_sizes:
         print("Batch size: ", batch_size)
         if INT8:
-            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx" 
+            # Unsimplified QCDQ-Modell verwenden (stabiler für TRT-INT8)
+            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}.onnx"
         input_info, output_info = get_model_io_info(onnx_model_path)
         tegrastats_log = energy_base_path / f"tegrastats_{batch_size}.log"
         timestamps = energy_base_path / f"timestamps_{batch_size}.json"

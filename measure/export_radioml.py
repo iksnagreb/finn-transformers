@@ -106,6 +106,9 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
 
     if INT8:
         for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
+            # WICHTIG: Nicht aus dem DataLoader sampeln, da der letzte
+            # Rest-Batch kleiner sein kann (z. B. 726 statt 1024) und damit
+            # statische ONNX-Formen falsch exportiert werden.
             dummy_input = torch.randn(batch_size, *inp.shape[1:], dtype=inp.dtype)
             # test: wird das Ergebnis (Accuracy) besser mit echten daten?
             export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
@@ -115,7 +118,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simple.onnx"
             export_onnx_qcdq(
                 model, 
-                (inp,),
+                (dummy_input,),
                 export_path=export_path,
                 opset_version=17
             )
