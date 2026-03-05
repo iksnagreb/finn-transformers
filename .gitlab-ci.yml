@@ -6,7 +6,7 @@ variables:
 
 default:
   before_script:
-   - export MODEL_TYPE=vision  # radioml, language, vision
+   - export MODEL_TYPE=language  # radioml, language, vision
    - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
    - export USE_DLA=1 # 0 or 1, decides if the measurements will be executed on DLA or GPU
 
@@ -58,6 +58,11 @@ measure-job:
     - dvc push -r upload  
     - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
     - ssh-agent -k
+    # Trigger GitLab mirror sync so DataChain sees the new experiment immediately
+    - |
+      curl --silent --fail --request POST \
+        --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
+        "${CI_SERVER_URL}/api/v4/projects/${CI_PROJECT_ID}/mirror/pull"
   tags:
     - jetson
 
