@@ -30,13 +30,13 @@ measure-job:
 
     - pip install --upgrade pip
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
-    # Install onnxruntime-gpu explicitly for Jetson (aarch64).
-    # PyPI does not ship aarch64 CUDA wheels – use NVIDIA's index instead.
-    # JetPack 6.x (CUDA 12.x, Python 3.10):
-    - pip install onnxruntime-gpu --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/
-    # JetPack 5.x (CUDA 11.x, Python 3.8) – swap the line above for:
-    #   - wget -q https://nvidia.box.com/shared/static/onj1210qqkv2p6aemkh8kpmjy1kf1s1.whl -O /tmp/ort_gpu.whl
-    #   - pip install /tmp/ort_gpu.whl
+    # onnxruntime-gpu on Jetson (aarch64):
+    # JetPack ships onnxruntime-gpu as a system package under /usr/lib/python3.10/dist-packages,
+    # which is already on PYTHONPATH. Only install via pip if it is not yet accessible
+    # (e.g. CUDAExecutionProvider missing).  The NGC index is the correct aarch64 source;
+    # PyPI and the Microsoft CUDA-12 feed only carry x86_64 wheels.
+    - python3 -c "import onnxruntime as ort; assert 'CUDAExecutionProvider' in ort.get_available_providers(), 'CUDA EP missing'" \
+      || pip install onnxruntime-gpu --extra-index-url https://pypi.ngc.nvidia.com
     - pip install -r requirements.txt
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
