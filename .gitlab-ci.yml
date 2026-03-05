@@ -30,6 +30,13 @@ measure-job:
 
     - pip install --upgrade pip
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
+    # Install onnxruntime-gpu explicitly for Jetson (aarch64).
+    # PyPI does not ship aarch64 CUDA wheels – use NVIDIA's index instead.
+    # JetPack 6.x (CUDA 12.x, Python 3.10):
+    - pip install onnxruntime-gpu --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/
+    # JetPack 5.x (CUDA 11.x, Python 3.8) – swap the line above for:
+    #   - wget -q https://nvidia.box.com/shared/static/onj1210qqkv2p6aemkh8kpmjy1kf1s1.whl -O /tmp/ort_gpu.whl
+    #   - pip install /tmp/ort_gpu.whl
     - pip install -r requirements.txt
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
@@ -40,6 +47,8 @@ measure-job:
     - python3 -m measure.export_wrapper
 
     - python3 -m measure.measure
+
+    - python3 -m measure.onnxruntime_inf
 
     - python3 -m measure.tegrastats
 
