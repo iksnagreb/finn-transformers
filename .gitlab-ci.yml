@@ -34,7 +34,6 @@ measure-job:
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
     - pip install -r requirements.txt
 
-    - python3 -c "import onnxruntime as ort; eps=ort.get_available_providers(); print('ORT', ort.__version__, '| providers:', eps)" || echo "onnxruntime not importable – skipping provider check"
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
     - dvc pull --allow-missing    
