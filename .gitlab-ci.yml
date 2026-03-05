@@ -29,16 +29,11 @@ measure-job:
     - ls -l /usr/local/cuda/include/cuda.h
 
     - pip install --upgrade pip
+    
+    - pip install /data/onnxruntime_gpu-1.17.0-cp310-cp310-linux_aarch64.whl
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
-    # requirements.txt installs the CPU-only `onnxruntime` from PyPI (aarch64-compatible).
     - pip install -r requirements.txt
-    # onnxruntime-gpu for Jetson (aarch64) has no pip source on PyPI/NGC/Microsoft feeds.
-    # The ONLY source is the Jetson Zoo: https://elinux.org/Jetson_Zoo#ONNX_Runtime
-    # Pre-download the wheel ONCE on the Jetson and place it at /data/onnxruntime_gpu.whl:
-    #   wget <URL_FROM_JETSON_ZOO> -O /data/onnxruntime_gpu.whl
-    # The CI will upgrade to the GPU wheel automatically on every run if the file exists.
-    - pip install /data/onnxruntime_gpu.whl
-    # Report available providers (informational only, never fails the job)
+
     - python3 -c "import onnxruntime as ort; eps=ort.get_available_providers(); print('ORT', ort.__version__, '| providers:', eps)" || echo "onnxruntime not importable – skipping provider check"
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
