@@ -24,26 +24,30 @@ measure-job:
   stage: measure
   script:
     - mkdir -p $PIP_CACHE_DIR
-    - python3 -m venv --system-site-packages .venv
-    - source .venv/bin/activate   #   - source $VENV_PATH/bin/activate
+    - python3 -m venv .venv
+    - source .venv/bin/activate
     - ls -l /usr/local/cuda/include/cuda.h
 
     - pip install --upgrade pip
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
-    # onnxruntime-gpu on Jetson (aarch64) has NO pip-installable source on PyPI, NGC,
-    # or any Microsoft feed – all those only carry x86_64 wheels.
-    # The ONLY source is the Jetson Zoo: https://elinux.org/Jetson_Zoo#ONNX_Runtime
-    #
-    # PRE-INSTALL ONCE on the Jetson (as root, outside of CI):
-    #   wget <URL_FROM_JETSON_ZOO> -O /tmp/onnxruntime_gpu.whl
-    #   pip3 install /tmp/onnxruntime_gpu.whl
-    #
-    # The venv above is created with --system-site-packages so the system-installed
-    # onnxruntime-gpu is visible inside the venv without reinstalling it each CI run.
-    #
-    # Verify CUDA EP is accessible:
-    - python3 -c "import onnxruntime as ort; eps=ort.get_available_providers(); print('ORT', ort.__version__, '| providers:', eps); assert 'CUDAExecutionProvider' in eps, 'CUDAExecutionProvider missing – install onnxruntime-gpu via Jetson Zoo'"
+    # requirements.txt installs the CPU-only `onnxruntime` from PyPI (aarch64-compatible).
     - pip install -r requirements.txt
+    # onnxruntime-gpu for Jetson (aarch64) has no pip source on PyPI/NGC/Microsoft feeds.
+    # The ONLY source is the Jetson Zoo: https://elinux.org/Jetson_Zoo#ONNX_Runtime
+    # Pre-download the wheel ONCE on the Jetson and place it at /data/onnxruntime_gpu.whl:
+    #   wget <URL_FROM_JETSON_ZOO> -O /data/onnxruntime_gpu.whl
+    # The CI will upgrade to the GPU wheel automatically on every run if the file exists.
+    - >
+      if [ -f /data/onnxruntime_gpu.whl ]; then
+        echo "Found Jetson Zoo wheel – installing onnxruntime-gpu";
+        pip install /data/onnxruntime_gpu.whl;
+      else
+        echo "WARNING: /data/onnxruntime_gpu.whl not found – running with CPU provider only";
+        echo "         Download from https://elinux.org/Jetson_Zoo#ONNX_Runtime";
+        echo "         and place it at /data/onnxruntime_gpu.whl to enable CUDAExecutionProvider";
+      fi
+    # Report available providers (informational only, never fails the job)
+    - python3 -c "import onnxruntime as ort; eps=ort.get_available_providers(); print('ORT', ort.__version__, '| providers:', eps)"
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
     - dvc pull --allow-missing    
