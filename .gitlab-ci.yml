@@ -37,15 +37,7 @@ measure-job:
     # Pre-download the wheel ONCE on the Jetson and place it at /data/onnxruntime_gpu.whl:
     #   wget <URL_FROM_JETSON_ZOO> -O /data/onnxruntime_gpu.whl
     # The CI will upgrade to the GPU wheel automatically on every run if the file exists.
-    - >
-      if [ -f /data/onnxruntime_gpu.whl ]; then
-        echo "Found Jetson Zoo wheel – installing onnxruntime-gpu";
-        pip install /data/onnxruntime_gpu.whl;
-      else
-        echo "WARNING: /data/onnxruntime_gpu.whl not found – running with CPU provider only";
-        echo "         Download from https://elinux.org/Jetson_Zoo#ONNX_Runtime";
-        echo "         and place it at /data/onnxruntime_gpu.whl to enable CUDAExecutionProvider";
-      fi
+    - pip install /data/onnxruntime_gpu.whl
     # Report available providers (informational only, never fails the job)
     - python3 -c "import onnxruntime as ort; eps=ort.get_available_providers(); print('ORT', ort.__version__, '| providers:', eps)" || echo "onnxruntime not importable – skipping provider check"
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
