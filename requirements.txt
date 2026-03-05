@@ -9,9 +9,9 @@ h5py~=3.14.0
 einops~=0.8.1
 onnx==1.17.0
 onnxconverter-common == 1.15.0
-# CPU-only onnxruntime – available on PyPI for aarch64, always installable.
-# CUDAExecutionProvider requires the Jetson Zoo GPU wheel (see .gitlab-ci.yml).
-onnxruntime
+# onnxruntime: neither the CPU-only nor the GPU wheel from PyPI works on Jetson (aarch64).
+# The PyPI aarch64 wheel crashes with an assertion in cpuid detection on Jetson's CPU.
+# Install the Jetson-Zoo-specific wheel ONCE on the machine (see .gitlab-ci.yml).
 onnxsim
 onnxoptimizer==0.3.13
 pandas~=2.3.1

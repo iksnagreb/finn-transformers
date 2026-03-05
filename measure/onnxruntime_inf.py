@@ -3,18 +3,15 @@ ONNX Runtime inference with CUDA Execution Provider.
 
 NOTE – Jetson (aarch64) installation
 --------------------------------------
-The standard PyPI `onnxruntime-gpu` is built for x86_64 and will NOT work on
-Jetson. NVIDIA ships aarch64 wheels via the Jetson Zoo:
+NEITHER the CPU-only nor the GPU `onnxruntime` wheel from PyPI works on Jetson.
+The PyPI aarch64 wheel crashes on import with a cpuid assertion failure because
+Jetson's CPU vendor is not recognised by the upstream cpuinfo library.
 
-  JetPack 5.x (CUDA 11.4):
-    wget https://nvidia.box.com/shared/static/onj1210qqkv2p6aemkh8kpmjy1kf1s1.whl \
-         -O onnxruntime_gpu-1.14.1-cp38-cp38-linux_aarch64.whl
-    pip install onnxruntime_gpu-1.14.1-cp38-cp38-linux_aarch64.whl
+The ONLY working source is the Jetson Zoo wheel, which is patched for Jetson:
+  https://elinux.org/Jetson_Zoo#ONNX_Runtime
 
-  JetPack 6.x (CUDA 12.x):
-    pip install onnxruntime-gpu   # NVIDIA provides an aarch64 build on PyPI for JP6
-
-Reference: https://elinux.org/Jetson_Zoo#ONNX_Runtime
+Place the downloaded wheel at /data/onnxruntime_gpu.whl – the CI will then
+install it automatically on every run (see .gitlab-ci.yml).
 
 TensorRT provider vs CUDA provider
 ------------------------------------
@@ -23,9 +20,17 @@ CUDAExecutionProvider for models that contain uint activations (e.g. FINN /
 QONNX uint8 models).  CUDAExecutionProvider handles uint tensors natively.
 """
 
+import sys
 import time
 import numpy as np
-import onnxruntime as ort
+
+try:
+    import onnxruntime as ort
+    _ORT_AVAILABLE = True
+except Exception as e:  # catches ImportError AND the aarch64 cpuid AssertionError
+    print(f"[onnxruntime_inf] WARNING: onnxruntime not importable ({e}). "
+          "Install the Jetson Zoo wheel – see module docstring.", file=sys.stderr)
+    _ORT_AVAILABLE = False
 
 
 # ---------------------------------------------------------------------------
