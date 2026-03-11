@@ -14,7 +14,7 @@
       "field": "type",
       "type": "nominal",
       "scale": {
-        "domain": ["inteference", "synchronize", "datatransfer"],
+        "domain": ["inference", "synchronize", "datatransfer"],
         "range": ["#e7ba52", "green", "#aec7e8"]
       },
       "title": "Latency type"

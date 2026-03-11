@@ -1,7 +1,7 @@
 [
     {
         "batch_size": 1,
-        "type": "inteference",
+        "type": "inference",
         "value": 0.8409278082847595
     },
     {
@@ -16,7 +16,7 @@
     },
     {
         "batch_size": 2,
-        "type": "inteference",
+        "type": "inference",
         "value": 0.8718436384201048
     },
     {
@@ -31,7 +31,7 @@
     },
     {
         "batch_size": 4,
-        "type": "inteference",
+        "type": "inference",
         "value": 0.9663402175903322
     },
     {
@@ -46,7 +46,7 @@
     },
     {
         "batch_size": 8,
-        "type": "inteference",
+        "type": "inference",
         "value": 1.0982972145080567
     },
     {
@@ -61,7 +61,7 @@
     },
     {
         "batch_size": 16,
-        "type": "inteference",
+        "type": "inference",
         "value": 1.6767068099975586
     },
     {
@@ -76,7 +76,7 @@
     },
     {
         "batch_size": 32,
-        "type": "inteference",
+        "type": "inference",
         "value": 2.5244147349626593
     },
     {
@@ -91,7 +91,7 @@
     },
     {
         "batch_size": 64,
-        "type": "inteference",
+        "type": "inference",
         "value": 4.270707185451801
     },
     {
@@ -106,7 +106,7 @@
     },
     {
         "batch_size": 128,
-        "type": "inteference",
+        "type": "inference",
         "value": 8.17345136251205
     },
     {
@@ -121,7 +121,7 @@
     },
     {
         "batch_size": 256,
-        "type": "inteference",
+        "type": "inference",
         "value": 14.844898688487518
     },
     {
@@ -136,7 +136,7 @@
     },
     {
         "batch_size": 512,
-        "type": "inteference",
+        "type": "inference",
         "value": 28.183806569952715
     },
     {
@@ -151,7 +151,7 @@
     },
     {
         "batch_size": 1024,
-        "type": "inteference",
+        "type": "inference",
         "value": 34.7222884496053
     },
     {

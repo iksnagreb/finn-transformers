@@ -87,7 +87,7 @@ def measure_latency(context, test_loader, device_input, device_output, stream_pt
         start_time_synchronize = time.time()  # Startzeit messen
         torch_stream.synchronize()  
 
-        start_time_inteference = time.time()  # Startzeit messen
+        start_time_inference = time.time()  # Startzeit messen
         try:
             with torch.cuda.stream(torch_stream):
                 context.execute_async_v3(stream_ptr)
@@ -99,7 +99,7 @@ def measure_latency(context, test_loader, device_input, device_output, stream_pt
         output = device_output.cpu().numpy()
         end_time_datatransfer = time.time() 
 
-        latency = end_time - start_time_inteference  # Latenz für diesen Batch
+        latency = end_time - start_time_inference  # Latenz für diesen Batch
         latency_synchronize = end_time - start_time_synchronize  # Latenz für diesen Batch
         latency_datatransfer = end_time_datatransfer - start_time_datatransfer  # Latenz für diesen Batch
 
@@ -229,18 +229,18 @@ def calculate_latency_and_throughput(context, batch_sizes):
         throughput_images = (num_batches*batch_size)/(total_time_avg)
 
 
-        log_latency_inteference = {"batch_size": batch_size, "type":"inteference", "value": latency_avg/batch_size} # pro datensatz?
+        log_latency_inference = {"batch_size": batch_size, "type":"inference", "value": latency_avg/batch_size} # pro datensatz?
         log_latency_synchronize = {"batch_size": batch_size, "type":"synchronize", "value": (latency_synchronize_avg/batch_size)} # pro datensatz?
         log_latency_datatransfer = {"batch_size": batch_size, "type":"datatransfer", "value": (latency_datatransfer_avg/batch_size)} # pro datensatz?
-        log_latency_inteference_batch = {"batch_size": batch_size, "type":"inteference", "value": latency_avg} #pro batch
+        log_latency_inference_batch = {"batch_size": batch_size, "type":"inference", "value": latency_avg} #pro batch
         log_latency_synchronize_batch = {"batch_size": batch_size, "type":"synchronize", "value": (latency_synchronize_avg)} #pro batch
         log_latency_datatransfer_batch = {"batch_size": batch_size, "type":"datatransfer", "value": (latency_datatransfer_avg)} #pro batch 
         throughput = {"batch_size": batch_size, "throughput_images_per_s": throughput_images, "throughput_batches_per_s": throughput_batches}
 
 
         throughput_log.append(throughput)
-        latency_log.extend([log_latency_inteference, log_latency_synchronize, log_latency_datatransfer])
-        latency_log_batch.extend([log_latency_inteference_batch, log_latency_synchronize_batch, log_latency_datatransfer_batch])
+        latency_log.extend([log_latency_inference, log_latency_synchronize, log_latency_datatransfer])
+        latency_log_batch.extend([log_latency_inference_batch, log_latency_synchronize_batch, log_latency_datatransfer_batch])
         print_latency(latency_avg, latency_synchronize_avg+latency_avg, latency_datatransfer_avg+latency_synchronize_avg+latency_avg, end_time, start_time, num_batches, throughput_batches, throughput_images, batch_size)
 
     return throughput_log, latency_log, latency_log_batch

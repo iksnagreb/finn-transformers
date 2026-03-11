@@ -86,7 +86,7 @@ def latency_plot(json_path, output_path):
     batch_sizes = sorted(list(set(d["batch_size"] for d in latency_results)))
 
     # 3. Separate Listen für jeden Typ
-    inteference = []
+    inference = []
     synchronize = []
     datatransfer = []
 
@@ -95,7 +95,7 @@ def latency_plot(json_path, output_path):
         entries = [d for d in latency_results if d["batch_size"] == bs]
         
         # Werte den richtigen Listen zuordnen
-        inteference.append(next(d["value"] for d in entries if d["type"] == "inteference"))
+        inference.append(next(d["value"] for d in entries if d["type"] == "inference"))
         synchronize.append(next(d["value"] for d in entries if d["type"] == "synchronize"))
         datatransfer.append(next(d["value"] for d in entries if d["type"] == "datatransfer"))
 
@@ -103,9 +103,9 @@ def latency_plot(json_path, output_path):
 
     bar_width = 0.4
     x = np.arange(len(batch_sizes))
-    ax.bar(x, inteference, width=bar_width, edgecolor="white", linewidth=0.7, label='inteference')
-    ax.bar(x, synchronize, width=bar_width, bottom=inteference, edgecolor="white", linewidth=0.7, label='synchronize')
-    ax.bar(x, datatransfer, width=bar_width, bottom=np.array(inteference)+np.array(synchronize), edgecolor="white", linewidth=0.7, label='datatransfer')
+    ax.bar(x, inference, width=bar_width, edgecolor="white", linewidth=0.7, label='inference')
+    ax.bar(x, synchronize, width=bar_width, bottom=inference, edgecolor="white", linewidth=0.7, label='synchronize')
+    ax.bar(x, datatransfer, width=bar_width, bottom=np.array(inference)+np.array(synchronize), edgecolor="white", linewidth=0.7, label='datatransfer')
 
 
     ax.set_xticks(x)

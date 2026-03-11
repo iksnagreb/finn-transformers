@@ -14,7 +14,6 @@ WARNING: Session is NOT using the GPU – check your onnxruntime-gpu install.
 https://developer.nvidia.com/rdp/cudnn-archive
 
 - 1.19 for jetpack 6.0 und python 3.10, problem: onnxsim doesn't work anymore, same problem with measure (free(): invalid pointer), probably needs cudnn8 as well
-
 free(): invalid pointer
 
 
