@@ -44,7 +44,7 @@ measure-job:
 
     - python3 -m measure.measure
 
-    - python3 -m measure.onnxruntime_inf || echo "onnxruntime_inf skipped (Jetson Zoo wheel not installed)"
+    - python3 -m measure.measure_onnxruntime
 
     - python3 -m measure.tegrastats
 

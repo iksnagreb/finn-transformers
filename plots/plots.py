@@ -332,31 +332,37 @@ def power_bar_plot(json_path, output_path):
 if __name__ == "__main__":
     if INT8 == True:
         quant_type = "INT8"
+        quant_type2 ="ORT_INT8"
     elif FP16 == True:
         quant_type = "FP16"
+        quant_type2 ="ORT_FP16"
     else:
         quant_type = "FP32"
+        quant_type2 ="ORT_FP32"
+    
 
     base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type 
+    base_path2 = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type2 
 
-    latency_throughput_path = base_path / "latency_throughput.json"
-    latency_throughput_output = base_path / "latency_per_throughput_plot.png"
+
+    latency_throughput_path = base_path2 / "latency_throughput.json"
+    latency_throughput_output = base_path2 / "latency_per_throughput_plot.png"
 
     latency_throughput_output.parent.mkdir(parents=True, exist_ok=True)
     latency_per_throughput_plot(latency_throughput_path, latency_throughput_output)
 
 
-    throughput_results_path = base_path / "throughput_results.json"
+    throughput_results_path = base_path2 / "throughput_results.json"
     # throughput_results_output_batch = "images/throughput_batch_plot.png"
-    throughput_results_output_batch =  base_path / "throughput_batch_plot.png"
+    throughput_results_output_batch =  base_path2 / "throughput_batch_plot.png"
     throughput_batch_plot(throughput_results_path, throughput_results_output_batch)
 
-    throughput_results_output_images =  base_path / "throughput_images_plot.png"
+    throughput_results_output_images =  base_path2 / "throughput_images_plot.png"
     throughput_images_plot(throughput_results_path, throughput_results_output_images)
 
-    latency_results_path = base_path / "latency_results_batch.json"
+    latency_results_path = base_path2 / "latency_results_batch.json"
     # latency_results_output = "images/latency_plot.png"
-    latency_results_output = base_path / "latency_plot.png"
+    latency_results_output = base_path2 / "latency_plot.png"
     latency_plot(latency_results_path, latency_results_output)
 
     power_throughput_path = base_path / "power_throughput.json"
