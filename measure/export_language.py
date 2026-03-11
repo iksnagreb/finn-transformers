@@ -22,10 +22,9 @@ from language.dataset import get_datasets, preprocess
 from attention import QuantMultiheadAttention
 # Seeding RNGs for reproducibility, affine parameter export patching
 from utils import seed, patch_missing_affine_norms
-import gc
 import yaml
 import onnx
-from onnxsim import simplify
+from measure.onnx_simplify import simplify_onnx
 
 # Export function mapping
 EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
@@ -137,11 +136,6 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
         seq_len = tokens.shape[1]
 
 
-        # onnxsim materialises all tensors during constant-folding; for large
-        # batch sizes this exhausts Jetson's unified memory and corrupts the
-        # heap. Skip simplification above this threshold.
-        SIMPLIFY_MAX_BATCH = 256
-
         for batch_size in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]:
 
             # test: wird das Ergebnis (Accuracy) besser mit echten daten?
@@ -166,28 +160,7 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
 
             print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
-            if batch_size > SIMPLIFY_MAX_BATCH:
-                # Copy the unsimplified model so downstream code always finds
-                # a *_simple.onnx file, without running onnxsim on huge tensors.
-                import shutil
-                shutil.copy(export_path, simplified_path)
-                print(f"onnxsim übersprungen für batch_size={batch_size} "
-                      f"(> {SIMPLIFY_MAX_BATCH}), unsimplified Kopie gespeichert.")
-            else:
-                onnx_model = onnx.load(export_path)
-                # Simplify mit onnxsim
-                model_simplified, check = simplify(onnx_model)
-                del onnx_model  # free before saving to reduce peak memory
-                if not check:
-                    print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
-                    import shutil
-                    shutil.copy(export_path, simplified_path)
-                else:
-                    onnx.save(model_simplified, simplified_path)
-                    print(f"Simplified gespeichert: {simplified_path}")
-                del model_simplified
-
-            gc.collect()
+            simplify_onnx(export_path, simplified_path)
     else:
         print("No quantisation -> export with qonnx")
         onnx_path = "outputs/language/model_dynamic_batchsize.onnx"
