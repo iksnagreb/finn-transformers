@@ -44,7 +44,7 @@ measure-job:
         echo "cuDNN 8 found natively, no symlink needed"
       fi
 
-    - pip install /data/onnxruntime_gpu-1.19.0-cp310-cp310-linux_aarch64.whl
+    - pip install /data/onnxruntime_gpu-1.17.0-cp310-cp310-linux_aarch64.whl
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
     - pip install -r requirements.txt
 
