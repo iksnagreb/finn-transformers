@@ -18,6 +18,9 @@ default:
    - export LIBRARY_PATH=/usr/local/cuda/lib64
    - export PYTHONPATH=/usr/lib/python3.10/dist-packages:${CI_PROJECT_DIR}:$PYTHONPATH  
    - export LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
+   # Prepend the cuDNN compat dir so ORT 1.17/1.19 (built for cuDNN 8) finds
+   # libcudnn.so.8 even though this runner ships cuDNN 9 (JP6 R36.4+).
+   - export LD_LIBRARY_PATH=${CI_PROJECT_DIR}/.cudnn_compat:$LD_LIBRARY_PATH
    - export PIP_CACHE_DIR=$CI_PROJECT_DIR/.cache/pip
 
 measure-job:
@@ -30,6 +33,17 @@ measure-job:
 
     - pip install --upgrade pip
     
+    # Create cuDNN 8 compatibility symlink if the runner only has cuDNN 9.
+    # LD_LIBRARY_PATH already points to .cudnn_compat (set in before_script).
+    - mkdir -p $CI_PROJECT_DIR/.cudnn_compat
+    - |
+      if [ ! -f /usr/lib/aarch64-linux-gnu/libcudnn.so.8 ]; then
+        ln -sf /usr/lib/aarch64-linux-gnu/libcudnn.so.9 $CI_PROJECT_DIR/.cudnn_compat/libcudnn.so.8
+        echo "cuDNN compat: symlinked libcudnn.so.8 -> libcudnn.so.9"
+      else
+        echo "cuDNN 8 found natively, no symlink needed"
+      fi
+
     - pip install /data/onnxruntime_gpu-1.17.0-cp310-cp310-linux_aarch64.whl
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
     - pip install -r requirements.txt
