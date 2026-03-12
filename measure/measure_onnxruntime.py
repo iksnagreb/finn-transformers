@@ -22,11 +22,14 @@ import sys
 import numpy as np
 import onnx
 import onnxruntime as ort
-import torch
 import yaml
 from pathlib import Path
-from torch.utils.data import TensorDataset, DataLoader
 from dvclive import Live
+
+# Prevent PyTorch from initialising a CUDA context before ORT gets a chance
+# to allocate its cuBLAS handle.  We import torch lazily (after ORT sessions
+# are created) to avoid CUBLAS_STATUS_ALLOC_FAILED on the Jetson.
+os.environ.setdefault("CUDA_MODULE_LOADING", "LAZY")
 
 from measure.latency_throughput_log import latency_throughput
 
@@ -79,24 +82,8 @@ ONNX_TO_NP_DTYPE = {
     "tensor(bool)":    np.bool_,
 }
 
-ONNX_TO_TORCH_DTYPE = {
-    "tensor(float)":   torch.float32,
-    "tensor(float16)": torch.float16,
-    "tensor(double)":  torch.float64,
-    "tensor(int32)":   torch.int32,
-    "tensor(int64)":   torch.int64,
-    "tensor(uint8)":   torch.uint8,
-    "tensor(int8)":    torch.int8,
-    "tensor(bool)":    torch.bool,
-}
-
-
 def onnx_dtype_to_numpy(onnx_dtype_str: str) -> np.dtype:
     return ONNX_TO_NP_DTYPE.get(onnx_dtype_str, np.float32)
-
-
-def onnx_dtype_to_torch(onnx_dtype_str: str) -> torch.dtype:
-    return ONNX_TO_TORCH_DTYPE.get(onnx_dtype_str, torch.float32)
 
 # ---------------------------------------------------------------------------
 # Shared utilities
@@ -220,7 +207,7 @@ def create_ort_session(onnx_model_path: str) -> ort.InferenceSession:
 # Data loading (same logic as measure.py)
 # ---------------------------------------------------------------------------
 
-def create_test_dataloader(data_path_npz: str, batch_size: int, onnx_model_path: str) -> DataLoader:
+def create_test_dataloader(data_path_npz: str, batch_size: int, onnx_model_path: str) -> list:
     """Build a DataLoader from the NPZ test split."""
     data = np.load(data_path_npz)
     input_info, output_info = get_model_io_info(onnx_model_path)
@@ -236,22 +223,21 @@ def create_test_dataloader(data_path_npz: str, batch_size: int, onnx_model_path:
         attention_mask_key = None
         output_key         = key_list[1]
 
-    input_ids      = torch.from_numpy(data[input_key])
-    attention_mask = torch.from_numpy(data[attention_mask_key]) if attention_mask_key else None
-    labels         = torch.from_numpy(data[output_key])
+    input_ids      = data[input_key]
+    attention_mask = data[attention_mask_key] if attention_mask_key else None
+    labels         = data[output_key]
 
-    if attention_mask is not None:
-        test_dataset = TensorDataset(input_ids, attention_mask, labels)
-    else:
-        test_dataset = TensorDataset(input_ids, labels)
-
-    return DataLoader(
-        test_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        pin_memory=False,   # inputs stay on CPU; ORT handles H2D internally
-        drop_last=True,
-    )
+    # Build a simple list-of-numpy-arrays DataLoader without importing torch
+    n = len(input_ids)
+    n = (n // batch_size) * batch_size  # drop_last=True equivalent
+    batches = []
+    for i in range(0, n, batch_size):
+        sl = slice(i, i + batch_size)
+        if attention_mask is not None:
+            batches.append((input_ids[sl], attention_mask[sl], labels[sl]))
+        else:
+            batches.append((input_ids[sl], labels[sl]))
+    return batches
 
 
 # ---------------------------------------------------------------------------
@@ -260,7 +246,7 @@ def create_test_dataloader(data_path_npz: str, batch_size: int, onnx_model_path:
 
 def run_inference_ort(
     session: ort.InferenceSession,
-    test_loader: DataLoader,
+    test_loader: list,
     batch_size: int,
     input_info: list,
     output_info: list,
@@ -306,29 +292,25 @@ def run_inference_ort(
         start_time_dt = time.time()
 
         inp_dtype = onnx_dtype_to_numpy(input_info[0]["dtype"])
-        feed = {input_info[0]["name"]: xb.numpy().astype(inp_dtype)}
+        feed = {input_info[0]["name"]: np.asarray(xb).astype(inp_dtype)}
 
         if att_mask is not None and len(input_info) > 1:
             att_dtype = onnx_dtype_to_numpy(input_info[1]["dtype"])
-            feed[input_info[1]["name"]] = att_mask.numpy().astype(att_dtype)
+            feed[input_info[1]["name"]] = np.asarray(att_mask).astype(att_dtype)
 
         if token_type is not None and len(input_info) > 2:
             tt_dtype = onnx_dtype_to_numpy(input_info[2]["dtype"])
-            feed[input_info[2]["name"]] = token_type.numpy().astype(tt_dtype)
+            feed[input_info[2]["name"]] = np.asarray(token_type).astype(tt_dtype)
 
-        # ── synchronize timer: pre-run CUDA sync + session.run() ──
+        # ── synchronize timer: session.run() (ORT already synchronises internally) ──
         start_time_sync = time.time()
-        if torch.cuda.is_available():
-            torch.cuda.synchronize()
 
         # ── inference timer: session.run() only ──
         start_time_inf = time.time()
         outputs = session.run(output_names, feed)
         end_time = time.time()
-
-        # post-run CUDA sync (mirrors the stream sync in measure.py)
-        if torch.cuda.is_available():
-            torch.cuda.synchronize()
+        # ORT's session.run() blocks until GPU work is done and results are
+        # copied back to CPU, so no explicit CUDA sync is needed here.
         end_time_sync = time.time()
 
         # ORT already returns numpy arrays; no extra D2H copy needed
@@ -342,14 +324,14 @@ def run_inference_ort(
 
         if accuracy_flag:
             pred    = output.argmax(axis=-1)
-            correct = (pred == yb.numpy()).sum()
+            correct = (pred == yb).sum()
             total   = int(np.prod(yb.shape)) if MODEL_TYPE == "language" else yb.shape[0]
             correct_predictions += correct
             total_predictions   += total
 
         if accuracy_flag and do_prints:
             print("Prediction (Raw):", output[0])
-            print("Label:           ", yb.numpy()[0])
+            print("Label:           ", yb[0])
             print("Predicted label: ", pred[0])
             do_prints = False
 
@@ -574,5 +556,3 @@ if __name__ == "__main__":
         live.next_step()
 
     print("DVC Live Bericht (ORT CUDA) fertig!")
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
