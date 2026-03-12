@@ -124,14 +124,14 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             )
             print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
 
-            # model_load = onnx.load(export_path)
+            model_load = onnx.load(export_path)
             # # Simplify mit onnxsim
             # model_simplified, check = simplify(model_load)
             # if not check:
             #     print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
             #     continue
             # onnx.save(model_simplified, simplified_path)
-            onnx.save(model, simplified_path)
+            onnx.save(model_load, simplified_path)
             print(f"not Simplified gespeichert: {simplified_path}")
 
 
