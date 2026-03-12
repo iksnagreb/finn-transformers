@@ -19,6 +19,7 @@ import time
 import json
 import os
 import sys
+import gc
 import numpy as np
 import onnx
 import onnxruntime as ort
@@ -371,6 +372,8 @@ def run_accuracy_eval(batch_size, input_info, output_info, data_path_npz, onnx_m
         output_info=output_info,
         accuracy_flag=True,
     )
+    del session
+    gc.collect()
     return accuracy
 
 
@@ -403,6 +406,9 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
         # Re-create session only when the model file changes
         if current_onnx_path != current_session_path:
+            if session is not None:
+                del session
+                gc.collect()
             input_info, output_info = get_model_io_info(current_onnx_path)
             session = create_ort_session(current_onnx_path)
             current_session_path = current_onnx_path
@@ -469,6 +475,10 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
             num_batches, throughput_batches, throughput_images,
             batch_size,
         )
+
+    if session is not None:
+        del session
+        gc.collect()
 
     return throughput_log, latency_log, latency_log_batch
 
@@ -556,3 +566,11 @@ if __name__ == "__main__":
         live.next_step()
 
     print("DVC Live Bericht (ORT CUDA) fertig!")
+
+    # Explicit exit to avoid free(): invalid pointer crash during Python
+    # interpreter shutdown.  ORT's CUDA-EP C++ destructors are called in
+    # undefined order when the interpreter tears down module globals, which
+    # causes a double-free.  At this point all data is written and DVC Live
+    # is closed, so a hard exit is safe.
+    gc.collect()
+    os._exit(0)
