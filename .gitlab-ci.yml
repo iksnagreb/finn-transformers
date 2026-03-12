@@ -46,9 +46,9 @@ measure-job:
 
     - python3 -m measure.export_wrapper
 
-    - python3 -m measure.measure
-
     - python3 -m measure.measure_onnxruntime
+
+    - python3 -m measure.measure
 
     - python3 -m measure.tegrastats
 
