@@ -32,21 +32,11 @@ measure-job:
     - ls -l /usr/local/cuda/include/cuda.h
 
     - pip install --upgrade pip
-    
-    # Create cuDNN 8 compatibility symlink if the runner only has cuDNN 9.
-    # LD_LIBRARY_PATH already points to .cudnn_compat (set in before_script).
-    - mkdir -p $CI_PROJECT_DIR/.cudnn_compat
-    - |
-      if [ ! -f /usr/lib/aarch64-linux-gnu/libcudnn.so.8 ]; then
-        ln -sf /usr/lib/aarch64-linux-gnu/libcudnn.so.9 $CI_PROJECT_DIR/.cudnn_compat/libcudnn.so.8
-        echo "cuDNN compat: symlinked libcudnn.so.8 -> libcudnn.so.9"
-      else
-        echo "cuDNN 8 found natively, no symlink needed"
-      fi
 
-    - pip install /data/onnxruntime_gpu-1.17.0-cp310-cp310-linux_aarch64.whl
+    - pip install /data/onnxruntime/build/Linux/Release/dist/onnxruntime_gpu-1.20.0-cp310-cp310-linux_aarch64.whl
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
     - pip install -r requirements.txt
+    - pip freeze
 
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 

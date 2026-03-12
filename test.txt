@@ -8,12 +8,154 @@ Available ORT providers: ['TensorrtExecutionProvider', 'CUDAExecutionProvider', 
 ORT session active providers: ['CPUExecutionProvider']
 WARNING: Session is NOT using the GPU – check your onnxruntime-gpu install.
 
-
 - can not find jetson cudnn8 installation
+pip install "nvidia-cudnn-cu12>=8.0,<9.0"
+Defaulting to user installation because normal site-packages is not writeable
+ERROR: Could not find a version that satisfies the requirement nvidia-cudnn-cu12<9.0,>=8.0 (from versions: 0.0.1.dev5, 9.0.0.312, 9.0.0.312.post1, 9.1.0.70.post1, 9.1.1.17, 9.2.0.82, 9.2.1.18, 9.3.0.75, 9.4.0.58, 9.5.0.50, 9.5.1.17, 9.6.0.74, 9.7.0.66, 9.7.1.26, 9.8.0.87, 9.9.0.52, 9.10.0.56, 9.10.1.4, 9.10.2.21, 9.11.0.98, 9.11.1.4, 9.12.0.46, 9.13.0.50, 9.13.1.26, 9.14.0.64, 9.15.0.57, 9.15.1.9, 9.16.0.29, 9.17.0.29, 9.17.1.4, 9.18.0.77, 9.18.1.3, 9.19.0.56, 9.20.0.48)
+ERROR: No matching distribution found for nvidia-cudnn-cu12<9.0,>=8.0
 
 https://developer.nvidia.com/rdp/cudnn-archive
+pypi
+nvidia-cudnn-cu12==8
+
 
 - 1.19 for jetpack 6.0 und python 3.10, problem: onnxsim doesn't work anymore, same problem with measure (free(): invalid pointer), probably needs cudnn8 as well
 free(): invalid pointer
 
 
+
+
+- ort 1.20 für jetson selber bauen:
+ev. möglich
+onnxsim wird damit nicht funktionieren -> onnxsim braucht scheinbar ort 1.17
+
+
+
+
+normalen PC nutzen und Zeiten vergleichen
+1. neuen stand nutzen
+2. dvc nutzen? wie
+3. vergleichen alle modelle: tensorrt vs cuda onnnxruntime
+
+
+
+
+
+ORT Bauen:
+cmake --version 2>/dev/null; ninja --version 2>/dev/null; python3.10 --version; free -h | grep Mem; df -h / | tail -1; nproc
+cmake version 3.22.1
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).
+Python 3.10.12
+Mem:            61Gi        10Gi        21Gi       1.2Gi        29Gi        49Gi
+/dev/mmcblk0p1   57G   52G  2.0G  97% /
+8
+
+
+ORT bauen:
+im data/ ordner (ssd)
+ort 1.20
+mit cudnn9
+jetson
+Python 3.10.12
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2024 NVIDIA Corporation
+Built on Wed_Aug_14_10:14:07_PDT_2024
+Cuda compilation tools, release 12.6, V12.6.68
+---
+/usr/include/cudnn_version.h
+cuDNN include: 2
+---
+cuda-cudart-dev-12-6 12.6.68-1
+cuda-toolkit 12.6.11-1
+cuda-toolkit-12-6 12.6.11-1
+cuda-toolkit-12-6-config-common 12.6.68-1
+cuda-toolkit-12-config-common 12.6.68-1
+cuda-toolkit-config-common 12.6.68-1
+libcudnn9-cuda-12 9.3.0.75-1
+libcudnn9-dev-cuda-12 9.3.0.75-1
+libcudnn9-samples 9.3.0.75-1
+---
+/usr/include/python3.10
+---
+NVIDIA Jetson AGX Orin Developer Kit
+
+
+
+vorgeschlagen von ort:
+./build.sh 
+    --use_cuda 
+    --cudnn_home <cudnn home path> 
+    --cuda_home <cuda home path>
+    --cmake_extra_defines CMAKE_CUDA_ARCHITECTURES=80;86;89
+
+vorgeschlaggen von copilot:
+./build.sh \
+  --config Release \
+  --use_cuda \
+  --cuda_home /usr/local/cuda \
+  --cudnn_home /usr \
+  --build_wheel \
+  --skip_tests \
+  --parallel 4 \
+  --cmake_extra_defines \
+      CMAKE_CUDA_ARCHITECTURES=87 \
+      Python_EXECUTABLE=/usr/bin/python3.10 \
+      CUDNN_LIBRARY=/usr/lib/aarch64-linux-gnu/libcudnn.so
+
+
+    Eigen ist eine C++ Header-Only-Bibliothek für lineare Algebra (Matrizen, Vektoren, numerische Berechnungen). ORT nutzt sie intern für mathematische Operationen.
+
+Warum der Fehler?
+
+ORT versucht Eigen automatisch von GitLab herunterzuladen (FetchContent). Der Download schlägt fehl weil:
+
+Die heruntergeladene Datei hat einen anderen SHA1-Hash als erwartet
+Das passiert wenn GitLab ein dynamisch generiertes ZIP liefert dessen Inhalt sich minimal unterscheidet (z.B. Timestamps) — ein bekanntes Problem mit GitLab-Archive-URLs
+Die Lösung (--use_preinstalled_eigen) sagt ORT: "Lad nichts herunter, nutz stattdessen das bereits installierte Eigen aus dem System" (eigen3). Das umgeht den fehlgeschlagenen Download komplett.
+
+Jetzt kannst du den Build starten:
+
+
+./build.sh \
+  --config Release \
+  --use_cuda \
+  --cuda_home /usr/local/cuda \
+  --cudnn_home /usr \
+  --build_wheel \
+  --skip_tests \
+  --parallel 4 \
+  --use_preinstalled_eigen \
+  --eigen_path /usr/include/eigen3 \
+  --cmake_extra_defines \
+      CMAKE_CUDA_ARCHITECTURES=87 \
+      Python_EXECUTABLE=/usr/bin/python3.10 \
+      CUDNN_LIBRARY=/usr/lib/aarch64-linux-gnu/libcudnn.so
+
+
+      [ 64%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_hdim64_bf16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_hdim64_fp16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_hdim96_bf16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_hdim96_fp16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim128_bf16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim128_fp16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim160_bf16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim160_fp16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim192_bf16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim192_fp16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim224_bf16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim224_fp16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim256_bf16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim256_fp16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim32_bf16_sm80.cu.o
+[ 65%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim32_fp16_sm80.cu.o
+
+
+# system eigen hat nicht zu der ort eigen version gepasst -> manuell hash matchen (da hat es vorher bei der eigenversion probleme gegeben)
+
+
+Immer noch das System-Eigen-Problem — der Compiler findet eigen3 automatisch da es im Standard-Include-Pfad liegt, egal was CMake setzt. Der einfachste Fix: System-Eigen temporär deinstallieren:
+
+
+wieder installieren:
+sudo apt install -y libeigen3-dev
