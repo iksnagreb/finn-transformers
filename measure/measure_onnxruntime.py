@@ -178,34 +178,41 @@ def create_ort_session(onnx_model_path: str) -> ort.InferenceSession:
     available = ort.get_available_providers()
     print(f"Available ORT providers: {available}")
 
+    sess_opts = ort.SessionOptions()
+    sess_opts.intra_op_num_threads = 1
+    sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_DISABLE_ALL
+
     if "CUDAExecutionProvider" in available:
-        providers = [
+        cuda_providers = [
             (
                 "CUDAExecutionProvider",
                 {
                     "device_id": 0,
-                    "arena_extend_strategy": "kNextPowerOfTwo",
-                    "cudnn_conv_algo_search": "EXHAUSTIVE",
+                    "arena_extend_strategy": "kSameAsRequested",
+                    "gpu_mem_limit": int(4 * 1024 * 1024 * 1024),  # 4 GB
+                    "cudnn_conv_algo_search": "DEFAULT",
                     "do_copy_in_default_stream": True,
                 },
             ),
             ("CPUExecutionProvider", {}),
         ]
-    else:
-        print("WARNING: CUDAExecutionProvider not available – falling back to CPU.")
-        providers = [("CPUExecutionProvider", {})]
+        try:
+            session = ort.InferenceSession(
+                onnx_model_path, sess_options=sess_opts, providers=cuda_providers
+            )
+            active = session.get_providers()
+            print(f"ORT session active providers: {active}")
+            if active[0] != "CUDAExecutionProvider":
+                print("WARNING: Session is NOT using the GPU – check your onnxruntime-gpu install.")
+            return session
+        except Exception as e:
+            print(f"WARNING: CUDAExecutionProvider failed ({e}), falling back to CPU.")
 
-    sess_opts = ort.SessionOptions()
-    sess_opts.intra_op_num_threads = 1
-    sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_DISABLE_ALL
-
+    print("WARNING: CUDAExecutionProvider not available or failed – using CPU.")
     session = ort.InferenceSession(
-        onnx_model_path, sess_options=sess_opts, providers=providers
+        onnx_model_path, sess_options=sess_opts, providers=[("CPUExecutionProvider", {})]
     )
-    active = session.get_providers()
-    print(f"ORT session active providers: {active}")
-    if active[0] != "CUDAExecutionProvider":
-        print("WARNING: Session is NOT using the GPU – check your onnxruntime-gpu install.")
+    print(f"ORT session active providers: {session.get_providers()}")
     return session
 
 
