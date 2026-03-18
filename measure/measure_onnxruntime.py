@@ -415,6 +415,12 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
         test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size, current_onnx_path)
 
+        # Aggressively free memory before large batch measurements
+        if batch_size > 64:
+            import torch
+            torch.cuda.empty_cache()
+            gc.collect()
+
         # Average over num_executions runs (set > 1 for more stable estimates)
         num_executions    = 1
         latency_ms_sum    = 0.0
