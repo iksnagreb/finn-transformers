@@ -12,6 +12,7 @@ from torch.utils.data import TensorDataset, DataLoader
 import pycuda.driver as cuda
 # import pycuda.autoinit
 import os
+import gc
 import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
@@ -603,5 +604,13 @@ if __name__ == "__main__":
             os.environ["DVC_LOGLEVEL"] = _prev_dvc_loglevel
 
     print("DVC Live Bericht fertig!")
+
+    # Explicit exit to avoid free(): invalid pointer crash during Python
+    # interpreter shutdown. ORT's CUDA-EP C++ destructors are called in
+    # undefined order when the interpreter tears down module globals, which
+    # causes a double-free. At this point all data is written and DVC Live
+    # is closed, so a hard exit is safe.
+    gc.collect()
+    os._exit(0)
 
 
