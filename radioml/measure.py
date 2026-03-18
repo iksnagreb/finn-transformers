@@ -17,6 +17,7 @@ from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
 import dvc.api
 import model
+import gc
 
 # import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -511,7 +512,6 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
         torch.cuda.synchronize()
         torch.cuda.empty_cache()
-        import gc
         gc.collect()
 
     return throughput_log, latency_log, latency_log_batch
