@@ -39,3 +39,11 @@ artifacts:
 
 
     # alle artifacts hier hinzugefügt - aber eigentlich sollte push experiments reichen (mit korrektem remote)
+  ort_throughput_results_INT8_language:
+    path: outputs/language/plot/ORT_INT8/throughput_results.json
+  ort_latency_results_batch_INT8_language:
+    path: outputs/language/plot/ORT_INT8/latency_results_batch.json
+  ort_latency_throughput_INT8_language:
+    path: outputs/language/plot/ORT_INT8/latency_throughput.json
+metrics:
+- dvclive/metrics.json
