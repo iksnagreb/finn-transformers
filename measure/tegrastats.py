@@ -579,20 +579,28 @@ if __name__ == "__main__":
 
     power_throughput(power_path, throughput_path, power_throughput_path)
 
-    with Live(save_dvc_exp=True, report="md") as live:
-        print("Starte DVC Live Bericht....", flush=True)
+    _prev_dvc_loglevel = os.environ.get("DVC_LOGLEVEL")
+    os.environ["DVC_LOGLEVEL"] = "ERROR"
+    try:
+        with Live(save_dvc_exp=True, report="md") as live:
+            print("Starte DVC Live Bericht....", flush=True)
 
-        live.log_artifact(energy_consumption_file, name="energy_consumption")
+            live.log_artifact(energy_consumption_file, name="energy_consumption")
 
-        # noch zusammenfassen
-        live.log_artifact(power_averages_file, name=f"power_averages_{quant_type}_{MODEL_TYPE}")
-        live.log_artifact(power_averages_file_baseline, name=f"power_averages_baseline_{quant_type}_{MODEL_TYPE}")
+            # noch zusammenfassen
+            live.log_artifact(power_averages_file, name=f"power_averages_{quant_type}_{MODEL_TYPE}")
+            live.log_artifact(power_averages_file_baseline, name=f"power_averages_baseline_{quant_type}_{MODEL_TYPE}")
 
-        live.log_artifact(power_averages_difference_file, name=f"power_averages_difference_{quant_type}_{MODEL_TYPE}")
-        live.log_artifact(power_throughput_path, name=f"power_throughput_{quant_type}_{MODEL_TYPE}")
-        live.log_artifact(power_path, name=f"power_averages_{quant_type}_{MODEL_TYPE}")
-        
-        live.next_step() 
+            live.log_artifact(power_averages_difference_file, name=f"power_averages_difference_{quant_type}_{MODEL_TYPE}")
+            live.log_artifact(power_throughput_path, name=f"power_throughput_{quant_type}_{MODEL_TYPE}")
+            live.log_artifact(power_path, name=f"power_averages_{quant_type}_{MODEL_TYPE}")
+
+            live.next_step()
+    finally:
+        if _prev_dvc_loglevel is None:
+            os.environ.pop("DVC_LOGLEVEL", None)
+        else:
+            os.environ["DVC_LOGLEVEL"] = _prev_dvc_loglevel
 
     print("DVC Live Bericht fertig!")
 
