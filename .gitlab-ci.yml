@@ -41,8 +41,10 @@ export-models:
   stage: export
   script:
     - mkdir -p $PIP_CACHE_DIR
-    - python3 -m venv .venv-export
-    - source .venv-export/bin/activate
+    - export VENV_DIR=/data/gitlab/venvs/export-${CI_PIPELINE_ID}-${CI_JOB_ID}
+    - mkdir -p /data/gitlab/venvs
+    - python3 -m venv "$VENV_DIR"
+    - source "$VENV_DIR/bin/activate"
     - ls -l /usr/local/cuda/include/cuda.h
 
     - pip install --upgrade pip
@@ -76,8 +78,10 @@ measure-job:
       artifacts: true
   script:
     - mkdir -p $PIP_CACHE_DIR
-    - python3 -m venv .venv-measure
-    - source .venv-measure/bin/activate
+    - export VENV_DIR=/data/gitlab/venvs/measure-${CI_PIPELINE_ID}-${CI_JOB_ID}
+    - mkdir -p /data/gitlab/venvs
+    - python3 -m venv "$VENV_DIR"
+    - source "$VENV_DIR/bin/activate"
     - ls -l /usr/local/cuda/include/cuda.h
 
     - pip install --upgrade pip
@@ -112,7 +116,7 @@ measure-job:
     - git config --global user.name "CI Runner"
 
     - dvc push -r upload  
-    - dvc exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
+    - dvc -q exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
     - ssh-agent -k
     # Trigger GitLab mirror sync so DataChain sees the new experiment immediately
     # - |

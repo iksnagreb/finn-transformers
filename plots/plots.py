@@ -385,19 +385,29 @@ if __name__ == "__main__":
     # mit dvc exp hochladen
     # log image
     # hash -> im git als ref finden, oder irgendwie apply machen
-    with Live(save_dvc_exp=True, cache_images = False, report="md") as live:
-        print("Starte DVC Live Bericht....", flush=True)
+    # Always save an experiment, but suppress warning-level DVC output
+    # (for example long untracked-file warnings in CI logs).
+    _prev_dvc_loglevel = os.environ.get("DVC_LOGLEVEL")
+    os.environ["DVC_LOGLEVEL"] = "ERROR"
+    try:
+        with Live(save_dvc_exp=True, cache_images=False, report="md") as live:
+            print("Starte DVC Live Bericht....", flush=True)
 
-        live.log_image(f"latency_throughput_plot_{quant_type}_{MODEL_TYPE}.png", latency_throughput_output)
-        live.log_image(f"throughput_batch_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_batch)
-        live.log_image(f"throughput_images_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_images)
-        live.log_image(f"latency_plot_{quant_type}_{MODEL_TYPE}.png", latency_results_output)
-        live.log_image(f"throughput_per_power_plot_{quant_type}_{MODEL_TYPE}.png", power_throughput_output)
-        # live.log_image("accuracies_plot.png", accuracy_output)
-        live.log_image(f"energy_consumption_plot_{quant_type}_{MODEL_TYPE}.png", energy_consumption_output)
-        live.log_image(f"power_bar_plot_{quant_type}_{MODEL_TYPE}.png", power_bar_output)
+            live.log_image(f"latency_throughput_plot_{quant_type}_{MODEL_TYPE}.png", latency_throughput_output)
+            live.log_image(f"throughput_batch_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_batch)
+            live.log_image(f"throughput_images_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_images)
+            live.log_image(f"latency_plot_{quant_type}_{MODEL_TYPE}.png", latency_results_output)
+            live.log_image(f"throughput_per_power_plot_{quant_type}_{MODEL_TYPE}.png", power_throughput_output)
+            # live.log_image("accuracies_plot.png", accuracy_output)
+            live.log_image(f"energy_consumption_plot_{quant_type}_{MODEL_TYPE}.png", energy_consumption_output)
+            live.log_image(f"power_bar_plot_{quant_type}_{MODEL_TYPE}.png", power_bar_output)
 
 
-        live.next_step()
+            live.next_step()
+    finally:
+        if _prev_dvc_loglevel is None:
+            os.environ.pop("DVC_LOGLEVEL", None)
+        else:
+            os.environ["DVC_LOGLEVEL"] = _prev_dvc_loglevel
 
     print("DVC Live Bericht fertig!")
