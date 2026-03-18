@@ -1,4 +1,5 @@
 stages:
+  - export
   - measure
 
 variables:
@@ -23,17 +24,18 @@ default:
    - export LD_LIBRARY_PATH=${CI_PROJECT_DIR}/.cudnn_compat:$LD_LIBRARY_PATH
    - export PIP_CACHE_DIR=$CI_PROJECT_DIR/.cache/pip
 
-measure-job:
-  stage: measure
+export-models:
+  stage: export
   script:
     - mkdir -p $PIP_CACHE_DIR
-    - python3 -m venv .venv
-    - source .venv/bin/activate
+    - python3 -m venv .venv-export
+    - source .venv-export/bin/activate
     - ls -l /usr/local/cuda/include/cuda.h
 
     - pip install --upgrade pip
 
-    - pip install /data/onnxruntime/build/Linux/Release/dist/onnxruntime_gpu-1.20.0-cp310-cp310-linux_aarch64.whl
+    # ORT 1.17 environment for onnxsim/simplification
+    - pip install onnxruntime==1.17.0
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
     - pip install -r requirements.txt
     - pip freeze
@@ -45,6 +47,40 @@ measure-job:
     - dvc remote modify upload password $DVC_Sciebo_Upload_PASSWORD
 
     - python3 -m measure.export_wrapper
+
+  artifacts:
+    name: "exported-models-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 day
+    paths:
+      - outputs/
+
+  tags:
+    - jetson
+
+measure-job:
+  stage: measure
+  needs:
+    - job: export-models
+      artifacts: true
+  script:
+    - mkdir -p $PIP_CACHE_DIR
+    - python3 -m venv .venv-measure
+    - source .venv-measure/bin/activate
+    - ls -l /usr/local/cuda/include/cuda.h
+
+    - pip install --upgrade pip
+
+    # ORT 1.20 environment for inference/measurement
+    - pip install /data/onnxruntime/build/Linux/Release/dist/onnxruntime_gpu-1.20.0-cp310-cp310-linux_aarch64.whl
+    - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
+    - pip install -r requirements.txt
+    - pip freeze
+
+    - python3 -c "import tensorrt; print(tensorrt.__version__)"
+
+    - dvc pull --allow-missing
+    - dvc remote modify upload user $DVC_Sciebo_Upload_USER
+    - dvc remote modify upload password $DVC_Sciebo_Upload_PASSWORD
 
     - python3 -m measure.measure_onnxruntime
 

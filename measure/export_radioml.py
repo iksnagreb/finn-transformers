@@ -126,13 +126,12 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
 
             model_load = onnx.load(export_path)
             # # Simplify mit onnxsim
-            # model_simplified, check = simplify(model_load)
-            # if not check:
-            #     print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
-            #     continue
-            # onnx.save(model_simplified, simplified_path)
-            onnx.save(model_load, simplified_path)
-            print(f"not Simplified gespeichert: {simplified_path}")
+            model_simplified, check = simplify(model_load)
+            if not check:
+                print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+                continue
+            onnx.save(model_simplified, simplified_path)
+            print(f"Simplified gespeichert: {simplified_path}")
 
 
 # Script entrypoint

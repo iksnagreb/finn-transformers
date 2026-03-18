@@ -159,3 +159,6 @@ Immer noch das System-Eigen-Problem — der Compiler findet eigen3 automatisch d
 
 wieder installieren:
 sudo apt install -y libeigen3-dev
+
+[ 78%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim96_bf16_sm80.cu.o
+[ 78%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim96_fp16_sm80.cu.o

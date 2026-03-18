@@ -760,3 +760,5 @@ if __name__ == "__main__":
 # dateien umbenennen, dokumentieren
 # fp 32 und fp 16 möglich machen
 # was darf für dla zwischen dequantize & Quantize sein? Sotmax, Matmul, ...?
+
+# todo: Lösung für Onnxsim finden 
