@@ -12,7 +12,6 @@ from torch.utils.data import TensorDataset, DataLoader
 import pycuda.driver as cuda
 # import pycuda.autoinit
 import os
-import gc
 import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
@@ -738,35 +737,21 @@ if __name__ == "__main__":
 
     latency_throughput(latency_results_batch, throughput_results, latency_throughput_path) # hat in richtige datei geschrieben
 
-    _prev_dvc_loglevel = os.environ.get("DVC_LOGLEVEL")
-    os.environ["DVC_LOGLEVEL"] = "ERROR"
-    try:
-        with Live(save_dvc_exp=True, report="md") as live:
-            print("Starte DVC Live Bericht.... mini measure", flush=True)
-            print("throughput result: ")
-            print(throughput_results)
-            live.log_artifact(throughput_results, name=f"throughput_results_{quantisation_type}_{MODEL_TYPE}")
-            print("latency batch result:")
-            print(latency_results_batch)
-            live.log_artifact(latency_results_batch, name=f"latency_results_batch_{quantisation_type}_{MODEL_TYPE}")
-            print("latency throughput result: ")
-            print(latency_throughput_path)
-            live.log_artifact(latency_throughput_path, name=f"latency_throughput_{quantisation_type}_{MODEL_TYPE}")
-
-            live.next_step()
-    finally:
-        if _prev_dvc_loglevel is None:
-            os.environ.pop("DVC_LOGLEVEL", None)
-        else:
-            os.environ["DVC_LOGLEVEL"] = _prev_dvc_loglevel
+    with Live(save_dvc_exp=True, report="md") as live:
+        print("Starte DVC Live Bericht.... mini measure", flush=True)
+        print("throughput result: ")
+        print(throughput_results)
+        live.log_artifact(throughput_results, name=f"throughput_results_{quantisation_type}_{MODEL_TYPE}")
+        print("latency batch result:")
+        print(latency_results_batch)
+        live.log_artifact(latency_results_batch, name=f"latency_results_batch_{quantisation_type}_{MODEL_TYPE}")
+        print("latency throughput result: ")
+        print(latency_throughput_path)
+        live.log_artifact(latency_throughput_path, name=f"latency_throughput_{quantisation_type}_{MODEL_TYPE}")      
+        
+        live.next_step() 
 
     print("DVC Live Bericht fertig!")
-
-    # Explicit exit to avoid free(): invalid pointer crash during Python
-    # interpreter shutdown. ORT's CUDA-EP C++ destructors are called in
-    # undefined order when the interpreter tears down module globals, which
-    # causes a double-free. At this point all data is written and DVC Live
-    # is closed, so a hard exit is safe.
     gc.collect()
     os._exit(0)
 

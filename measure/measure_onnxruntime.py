@@ -549,29 +549,21 @@ if __name__ == "__main__":
     save_json(latency_log_batch, latency_results_batch)
     latency_throughput(latency_results_batch, throughput_results, latency_throughput_path)
 
-    _prev_dvc_loglevel = os.environ.get("DVC_LOGLEVEL")
-    os.environ["DVC_LOGLEVEL"] = "ERROR"
-    try:
-        with Live(save_dvc_exp=True, report="md") as live:
-            print("Starte DVC Live Bericht (ORT CUDA)...", flush=True)
-            live.log_artifact(
-                throughput_results,
-                name=f"ort_throughput_results_{quantisation_type}_{MODEL_TYPE}",
-            )
-            live.log_artifact(
-                latency_results_batch,
-                name=f"ort_latency_results_batch_{quantisation_type}_{MODEL_TYPE}",
-            )
-            live.log_artifact(
-                latency_throughput_path,
-                name=f"ort_latency_throughput_{quantisation_type}_{MODEL_TYPE}",
-            )
-            live.next_step()
-    finally:
-        if _prev_dvc_loglevel is None:
-            os.environ.pop("DVC_LOGLEVEL", None)
-        else:
-            os.environ["DVC_LOGLEVEL"] = _prev_dvc_loglevel
+    with Live(save_dvc_exp=True, report="md") as live:
+        print("Starte DVC Live Bericht (ORT CUDA)...", flush=True)
+        live.log_artifact(
+            throughput_results,
+            name=f"ort_throughput_results_{quantisation_type}_{MODEL_TYPE}",
+        )
+        live.log_artifact(
+            latency_results_batch,
+            name=f"ort_latency_results_batch_{quantisation_type}_{MODEL_TYPE}",
+        )
+        live.log_artifact(
+            latency_throughput_path,
+            name=f"ort_latency_throughput_{quantisation_type}_{MODEL_TYPE}",
+        )
+        live.next_step()
 
     print("DVC Live Bericht (ORT CUDA) fertig!")
 

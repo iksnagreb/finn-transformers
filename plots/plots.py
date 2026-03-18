@@ -8,6 +8,7 @@ from matplotlib.patches import Patch
 from pathlib import Path
 from dvclive import Live
 import os
+import subprocess
 import yaml
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
@@ -377,6 +378,21 @@ if __name__ == "__main__":
     power_bar_output = base_path / "power_bar_plot.png"
     power_bar_plot(power_bar_path, power_bar_output)
 
+    # Vergleichsplots (TensorRT vs ORT) erzeugen
+    variants = f"{quant_type},{quant_type2}"
+    compare_env = os.environ.copy()
+    compare_env["MODEL_TYPE"] = MODEL_TYPE
+    compare_env["VARIANTS"] = variants
+
+    subprocess.run(["python3", "-m", "plots.compare_latency"], check=True, env=compare_env)
+    subprocess.run(["python3", "-m", "plots.compare_throughput"], check=True, env=compare_env)
+    subprocess.run(["python3", "-m", "plots.compare_accuracy"], check=True, env=compare_env)
+
+    variant_suffix = f"{quant_type}_{quant_type2}"
+    compare_latency_output = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / f"latency_comparison_{variant_suffix}.png"
+    compare_throughput_output = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / f"throughput_comparison_{variant_suffix}.png"
+    compare_accuracy_output = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / f"accuracy_comparison_{variant_suffix}.png"
+
     # eigentlich nicht bei jeder Quantisierung plotten, sondern am ende
     # accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / "accuracy.json"
     # accuracy_output = base_path / "accuracies_plot.png"
@@ -385,29 +401,23 @@ if __name__ == "__main__":
     # mit dvc exp hochladen
     # log image
     # hash -> im git als ref finden, oder irgendwie apply machen
-    # Always save an experiment, but suppress warning-level DVC output
-    # (for example long untracked-file warnings in CI logs).
-    _prev_dvc_loglevel = os.environ.get("DVC_LOGLEVEL")
-    os.environ["DVC_LOGLEVEL"] = "ERROR"
-    try:
-        with Live(save_dvc_exp=True, cache_images=False, report="md") as live:
-            print("Starte DVC Live Bericht....", flush=True)
+    save_dvc_exp = os.environ.get("DVCLIVE_SAVE_DVC_EXP", "1") == "1"
+    with Live(save_dvc_exp=save_dvc_exp, cache_images=False, report="md") as live:
+        print(f"Starte DVC Live Bericht.... (save_dvc_exp={save_dvc_exp})", flush=True)
 
-            live.log_image(f"latency_throughput_plot_{quant_type}_{MODEL_TYPE}.png", latency_throughput_output)
-            live.log_image(f"throughput_batch_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_batch)
-            live.log_image(f"throughput_images_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_images)
-            live.log_image(f"latency_plot_{quant_type}_{MODEL_TYPE}.png", latency_results_output)
-            live.log_image(f"throughput_per_power_plot_{quant_type}_{MODEL_TYPE}.png", power_throughput_output)
-            # live.log_image("accuracies_plot.png", accuracy_output)
-            live.log_image(f"energy_consumption_plot_{quant_type}_{MODEL_TYPE}.png", energy_consumption_output)
-            live.log_image(f"power_bar_plot_{quant_type}_{MODEL_TYPE}.png", power_bar_output)
+        live.log_image(f"latency_throughput_plot_{quant_type}_{MODEL_TYPE}.png", latency_throughput_output)
+        live.log_image(f"throughput_batch_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_batch)
+        live.log_image(f"throughput_images_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_images)
+        live.log_image(f"latency_plot_{quant_type}_{MODEL_TYPE}.png", latency_results_output)
+        live.log_image(f"throughput_per_power_plot_{quant_type}_{MODEL_TYPE}.png", power_throughput_output)
+        # live.log_image("accuracies_plot.png", accuracy_output)
+        live.log_image(f"energy_consumption_plot_{quant_type}_{MODEL_TYPE}.png", energy_consumption_output)
+        live.log_image(f"power_bar_plot_{quant_type}_{MODEL_TYPE}.png", power_bar_output)
+        live.log_image(f"latency_comparison_{variant_suffix}_{MODEL_TYPE}.png", compare_latency_output)
+        live.log_image(f"throughput_comparison_{variant_suffix}_{MODEL_TYPE}.png", compare_throughput_output)
+        live.log_image(f"accuracy_comparison_{variant_suffix}_{MODEL_TYPE}.png", compare_accuracy_output)
 
 
-            live.next_step()
-    finally:
-        if _prev_dvc_loglevel is None:
-            os.environ.pop("DVC_LOGLEVEL", None)
-        else:
-            os.environ["DVC_LOGLEVEL"] = _prev_dvc_loglevel
+        live.next_step()
 
     print("DVC Live Bericht fertig!")
