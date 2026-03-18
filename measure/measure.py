@@ -12,6 +12,7 @@ from torch.utils.data import TensorDataset, DataLoader
 import pycuda.driver as cuda
 # import pycuda.autoinit
 import os
+import gc
 import yaml
 from onnxconverter_common import float16 # zu requirements hinzufügen
 import onnxruntime as ort
