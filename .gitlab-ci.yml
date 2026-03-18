@@ -4,9 +4,22 @@ stages:
 
 variables:
   VENV_PATH: "/data/gitlab/builds/runner/.venv"
+  # Keep temporary files on /data (large partition).
+  # This directory must exist and be writable by the gitlab-runner user.
+  TMPDIR: "/data/gitlab/tmp"
+  TMP: "/data/gitlab/tmp"
+  TEMP: "/data/gitlab/tmp"
 
 default:
   before_script:
+   - |
+     if command -v sudo >/dev/null 2>&1; then
+       sudo -n mkdir -p /data/gitlab/tmp || mkdir -p /data/gitlab/tmp
+       sudo -n chmod 1777 /data/gitlab/tmp || chmod 1777 /data/gitlab/tmp
+     else
+       mkdir -p /data/gitlab/tmp
+       chmod 1777 /data/gitlab/tmp
+     fi
    - export MODEL_TYPE=radioml  # radioml, language, vision
    - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
    - export USE_DLA=1 # 0 or 1, decides if the measurements will be executed on DLA or GPU
@@ -34,7 +47,7 @@ export-models:
 
     - pip install --upgrade pip
 
-    # ORT 1.17 environment for onnxsim/simplification
+    # ORT 1.17 / 1.16.3 environment for onnxsim/simplification
     - pip install onnxruntime==1.17.0
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
     - pip install -r requirements.txt
