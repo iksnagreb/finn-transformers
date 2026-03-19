@@ -499,7 +499,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
 if __name__ == "__main__":
     # Language model has memory constraints on Jetson → limit max batch size
-    if MODEL_TYPE == "language":
+    if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
         batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256]
     else:
         # Vision and RadioML can handle larger batches
