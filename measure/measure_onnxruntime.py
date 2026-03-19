@@ -39,6 +39,8 @@ from measure.latency_throughput_log import latency_throughput
 # ---------------------------------------------------------------------------
 
 FP16 = os.environ.get("FP16", "0") == "1"
+GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
+GPU_MEM_LIMIT_BYTES = int(GPU_MEM_LIMIT_GB * 1024 * 1024 * 1024)
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
 if MODEL_TYPE not in ("radioml", "language", "vision"):
@@ -57,6 +59,8 @@ elif FP16:
     print("FP16 enabled")
 else:
     print("FP32")
+
+print(f"GPU memory budget: {GPU_MEM_LIMIT_GB:.2f} GB ({GPU_MEM_LIMIT_BYTES} bytes)")
 
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 CIFAR10_PATH_NPZ = R"/data/gitlab/cifar-10-batches-py/cifar10.npz"
@@ -177,7 +181,7 @@ def create_ort_session(onnx_model_path: str) -> ort.InferenceSession:
                 {
                     "device_id": 0,
                     "arena_extend_strategy": "kSameAsRequested",
-                    "gpu_mem_limit": int(4 * 1024 * 1024 * 1024),  # 4 GB
+                    "gpu_mem_limit": GPU_MEM_LIMIT_BYTES,
                     "cudnn_conv_algo_search": "DEFAULT",
                     "do_copy_in_default_stream": True,
                 },

@@ -26,6 +26,8 @@ from torchvision import datasets, transforms
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # tensorrt, datasets(hugging face), pycuda
 FP16 = os.environ.get("FP16", "0") == "1"
+GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
+GPU_MEM_LIMIT_BYTES = int(GPU_MEM_LIMIT_GB * 1024 * 1024 * 1024)
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
 if MODEL_TYPE != "radioml" and MODEL_TYPE != "language" and MODEL_TYPE != "vision":
@@ -50,6 +52,8 @@ elif FP16:
 else:
     dtype = torch.float32
     print("FP32")
+
+print(f"GPU memory budget: {GPU_MEM_LIMIT_GB:.2f} GB ({GPU_MEM_LIMIT_BYTES} bytes)")
 
 # todo: richtigen Pfad für Daten angeben
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
@@ -381,7 +385,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         print(f"  opt_shape: {opt_shape}")
         print(f"  max_shape: {max_shape}")
 
-    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
+    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, GPU_MEM_LIMIT_BYTES)
 
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
