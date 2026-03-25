@@ -43,7 +43,7 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
                 count_vin_sys += 1
 
         if count_vdd_gpu==0 or count_vdd_cpu==0 or count_vin_sys==0:
-            print(f"⚠️ Warnung: Keine Daten für batch_size {batch_size} gefunden.")
+            print(f"⚠️ No data for batch size {batch_size} found.")
 
         vdd_gpu_avg = vdd_gpu/count_vdd_gpu if count_vdd_gpu > 0 else 0
         vdd_cpu_avg = vdd_cpu/count_vdd_cpu if count_vdd_cpu > 0 else 0
@@ -68,7 +68,7 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
     with open(power_averages_file, "w") as f:
         json.dump(power_averages, f, indent=2)
 
-    print(f"{len(power_averages)} Einträge in '{power_averages_file.name}' gespeichert (Durchschnittswerte).")
+    print(f"{len(power_averages)} entries in '{power_averages_file.name}' saved (average values).")
 
 
 
@@ -139,7 +139,7 @@ def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption
     with open(power_averages_file, "w") as f:
         json.dump(power_averages, f, indent=2)
 
-    print(f"{len(power_averages)} Einträge in '{power_averages_file.name}' gespeichert (Durchschnittswerte).")
+    print(f"{len(power_averages)} entries in '{power_averages_file.name}' saved (average values).")
 
 def power_averages_difference(batch_sizes, power_averages_file, power_averages_baseline_file, power_difference_file, quant_type, model_type):
     # input logs besteht aus tegrastats_log, batch_size tuples
@@ -181,9 +181,9 @@ def power_averages_difference(batch_sizes, power_averages_file, power_averages_b
                     "value": difference
                 })
             else:
-                print(f"⚠️ Kein Baseline-Wert für batch_size {batch_size} und type {type_} gefunden.")
+                print(f"⚠️ No baseline value found for batch_size {batch_size} and type {type_}.")
 
-    # In die Ausgabedatei schreiben
+    # In the output file write
     power_difference_file.parent.mkdir(parents=True, exist_ok=True)
     with open(power_difference_file, 'w') as f:
         json.dump(difference_data, f, indent=2)
@@ -214,7 +214,7 @@ def power_averages_baseline_inference(idle_path, inference_path, output_path):
             merged_entry["idle_value"] = idle_value
             merged_data.append(merged_entry)
         else:
-            print(f"Warnung: Kein Idle-Wert gefunden für {key}")
+            print(f"Warning: No idle value found for {key}")
 
     # Ergebnis speichern
     output_path.parent.mkdir(parents=True, exist_ok=True)

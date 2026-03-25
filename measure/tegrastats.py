@@ -518,8 +518,6 @@ if __name__ == "__main__":
     # else:
     #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_32FP")
 
-    
-
     # batch_sizes = params["batch_sizes"]
 
     if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
@@ -588,7 +586,7 @@ if __name__ == "__main__":
     os.environ["DVC_LOGLEVEL"] = "ERROR"
     try:
         with Live(save_dvc_exp=True, report="md") as live:
-            print("Starte DVC Live Bericht....", flush=True)
+            print("Start DVC Live report....", flush=True)
 
             live.log_artifact(energy_consumption_file, name="energy_consumption")
 
@@ -607,7 +605,7 @@ if __name__ == "__main__":
         else:
             os.environ["DVC_LOGLEVEL"] = _prev_dvc_loglevel
 
-    print("DVC Live Bericht fertig!")
+    print("DVC Live report ready!")
 
     # Explicit exit to avoid free(): invalid pointer crash during Python
     # interpreter shutdown. ORT's CUDA-EP C++ destructors are called in

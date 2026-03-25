@@ -39,10 +39,6 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
-if INT8:
-    print("Export mit INT8 Quantisierung")
-else:
-    print("Export ohne Quantisierung")
 
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
@@ -99,9 +95,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
         output_names=['output'],
         dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
     )
-    print(f"Modell als ONNX exportiert: {onnx_path}")
-    # model = onnx.load(onnx_path)
-    # print("IR version:", model.ir_version)
+    print(f"Model successfully exported as ONNX: {onnx_path}")
 
 
     if INT8:
@@ -122,16 +116,16 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
                 export_path=export_path,
                 opset_version=17
             )
-            print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+            print(f"Quantized Model successfully exported for Batch Size: {batch_size}")
 
             model_load = onnx.load(export_path)
             # # Simplify mit onnxsim
             model_simplified, check = simplify(model_load)
             if not check:
-                print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+                print(f"[!] Simplification failed for Batch Size {batch_size}")
                 continue
             onnx.save(model_simplified, simplified_path)
-            print(f"Simplified gespeichert: {simplified_path}")
+            print(f"Simplified saved: {simplified_path}")
 
 
 # Script entrypoint
@@ -149,7 +143,6 @@ if __name__ == "__main__":
     
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/radioml/model.pt")) #(int8)
-    # model.load_state_dict(torch.load("outputs/radioml/model_.pt")) #(fp32)
-    print("loaded")
+    # model.load_state_dict(torch.load("outputs/radioml/model_fp32.pt")) #(fp32)
     export(model, dataset=params["dataset"], **params["export"])
 

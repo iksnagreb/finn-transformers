@@ -571,7 +571,7 @@ if __name__ == "__main__":
     latency_throughput(latency_results_batch, throughput_results, latency_throughput_path)
 
     with Live(save_dvc_exp=True, report="md") as live:
-        print("Starte DVC Live Bericht (ORT CUDA)...", flush=True)
+        print("Start DVC Live Report...", flush=True)
         live.log_artifact(
             throughput_results,
             name=f"ort_throughput_results_{quantisation_type}_{MODEL_TYPE}",
@@ -586,7 +586,7 @@ if __name__ == "__main__":
         )
         live.next_step()
 
-    print("DVC Live Bericht (ORT CUDA) fertig!")
+    print("DVC Live Report (ORT CUDA) ready!")
 
     # Explicit exit to avoid free(): invalid pointer crash during Python
     # interpreter shutdown.  ORT's CUDA-EP C++ destructors are called in
@@ -596,29 +596,3 @@ if __name__ == "__main__":
     gc.collect()
     os._exit(0)
 
-
-
-# Measuring for batch size: 512
-# Using INT8 ONNX model: outputs/language/model_brevitas_512_simple.onnx
-# Available ORT providers: ['CUDAExecutionProvider', 'CPUExecutionProvider']
-# ORT session active providers: ['CUDAExecutionProvider', 'CPUExecutionProvider']
-# Keys in NPZ file: ['input_ids', 'labels']
-# 2026-03-18 15:03:23.766164438 [E:onnxruntime:, sequential_executor.cc:516 ExecuteKernel] Non-zero status code returned while running Add node. Name:'/cls/cls.0/Add' Status Message: /data/onnxruntime/onnxruntime/core/framework/bfc_arena.cc:376 void* onnxruntime::BFCArena::AllocateRawInternal(size_t, bool, onnxruntime::Stream*, bool, onnxruntime::WaitNotificationFn) Available memory of 966009600 is smaller than requested bytes of 1073741824
-# Traceback (most recent call last):
-#   File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
-#     return _run_code(code, main_globals, None,
-#   File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
-#     exec(code, run_globals)
-#   File "/data/gitlab/builds/ggOHaiaWY/0/haka/mirror-finn-transformers/measure/measure_onnxruntime.py", line 537, in <module>
-#     throughput_log, latency_log, latency_log_batch = calculate_latency_and_throughput(
-#   File "/data/gitlab/builds/ggOHaiaWY/0/haka/mirror-finn-transformers/measure/measure_onnxruntime.py", line 433, in calculate_latency_and_throughput
-#     latency_ms, latency_sync, latency_dt, _ = run_inference_ort(
-#   File "/data/gitlab/builds/ggOHaiaWY/0/haka/mirror-finn-transformers/measure/measure_onnxruntime.py", line 311, in run_inference_ort
-#     outputs = session.run(output_names, feed)
-#   File "/data/gitlab/venvs/measure-117236-483133/lib/python3.10/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py", line 266, in run
-#     return self._sess.run(output_names, input_feed, run_options)
-# onnxruntime.capi.onnxruntime_pybind11_state.RuntimeException: [ONNXRuntimeError] : 6 : RUNTIME_EXCEPTION : Non-zero status code returned while running Add node. Name:'/cls/cls.0/Add' Status Message: /data/onnxruntime/onnxruntime/core/framework/bfc_arena.cc:376 void* onnxruntime::BFCArena::AllocateRawInternal(size_t, bool, onnxruntime::Stream*, bool, onnxruntime::WaitNotificationFn) Available memory of 966009600 is smaller than requested bytes of 1073741824
-# free(): invalid pointer
-# bash: line 232: 980362 Aborted                 (core dumped) python3 -m measure.measure_onnxruntime
-# Cleaning up project directory and file based variables 00:00
-# ERROR: Job failed: exit status 1

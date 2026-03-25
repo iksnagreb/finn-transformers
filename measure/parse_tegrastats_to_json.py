@@ -151,16 +151,15 @@ def parse_tegrastats(input_logs, base_path, plot_base_path):
 
     # Speicher
     save_json(parsed_data, output_json_full)
-    print(f"{len(parsed_data)} Einträge in '{output_json_full.name}' gespeichert .")
+    print(f"{len(parsed_data)} entries in '{output_json_full.name}' saved .")
 
     save_json(simple_data, output_json_simple)
     save_json(simple_data, output_json_simple2)
-    print(f"{len(simple_data)} Einträge in '{output_json_simple.name}' gespeichert (vereinfacht).")
-
+    print(f"{len(simple_data)} entries in '{output_json_simple.name}' saved (simplified).")
     save_json(energy_data, output_json_energy)    
     save_json(energy_data, output_json_energy2)
         
-    print(f"{len(energy_data)} Einträge in '{output_json_energy.name}' gespeichert  (Energieverbrauch).")
+    print(f"{len(energy_data)} entries in '{output_json_energy.name}' saved  (energy consumption).")
 
 
 

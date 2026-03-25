@@ -747,7 +747,7 @@ if __name__ == "__main__":
     latency_throughput(latency_results_batch, throughput_results, latency_throughput_path) # hat in richtige datei geschrieben
 
     with Live(save_dvc_exp=True, report="md") as live:
-        print("Starte DVC Live Bericht.... mini measure", flush=True)
+        print("Start DVC Live Report....", flush=True)
         print("throughput result: ")
         print(throughput_results)
         live.log_artifact(throughput_results, name=f"throughput_results_{quantisation_type}_{MODEL_TYPE}")
@@ -760,7 +760,7 @@ if __name__ == "__main__":
         
         live.next_step() 
 
-    print("DVC Live Bericht fertig!")
+    print("DVC Live Report ready!")
     gc.collect()
     os._exit(0)
 

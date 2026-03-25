@@ -37,11 +37,6 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
-if INT8:
-    print("Export mit INT8 Quantisierung")
-else:
-    print("Export ohne Quantisierung")
-
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
 def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
@@ -112,7 +107,6 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
         np.savez(R"/data/gitlab/language.npz",
                 input_ids=input_ids,
                 labels=labels)
-        print("Dataset gespeichert: /data/gitlab/language.npz")
         print("Shapes:", input_ids.shape, labels.shape)
     
     safe_dataset_to_npz(export_data_load)
@@ -159,17 +153,17 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
                 quant_type='uint',            
             )
         
-            print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+            print(f"Quantized Model successfully exported for Batch Size: {batch_size}")
 
         
             onnx_model = onnx.load(export_path)
             # Simplify mit onnxsim
             model_simplified, check = simplify(onnx_model)
             if not check:
-                print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+                print(f"[!] Simplification failed for Batch Size {batch_size}")
                 continue
             onnx.save(model_simplified, simplified_path)
-            print(f"Simplified gespeichert: {simplified_path}")
+            print(f"Simplified saved: {simplified_path}")
     else:
         print("No quantisation -> export with qonnx")
         onnx_path = "outputs/language/model_dynamic_batchsize.onnx"
@@ -184,13 +178,13 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
             output_names=['output'],
             dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
             )
-        print(f"Modell als ONNX exportiert: {onnx_path}")
+        print(f"Model successfully exported as ONNX: {onnx_path}")
 
 
 # Script entrypoint
 if __name__ == "__main__":
     # Load the stage parameters from the parameters file
-    with open("language/params.yaml", "r") as f:
+    with open("language/params.yaml", "r") as   f:
         params = yaml.safe_load(f)
     # Seed all RNGs
     seed(params["seed"])

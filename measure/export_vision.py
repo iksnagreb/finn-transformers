@@ -86,7 +86,6 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     dataset = datasets.CIFAR10(CIFAR10_ROOT, False, download=True, transform=tf)
     # Create a batched and shuffled data loader the Vision validation split
     export_data = DataLoader(dataset, batch_size=batch_size)
-    print("data now in ", CIFAR10_ROOT)
 
     # accuracy on pt model
     it = iter(export_data)
@@ -99,10 +98,6 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             outputs = model(images)
             preds = outputs.argmax(dim=1)
 
-            # print(f"Batch {i}:")
-            # print("  pred :", preds[:10].tolist())
-            # print("  label:", labels[:10].tolist())
-
     # Sample the first batch from the export dataset
     inp, cls = next(iter(export_data))
 
@@ -113,7 +108,6 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
 
     # Export the model to ONNX using the input example
     # model ist wahrscheinlich schon quantisiert
-    print(kwargs)
     export_qonnx(model, (inp,), "outputs/vision/model.onnx", **kwargs)
 
     # Save the input and output data for verification purposes later
@@ -145,17 +139,17 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
                 export_path=export_path,
                 opset_version=17
             )
-            print(f"Quantisiertes Modell erfolgreich exportiert für Batch-Größe: {batch_size}")
+            print(f"Quantized Model successfully exported for Batch Size: {batch_size}")
 
         
             onnx_model = onnx.load(export_path)
             # Simplify mit onnxsim
             model_simplified, check = simplify(onnx_model)
             if not check:
-                print(f"[!] Vereinfachung fehlgeschlagen für Batch-Größe {batch_size}")
+                print(f"[!] Simplification failed for Batch Size {batch_size}")
                 continue
             onnx.save(model_simplified, simplified_path)
-            print(f"Simplified gespeichert: {simplified_path}")
+            print(f"Simplified saved: {simplified_path}")
     else:
         print("No quantisation -> export with qonnx")
         onnx_path = "outputs/vision/model_dynamic_batchsize.onnx"
@@ -170,7 +164,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             output_names=['output'],
             dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
         )
-        print(f"Modell als ONNX exportiert: {onnx_path}")
+        print(f"Model successfully exported as ONNX: {onnx_path}")
 
     
     
