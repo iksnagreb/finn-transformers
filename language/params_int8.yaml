@@ -3,23 +3,9 @@ tag: quantized
 # Global seed to make evaluation reproducible
 seed: 12
 # Model hyperparameters: ...
-batch_sizes: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 model:
-  # Number of output classes to predict (default 24 RadioML classes)
-  num_classes: 24
-  # Configuration of the initial patch-embedding layer
+  # Configuration of the quantized token embedding layer
   embedding:
-    # Number of patches to aggregate the feature map into
-    patches: [ 1, 64 ]
-    # Kernel size for sliding windows generating the patches
-    kernel_size: [ 1, 16 ]
-    # Stride of the sliding windows
-    stride: [ 1, 16 ]
-    # Padding to the input width to ensure expected number of output patches
-    padding: [ 0, 0 ]
-    # Activation functions to use after the convolution layer
-    #   Options: tanh, sigmoid, relu, gelu, silu, none
-    activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
     bits: 8
@@ -37,15 +23,15 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 1
+  num_layers: 2
   # Number of attention heads
   num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 96
+  emb_dim: 192
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 384
+  expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: 4
@@ -62,79 +48,37 @@ model:
   # none
   norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
-  dropout: 0.5
-# Training/Validation dataset configuration
-model_int8:
-  # Number of output classes to predict (default 24 RadioML classes)
-  num_classes: 24
-  # Configuration of the initial patch-embedding layer
-  embedding:
-    # Number of patches to aggregate the feature map into
-    patches: [ 1, 64 ]
-    # Kernel size for sliding windows generating the patches
-    kernel_size: [ 1, 16 ]
-    # Stride of the sliding windows
-    stride: [ 1, 16 ]
-    # Activation functions to use after the convolution layer
-    #   Options: tanh, sigmoid, relu, gelu, silu, none
-    activation: relu
-    # Number of quantization bits for weights and activations of the embedding
-    # layer, null means no quantization
-    bits: 8
-  # Type of positional encoding to use at the input (following the embedding)
-  #   Options are: none, sinusoidal, binary, learned
-  positional: binary
-  # List of layers configuring the encoder stack: Either a string referring to a
-  # pre-defined configuration or a list of individual layer configurations
-  configuration: original
-  # Number of layers, i.e., stacked repetitions of the encoder configuration
-  # above
-  num_layers: 1
-  # Number of attention heads
-  num_heads: 4
-  # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
-  # convolution, etc.
-  emb_dim: 32
-  # Expanded embedding dimension in MLP or convolution blocks, usually this is
-  # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 128
-  # Number of quantization bits for weights and activations (for all
-  # intermediate layers), null means no quantization
-  bits: 8
-  # Activation functions to use after convolution and linear layers
-  #   Options: tanh, sigmoid, relu, gelu, silu
-  activation: relu
-  # Normalization layer preceding or following each block
-  #   Options: batch-norm, layer-norm, none
-  norm: batch-norm
-  # Placement of the normalization layer: pre-norm or post-norm, if norm is not
-  # none
-  norm_placement: post-norm
-  # Dropout: probability of an element to be zeroed during training
-  dropout: 0.0
+  dropout: 0.25
 # Training/Validation dataset configuration
 dataset:
-  # Optionally select only a subset of the classes
-  #  classes: null
-  # Optionally select only a subset of the available noise levels
-  signal_to_noise_ratios: [
-    # Noise levels from -6 dB upwards to 30 dB in steps of 2
-    #   !!python/object/apply:builtins.range [-6, 31, 2]
-    -6, -4, -2, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
-  ]
+  # Path to the dataset (huggingface identifier)
+  path: roneneldan/TinyStories
+  # Name of the dataset subset
+  name: null
+  # Select the training split of the dataset
+  split: train
   # Splits the dataset into train/validation/evaluation subsets
   splits: [ 0.80, 0.10, 0.10 ]  # 80%, 10%, 10% splits
-  # Seed used for reproducible splitting of datasets
-  seed: 12
-  # Reshape the dataset to fit the expected embedding dimension of the model
-  # and to effectively reduce the sequence length
-  reshape: [ 1, 1024, 2 ]
+# Tokenizer configuration
+tokenizer:
+  # Pretrained base tokenizer used to train a custom tokenizer
+  pretrained: bert-base-cased
+  # Number of tokens in the vocabulary
+  vocab_size: 2048
+  # Limit the maximum different characters to keep in the alphabet
+  limit_alphabet: 150
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 1
+  epochs: 50
   # Batch size for training
-  batch_size: 512
+  batch_size: 256
+  # Context length for training inputs
+  context_length: 256
+  # Whether to use masked language modeling
+  mlm: true
+  # Probability of random mask tokens
+  mlm_probability: 0.15
   # Optimizer configuration
   optimizer:
     # Name of the optimization algorithm to use: adam or sgd
@@ -142,7 +86,7 @@ train:
     # (Initial) Learning rate
     lr: 0.001
     # L2 regularization
-    weight_decay: 1.0e-5
+    weight_decay: 0.0
     # Coefficients used for computing running averages of gradient and its
     # square.
     betas: [ 0.9, 0.999 ]
@@ -156,7 +100,7 @@ train:
     factor: 0.5
     # Number of epochs without improvement to wait before reducing the
     # learning rate
-    patience: 5
+    patience: 10
   # DataLoader keyword arguments
   loader:
     # Reshuffle data every epoch
@@ -176,6 +120,12 @@ eval:
   # Evaluation batch size - does not influence the result, just speeds up the
   # evaluation by doing more in parallel
   batch_size: 512
+  # Context length for evaluation inputs
+  context_length: 256
+  # Whether to use masked language modeling
+  mlm: true
+  # Probability of random mask tokens
+  mlm_probability: 0.15
   # DataLoader keyword arguments
   loader:
     # Number of workers to use for loading the data in parallel
@@ -186,8 +136,8 @@ eval:
     persistent_workers: false
     # Load tensors into device pinned memory
     pin_memory: true
-    # Do not drop the last batch if it is incomplete
-    drop_last: false
+    # Drop the last batch if it is incomplete
+    drop_last: true
 # Model to ONNX export hyperparameters
 export:
   # Format to export: qcdq (~ standard ONNX) or qonnx
@@ -200,6 +150,12 @@ export:
   do_constant_folding: true
   # Export batch size - allows to provide more verification samples
   batch_size: 1
+  # Context length for export inputs
+  context_length: 256
+  # Whether to use masked language modeling
+  mlm: true
+  # Probability of random mask tokens
+  mlm_probability: 0.15
   # Need to use dynamo export to allow exporting torch.compiled graphs
   dynamo: false
   # Keep parameters as part of the model ONNX file

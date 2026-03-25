@@ -194,7 +194,7 @@ if __name__ == "__main__":
         print(f"{key}: {value}")
     
     # Load the trained model parameters
-    # model.load_state_dict(torch.load("outputs/vision/model.pt"))
+    # model.load_state_dict(torch.load("outputs/vision/model_fp32.pt"))
     model.load_state_dict(torch.load("outputs/vision/model.pt"))
 
     model = patch_missing_affine_norms(model)
