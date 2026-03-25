@@ -6,15 +6,13 @@ import time
 import json
 import torch
 import onnx
-#from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
 from pathlib import Path
 from torch.utils.data import TensorDataset, DataLoader
 import pycuda.driver as cuda
-# import pycuda.autoinit
 import os
 import gc
 import yaml
-from onnxconverter_common import float16 # zu requirements hinzufügen
+from onnxconverter_common import float16 
 import onnxruntime as ort
 import dvc.api
 from vision.model import Model
@@ -22,9 +20,6 @@ from measure.latency_throughput_log import latency_throughput
 from dvclive import Live
 from torchvision import datasets, transforms
 
-# import sys
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-# tensorrt, datasets(hugging face), pycuda
 FP16 = os.environ.get("FP16", "0") == "1"
 GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
 GPU_MEM_LIMIT_BYTES = int(GPU_MEM_LIMIT_GB * 1024 * 1024 * 1024)
@@ -41,8 +36,6 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
 
-
-# falls INT8 false: FP16 und FP32 testen
 if INT8:
     dtype = torch.int8
     print("INT8 enabled")
@@ -55,7 +48,6 @@ else:
 
 print(f"GPU memory budget: {GPU_MEM_LIMIT_GB:.2f} GB ({GPU_MEM_LIMIT_BYTES} bytes)")
 
-# todo: richtigen Pfad für Daten angeben
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 CIFAR10_ROOT = R"/data/gitlab/cifar-10-batches-py"
@@ -74,7 +66,6 @@ def to_device(data,device):
         return [to_device(x,device) for x in data]
     return data.to(device,non_blocking=True)
 
-
 class DeviceDataLoader():
     def __init__(self,dl,device):
         self.dl = dl
@@ -92,8 +83,6 @@ def load_params():
         params = yaml.safe_load(f)
     return params
 
-
-
 def save_json(log, filepath):
     filepath = Path(filepath)
     filepath.parent.parent.mkdir(parents=True, exist_ok=True)
@@ -104,24 +93,8 @@ def save_json(log, filepath):
 
 def parse_shape(shape, batch_value):
     """Ersetzt 'batch_size' durch batch_value in der shape-Liste."""
-    # Alte Implementierung (zur Referenz):
-    # print("shape:", shape)
-    # return tuple(
-    #     batch_value if d == "batch_size"
-    #     else 1 if (i == 1 and INT8 and MODEL_TYPE=="radioml")  # zweite Dimension immer 1 im INT8-Modus
-    #     else batch_value if (i == 0 and INT8)
-    #     else 128 if d == "sequence_length"
-    #     else 64 if d == "Muloutput_dim_2"
-    #     else 3 if d == "channels"
-    #     else d
-    #     for i, d in enumerate(shape)
-    # )
-
-    # WICHTIG: Keine INT8-spezifischen Shape-Overrides erzwingen.
-    # TensorRT soll die echten ONNX-Formen sehen (insb. bei Q/DQ-Modellen).
     resolved = []
     for i, d in enumerate(shape):
-        # Symbolische ONNX-Dimensionen
         if isinstance(d, str):
             if d == "batch_size" or i == 0:
                 resolved.append(batch_value)
@@ -132,9 +105,7 @@ def parse_shape(shape, batch_value):
             elif d == "channels":
                 resolved.append(3)
             else:
-                # Unbekanntes Symbol: konservativer Fallback
                 resolved.append(1)
-        # ONNX kann dynamische Dims auch als None liefern
         elif d is None:
             resolved.append(batch_value if i == 0 else 1)
         else:
@@ -152,7 +123,6 @@ ONNX_TO_TORCH_DTYPE = {
     "tensor(uint8)": torch.uint8,
     "tensor(int8)": torch.int8,
     "tensor(bool)": torch.bool,
-    # Füge weitere Typen bei Bedarf hinzu
 }
 
 
@@ -160,7 +130,7 @@ def onnx_dtype_to_torch(onnx_dtype_str):
     """
     Wandelt einen ONNX-Datentyp-String in einen torch.dtype um.
     """
-    return ONNX_TO_TORCH_DTYPE.get(onnx_dtype_str, torch.float32)  # Default: float32
+    return ONNX_TO_TORCH_DTYPE.get(onnx_dtype_str, torch.float32) 
 
 
 def get_model_io_info(model_path):
@@ -168,11 +138,10 @@ def get_model_io_info(model_path):
     Liest Input- und Output-Infos aus einem ONNX-Modell.
     Gibt Listen von Dictionaries mit Name, Shape und Dtype zurück.
     """
-    # vielleicht nicht ort nutzen (nicht kompatibel mit brevitas ohne qcdq)
     sess_options = ort.SessionOptions()
 
     sess_options.intra_op_num_threads = 8
-    session = ort.InferenceSession(model_path, sess_options)    # problem for brevitas model
+    session = ort.InferenceSession(model_path, sess_options)    
     input_info = [
         {
             "name": inp.name,
@@ -229,13 +198,6 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size, onnx_model_path):
 
     input_ids = torch.from_numpy(data[input_key])
 
-    # if MODEL_TYPE == "radioml":
-    #     input_ids = torch.from_numpy(data[input_key])
-    #     print("input_ids.shape:", input_ids.shape)
-    #     input_ids = input_ids.reshape(-1, 1, 1024, 2)
-    #     input_ids = input_ids.unsqueeze(1)
-    #     print("input_ids.shape nach unsqueeze:", input_ids.shape)
-
 
     attention_mask = torch.from_numpy(data[attention_mask_key]) if attention_mask_key else None
     labels = torch.from_numpy(data[output_key])
@@ -269,18 +231,16 @@ def test_data(context, batch_size, input_info, output_info):
     torch_stream = torch.cuda.Stream()
     stream_ptr = torch_stream.cuda_stream
 
-    # Inputs vorbereiten
     inp = input_info[0]
     name = inp["name"]
     shape = parse_shape(inp["shape"], batch_size)
-    dtype = onnx_dtype_to_torch(inp["dtype"])  # ONNX-Datentyp in PyTorch-Datentyp umwandeln
-    dtype_out = onnx_dtype_to_torch(output_info[0]["dtype"])  # Ausgabe-Datentyp
+    dtype = onnx_dtype_to_torch(inp["dtype"])  
+    dtype_out = onnx_dtype_to_torch(output_info[0]["dtype"]) 
     tensor = torch.empty(shape, dtype=dtype, device='cuda')
     context.set_tensor_address(name, tensor.data_ptr())
     context.set_input_shape(name, shape)
     device_inputs[name] = tensor
     
-    # Wenn mehrere Inputs: attention_mask
     if len(input_info) > 1:
         att_mask_name = input_info[1]["name"]
         att_mask_shape = parse_shape(input_info[1]["shape"], batch_size)
@@ -301,19 +261,17 @@ def test_data(context, batch_size, input_info, output_info):
 
         device_token_type[token_type_name] = token_type_tensor
 
-    # Outputs vorbereiten
     for out in output_info:
         name = out["name"]
         shape = parse_shape(out["shape"], batch_size)
         print(shape)
-        dtype = onnx_dtype_to_torch(out["dtype"])  # ONNX-Datentyp in PyTorch-Datentyp umwandeln
+        dtype = onnx_dtype_to_torch(out["dtype"])  
         tensor = torch.empty(shape, dtype=dtype_out, device='cuda')
         context.set_tensor_address(name, tensor.data_ptr())
         device_outputs[name] = tensor
 
     device_input = next(iter(device_inputs.values()))
     device_output = next(iter(device_outputs.values()))
-    # if another input: nächste attmask adresse
     if len(input_info) > 1:
         device_attention_mask = next(iter(device_attention_masks.values()))
     else:
@@ -344,7 +302,6 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
     parser = trt.OnnxParser(network, logger)
-    #parser.set_flag(trt.OnnxParserFlag.kIMPORT_UINT8_QUANTIZATION)  #flag setzen - wird nicht erkannt...
 
     with open(onnx_model_path, 'rb') as f:
         if not parser.parse(f.read()):
@@ -428,7 +385,6 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     do_prints=True
 
     for batch in test_loader: 
-        # je nach Aufbau des Modells: mit Attention Mask oder ohne
         if len(batch) == 2:
             xb, yb = batch
             att_mask = None
@@ -441,7 +397,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         else:
             raise ValueError("Unerwartete Batch-Größe!", len(batch))
         
-        start_time_datatransfer = time.time()  # Startzeit        
+        start_time_datatransfer = time.time()  
 
         dtype = onnx_dtype_to_torch(input_info[0]["dtype"])
 
@@ -516,9 +472,9 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     if accuracy_flag:
         accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0
 
-    average_latency = (total_time / iterations) * 1000  # In Millisekunden
-    average_latency_synchronize = (total_time_synchronize / iterations) * 1000  # In Millisekunden
-    average_latency_datatransfer = (total_time_datatransfer / iterations) * 1000  # In Millisekunden
+    average_latency = (total_time / iterations) * 1000  
+    average_latency_synchronize = (total_time_synchronize / iterations) * 1000 
+    average_latency_datatransfer = (total_time_datatransfer / iterations) * 1000  
 
     del context
     torch_stream.synchronize()
@@ -553,11 +509,9 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
             # Prefer fixed ONNX if available (dequantized initializers)
             fixed = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_fixed.onnx"
             normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
-            # current_onnx_model_path = fixed if __import__('os').path.exists(fixed) else normal
             current_onnx_model_path = normal
             print(f"Using ONNX model for batch size {batch_size}: {current_onnx_model_path}")
 
-        # Nach Pfadwechsel IO-Infos immer neu laden (wichtig für batch-spezifische INT8-ONNX-Dateien)
         input_info, output_info = get_model_io_info(current_onnx_model_path)
 
         test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size, current_onnx_model_path)
@@ -565,13 +519,12 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
 
         
-        # Schleife für durchschnitt
+        # for the average
         latency_ms_sum = 0
         latency_synchronize_sum = 0
         lantency_datatransfer_sum = 0
         total_time_sum = 0
-        num_executions = 10
-        num_executions = 1 # da vision so lange dauert
+        num_executions = 5
         for i in range(num_executions):
             start_time = time.time()
             latency_ms, latency_synchronize, latency_datatransfer, _ = run_inference(
@@ -644,7 +597,6 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
     print("output_info", output_info)
     print("DATA_PATH_NPZ", DATA_PATH_NPZ)
     print("onnx_model_path for accuracy validation", onnx_model_path)
-    # Sicherstellen, dass IO-Metadaten zum gewählten ONNX-Pfad passen
     input_info, output_info = get_model_io_info(onnx_model_path)
     test_loader = create_test_dataloader(DATA_PATH_NPZ, 1, onnx_model_path)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
@@ -715,21 +667,18 @@ if __name__ == "__main__":
         "quantisation_type": quantisation_type,
         "value": accuracy
     }
-    # pfad anpassen für vision
     save_json(accuracy_result, accuracy_path)
     
 
 
     throughput_log, latency_log, latency_log_batch = calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info=input_info, output_info=output_info)
     if FP16:
-        # global variables, can be changed on other files somehow??
         throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16" / "throughput_results.json"
         latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results.json"
         latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results_batch.json"
         latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_throughput.json"
     elif INT8:
         throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8" / "throughput_results.json"
-        #throughput_results2 = Path(__file__).resolve().parent.parent / "outputs" / "vision" / "throughput" / "INT8"/ "throughput_results_2.json"
         latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_results.json"
         latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_results_batch.json"
         latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_throughput.json"
@@ -740,11 +689,9 @@ if __name__ == "__main__":
         latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP32"/ "latency_throughput.json"
 
     save_json(throughput_log, throughput_results)
-    #save_json(throughput_log, throughput_results2)
-    # save_json(latency_log, latency_results)
     save_json(latency_log_batch, latency_results_batch)
 
-    latency_throughput(latency_results_batch, throughput_results, latency_throughput_path) # hat in richtige datei geschrieben
+    latency_throughput(latency_results_batch, throughput_results, latency_throughput_path) 
 
     with Live(save_dvc_exp=True, report="md") as live:
         print("Start DVC Live Report....", flush=True)
@@ -765,10 +712,3 @@ if __name__ == "__main__":
     os._exit(0)
 
 
-
-# alle models in einem yaml? -> ja, mit auskommentieren
-# dateien umbenennen, dokumentieren
-# fp 32 und fp 16 möglich machen
-# was darf für dla zwischen dequantize & Quantize sein? Sotmax, Matmul, ...?
-
-# todo: Lösung für Onnxsim finden 

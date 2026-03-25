@@ -36,9 +36,6 @@ os.environ.setdefault("CUDA_MODULE_LOADING", "LAZY")
 
 from measure.latency_throughput_log import latency_throughput
 
-# ---------------------------------------------------------------------------
-# Global configuration (mirrors measure.py)
-# ---------------------------------------------------------------------------
 
 FP16 = os.environ.get("FP16", "0") == "1"
 GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
@@ -74,10 +71,6 @@ DATA_PATH_NPZ = {
     "language": LANG_PATH_NPZ,
 }[MODEL_TYPE]
 
-# ---------------------------------------------------------------------------
-# dtype helpers
-# ---------------------------------------------------------------------------
-
 ONNX_TO_NP_DTYPE = {
     "tensor(float)":   np.float32,
     "tensor(float16)": np.float16,
@@ -92,9 +85,6 @@ ONNX_TO_NP_DTYPE = {
 def onnx_dtype_to_numpy(onnx_dtype_str: str) -> np.dtype:
     return ONNX_TO_NP_DTYPE.get(onnx_dtype_str, np.float32)
 
-# ---------------------------------------------------------------------------
-# Shared utilities
-# ---------------------------------------------------------------------------
 
 def save_json(log, filepath):
     filepath = Path(filepath)
@@ -139,9 +129,6 @@ def print_latency(latency_ms, latency_synchronize, latency_datatransfer,
     print(f"Throughput: {throughput_images:.4f} Bilder/Sekunde")
 
 
-# ---------------------------------------------------------------------------
-# Model / session helpers
-# ---------------------------------------------------------------------------
 
 def get_model_io_info(model_path: str):
     """
@@ -211,10 +198,6 @@ def create_ort_session(onnx_model_path: str) -> ort.InferenceSession:
     print(f"ORT session active providers: {session.get_providers()}")
     return session
 
-
-# ---------------------------------------------------------------------------
-# Data loading (same logic as measure.py)
-# ---------------------------------------------------------------------------
 
 def create_test_dataloader(data_path_npz: str, batch_size: int, onnx_model_path: str) -> list:
     """Build a DataLoader from the NPZ test split."""
@@ -430,7 +413,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
             gc.collect()
 
         # Average over num_executions runs (set > 1 for more stable estimates)
-        num_executions    = 1
+        num_executions    = 5
         latency_ms_sum    = 0.0
         latency_sync_sum  = 0.0
         latency_dt_sum    = 0.0
