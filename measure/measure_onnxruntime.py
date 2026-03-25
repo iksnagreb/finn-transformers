@@ -174,7 +174,9 @@ def create_ort_session(onnx_model_path: str) -> ort.InferenceSession:
 
     sess_opts = ort.SessionOptions()
     sess_opts.intra_op_num_threads = 1
-    sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_DISABLE_ALL
+    # sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_DISABLE_ALL
+    sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
+
 
     if "CUDAExecutionProvider" in available:
         cuda_providers = [
