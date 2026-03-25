@@ -1,0 +1,5 @@
+outs:
+- md5: 31ec28b320ea1479829e140d6a52306b
+  size: 2834
+  hash: md5
+  path: power_averages_difference.json
