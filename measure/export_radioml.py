@@ -41,6 +41,7 @@ bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
 
 def remove_initializers_from_inputs_model(model: onnx.ModelProto) -> onnx.ModelProto:
+    print("Removing initializers from graph inputs if they appear there...")
     graph = model.graph
     initializer_names = {init.name for init in graph.initializer}
     # Filter graph.input: behalte nur Inputs, die nicht Initializer sind
@@ -108,7 +109,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
         dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
     )
     print(f"Model successfully exported as ONNX: {onnx_path}")
-    
+
     # remove initializers from inputs
     m = onnx.load(onnx_path)
     m = remove_initializers_from_inputs_model(m)

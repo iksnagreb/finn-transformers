@@ -89,6 +89,7 @@ measure-job:
     # - dvc pull --allow-missing
     - dvc remote modify --local upload user $DVC_Sciebo_Upload_USER
     - dvc remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
+    - dvc remote modify --local upload timeout 600
 
     - python3 -m measure.measure_onnxruntime
 
@@ -97,7 +98,6 @@ measure-job:
     - python3 -m measure.tegrastats
 
     - python3 -m plots.plots
-
 
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
@@ -117,5 +117,6 @@ measure-job:
 
 
 # tensorrt language int8 - datatransfer
-# warnungen anschauen - Initializer onnx::MatMul_316 appears in graph inputs  entfernen (onnx-skript/onnx ia)
+# warnungen anschauen - Initializer onnx::MatMul_316 appears in graph inputs  entfernen (onnxscript)
+
 # config dvc timeout erhöhen
