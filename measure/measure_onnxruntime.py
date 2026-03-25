@@ -26,6 +26,8 @@ import onnxruntime as ort
 import yaml
 from pathlib import Path
 from dvclive import Live
+from onnxconverter_common import float16
+
 
 # Prevent PyTorch from initialising a CUDA context before ORT gets a chance
 # to allocate its cuBLAS handle.  We import torch lazily (after ORT sessions
@@ -509,6 +511,11 @@ if __name__ == "__main__":
     if INT8:
         # For INT8 accuracy eval use batch-size-1 QCDQ model
         onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+    if FP16:
+        model_fp32 = onnx.load(onnx_model_path)
+        model_fp16 = float16.convert_float_to_float16(model_fp32)
+        onnx.save(model_fp16, f"outputs/{MODEL_TYPE}/model_dynamic_batchsize_fp16.onnx")
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize_fp16.onnx"
 
     model = onnx.load(onnx_model_path)
     input_info, output_info = get_model_io_info(onnx_model_path)
