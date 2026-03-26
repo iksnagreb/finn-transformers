@@ -179,7 +179,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
         )
         print(f"Model successfully exported as ONNX: {onnx_path}")
-            # remove initializers from inputs
+        # remove initializers from inputs
         m = onnx.load(onnx_path)
         m = remove_initializers_from_inputs_model(m)
         onnx.save(m, onnx_path)
