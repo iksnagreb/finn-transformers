@@ -53,7 +53,7 @@ export-models:
     - dvc remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
 
     - python3 -m measure.export_wrapper
-    - python3 -m onnxruntime.quantization.preprocess --input model_brevitas_1_simple.onnx --output model_brevitas_1_simple_pre.onnx
+    - python3 -m onnxruntime.quantization.preprocess --input outputs/radioml/model_brevitas_1_simple.onnx --output outputs/radioml/model_brevitas_1_simple_pre.onnx
 
   artifacts:
     name: "exported-models-$CI_COMMIT_SHORT_SHA"
