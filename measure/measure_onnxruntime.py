@@ -413,7 +413,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
             gc.collect()
 
         # Average over num_executions runs (set > 1 for more stable estimates)
-        num_executions    = 5
+        num_executions    = 1
         latency_ms_sum    = 0.0
         latency_sync_sum  = 0.0
         latency_dt_sum    = 0.0
