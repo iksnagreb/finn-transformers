@@ -496,6 +496,7 @@ if __name__ == "__main__":
     if INT8:
         # For INT8 accuracy eval use batch-size-1 QCDQ model
         onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple_pre.onnx"
     if FP16:
         model_fp32 = onnx.load(onnx_model_path)
         model_fp16 = float16.convert_float_to_float16(model_fp32)
