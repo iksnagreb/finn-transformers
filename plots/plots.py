@@ -333,39 +333,55 @@ def power_bar_plot(json_path, output_path):
 if __name__ == "__main__":
     if INT8 == True:
         quant_type = "INT8"
-        quant_type2 ="ORT_INT8"
+        quant_type_ort ="ORT_INT8"
     elif FP16 == True:
         quant_type = "FP16"
-        quant_type2 ="ORT_FP16"
+        quant_type_ort ="ORT_FP16"
     else:
         quant_type = "FP32"
-        quant_type2 ="ORT_FP32"
+        quant_type_ort ="ORT_FP32"
     
 
     base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type 
-    base_path2 = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type2 
-
-
-    latency_throughput_path = base_path2 / "latency_throughput.json"
-    latency_throughput_output = base_path2 / "latency_per_throughput_plot.png"
+    base_path_ort = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type_ort 
+    
+    # plots for tensorrt
+    latency_throughput_path = base_path / "latency_throughput.json"
+    latency_throughput_output = base_path / "latency_per_throughput_plot.png"
 
     latency_throughput_output.parent.mkdir(parents=True, exist_ok=True)
     latency_per_throughput_plot(latency_throughput_path, latency_throughput_output)
 
-
-    throughput_results_path = base_path2 / "throughput_results.json"
-    # throughput_results_output_batch = "images/throughput_batch_plot.png"
-    throughput_results_output_batch =  base_path2 / "throughput_batch_plot.png"
+    throughput_results_path = base_path / "throughput_results.json"
+    throughput_results_output_batch =  base_path / "throughput_batch_plot.png"
     throughput_batch_plot(throughput_results_path, throughput_results_output_batch)
 
-    throughput_results_output_images =  base_path2 / "throughput_images_plot.png"
+    throughput_results_output_images =  base_path / "throughput_images_plot.png"
     throughput_images_plot(throughput_results_path, throughput_results_output_images)
 
-    latency_results_path = base_path2 / "latency_results_batch.json"
-    # latency_results_output = "images/latency_plot.png"
-    latency_results_output = base_path2 / "latency_plot.png"
+    latency_results_path = base_path / "latency_results_batch.json"
+    latency_results_output = base_path / "latency_plot.png"
     latency_plot(latency_results_path, latency_results_output)
 
+    # plots for onnxruntime
+    latency_throughput_path = base_path_ort / "latency_throughput.json"
+    latency_throughput_output_ort = base_path_ort / "latency_per_throughput_plot.png"
+
+    latency_throughput_output_ort.parent.mkdir(parents=True, exist_ok=True)
+    latency_per_throughput_plot(latency_throughput_path, latency_throughput_output_ort)
+
+    throughput_results_path = base_path_ort / "throughput_results.json"
+    throughput_results_output_batch_ort =  base_path_ort / "throughput_batch_plot.png"
+    throughput_batch_plot(throughput_results_path, throughput_results_output_batch_ort)
+
+    throughput_results_output_images_ort =  base_path_ort / "throughput_images_plot.png"
+    throughput_images_plot(throughput_results_path, throughput_results_output_images_ort)
+
+    latency_results_path = base_path_ort / "latency_results_batch.json"
+    latency_results_output_ort = base_path_ort / "latency_plot.png"
+    latency_plot(latency_results_path, latency_results_output_ort)
+
+    # powerplots (only tensorrt for know)
     power_throughput_path = base_path / "power_throughput.json"
     power_throughput_output = base_path / "throughput_per_power_plot.png"
     throughput_per_power_plot(power_throughput_path, power_throughput_output)
@@ -378,8 +394,9 @@ if __name__ == "__main__":
     power_bar_output = base_path / "power_bar_plot.png"
     power_bar_plot(power_bar_path, power_bar_output)
 
+
     # Vergleichsplots (TensorRT vs ORT) erzeugen
-    variants = f"{quant_type},{quant_type2}"
+    variants = f"{quant_type},{quant_type_ort}"
     compare_env = os.environ.copy()
     compare_env["MODEL_TYPE"] = MODEL_TYPE
     compare_env["VARIANTS"] = variants
@@ -388,31 +405,35 @@ if __name__ == "__main__":
     subprocess.run(["python3", "-m", "plots.compare_throughput"], check=True, env=compare_env)
     subprocess.run(["python3", "-m", "plots.compare_accuracy"], check=True, env=compare_env)
 
-    variant_suffix = f"{quant_type}_{quant_type2}"
+    variant_suffix = f"{quant_type}_{quant_type_ort}"
     compare_latency_output = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / f"latency_comparison_{variant_suffix}.png"
     compare_throughput_output = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / f"throughput_comparison_{variant_suffix}.png"
     compare_accuracy_output = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / f"accuracy_comparison_{variant_suffix}.png"
 
-    # eigentlich nicht bei jeder Quantisierung plotten, sondern am ende
-    # accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE /"plot" / "accuracy.json"
-    # accuracy_output = base_path / "accuracies_plot.png"
-    # accuracies_plot(accuracy_path, accuracy_output)
-
-    # mit dvc exp hochladen
-    # log image
-    # hash -> im git als ref finden, oder irgendwie apply machen
     save_dvc_exp = os.environ.get("DVCLIVE_SAVE_DVC_EXP", "1") == "1"
+    
     with Live(save_dvc_exp=save_dvc_exp, cache_images=False, report="md") as live:
         print(f"Starte DVC Live Bericht.... (save_dvc_exp={save_dvc_exp})", flush=True)
 
+        # tensorrt
         live.log_image(f"latency_throughput_plot_{quant_type}_{MODEL_TYPE}.png", latency_throughput_output)
         live.log_image(f"throughput_batch_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_batch)
         live.log_image(f"throughput_images_plot_{quant_type}_{MODEL_TYPE}.png", throughput_results_output_images)
         live.log_image(f"latency_plot_{quant_type}_{MODEL_TYPE}.png", latency_results_output)
         live.log_image(f"throughput_per_power_plot_{quant_type}_{MODEL_TYPE}.png", power_throughput_output)
-        # live.log_image("accuracies_plot.png", accuracy_output)
         live.log_image(f"energy_consumption_plot_{quant_type}_{MODEL_TYPE}.png", energy_consumption_output)
         live.log_image(f"power_bar_plot_{quant_type}_{MODEL_TYPE}.png", power_bar_output)
+
+        # onnxruntime
+        live.log_image(f"latency_throughput_plot_{quant_type_ort}_{MODEL_TYPE}.png", latency_throughput_output_ort)
+        live.log_image(f"throughput_batch_plot_{quant_type_ort}_{MODEL_TYPE}.png", throughput_results_output_batch_ort)
+        live.log_image(f"throughput_images_plot_{quant_type_ort}_{MODEL_TYPE}.png", throughput_results_output_images_ort)
+        live.log_image(f"latency_plot_{quant_type_ort}_{MODEL_TYPE}.png", latency_results_output_ort)
+        live.log_image(f"throughput_per_power_plot_{quant_type_ort}_{MODEL_TYPE}.png", power_throughput_output_ort)
+        live.log_image(f"energy_consumption_plot_{quant_type_ort}_{MODEL_TYPE}.png", energy_consumption_output_ort)
+        live.log_image(f"power_bar_plot_{quant_type_ort}_{MODEL_TYPE}.png", power_bar_output_ort)
+
+        # power
         live.log_image(f"latency_comparison_{variant_suffix}_{MODEL_TYPE}.png", compare_latency_output)
         live.log_image(f"throughput_comparison_{variant_suffix}_{MODEL_TYPE}.png", compare_throughput_output)
         live.log_image(f"accuracy_comparison_{variant_suffix}_{MODEL_TYPE}.png", compare_accuracy_output)
