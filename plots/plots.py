@@ -345,7 +345,7 @@ if __name__ == "__main__":
     base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type 
     base_path_ort = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type_ort 
     
-    # plots for tensorrt
+    # plots for trt
     latency_throughput_path = base_path / "latency_throughput.json"
     latency_throughput_output = base_path / "latency_per_throughput_plot.png"
 
@@ -363,7 +363,7 @@ if __name__ == "__main__":
     latency_results_output = base_path / "latency_plot.png"
     latency_plot(latency_results_path, latency_results_output)
 
-    # plots for onnxruntime
+    # plots for ort
     latency_throughput_path = base_path_ort / "latency_throughput.json"
     latency_throughput_output_ort = base_path_ort / "latency_per_throughput_plot.png"
 
@@ -381,7 +381,7 @@ if __name__ == "__main__":
     latency_results_output_ort = base_path_ort / "latency_plot.png"
     latency_plot(latency_results_path, latency_results_output_ort)
 
-    # powerplots (only tensorrt for know)
+    # powerplots trt
     power_throughput_path = base_path / "power_throughput.json"
     power_throughput_output = base_path / "throughput_per_power_plot.png"
     throughput_per_power_plot(power_throughput_path, power_throughput_output)
@@ -394,8 +394,21 @@ if __name__ == "__main__":
     power_bar_output = base_path / "power_bar_plot.png"
     power_bar_plot(power_bar_path, power_bar_output)
 
+    # powerplots ort
+    power_throughput_path_ort = base_path_ort / "power_throughput.json"
+    power_throughput_output_ort = base_path_ort / "throughput_per_power_plot.png"
+    throughput_per_power_plot(power_throughput_path_ort, power_throughput_output_ort)
 
-    # Vergleichsplots (TensorRT vs ORT) erzeugen
+    energy_consumption_path_ort = base_path_ort / "energy_consumption.json"
+    energy_consumption_output_ort = base_path_ort / "energy_consumption_plot.png"
+    energy_consumption_plot(energy_consumption_path_ort, energy_consumption_output_ort)
+
+    power_bar_path = base_path_ort / "power_averages_baseline_inference.json"
+    power_bar_output_ort = base_path_ort / "power_bar_plot.png"
+    power_bar_plot(power_bar_path, power_bar_output_ort)
+
+
+    # comparison (trt vs ort)
     variants = f"{quant_type},{quant_type_ort}"
     compare_env = os.environ.copy()
     compare_env["MODEL_TYPE"] = MODEL_TYPE

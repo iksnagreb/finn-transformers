@@ -33,7 +33,8 @@ from torchvision import datasets, transforms
 
 
 FP16 = os.environ.get("FP16", "0") == "1"
-
+GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
+GPU_MEM_LIMIT_BYTES = int(GPU_MEM_LIMIT_GB * 1024 * 1024 * 1024)
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
 
 if MODEL_TYPE not in ("radioml", "language", "vision"):
@@ -319,7 +320,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config = builder.create_builder_config()
     
-    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
+    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, GPU_MEM_LIMIT_BYTES)
 
     if FP16 == True:
         config.set_flag(trt.BuilderFlag.FP16)
@@ -509,16 +510,6 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
 
 
 if __name__ == "__main__":
-
-    
-    # if FP16: 
-    #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_16FP")
-    # elif INT8:
-    #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_INT8_brevitas")
-    # else:
-    #     params = dvc.api.params_show(stages="vision/dvc.yaml:measure_32FP")
-
-    # batch_sizes = params["batch_sizes"]
 
     if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
         batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128]
