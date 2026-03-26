@@ -230,7 +230,7 @@ if __name__ == "__main__":
     model = Model(**params["model"], vocab_size=tokenizer.vocab_size)
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/language/model.pt"))      # doesn't work for not quantized params -> model.pt is not te correct unquantized one
-    # model.load_state_dict(torch.load("outputs/language/model_fp32.pt")) 
+    model.load_state_dict(torch.load("outputs/language/model_fp32.pt")) 
     # Prevent export and streamlining issues for missing affine normalization
     # parameters
     model = patch_missing_affine_norms(model)
