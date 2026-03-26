@@ -101,7 +101,7 @@ def run_accuracy_sweep(batch_size, onnx_model_path, tegrastats_log, timestamps_f
 
     # build test loader and run inference loop using existing ORT helpers
     try:
-        test_loader = create_test_dataloader(DATA_PATH_NPZ, 1, onnx_model_path)
+        test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size, onnx_model_path)
         _, _, _, accuracy = run_inference_ort(
             session=session,
             test_loader=test_loader,
@@ -139,7 +139,7 @@ if __name__ == "__main__":
         quant_type = "ORT_FP16"
     else:
         quant_type = "ORT_FP32"
-        
+
     energy_base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "energy_metrics" / quant_type
     throughput_base_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / quant_type
     energy_base_path.mkdir(parents=True, exist_ok=True)
