@@ -39,6 +39,20 @@ bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
 # Exports the model to ONNX in conjunction with an input-output pair for
 # verification
+def remove_initializers_from_inputs_model(model: onnx.ModelProto) -> onnx.ModelProto:
+    print("Removing initializers from graph inputs if they appear there...")
+    graph = model.graph
+    initializer_names = {init.name for init in graph.initializer}
+    # Filter graph.input: behalte nur Inputs, die nicht Initializer sind
+    new_inputs = [inp for inp in graph.input if inp.name not in initializer_names]
+    if len(new_inputs) == len(graph.input):
+        return model  # nichts zu tun
+    del graph.input[:]
+    graph.input.extend(new_inputs)
+    onnx.checker.check_model(model)  # optional: Validität prüfen
+    return model
+
+
 def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
            context_length, format="qonnx", split_heads=False, **kwargs):
     # Do the forward pass for generating verification data and tracing the model
@@ -101,7 +115,19 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
                 break
 
         # Concatenate batches
-        input_ids = np.concatenate(all_inputs, axis=0)[:max_samples]
+        input_ids = np.concatenate(all_inputs, axisdef remove_initializers_from_inputs_model(model: onnx.ModelProto) -> onnx.ModelProto:
+    print("Removing initializers from graph inputs if they appear there...")
+    graph = model.graph
+    initializer_names = {init.name for init in graph.initializer}
+    # Filter graph.input: behalte nur Inputs, die nicht Initializer sind
+    new_inputs = [inp for inp in graph.input if inp.name not in initializer_names]
+    if len(new_inputs) == len(graph.input):
+        return model  # nichts zu tun
+    del graph.input[:]
+    graph.input.extend(new_inputs)
+    onnx.checker.check_model(model)  # optional: Validität prüfen
+    return model
+=0)[:max_samples]
         labels = np.concatenate(all_labels, axis=0)[:max_samples]
         # speichern
         np.savez(R"/data/gitlab/language.npz",
@@ -164,6 +190,9 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
                 continue
             onnx.save(model_simplified, simplified_path)
             print(f"Simplified saved: {simplified_path}")
+            # remove initializers from inputs
+            model_simplified = remove_initializers_from_inputs_model(model_simplified)
+            onnx.save(model_simplified, simplified_path)
     else:
         print("No quantisation -> export with qonnx")
         onnx_path = "outputs/language/model_dynamic_batchsize.onnx"
@@ -179,6 +208,11 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
             dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
             )
         print(f"Model successfully exported as ONNX: {onnx_path}")
+        # remove initializers from inputs
+        m = onnx.load(onnx_path)
+        m = remove_initializers_from_inputs_model(m)
+        onnx.save(m, onnx_path)
+        print(f"Fixed initializers and saved: {onnx_path}")
 
 
 # Script entrypoint

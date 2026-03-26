@@ -162,3 +162,6 @@ sudo apt install -y libeigen3-dev
 
 [ 78%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim96_bf16_sm80.cu.o
 [ 78%] Building CUDA object CMakeFiles/onnxruntime_providers_cuda.dir/data/onnxruntime/onnxruntime/contrib_ops/cuda/bert/flash_attention/flash_fwd_split_hdim96_fp16_sm80.cu.o
+
+
+https://studio.datachain.ai/user/Hanner123/projects/finn-transformers-gh0yt4gyep?panels=plots%2C&activeExperimentReferences=41ca897cb03cb59f2946d42165a1380427822acc%3Aprimary%3B5289c7ada86a2a51b0bb5dc212af577a945c1b52%3Apurple%3B39ed0a77c97f7a1b8c311987b9436500c1abf121%3Ared

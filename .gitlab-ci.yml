@@ -13,8 +13,7 @@ variables:
 default:
   before_script:
    - mkdir -p /data/gitlab/tmp
-   # - chmod 1777 /data/gitlab/tmp
-   - export MODEL_TYPE=radioml  # radioml, language, vision
+   - export MODEL_TYPE=vision  # radioml, language, vision
    - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
    - export USE_DLA=1 # 0 or 1, decides if the measurements will be executed on DLA or GPU
    - export GPU_MEM_LIMIT_GB=32.0 # same limit for ORT and TRT
@@ -86,7 +85,6 @@ measure-job:
 
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
-    # - dvc pull --allow-missing
     - dvc remote modify --local upload user $DVC_Sciebo_Upload_USER
     - dvc remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
     - dvc remote modify --local upload timeout 600
@@ -120,3 +118,8 @@ measure-job:
 # warnungen anschauen - Initializer onnx::MatMul_316 appears in graph inputs  entfernen (onnxscript)
 
 # config dvc timeout erhöhen
+# 2026-03-25 16:10:03.068514375 [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
+# -> still there with graph optimization 
+# -> would maybe not be there without int4 quantization?
+
+# 2026-03-25 16:37:52.173904598 [E:onnxruntime:Default, env.cc:254 ThreadMain] pthread_setaffinity_np failed for thread: 1134576, index: 2, mask: {11, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.
