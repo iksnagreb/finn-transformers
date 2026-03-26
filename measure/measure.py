@@ -524,7 +524,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         latency_synchronize_sum = 0
         lantency_datatransfer_sum = 0
         total_time_sum = 0
-        num_executions = 5
+        num_executions = 1
         for i in range(num_executions):
             start_time = time.time()
             latency_ms, latency_synchronize, latency_datatransfer, _ = run_inference(
