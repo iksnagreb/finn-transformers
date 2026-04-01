@@ -148,6 +148,7 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             # remove initializers from inputs
             model_simplified = remove_initializers_from_inputs_model(model_simplified)
             onnx.save(model_simplified, simplified_path)
+            
 
 
 # Script entrypoint

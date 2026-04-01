@@ -305,7 +305,7 @@ def run_inference_ort(
         # copied back to CPU, so no explicit CUDA sync is needed here.
         end_time_sync = time.time()
 
-        # ORT already returns numpy arrays; no extra D2H copy needed
+        # ORT already returns numpy arrays; no extra D2H copy needed -> faster with big outputs
         output = outputs[0]
         end_time_dt = time.time()
 

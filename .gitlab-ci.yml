@@ -123,9 +123,6 @@ measure-job:
 # tensorrt language int8 - datatransfer
 # warnungen anschauen - Initializer onnx::MatMul_316 appears in graph inputs  entfernen (onnxscript)
 
-# config dvc timeout erhöhen
 # 2026-03-25 16:10:03.068514375 [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
 # -> still there with graph optimization 
-# -> would maybe not be there without int4 quantization?
 
-# 2026-03-25 16:37:52.173904598 [E:onnxruntime:Default, env.cc:254 ThreadMain] pthread_setaffinity_np failed for thread: 1134576, index: 2, mask: {11, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.
