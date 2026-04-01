@@ -36,6 +36,7 @@ export-models:
     - mkdir -p $PIP_CACHE_DIR
     - mkdir -p "$VENV_BASE"
     - export VENV_DIR="$VENV_BASE/export-${CI_PIPELINE_ID}-${CI_JOB_ID}"
+    - trap 'deactivate 2>/dev/null || true; rm -rf "$VENV_DIR"' EXIT
     - python3 -m venv "$VENV_DIR"
     - source "$VENV_DIR/bin/activate"
     - ls -l /usr/local/cuda/include/cuda.h
@@ -55,8 +56,6 @@ export-models:
 
     - python3 -m measure.export_wrapper
    #- python3 -m onnxruntime.quantization.preprocess --input outputs/radioml/model_brevitas_1_simple.onnx --output outputs/radioml/model_brevitas_1_simple_pre.onnx
-    - deactivate
-    - rm -rf "$VENV_DIR"
   artifacts:
     name: "exported-models-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 day
@@ -75,6 +74,7 @@ measure-job:
     - mkdir -p $PIP_CACHE_DIR
     - mkdir -p "$VENV_BASE"
     - export VENV_DIR="$VENV_BASE/measure-${CI_PIPELINE_ID}-${CI_JOB_ID}"
+    - trap 'deactivate 2>/dev/null || true; rm -rf "$VENV_DIR"' EXIT
     - python3 -m venv "$VENV_DIR"
     - source "$VENV_DIR/bin/activate"
     - ls -l /usr/local/cuda/include/cuda.h
@@ -116,8 +116,6 @@ measure-job:
     - dvc push -r upload  
     - dvc -q exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
     - ssh-agent -k
-    - deactivate
-    - rm -rf "$VENV_DIR"
   tags:
     - jetson
 
