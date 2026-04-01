@@ -313,8 +313,9 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     print("config created")
     
     # DLA configuration for INT8 - disabled by default due to 16 loadables limit on Jetson
+    # Language models with transformers/attention are poorly suited for DLA due to many unsupported ops
     USE_DLA = os.environ.get("USE_DLA", "0") == "1"
-    if INT8 and USE_DLA:
+    if INT8 and USE_DLA and MODEL_TYPE != "language":
         config.default_device_type = trt.DeviceType.DLA
         print("use dla")
         config.DLA_core = 0  # 0 oder 1
@@ -323,6 +324,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         # DLA doesn't need optimization profile
     else:
         # GPU mode - needs optimization profile for dynamic shapes
+        # (or fallback for models unsuitable for DLA like transformers)
         config.default_device_type = trt.DeviceType.GPU
         print("config.default_device_type = trt.DeviceType.GPU")
         
@@ -425,7 +427,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         context.set_tensor_address(output_name, device_output.data_ptr()) 
 
         
-        torch_stream.synchronize()
+        # torch_stream.synchronize()
 
         start_time_synchronize = time.time()  
         torch_stream.synchronize()  
