@@ -46,10 +46,10 @@ def remove_initializers_from_inputs_model(model: onnx.ModelProto) -> onnx.ModelP
     # Filter graph.input: behalte nur Inputs, die nicht Initializer sind
     new_inputs = [inp for inp in graph.input if inp.name not in initializer_names]
     if len(new_inputs) == len(graph.input):
-        return model  # nichts zu tun
+        return model  
     del graph.input[:]
     graph.input.extend(new_inputs)
-    onnx.checker.check_model(model)  # optional: Validität prüfen
+    onnx.checker.check_model(model)  
     return model
 
 def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
@@ -116,10 +116,11 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
         # Concatenate batches
         input_ids = np.concatenate(all_inputs, axis=0)[:max_samples]
         labels = np.concatenate(all_labels, axis=0)[:max_samples]
-        # speichern
-        np.savez(R"/data/gitlab/language.npz",
-                input_ids=input_ids,
-                labels=labels)
+        # speichern - dont save on hanna
+        
+        # np.savez(R"/data/gitlab/language.npz",
+        #         input_ids=input_ids,
+        #         labels=labels)
         print("Shapes:", input_ids.shape, labels.shape)
     
     safe_dataset_to_npz(export_data_load)

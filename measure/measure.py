@@ -442,8 +442,9 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     
         end_time = time.time()
 
-        output = device_output.cpu().numpy()
+        # output = device_output.cpu().numpy()    # expensive for langage (big output) - test: after datatransfer time test
         end_time_datatransfer = time.time() 
+        output = device_output.cpu().numpy()    # expensive for langage (big output) - test: after datatransfer time test
 
         latency = end_time - start_time_inference  
         latency_synchronize = end_time - start_time_synchronize  
