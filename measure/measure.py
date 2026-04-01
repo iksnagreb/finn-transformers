@@ -163,7 +163,7 @@ def get_model_io_info(model_path):
 
 def print_latency(latency_ms, latency_synchronize, latency_datatransfer, end_time, start_time, num_batches, throughput_batches, throughput_images, batch_size):
     print("For Batch Size: ", batch_size)
-    print(f"Gemessene durchschnittliche Latenz für Inteferenz : {latency_ms:.4f} ms")
+    print(f"Gemessene durchschnittliche Latenz für Inference : {latency_ms:.4f} ms")
     print(f"Gemessene durchschnittliche Latenz mit Synchronisation : {latency_synchronize:.4f} ms")
     print(f"Gemessene durchschnittliche Latenz mit Datentransfer : {latency_datatransfer:.4f} ms")
     print(f"Gesamtzeit: {end_time-start_time:.4f} s")
