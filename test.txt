@@ -173,3 +173,15 @@ nohup ./build.sh   --config Release   --use_cuda   --cuda_home /usr/local/cuda  
 Venvs on sd:
 source "/data/gitlab/venvs/export/bin/activate"
 source "/data/gitlab/venvs/measure/bin/activate"
+
+
+warnings in onnxruntime:
+- language: none (if initializers as input removed)
+- vision: [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.0/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
+in netron it looks like this:
+x.1 -> QuantizeLinear -> Dequantize Linear -> Conv <- Dequantize Linear
+
+
+- radioml: [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
+
+warnings in tensorrt_

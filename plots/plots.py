@@ -47,7 +47,7 @@ def throughput_batch_plot(json_path, output_path):
     ax.set_xticklabels(batch_sizes)
     ax.set_xlabel("Batch Size")
     ax.set_ylabel("Throughput (batches/s)")
-    ax.set_title("Throughput pro Batch Size")
+    ax.set_title("Throughput per Batch Size")
 
     # plt.show()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
@@ -74,7 +74,7 @@ def throughput_images_plot(json_path, output_path):
     ax.set_xticklabels(batch_sizes)
     ax.set_xlabel("Batch Size")
     ax.set_ylabel("Throughput (images/s)")
-    ax.set_title("Throughput pro Batch Size")
+    ax.set_title("Throughput per Batch Size")
 
     # plt.show()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')

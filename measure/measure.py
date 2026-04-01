@@ -1,3 +1,8 @@
+import os
+
+# Disable ONNX Runtime CPU affinity to prevent pthread errors on ARM systems
+os.environ['ORT_DISABLE_CPU_AFFINITY'] = '1'
+
 import tensorrt as trt
 import torch
 from torch.utils.data.dataloader import DataLoader
@@ -9,7 +14,6 @@ import onnx
 from pathlib import Path
 from torch.utils.data import TensorDataset, DataLoader
 import pycuda.driver as cuda
-import os
 import gc
 import yaml
 from onnxconverter_common import float16 
@@ -442,10 +446,9 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     
         end_time = time.time()
 
-        # output = device_output.cpu().numpy()    # expensive for langage (big output) - test: after datatransfer time test
+        output = device_output.cpu().numpy()    # expensive for langage (big output)
         end_time_datatransfer = time.time() 
-        output = device_output.cpu().numpy()    # expensive for langage (big output) - test: after datatransfer time test
-
+        
         latency = end_time - start_time_inference  
         latency_synchronize = end_time - start_time_synchronize  
         latency_datatransfer = end_time_datatransfer - start_time_datatransfer  

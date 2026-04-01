@@ -1,5 +1,11 @@
 # Use the DVC api for loading the YAML parameters
 import dvc.api
+# System functionality like creating directories and reading env-vars
+import os
+
+# Disable ONNX Runtime CPU affinity to prevent pthread errors on ARM systems
+os.environ['ORT_DISABLE_CPU_AFFINITY'] = '1'
+
 # Save verification input-output pair as numpy array
 import numpy as np
 # PyTorch base package: Math and Tensor Stuff
