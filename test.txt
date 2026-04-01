@@ -167,3 +167,9 @@ TODO:
 
 Befehl zum installieren:
 nohup ./build.sh   --config Release   --use_cuda   --cuda_home /usr/local/cuda   --cudnn_home /usr   --build_wheel   --skip_tests   --parallel 4   --cmake_extra_defines       CMAKE_CUDA_ARCHITECTURES=87       Python_EXECUTABLE=/usr/bin/python3.10       CUDNN_LIBRARY=/usr/lib/aarch64-linux-gnu/libcudnn.so   > /data/ort_build.log 2>&1 &
+
+
+
+Venvs on sd:
+source "/data/gitlab/venvs/export/bin/activate"
+source "/data/gitlab/venvs/measure/bin/activate"

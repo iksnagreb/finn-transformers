@@ -77,7 +77,7 @@ class DeviceDataLoader():
     
     def __len__(self):
         return len(self.dl)
-
+config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 << 40)
 def load_params():
     with open('params.yaml', 'r') as f:
         params = yaml.safe_load(f)
