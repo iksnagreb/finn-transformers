@@ -54,8 +54,9 @@ export-models:
     - dvc remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
 
     - python3 -m measure.export_wrapper
-    - python3 -m onnxruntime.quantization.preprocess --input outputs/radioml/model_brevitas_1_simple.onnx --output outputs/radioml/model_brevitas_1_simple_pre.onnx
-
+   #- python3 -m onnxruntime.quantization.preprocess --input outputs/radioml/model_brevitas_1_simple.onnx --output outputs/radioml/model_brevitas_1_simple_pre.onnx
+    - deactivate
+    - rm -rf "$VENV_DIR"
   artifacts:
     name: "exported-models-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 day
@@ -115,6 +116,8 @@ measure-job:
     - dvc push -r upload  
     - dvc -q exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
     - ssh-agent -k
+    - deactivate
+    - rm -rf "$VENV_DIR"
   tags:
     - jetson
 
