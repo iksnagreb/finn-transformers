@@ -446,7 +446,15 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     
         end_time = time.time()
 
-        output = device_output.cpu().numpy()    # expensive for langage (big output)
+        # For language models, only keep top-5 to reduce data transfer
+        if MODEL_TYPE == "language":
+            # Get top-5 on GPU (fast)
+            top_k_values, top_k_indices = torch.topk(device_output, k=5, dim=-1)
+            output = top_k_indices.cpu().numpy()
+        else:
+            output = device_output.cpu()    # expensive for langage (big output) 
+            output = output.numpy()    # expensive for langage (big output) 
+
         end_time_datatransfer = time.time() 
         
         latency = end_time - start_time_inference  
@@ -459,12 +467,15 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         iterations += 1
 
         if accuracy_flag:
-            pred = output.argmax(axis=-1) 
-            correct = (pred == yb.numpy()).sum()
             if MODEL_TYPE == "language":
-                total = np.prod(yb.shape)
+                # output shape: [batch, seq_len, 5] (top-5 indices)
+                pred = output[:, :, 0]  # Take best prediction (first of top-5)
+                total = np.prod(yb.shape)   # tokens*batch size
             else:
+                pred = output.argmax(axis=-1)
                 total = yb.shape[0]
+            
+            correct = (pred == yb.numpy()).sum()
             correct_predictions += correct
             total_predictions += total
 

@@ -133,3 +133,8 @@ class Model(torch.nn.Module):
 
     def forward(self, x):
         return self.cls(self.enc(self.emb(x)))
+
+
+
+        # ev. top 5 tokens ausgeben als wrapper um modell -> weniger datatransfer
+        # convolution bias quantisieren ()

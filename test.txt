@@ -184,5 +184,30 @@ x.1 -> QuantizeLinear -> Dequantize Linear -> Conv <- Dequantize Linear
 
 - radioml: [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
 
+tensorrt warnings:
+- uint8 -C Int8
+- DLA not supported
+- ... due to missing scale and zero point
 
 
+
+
+
+
+- radioml trainieren: bias für convolution trainieren - embeddings.py ändern
+
+
+- language batch size 8 einbruch
+    - num threads für computer erhöhen auf 16 (vorher: 8, nachher 16 num threads bei sessoptions):
+        - vorher bei batch size 8: 7600 batches/s
+        - nachher bei batch size 8: 7600 batches/s
+        - vorher bei batch size 16: 2500 batches/s
+        - nachher bei batch size 16: 4000 batches/S
+
+        --> weniger Einbruch an throughput, aber immer noch da...
+        --> kernel=32 genauso wie kernels=8
+
+- top 5 für language modell -> wrapper (topk/argmax onnx) 
+    - geändert in measure
+    - geändert in tegrastats
+    - test läuft
