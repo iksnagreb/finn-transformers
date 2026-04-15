@@ -98,9 +98,9 @@ def summarize(model, tag=None, repo=None, revs=None):
     # baseline model from above
     ax.axhline(min_top_1, ls='dotted', color="black")
     ax.text(
-        8, best_top_1 - ACC_DROP - 0.02,  # -0.01 to not occlude the lines
+        8, best_top_1 - ACC_DROP - 0.03,  # -0.03 to not occlude the lines
         f"Baseline -{ACC_DROP:.1%}\n{min_top_1:.1%}",
-        ha="center", va="center",
+        ha="center", va="top",
         backgroundcolor="white",
 
     )
@@ -146,3 +146,4 @@ def summarize(model, tag=None, repo=None, revs=None):
 if __name__ == "__main__":
     summarize(model="vision", revs=["19680d2"])
     summarize(model="radioml", revs=["19680d2"])
+    summarize(model="language", revs=["19680d2"])
