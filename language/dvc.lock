@@ -34,9 +34,9 @@ stages:
     outs:
     - path: outputs/language/tokenizer
       hash: md5
-      md5: c83dd977f450bd7dbf75eb1ce1dc50b1.dir
-      size: 55456
-      nfiles: 4
+      md5: 0aeb9ab95d648e857f27811f81d53d92.dir
+      size: 12163
+      nfiles: 2
   train:
     cmd: PARTITION=gpu bash run.sh python -m language.train
     deps:
@@ -78,9 +78,9 @@ stages:
       size: 5162
     - path: outputs/language/tokenizer
       hash: md5
-      md5: c83dd977f450bd7dbf75eb1ce1dc50b1.dir
-      size: 55456
-      nfiles: 4
+      md5: 0aeb9ab95d648e857f27811f81d53d92.dir
+      size: 12163
+      nfiles: 2
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -205,9 +205,9 @@ stages:
       size: 5303223
     - path: outputs/language/tokenizer
       hash: md5
-      md5: c83dd977f450bd7dbf75eb1ce1dc50b1.dir
-      size: 55456
-      nfiles: 4
+      md5: 0aeb9ab95d648e857f27811f81d53d92.dir
+      size: 12163
+      nfiles: 2
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -306,9 +306,9 @@ stages:
       size: 5303223
     - path: outputs/language/tokenizer
       hash: md5
-      md5: c83dd977f450bd7dbf75eb1ce1dc50b1.dir
-      size: 55456
-      nfiles: 4
+      md5: 0aeb9ab95d648e857f27811f81d53d92.dir
+      size: 12163
+      nfiles: 2
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
