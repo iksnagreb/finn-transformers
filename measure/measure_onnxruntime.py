@@ -160,7 +160,7 @@ def create_ort_session(onnx_model_path: str) -> ort.InferenceSession:
     print(f"Available ORT providers: {available}")
 
     sess_opts = ort.SessionOptions()
-    sess_opts.intra_op_num_threads = 1
+    sess_opts.intra_op_num_threads = 8          # verschiedene anzahlen ausprobieren - max 8
     # sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_DISABLE_ALL
     sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
 
@@ -173,7 +173,7 @@ def create_ort_session(onnx_model_path: str) -> ort.InferenceSession:
                     "device_id": 0,
                     "arena_extend_strategy": "kSameAsRequested",
                     "gpu_mem_limit": GPU_MEM_LIMIT_BYTES,
-                    "cudnn_conv_algo_search": "DEFAULT",
+                    "cudnn_conv_algo_search": "DEFAULT",    # EXHAUSTIVE for best performance, DEFAULT
                     "do_copy_in_default_stream": True,
                 },
             ),
@@ -487,7 +487,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 if __name__ == "__main__":
     # Language model has memory constraints on Jetson → limit max batch size
     if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
-        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128]
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
     else:
         # Vision and RadioML can handle larger batches
         batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]

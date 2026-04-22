@@ -411,11 +411,11 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             print("TensorRT Error:", e)
         torch_stream.synchronize() 
     
-        # copy output - ony top 5 for language model
+        # copy output - only transfer best indices for language model
         if MODEL_TYPE == "language":
-            # Get top-5 on GPU (fast)
-            top_k_values, top_k_indices = torch.topk(device_output, k=5, dim=-1)
-            output = top_k_indices.cpu().numpy()
+            # Get argmax directly on GPU and transfer only indices
+            output = device_output.cpu()    # expensive for langage (big output) 
+            output = output.numpy()    # expensive for langage (big output) 
         else:
             output = device_output.cpu()    # expensive for langage (big output) 
             output = output.numpy()    # expensive for langage (big output) 
@@ -424,8 +424,9 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
         if accuracy_flag:
             if MODEL_TYPE == "language":
-                # output shape: [batch, seq_len, 5] (top-5 indices)
-                pred = output[:, :, 0]  # Take best prediction (first of top-5)
+                # output is already [batch, seq_len] from ArgMax model
+                # no need to call argmax again
+                pred = output.argmax(axis=-1)
                 total = np.prod(yb.shape)   # tokens*batch size
             else:
                 pred = output.argmax(axis=-1)
@@ -521,7 +522,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
 if __name__ == "__main__":
 
     if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
-        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128]
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
     else:
         # Vision and RadioML can handle larger batches
         batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
@@ -548,9 +549,7 @@ if __name__ == "__main__":
         print("Batch size: ", batch_size)
         if INT8:
             # Prefer fixed ONNX if available (dequantized initializers)
-            fixed = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_fixed.onnx"
             normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
-            # onnx_model_path = fixed if os.path.exists(fixed) else normal
             onnx_model_path = normal
         input_info, output_info = get_model_io_info(onnx_model_path)
         tegrastats_log = energy_base_path / f"tegrastats_{batch_size}.log"

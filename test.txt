@@ -194,7 +194,7 @@ tensorrt warnings:
 
 
 
-- radioml trainieren: bias für convolution trainieren - embeddings.py ändern
+
 
 
 - language batch size 8 einbruch
@@ -207,7 +207,98 @@ tensorrt warnings:
         --> weniger Einbruch an throughput, aber immer noch da...
         --> kernel=32 genauso wie kernels=8
 
+        - auf dem Jetson: für 1...13 Threads getestet, kaum unterschiede
+
+
+Problem: Durch das große Output nach der inferenz beim language model, wird durch das kopieren des outputs von der gpu zur cpu sehr viel datatransfer time verbraucht. Das soll für das int8 modell in tensorrt verringert werden, indem nur die top5 zur cpu kopiert werden.
 - top 5 für language modell -> wrapper (topk/argmax onnx) 
-    - geändert in measure
-    - geändert in tegrastats
-    - test läuft
+    - geändert in measure (vor dem copy zur cpu top5 bestimmen)
+    - geändert in tegrastats (vor dem copy zur cpu top5 bestimmen)
+    - test läuft -> funktioniert nicht
+    - RuntimeError: CUDA error: no kernel image is available for execution on the device for
+        - argmax:       np.argmax(output_cpu, axis=-1)
+        - torch topk    torch.topk(device_output, k=5, dim=-1)
+        - torch sort:   torch.argsort(device_output, descending=True, dim=-1)[:, :, :5]
+    - RuntimeError: Fehler beim Bauen der TensorRT-Engine: serialized_engine ist None.
+        - wrapper for argmax in onnx modell (on int 8)
+        - wrapper for argmax in onnx modell (on fp32, with a cast)
+    - andere library (cupy) für argmax nutzen: build failed
+
+
+    Serialized engine: 
+[04/15/2026-15:03:12] [TRT] [E] Error Code: 9: Skipping tactic 0x0000000000000000 due to exception [shape.cpp:~op_constraints_msg_streamer_t:136] 
+Error during shape inference of
+
+/enc/enc_1/pre_norm/pre_norm_1/BatchNormalization_scale_out = mul(ONNXTRT_unsqueezeTensor_output', /enc/enc_1/pre_norm/pre_norm_1/BatchNormalization/enc/enc_1/pre_norm/pre_norm_1/BatchNormalization_scale_wFloat), name=/enc/enc_1/pre_norm/pre_norm_1/BatchNormalization_scale
+Error is:
+
+
+Input 0's element type (int8) differs from input 1's element type (
+Error Code 10: Internal Error (Could not find any implementation for node {ForeignNode[ONNXTRT_castHelper...ONNXTRT_castHelper_307]}.)
+
+
+- dequantize node manuell hinzugefügt
+- cast manuell hinzugefügt
+- identity node mit fp32 manuell hinzugefügt
+
+Chat GPT sagt, der Fehler liegt an:
+- global graph optimization
+- quantization re-propagation
+- layer fusion before execution planning
+ohne topk konnte tensorrt noch ein fallback machen, jetzt aus irgendeinem Grund nicht mehr...
+
+--> Keine Möglichkeit gefunden, den Datentransfer GPU->CPU zu verringern ....
+
+
+
+
+
+
+- radioml trainieren: bias für convolution trainieren - embeddings.py ändern
+wegen onnxruntime:
+2026-04-15 17:29:35.454313044 [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
+
+- beim export export_onnx_qcdq -> quantize_bias=True
+    - macht keinen unterschied, der bias wird nicht quantisiert
+    - https://xilinx.github.io/brevitas/v0.12.1/tutorials/quant_tensor_quant_conv2d_overview.html
+
+
+by default weights are quantized to 8-bit signed integer, while quantization of bias, input, and output are disabled.
+Bias Quantization:
+In many contexts, such as in the ONNX standard opset and in FINN, bias is assumed to be
+quantized with scale factor equal to input scale weight scale*, which means that we need 
+a valid quantized input somehow.
+We can solve the issue by passing in a valid QuantTensor, e.g. the quant_tensor_input we defined above:
+
+
+
+from brevitas.quant_tensor import IntQuantTensor
+
+scale = 0.0001
+bit_width = 8
+zero_point = 0.
+int_value = torch.randint(low=- 2 ** (bit_width - 1), high=2 ** (bit_width - 1) - 1, size=(1, 2, 5, 5))
+quant_value = (int_value - zero_point) * scale
+quant_tensor_input = IntQuantTensor(
+    quant_value,
+    scale=torch.tensor(scale),
+    zero_point=torch.tensor(zero_point),
+    bit_width=torch.tensor(float(bit_width)),
+    signed=True,
+    training=True)
+
+bias_quant_conv(quant_tensor_input)
+
+input_bias_quant_conv = QuantConv2d(
+    in_channels=2, out_channels=3, kernel_size=(3,3), bias=True,
+    input_quant=Int8ActPerTensorFloat, bias_quant=Int8Bias, return_quant_tensor=True)
+input_bias_quant_conv(torch.randn(1, 2, 5, 5))
+
+--> das ist aber scheinbar nicht möglich für den qcdq graph, sondern nur bei echter quantisierung?? QuantTensor-Graph
+
+
+- LazyQuantConv2d: bias=True -> kein quantisierter bias
+- LazyQuantConv2d: bias_quant=Int32Bias -> missing scale (training funktioniert nicht), probiert vor dem export inferenz laufen zu lassen, hat aber auch nicht geklappt
+
+LazyQuantConv2d(dim, kernel_size, **kwargs, **weight_quant, bias_quant=Int8BiasPerTensorFloatInternalScaling,return_quant_tensor=False),
+-> statische Quantisierung, keine dynamischen Input-abhängigen Scales im Bias

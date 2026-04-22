@@ -137,33 +137,62 @@ def onnx_dtype_to_torch(onnx_dtype_str):
     return ONNX_TO_TORCH_DTYPE.get(onnx_dtype_str, torch.float32) 
 
 
+# def get_model_io_info(model_path):
+#     """
+#     Liest Input- und Output-Infos aus einem ONNX-Modell.
+#     Gibt Listen von Dictionaries mit Name, Shape und Dtype zurück.
+#     """
+#     sess_options = ort.SessionOptions()
+
+#     sess_options.intra_op_num_threads = 8
+#     session = ort.InferenceSession(model_path, sess_options)    
+#     input_info = [
+#         {
+#             "name": inp.name,
+#             "shape": inp.shape,
+#             "dtype": inp.type
+#         }
+#         for inp in session.get_inputs()
+#     ]
+#     output_info = [
+#         {
+#             "name": out.name,
+#             "shape": out.shape,
+#             "dtype": out.type
+#         }
+#         for out in session.get_outputs()
+#     ]
+#     return input_info, output_info
+
 def get_model_io_info(model_path):
-    """
-    Liest Input- und Output-Infos aus einem ONNX-Modell.
-    Gibt Listen von Dictionaries mit Name, Shape und Dtype zurück.
-    """
-    sess_options = ort.SessionOptions()
+    model = onnx.load(model_path)
+    graph = model.graph
 
-    sess_options.intra_op_num_threads = 8
-    session = ort.InferenceSession(model_path, sess_options)    
-    input_info = [
-        {
+    inputs = []
+    for inp in graph.input:
+        shape = [
+            d.dim_value if (d.dim_value > 0) else None
+            for d in inp.type.tensor_type.shape.dim
+        ]
+        inputs.append({
             "name": inp.name,
-            "shape": inp.shape,
-            "dtype": inp.type
-        }
-        for inp in session.get_inputs()
-    ]
-    output_info = [
-        {
-            "name": out.name,
-            "shape": out.shape,
-            "dtype": out.type
-        }
-        for out in session.get_outputs()
-    ]
-    return input_info, output_info
+            "shape": shape,
+            "dtype": inp.type.tensor_type.elem_type
+        })
 
+    outputs = []
+    for out in graph.output:
+        shape = [
+            d.dim_value if (d.dim_value > 0) else None
+            for d in out.type.tensor_type.shape.dim
+        ]
+        outputs.append({
+            "name": out.name,
+            "shape": shape,
+            "dtype": out.type.tensor_type.elem_type
+        })
+
+    return inputs, outputs
 
 def print_latency(latency_ms, latency_synchronize, latency_datatransfer, end_time, start_time, num_batches, throughput_batches, throughput_images, batch_size):
     print("For Batch Size: ", batch_size)
@@ -446,11 +475,12 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     
         end_time = time.time()
 
-        # For language models, only keep top-5 to reduce data transfer
+        # For language models, only transfer best prediction indices to reduce data transfer
+        # torch sort doesnt work with gpu, torch topk also not supported, argmax is not supported as well:  RuntimeError: CUDA error: no kernel image is available for execution on the device
         if MODEL_TYPE == "language":
-            # Get top-5 on GPU (fast)
-            top_k_values, top_k_indices = torch.topk(device_output, k=5, dim=-1)
-            output = top_k_indices.cpu().numpy()
+            # Get argmax directly on GPU and transfer only indices
+            output = device_output.cpu()    # expensive for langage (big output) 
+            output = output.numpy()    # expensive for langage (big output) 
         else:
             output = device_output.cpu()    # expensive for langage (big output) 
             output = output.numpy()    # expensive for langage (big output) 
@@ -468,8 +498,9 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
         if accuracy_flag:
             if MODEL_TYPE == "language":
-                # output shape: [batch, seq_len, 5] (top-5 indices)
-                pred = output[:, :, 0]  # Take best prediction (first of top-5)
+                # output is already [batch, seq_len] from ArgMax model
+                # no need to call argmax again
+                pred = output.argmax(axis=-1)
                 total = np.prod(yb.shape)   # tokens*batch size
             else:
                 pred = output.argmax(axis=-1)
@@ -650,7 +681,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
 if __name__ == "__main__":
 
     if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
-        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128]
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
     else:
         # Vision and RadioML can handle larger batches
         batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
@@ -659,7 +690,7 @@ if __name__ == "__main__":
 
     if INT8:
         onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
-        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1.onnx"
+        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_argmax.onnx"
 
     model = onnx.load(onnx_model_path)
 
@@ -672,7 +703,7 @@ if __name__ == "__main__":
     if FP16:
         accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_FP16.json"
         quantisation_type = "FP16"
-    elif INT8:
+    elif INT8: 
         accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_INT8.json"
         quantisation_type = "INT8"
     else:

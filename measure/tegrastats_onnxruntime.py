@@ -127,7 +127,7 @@ def run_accuracy_sweep(batch_size, onnx_model_path, tegrastats_log, timestamps_f
 
 if __name__ == "__main__":
     if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
-        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128]
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
     else:
         batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 

@@ -1,11 +1,5 @@
 # Use the DVC api for loading the YAML parameters
 import dvc.api
-# System functionality like creating directories and reading env-vars
-import os
-
-# Disable ONNX Runtime CPU affinity to prevent pthread errors on ARM systems
-os.environ['ORT_DISABLE_CPU_AFFINITY'] = '1'
-
 # Save verification input-output pair as numpy array
 import numpy as np
 # PyTorch base package: Math and Tensor Stuff
@@ -170,7 +164,7 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
                 export_path=export_path,
                 opset_version=17,
                 export_as_int8=True,          
-                quant_type='uint',            
+                quant_type='int',            
             )
         
             print(f"Quantized Model successfully exported for Batch Size: {batch_size}")

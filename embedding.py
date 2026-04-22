@@ -1,14 +1,13 @@
 # Neural Network building blocks
 import torch
 # Brevitas quantized equivalents of PyTorch layers
-from brevitas.nn import QuantIdentity, QuantEmbedding
-
+from brevitas.nn import QuantIdentity, QuantEmbedding, QuantConv2d
 # Selection of supported activation functions shared by different models
 from activations import ACTIVATIONS
 # Lazy initialization versions of Brevitas layers
 from lazy import LazyQuantConv2d
-
-
+from brevitas.quant import Int32Bias
+from brevitas.quant.scaled_int import Int8Bias
 # Quantized convolutional embedding layer similar to patch embeddings of ViT but
 # with arbitrary kernel size, stride and padding followed by adaptive average
 # pooling to aggregate into a fixed number of patches
@@ -43,10 +42,10 @@ class PatchEmbedding(torch.nn.Module):
         # from the 2d input
         self.patches = torch.nn.Sequential(
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
-            # Quantized convolution of kernal size and stride generating
-            # patches
-            LazyQuantConv2d(dim, kernel_size, **kwargs, **weight_quant),
+             *([QuantIdentity(bit_width=bits, return_quant_tensor=True)] if bits else []),
+
+            LazyQuantConv2d(dim, kernel_size, **kwargs, **weight_quant, bias_quant=Int8Bias,return_quant_tensor=True), 
+
             # Normalization between convolution and activation function - this
             # is always a batch norm and not configurable
             torch.nn.LazyBatchNorm2d(affine=False),

@@ -133,7 +133,9 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
                 model, 
                 (dummy_input,),
                 export_path=export_path,
-                opset_version=17
+                opset_version=17,
+                quantize_bias=True,
+                fold_batch_norm=True
             )
             print(f"Quantized Model successfully exported for Batch Size: {batch_size}")
 
