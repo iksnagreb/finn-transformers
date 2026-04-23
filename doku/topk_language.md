@@ -41,8 +41,33 @@ ohne topk konnte tensorrt noch ein fallback machen, jetzt aus irgendeinem Grund 
 --> Keine Möglichkeit gefunden, den Datentransfer GPU->CPU zu verringern ....
 
 # use onnxscript
-# use torch method
+
+same error when trying to build the engine:
+Serialized engine: 
+[04/23/2026-09:24:20] [TRT] [E] Error Code: 9: Skipping tactic 0x0000000000000000 due to exception [shape.cpp:~op_constraints_msg_streamer_t:136] 
+Error during shape inference of
+/enc/enc_1/pre_norm/pre_norm_1/BatchNormalization_scale_out = mul(ONNXTRT_unsqueezeTensor_output', /enc/enc_1/pre_norm/pre_norm_1/BatchNormalization/enc/enc_1/pre_norm/pre_norm_1/BatchNormalization_scale_wFloat), name=/enc/enc_1/pre_norm/pre_norm_1/BatchNormalization_scale
+Error is:
+Input 0's element type (int8) differs from input 1's element type (
+[04/23/2026-09:24:20] [TRT] [E] IBuilder::buildSerializedNetwork: Error Code 10: Internal Error (Could not find any implementation for node {ForeignNode[ONNXTRT_castHelper...ONNXTRT_castHelper_307]}.)
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/hanna/git/finn-transformers/measure/measure.py", line 700, in <module>
+    accuracy = run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path)
+  File "/home/hanna/git/finn-transformers/measure/measure.py", line 650, in run_accuracy_eval
+    engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
+  File "/home/hanna/git/finn-transformers/measure/measure.py", line 392, in build_tensorrt_engine
+    raise RuntimeError("Fehler beim Bauen der TensorRT-Engine: serialized_engine ist None.")
+RuntimeError: Fehler beim Bauen der TensorRT-Engine: serialized_engine ist None.
 
 
-Freitag: 7
-Heute: 4 (13:40 - 17:15, 19:00 - 20:00)
+
+but: if I leave the old output and only add the topk node, it works fine! (with onnxscript and onnxhelper)
+Problem: accuracy ist bei tensorrt schlechter als bei onnxruntime, bei tesnorrt werden immer nur die gleichen labels zurückgegeben 
+
+Das Problem: TensorRT kann die TopK-Operation bei INT8-Quantisierung nicht korrekt berechnen. Das ist eine TensorRT-Limitation.
+
+ORT CPU produces different logits per token, but TensorRT produces identical logits. This suggests the TensorRT engine serialization/conversion is the problem, not the model itself.

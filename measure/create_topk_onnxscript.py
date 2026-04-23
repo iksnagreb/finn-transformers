@@ -12,6 +12,7 @@ This approach shows:
 """
 import onnx
 from onnx import helper, TensorProto
+import os
 
 MODEL_TYPE = os.environ.get("MODEL_TYPE", "vision")
 # ============================================================================

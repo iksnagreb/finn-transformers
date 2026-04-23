@@ -315,12 +315,12 @@ def test_data(context, batch_size, input_info, output_info):
     for out in output_info:
         name = out["name"]
         shape = parse_shape(out["shape"], batch_size)
-        print(shape)
         # Use the correct dtype for each output, not just the first output's dtype
         out_dtype = onnx_dtype_to_torch(out["dtype"])
         tensor = torch.empty(shape, dtype=out_dtype, device='cuda')
         context.set_tensor_address(name, tensor.data_ptr())
         device_outputs[name] = tensor
+        print(f"  Output '{name}': shape {shape}, dtype {out_dtype}, address {tensor.data_ptr()}")
 
     device_input = next(iter(device_inputs.values()))
     
@@ -487,7 +487,14 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         else:
             output_name = output_info[0]["name"]
         
-        context.set_tensor_address(output_name, device_output.data_ptr())
+        # Set addresses for ALL outputs
+        for out_info in output_info:
+            out_name = out_info["name"]
+            if out_name in device_outputs:
+                addr = device_outputs[out_name].data_ptr()
+                if iterations == 0:
+                    print(f"DEBUG: Setting output '{out_name}' address to {addr}, shape {device_outputs[out_name].shape}, dtype {device_outputs[out_name].dtype}")
+                context.set_tensor_address(out_name, addr)
         
         # Also set addresses for any other outputs to prevent memory errors
         for out_info in output_info:
@@ -511,11 +518,8 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     
         end_time = time.time()
 
-        # For language models with TopK, transfer top_indices (much smaller than logits)
-        if MODEL_TYPE == "language" and "top_indices" in device_outputs:
-            output = device_outputs["top_indices"].cpu().numpy()
-        else:
-            output = next(iter(device_outputs.values())).cpu().numpy()
+        # For TensorRT: always use logits (not TopK due to TensorRT bugs with INT8)
+        output = next(iter(device_outputs.values())).cpu().numpy()
 
         end_time_datatransfer = time.time() 
         
@@ -530,9 +534,9 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
         if accuracy_flag:
             if MODEL_TYPE == "language":
-                # output is [batch, seq_len, 5] from TopK model
-                # Extract top-1 prediction (best class) from top-5
-                pred = output[..., 0].astype(np.int64)  # [batch, seq_len]
+                # output is [batch, seq_len, vocab_size] from simple model
+                # Use argmax to get predictions
+                pred = output.argmax(axis=-1).astype(np.int64)  # [batch, seq_len]
                 labels = yb.numpy()
                 
                 # Filter out padding tokens (label == -100)
@@ -552,11 +556,11 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
                 total_predictions += total
 
         if accuracy_flag and do_prints==True:
-            print("Prediction (Raw TopK): ", output[0][:10])  # Print first 10 sequences with top-5 indices
+            print("Prediction (Raw): ", output[0][:10])  # Print first 10 logits
             print("Output dtype: ", output.dtype)
             print("Output shape: ", output.shape)
             print("Label: ", yb.numpy()[0][:10])
-            print("predicted label (top-1 from top-5): ", pred[0][:10])
+            print("predicted label (argmax): ", pred[0][:10])
             do_prints = False
 
     accuracy = 0
@@ -598,9 +602,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         current_onnx_model_path = onnx_model_path
         if INT8:
             current_onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
-            if MODEL_TYPE == "language":
-                current_onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_argmax.onnx"
-            print(f"Using ONNX model for batch size {batch_size}: {current_onnx_model_path}")
+            print(f"Using INT8 simple model for batch size {batch_size}: {current_onnx_model_path}")
 
         input_info, output_info = get_model_io_info(current_onnx_model_path)
 
@@ -733,8 +735,8 @@ if __name__ == "__main__":
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     if INT8:
-        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
-        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_argmax.onnx"
+        # For TensorRT: use simple model (TopK in INT8 has TensorRT bugs)
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
 
     model = onnx.load(onnx_model_path)
 
