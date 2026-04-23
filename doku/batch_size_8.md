@@ -26,3 +26,8 @@ language batch size 8 einbruch
             ),
             ("CPUExecutionProvider", {}),
         ]
+
+
+
+# Einstellung im measure skript für output größen max. größe (16MB, bei batch size 8)
+# test auf dem Jetson mit dem Language modell

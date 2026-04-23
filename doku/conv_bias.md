@@ -1,6 +1,5 @@
 # Problem:
 2026-04-15 17:29:35.454313044 [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
-
 # Set quantize bias parameter in export
 - beim export export_onnx_qcdq -> quantize_bias=True
     - macht keinen unterschied, der bias wird nicht quantisiert
@@ -45,5 +44,32 @@ Netron Screenshot in ORT Doku:
 ## Viele ONNX Runtime backends erwarten int32 bias.
 from brevitas.quant.scaled_int import Int32Bias
 
+2026-04-22 10:18:49.669988554 [W:onnxruntime:, transformer_memcpy.cc:74 ApplyImpl] 1 Memcpy nodes are added to the graph main_graph for CUDAExecutionProvider. It might have negative impact on performance (including unable to run CUDA graph). Set session_options.log_severity_level=1 to see the detail logs before this message.
+
+2026-04-22 10:18:49.999200573 [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
+
+does not work
+
 ## Batch Norm after Conv
 export_onnx_qcdq(..., fold_batch_norm=True)
+
+-> error is still there
+2026-04-22 10:34:15.130931783 [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.1/Conv) running in Fallback mode. May be extremely slow.
+
+## test ohne quantisierung
+measure) hanna@ceg-391:~/git/finn-transformers$ python3 -m measure.measure_onnxruntime
+/data/gitlab/venvs/measure/lib/python3.10/site-packages/dvclive/monitor_system.py:11: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  from pynvml import (
+FP32
+GPU memory budget: 32.00 GB (34359738368 bytes)
+batch_size           : 1
+input_info           : [{'name': 'input', 'shape': ['batch_size', 1, 1024, 2], 'dtype': 'tensor(float)'}]
+output_info          : [{'name': 'output', 'shape': ['batch_size', 24], 'dtype': 'tensor(float)'}]
+data_path_npz        : /home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz
+onnx_model_path      : outputs/radioml/model_dynamic_batchsize.onnx
+Available ORT providers: ['CUDAExecutionProvider', 'CPUExecutionProvider']
+ORT session active providers: ['CUDAExecutionProvider', 'CPUExecutionProvider']
+Keys in NPZ file: ['X', 'Y']
+2026-04-22 14:52:59.936826862 [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.0/Conv) running in Fallback mode. May be extremely slow.
+
+--> Fehlermeldung ist immer noch da

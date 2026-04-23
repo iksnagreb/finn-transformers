@@ -14,7 +14,7 @@ variables:
 default:
   before_script:
    - mkdir -p /data/gitlab/tmp
-   - export MODEL_TYPE=radioml  # radioml, language, vision
+   - export MODEL_TYPE=language  # radioml, language, vision
    - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
    - export USE_DLA=1 # 0 or 1, decides if the measurements will be executed on DLA or GPU
    - export GPU_MEM_LIMIT_GB=32.0 # same limit for ORT and TRT
@@ -43,7 +43,7 @@ export-models:
 
     - pip install --upgrade pip
 
-    # ORT 1.17 / 1.16.3 environment for onnxsim/simplificatio
+    # ORT 1.17 / 1.16.3 environment for onnxsim/simplification
     - pip install onnxruntime==1.17.0
     - pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126 -q
     - pip install -r requirements.txt
@@ -91,12 +91,14 @@ measure-job:
     - dvc remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
     - dvc remote modify --local upload timeout 600
 
-    - python3 -m measure.measure_onnxruntime
+    - python3 -m create_topk_onnxscript # only runs if MODEL_TYPE=language
+
+    - python3 -m measure.measure_onnxruntime      # sollte in Zukunft auf topk model verwenden
 
     - python3 -m measure.measure
 
-    - python3 -m measure.tegrastats_onnxruntime
-    - python3 -m measure.tegrastats
+    - python3 -m measure.tegrastats_onnxruntime   # sollte in Zukunft auf topk model verwenden
+    - python3 -m measure.tegrastats               # sollte in Zukunft auf topk model verwenden
 
     - python3 -m plots.plots
 

@@ -17,8 +17,8 @@ stages:
       size: 23056
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: bf6c1f50967dd9eefdd1bbf0debf492c
+      size: 4074
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -95,17 +95,17 @@ stages:
             - 0
             - 0
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 1
           num_heads: 3
           emb_dim: 96
           expansion_dim: 384
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -145,8 +145,8 @@ stages:
       size: 1912
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: af39449929ac007d951bc194dd8aaa1b
-      size: 580816
+      md5: 5f2a7eb8aaba1b0f8cca196787669108
+      size: 504672
     - path: outputs/radioml/optimizer.pt
       hash: md5
       md5: 3be62f4b4121b24542a0b87edcacf8fa
@@ -168,8 +168,8 @@ stages:
       size: 23056
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: bf6c1f50967dd9eefdd1bbf0debf492c
+      size: 4074
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -180,8 +180,8 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: af39449929ac007d951bc194dd8aaa1b
-      size: 580816
+      md5: 5f2a7eb8aaba1b0f8cca196787669108
+      size: 504672
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -258,17 +258,17 @@ stages:
             - 0
             - 0
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 1
           num_heads: 3
           emb_dim: 96
           expansion_dim: 384
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -301,8 +301,8 @@ stages:
       size: 23056
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: bf6c1f50967dd9eefdd1bbf0debf492c
+      size: 4074
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -313,8 +313,8 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: af39449929ac007d951bc194dd8aaa1b
-      size: 580816
+      md5: 5f2a7eb8aaba1b0f8cca196787669108
+      size: 504672
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -392,17 +392,17 @@ stages:
             - 0
             - 0
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 1
           num_heads: 3
           emb_dim: 96
           expansion_dim: 384
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -420,8 +420,8 @@ stages:
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: 91397903f3d5d066b88bbbfc7c7a0931
-      size: 529609
+      md5: 8548fa827356bf23872ff02bc7949a07
+      size: 504809
     - path: outputs/radioml/out.npy
       hash: md5
       md5: 82c6173e39faed0a6a272c23f0f31d6c
@@ -444,8 +444,8 @@ stages:
       size: 8320
     - path: outputs/radioml/model.onnx
       hash: md5
-      md5: 91397903f3d5d066b88bbbfc7c7a0931
-      size: 529609
+      md5: 8548fa827356bf23872ff02bc7949a07
+      size: 504809
     - path: outputs/radioml/out.npy
       hash: md5
       md5: 82c6173e39faed0a6a272c23f0f31d6c

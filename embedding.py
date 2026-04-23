@@ -44,7 +44,8 @@ class PatchEmbedding(torch.nn.Module):
             # Insert optional activation quantizer if enabled
              *([QuantIdentity(bit_width=bits, return_quant_tensor=True)] if bits else []),
 
-            LazyQuantConv2d(dim, kernel_size, **kwargs, **weight_quant, bias_quant=Int8Bias,return_quant_tensor=True), 
+            # LazyQuantConv2d(dim, kernel_size, **kwargs, **weight_quant, bias_quant=Int8Bias,return_quant_tensor=True), 
+            LazyQuantConv2d(dim, kernel_size, **kwargs, **weight_quant), 
 
             # Normalization between convolution and activation function - this
             # is always a batch norm and not configurable

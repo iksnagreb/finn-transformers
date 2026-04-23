@@ -41,15 +41,15 @@ def create_argmax_wrapper(input_model_path, output_model_path):
     #     to=TensorProto.FLOAT
     # )
 
-    identity_node = helper.make_node(
-        "Identity",
-        inputs=[int8_tensor],
-        outputs=["fp32_boundary"]
-    )
+    # identity_node = helper.make_node(
+    #     "Identity",
+    #     inputs=[int8_tensor],
+    #     outputs=["fp32_boundary"]
+    # )
 
     topk_node = helper.make_node(
         'TopK',
-        inputs=["fp32_boundary", 'k_value'],
+        inputs=[int8_tensor, 'k_value'],
         outputs=['top_values', 'top_indices'],
         axis=-1,
         largest=1,
@@ -57,7 +57,8 @@ def create_argmax_wrapper(input_model_path, output_model_path):
     )
 
 
-    original_model.graph.node.extend([identity_node, topk_node])
+    #  original_model.graph.node.extend([identity_node, topk_node])
+    original_model.graph.node.extend([topk_node])
 
     original_model.graph.output.clear()
     original_model.graph.output.append(
@@ -88,3 +89,9 @@ if __name__ == "__main__":
     create_argmax_wrapper(input_model, output_model)
     
 # next step: quant_type='int' in export?
+
+
+
+
+# 2. onnxscript, onnxir, onnx-passes 
+# 1. pytorch methode ändern: topk (vor dem export)

@@ -129,12 +129,30 @@ ONNX_TO_TORCH_DTYPE = {
     "tensor(bool)": torch.bool,
 }
 
+# ONNX proto dtype to torch dtype mapping (for integer dtype values)
+ONNX_PROTO_DTYPE_TO_TORCH = {
+    1: torch.float32,    # FLOAT
+    2: torch.uint8,      # UINT8
+    3: torch.int8,       # INT8
+    5: torch.int32,      # INT32
+    6: torch.int64,      # INT64
+    7: torch.int64,      # INT64 (alternate)
+    10: torch.float16,   # FLOAT16
+    12: torch.float64,   # DOUBLE
+}
 
-def onnx_dtype_to_torch(onnx_dtype_str):
+
+def onnx_dtype_to_torch(onnx_dtype):
     """
-    Wandelt einen ONNX-Datentyp-String in einen torch.dtype um.
+    Convert ONNX dtype (int or string) to torch dtype.
+    Handles both string format ("tensor(float)") and integer format (1, 7, etc.)
     """
-    return ONNX_TO_TORCH_DTYPE.get(onnx_dtype_str, torch.float32) 
+    if isinstance(onnx_dtype, int):
+        # Integer dtype from ONNX proto
+        return ONNX_PROTO_DTYPE_TO_TORCH.get(onnx_dtype, torch.float32)
+    else:
+        # String format
+        return ONNX_TO_TORCH_DTYPE.get(onnx_dtype, torch.float32) 
 
 
 # def get_model_io_info(model_path):
@@ -298,13 +316,20 @@ def test_data(context, batch_size, input_info, output_info):
         name = out["name"]
         shape = parse_shape(out["shape"], batch_size)
         print(shape)
-        dtype = onnx_dtype_to_torch(out["dtype"])  
-        tensor = torch.empty(shape, dtype=dtype_out, device='cuda')
+        # Use the correct dtype for each output, not just the first output's dtype
+        out_dtype = onnx_dtype_to_torch(out["dtype"])
+        tensor = torch.empty(shape, dtype=out_dtype, device='cuda')
         context.set_tensor_address(name, tensor.data_ptr())
         device_outputs[name] = tensor
 
     device_input = next(iter(device_inputs.values()))
-    device_output = next(iter(device_outputs.values()))
+    
+    # For language models, use the top_indices output specifically
+    if MODEL_TYPE == "language" and "top_indices" in device_outputs:
+        device_output = device_outputs["top_indices"]
+    else:
+        device_output = next(iter(device_outputs.values()))
+    
     if len(input_info) > 1:
         device_attention_mask = next(iter(device_attention_masks.values()))
     else:
@@ -315,7 +340,7 @@ def test_data(context, batch_size, input_info, output_info):
     else:
         device_token_type = None
 
-    return device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream
+    return device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, device_outputs
 
 
 def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=None, min_bs=1, opt_bs=8, max_bs=1024):
@@ -406,7 +431,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     return engine, context
 
 
-def run_inference(context, test_loader, device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, batch_size=1, input_info=None, output_info=None, accuracy_flag=False):
+def run_inference(context, test_loader, device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, batch_size=1, input_info=None, output_info=None, accuracy_flag=False, device_outputs=None):
     """
     Funktion zur Bestimmung der Inferenzlatenz.
     """
@@ -456,8 +481,19 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             context.set_tensor_address(token_type_name, device_token_type.data_ptr())
             context.set_input_shape(token_type_name, device_token_type.shape)
 
-        output_name = output_info[0]["name"]
-        context.set_tensor_address(output_name, device_output.data_ptr()) 
+        # For language models, set tensor address for top_indices output
+        if MODEL_TYPE == "language" and "top_indices" in device_outputs:
+            output_name = "top_indices"
+        else:
+            output_name = output_info[0]["name"]
+        
+        context.set_tensor_address(output_name, device_output.data_ptr())
+        
+        # Also set addresses for any other outputs to prevent memory errors
+        for out_info in output_info:
+            out_name = out_info["name"]
+            if out_name in device_outputs and out_name != output_name:
+                context.set_tensor_address(out_name, device_outputs[out_name].data_ptr()) 
 
         
         # torch_stream.synchronize()
@@ -498,22 +534,33 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
         if accuracy_flag:
             if MODEL_TYPE == "language":
-                # output is already [batch, seq_len] from ArgMax model
-                # no need to call argmax again
-                pred = output.argmax(axis=-1)
-                total = np.prod(yb.shape)   # tokens*batch size
+                # output is [batch, seq_len, 5] from TopK model
+                # Extract top-1 prediction (best class) from top-5
+                pred = output[..., 0].astype(np.int64)  # [batch, seq_len]
+                labels = yb.numpy()
+                
+                # Filter out padding tokens (label == -100)
+                mask = labels != -100
+                valid_preds = pred[mask]
+                valid_labels = labels[mask]
+                
+                correct = (valid_preds == valid_labels).sum()
+                total = len(valid_preds) if len(valid_preds) > 0 else 1
+                correct_predictions += correct
+                total_predictions += total
             else:
                 pred = output.argmax(axis=-1)
+                correct = (pred == yb.numpy()).sum()
                 total = yb.shape[0]
-            
-            correct = (pred == yb.numpy()).sum()
-            correct_predictions += correct
-            total_predictions += total
+                correct_predictions += correct
+                total_predictions += total
 
         if accuracy_flag and do_prints==True:
-            print("Prediction (Raw): ", output[0])
-            print("Label: ", yb.numpy()[0])
-            print("predicted label: ", pred[0])
+            print("Prediction (Raw TopK): ", output[0][:10])  # Print first 10 sequences with top-5 indices
+            print("Output dtype: ", output.dtype)
+            print("Output shape: ", output.shape)
+            print("Label: ", yb.numpy()[0][:10])
+            print("predicted label (top-1 from top-5): ", pred[0][:10])
             do_prints = False
 
     accuracy = 0
@@ -554,17 +601,16 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         print("Measuring for batch size:", batch_size)
         current_onnx_model_path = onnx_model_path
         if INT8:
-            # Prefer fixed ONNX if available (dequantized initializers)
-            fixed = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_fixed.onnx"
-            normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
-            current_onnx_model_path = normal
+            current_onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
+            if MODEL_TYPE == "language":
+                current_onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_argmax.onnx"
             print(f"Using ONNX model for batch size {batch_size}: {current_onnx_model_path}")
 
         input_info, output_info = get_model_io_info(current_onnx_model_path)
 
         test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size, current_onnx_model_path)
         engine, context = build_tensorrt_engine(current_onnx_model_path, test_loader, batch_size, input_info)
-        device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
+        device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, device_outputs = test_data(context, batch_size, input_info, output_info)
 
         
         # for the average
@@ -586,7 +632,8 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
                 torch_stream=torch_stream,
                 batch_size=batch_size,
                 input_info=input_info,
-                output_info=output_info
+                output_info=output_info,
+                device_outputs=device_outputs
             )
             latency_ms_sum = latency_ms_sum + latency_ms
             latency_synchronize_sum = latency_synchronize_sum + (latency_synchronize-latency_ms)
@@ -648,7 +695,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
     input_info, output_info = get_model_io_info(onnx_model_path)
     test_loader = create_test_dataloader(DATA_PATH_NPZ, 1, onnx_model_path)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
-    device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
+    device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, device_outputs = test_data(context, 1, input_info, output_info)
     
     _, _, _, accuracy = run_inference(
                 context=context,
@@ -662,7 +709,8 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
                 batch_size=batch_size,
                 input_info=input_info,
                 output_info=output_info,
-                accuracy_flag=True
+                accuracy_flag=True,
+                device_outputs=device_outputs
             )
     
     # Clean up resources
@@ -689,8 +737,8 @@ if __name__ == "__main__":
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     if INT8:
-        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
-        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_argmax.onnx"
+        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_argmax.onnx"
 
     model = onnx.load(onnx_model_path)
 

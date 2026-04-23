@@ -39,3 +39,10 @@ Chat GPT sagt, der Fehler liegt an:
 ohne topk konnte tensorrt noch ein fallback machen, jetzt aus irgendeinem Grund nicht mehr...
 
 --> Keine Möglichkeit gefunden, den Datentransfer GPU->CPU zu verringern ....
+
+# use onnxscript
+# use torch method
+
+
+Freitag: 7
+Heute: 4 (13:40 - 17:15, 19:00 - 20:00)
