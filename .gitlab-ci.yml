@@ -91,7 +91,7 @@ measure-job:
     - dvc remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
     - dvc remote modify --local upload timeout 600
 
-    - python3 -m create_topk_onnxscript # only runs if MODEL_TYPE=language
+    - python3 -m measure.create_topk_onnxscript # only runs if MODEL_TYPE=language
 
     - python3 -m measure.measure_onnxruntime      # sollte in Zukunft auf topk model verwenden
 

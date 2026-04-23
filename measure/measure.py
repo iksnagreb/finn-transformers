@@ -511,15 +511,11 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     
         end_time = time.time()
 
-        # For language models, only transfer best prediction indices to reduce data transfer
-        # torch sort doesnt work with gpu, torch topk also not supported, argmax is not supported as well:  RuntimeError: CUDA error: no kernel image is available for execution on the device
-        if MODEL_TYPE == "language":
-            # Get argmax directly on GPU and transfer only indices
-            output = device_output.cpu()    # expensive for langage (big output) 
-            output = output.numpy()    # expensive for langage (big output) 
+        # For language models with TopK, transfer top_indices (much smaller than logits)
+        if MODEL_TYPE == "language" and "top_indices" in device_outputs:
+            output = device_outputs["top_indices"].cpu().numpy()
         else:
-            output = device_output.cpu()    # expensive for langage (big output) 
-            output = output.numpy()    # expensive for langage (big output) 
+            output = next(iter(device_outputs.values())).cpu().numpy()
 
         end_time_datatransfer = time.time() 
         

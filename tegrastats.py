@@ -511,7 +511,8 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
         _, _, _, accuracy = run_inference(
                     context=context,
                     test_loader=test_loader,
-                    device_outputs=device_outputs,
+                    device_input=device_input,
+                    device_output=device_output,
                     device_attention_mask=device_attention_mask,
                     device_token_type=device_token_type,
                     stream_ptr=stream_ptr,

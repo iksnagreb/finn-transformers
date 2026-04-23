@@ -82,8 +82,24 @@ ONNX_TO_NP_DTYPE = {
     "tensor(bool)":    np.bool_,
 }
 
-def onnx_dtype_to_numpy(onnx_dtype_str: str) -> np.dtype:
-    return ONNX_TO_NP_DTYPE.get(onnx_dtype_str, np.float32)
+# ONNX proto dtype to numpy dtype mapping (for integer dtype values)
+ONNX_PROTO_DTYPE_TO_NP = {
+    1: np.float32,     # FLOAT
+    2: np.uint8,       # UINT8
+    3: np.int8,        # INT8
+    5: np.int32,       # INT32
+    6: np.int64,       # INT64
+    7: np.int64,       # INT64 (alternate)
+    10: np.float16,    # FLOAT16
+    12: np.float64,    # DOUBLE
+}
+
+def onnx_dtype_to_numpy(onnx_dtype) -> np.dtype:
+    """Convert ONNX dtype (int or string) to numpy dtype."""
+    if isinstance(onnx_dtype, int):
+        return ONNX_PROTO_DTYPE_TO_NP.get(onnx_dtype, np.float32)
+    else:
+        return ONNX_TO_NP_DTYPE.get(onnx_dtype, np.float32)
 
 
 def save_json(log, filepath):
@@ -306,7 +322,11 @@ def run_inference_ort(
         end_time_sync = time.time()
 
         # ORT already returns numpy arrays; no extra D2H copy needed -> faster with big outputs
-        output = outputs[0]
+        # For language models with TopK, select the top_indices output
+        if MODEL_TYPE == "language" and len(outputs) > 1 and output_names[1] == "top_indices":
+            output = outputs[1]  # top_indices output [batch, seq_len, 5]
+        else:
+            output = outputs[0]  # original output
         end_time_dt = time.time()
 
         total_time      += end_time      - start_time_inf
@@ -315,16 +335,34 @@ def run_inference_ort(
         iterations      += 1
 
         if accuracy_flag:
-            pred    = output.argmax(axis=-1)
-            correct = (pred == yb).sum()
-            total   = int(np.prod(yb.shape)) if MODEL_TYPE == "language" else yb.shape[0]
+            if MODEL_TYPE == "language" and output.ndim == 3 and output.shape[-1] == 5:
+                # output is [batch, seq_len, 5] from TopK model
+                # Extract top-1 prediction (best class) from top-5
+                pred = output[..., 0].astype(np.int64)  # [batch, seq_len]
+                labels = yb
+                
+                # Filter out padding tokens (label == -100)
+                mask = labels != -100
+                valid_preds = pred[mask]
+                valid_labels = labels[mask]
+                
+                correct = (valid_preds == valid_labels).sum()
+                total = len(valid_preds) if len(valid_preds) > 0 else 1
+            else:
+                pred = output.argmax(axis=-1)
+                correct = (pred == yb).sum()
+                total = int(np.prod(yb.shape)) if MODEL_TYPE == "language" else yb.shape[0]
+            
             correct_predictions += correct
             total_predictions   += total
 
         if accuracy_flag and do_prints:
-            print("Prediction (Raw):", output[0])
-            print("Label:           ", yb[0])
-            print("Predicted label: ", pred[0])
+            print("Prediction (Raw TopK):", output[0][:10] if MODEL_TYPE == "language" and output.ndim == 3 else output[0])
+            print("Output dtype:", output.dtype)
+            print("Output shape:", output.shape)
+            print("Label:", yb[0][:10] if MODEL_TYPE == "language" else yb[0])
+            if MODEL_TYPE == "language" and output.ndim == 3:
+                print("predicted label (top-1 from top-5):", output[..., 0][0][:10].astype(np.int64))
             do_prints = False
 
     accuracy = (
@@ -392,8 +430,12 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
         current_onnx_path = onnx_model_path
         if INT8:
-            current_onnx_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
-            print(f"Using INT8 ONNX model: {current_onnx_path}")
+            if MODEL_TYPE == "language":
+                current_onnx_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_argmax.onnx"
+                print(f"Using INT8 argmax model with TopK: {current_onnx_path}")
+            else:
+                current_onnx_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
+                print(f"Using INT8 simple model: {current_onnx_path}")
 
         # Re-create session only when the model file changes
         if current_onnx_path != current_session_path:
@@ -494,9 +536,12 @@ if __name__ == "__main__":
     # ORT handles dynamic batch sizes natively → one model file for all batch sizes
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
     if INT8:
-        # For INT8 accuracy eval use batch-size-1 QCDQ model
-        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
-        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple_pre.onnx"
+        if MODEL_TYPE == "language":
+            # For language models: use argmax model with TopK for accuracy evaluation
+            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_argmax.onnx"
+        else:
+            # For other models: use simple QCDQ model
+            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
     if FP16:
         model_fp32 = onnx.load(onnx_model_path)
         model_fp16 = float16.convert_float_to_float16(model_fp32)

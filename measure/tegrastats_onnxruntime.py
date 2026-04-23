@@ -150,7 +150,10 @@ if __name__ == "__main__":
     for batch_size in batch_sizes:
         print("Batch size:", batch_size)
         if INT8:
-            current_onnx = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
+            if MODEL_TYPE == "language":
+                current_onnx = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_argmax.onnx"
+            else:
+                current_onnx = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
         else:
             current_onnx = onnx_model_path
 
