@@ -129,7 +129,7 @@ eval:
   # DataLoader keyword arguments
   loader:
     # Number of workers to use for loading the data in parallel
-    num_workers: 32
+    num_workers: 8
     # Number of batches loaded in advance by each worker
     prefetch_factor: 4
     # Keep worker processes alive after consuming the dataset once

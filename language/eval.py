@@ -39,8 +39,8 @@ def top_k_accuracy(probabilities, cls, k=1):
 def evaluate(model, dataset, batch_size, context_length, tokenizer,
              mlm, mlm_probability, loader):
     # Check whether GPU eval is available and select the appropriate device
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    # device = "cpu"
+    #device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = "cpu"
     # Move the model to the training device
     model = model.to(device)  # noqa: Shadows model...
     # Set model to evaluation mode

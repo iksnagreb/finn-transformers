@@ -26,8 +26,19 @@ FP16 = os.environ.get("FP16", "0") == "1"
 
 
 def throughput_batch_plot(json_path, output_path):
-    with open(json_path, "r") as f:  # Name deiner Datei anpassen
-        data = json.load(f)
+    try:
+        with open(json_path, "r") as f:  # Name deiner Datei anpassen
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"WARNING: File not found: {json_path}")
+        return
+    except json.JSONDecodeError:
+        print(f"WARNING: Invalid JSON in {json_path}")
+        return
+    
+    if not data:
+        print(f"WARNING: No data in {json_path}")
+        return
 
     # Batch-Größen und Werte extrahieren
     batch_sizes = [d["batch_size"] for d in data]
@@ -51,10 +62,22 @@ def throughput_batch_plot(json_path, output_path):
 
     # plt.show()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
 
 def throughput_images_plot(json_path, output_path):
-    with open(json_path, "r") as f:  # Name deiner Datei anpassen
-        data = json.load(f)
+    try:
+        with open(json_path, "r") as f:  # Name deiner Datei anpassen
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"WARNING: File not found: {json_path}")
+        return
+    except json.JSONDecodeError:
+        print(f"WARNING: Invalid JSON in {json_path}")
+        return
+    
+    if not data:
+        print(f"WARNING: No data in {json_path}")
+        return
 
     # Batch-Größen und Werte extrahieren
     batch_sizes = [d["batch_size"] for d in data]
@@ -78,10 +101,22 @@ def throughput_images_plot(json_path, output_path):
 
     # plt.show()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
 
 def latency_plot(json_path, output_path):
-    with open(json_path, "r") as f:
-        latency_results = json.load(f)
+    try:
+        with open(json_path, "r") as f:
+            latency_results = json.load(f)
+    except FileNotFoundError:
+        print(f"WARNING: File not found: {json_path}")
+        return
+    except json.JSONDecodeError:
+        print(f"WARNING: Invalid JSON in {json_path}")
+        return
+    
+    if not latency_results:
+        print(f"WARNING: No data in {json_path}")
+        return
 
     # 2. Alle Batch-Größen sammeln (ohne Duplikate)
     batch_sizes = sorted(list(set(d["batch_size"] for d in latency_results)))
@@ -117,6 +152,7 @@ def latency_plot(json_path, output_path):
 
     ax.legend()  # Legende anzeigen
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
 
 def throughput_per_power_plot(json_path, output_path):
     with open(json_path, "r") as f:  # Name deiner Datei anpassen
@@ -144,10 +180,23 @@ def throughput_per_power_plot(json_path, output_path):
 
     # plt.show()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+
     
 def latency_per_throughput_plot(json_path, output_path):
-    with open(json_path, "r") as f:
-        data = json.load(f)
+    try:
+        with open(json_path, "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"WARNING: File not found: {json_path}")
+        return
+    except json.JSONDecodeError:
+        print(f"WARNING: Invalid JSON in {json_path}")
+        return
+    
+    if not data:
+        print(f"WARNING: No data in {json_path}")
+        return
 
     batch_sizes = [d["batch_size"] for d in data]
     latency_values = [d["latency_total"] for d in data]
@@ -176,8 +225,19 @@ def latency_per_throughput_plot(json_path, output_path):
 
     
 def accuracies_plot(json_path, output_path):
-    with open(json_path, "r") as f:  # Name deiner Datei anpassen
-        data = json.load(f)
+    try:
+        with open(json_path, "r") as f:  # Name deiner Datei anpassen
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"WARNING: File not found: {json_path}")
+        return
+    except json.JSONDecodeError:
+        print(f"WARNING: Invalid JSON in {json_path}")
+        return
+    
+    if not data:
+        print(f"WARNING: No data in {json_path}")
+        return
 
     # Batch-Größen und Werte extrahieren
     quantisation_type = [d["quantisation_type"] for d in data]
@@ -201,6 +261,7 @@ def accuracies_plot(json_path, output_path):
 
     # plt.show()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
     
 def energy_consumption_plot(json_path, output_path):
         # JSON laden

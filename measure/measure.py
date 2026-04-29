@@ -575,6 +575,7 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
                     
                     correct = matches.sum()
                     total = len(matches)
+                    # nur maskierte Tokens berücksichtigen
                 else:
                     # Simple model: full logits [batch, seq_len, vocab_size]
                     # Use argmax to get predictions
@@ -793,7 +794,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
 if __name__ == "__main__":
 
     if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
-        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256]
     else:
         # Vision and RadioML can handle larger batches
         batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]

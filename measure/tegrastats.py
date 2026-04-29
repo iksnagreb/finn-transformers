@@ -564,8 +564,8 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
 
 
     
-        
-    for i in range(5):
+    num_executions = 1
+    for i in range(num_executions):
         _, _, _, accuracy = run_inference(
                     context=context,
                     test_loader=test_loader,
