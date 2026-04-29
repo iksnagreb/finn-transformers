@@ -57,7 +57,7 @@ def evaluate(model, dataset, batch_size, context_length, tokenizer,
     # Data collator turning sample sequences of tokens into batches of masked
     # and padded tokens as PyTorch tensors, used by each DataLoader worker
     collator = DataCollatorForLanguageModeling(
-        tokenizer, mlm=mlm, mlm_probability=mlm_probability
+        tokenizer, mlm=mlm, mlm_probability=mlm_probability     # maske in accuracy berechnung berücksichtigen
     )
 
     def collate(samples):

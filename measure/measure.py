@@ -26,6 +26,28 @@ from torchvision import datasets, transforms
 from language.model_wrapper import ModelTopKWrapper
 
 
+# Computes the top-k prediction accuracy for probabilities and ground truth labels cls
+# Only considers masked positions (labels >= 0, ignores -100 padding)
+def top_k_accuracy(probabilities, cls, k=1):
+    """
+    Calculate top-k accuracy considering only masked tokens.
+    Args:
+        probabilities: model output probabilities/logits
+        cls: ground truth labels (with -100 for unmasked positions)
+        k: consider top-k predictions
+    Returns:
+        accuracy for masked tokens only
+    """
+    # Filter all predictions which are not masked (data collator marks unmasked with -100)
+    s = torch.where(torch.as_tensor(cls) >= 0)
+    # Select top-k probabilities predicted along the last axis
+    top_k = torch.as_tensor(probabilities[s].argsort(dim=-1)[..., -k:])
+    # Classification accuracy is the fraction of correct predictions
+    if len(s[0]) == 0:
+        return torch.tensor(0.0)
+    return torch.any(top_k == cls[..., None][s], dim=-1).sum() / cls[s].numel()
+
+
 FP16 = os.environ.get("FP16", "0") == "1"
 GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
 GPU_MEM_LIMIT_BYTES = int(GPU_MEM_LIMIT_GB * 1024 * 1024 * 1024)
@@ -558,36 +580,36 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
                 labels = yb.numpy()  # [batch, seq_len]
                 
                 if topk_indices is not None:
-                    # TopK wrapper: indices are [batch, 5] token IDs for the LAST token
-                    # Extract the label for the last token to compare
-                    pred = topk_indices  # [batch, 5]
+                    # TopK wrapper: indices are [batch, seq_len, k] - Top-k for EACH position
+                    # Reshape to [batch*seq_len, k] and [batch*seq_len] for comparison
+                    topk_indices_np = topk_indices.cpu().numpy() if isinstance(topk_indices, torch.Tensor) else topk_indices
+                    batch_size, seq_len, k = topk_indices_np.shape
                     
-                    # Get labels for last position (what we're predicting)
-                    if labels.ndim == 2:
-                        # [batch, seq_len] - get last position
-                        last_token_labels = labels[:, -1]  # [batch]
-                    else:
-                        # Already [batch]
-                        last_token_labels = labels
+                    # Reshape both arrays
+                    topk_flat = topk_indices_np.reshape(-1, k)  # [batch*seq_len, k]
+                    labels_flat = labels.reshape(-1)  # [batch*seq_len]
                     
-                    labels_expanded = last_token_labels.reshape(-1, 1)  # [batch, 1]
-                    matches = (pred == labels_expanded).any(axis=1)  # Check if label in top-5
+                    # Filter only masked positions (labels != -100)
+                    mask = labels_flat != -100
+                    topk_masked = topk_flat[mask]  # [num_masked, k]
+                    labels_masked = labels_flat[mask]  # [num_masked]
                     
+                    # Check if true label is in top-k predictions
+                    # topk_masked: [num_masked, k], labels_masked: [num_masked, 1]
+                    matches = (topk_masked == labels_masked[:, None]).any(axis=1)
                     correct = matches.sum()
-                    total = len(matches)
-                    # nur maskierte Tokens berücksichtigen
+                    total = len(labels_masked) if len(labels_masked) > 0 else 1
                 else:
                     # Simple model: full logits [batch, seq_len, vocab_size]
-                    # Use argmax to get predictions
-                    pred = output.argmax(axis=-1).astype(np.int64)  # [batch, seq_len]
+                    # Use top_k_accuracy function (k=1 for accuracy metric)
+                    output_tensor = torch.as_tensor(output)
+                    labels_tensor = torch.as_tensor(labels)
                     
-                    # Filter out padding tokens (label == -100)
-                    mask = labels != -100
-                    valid_preds = pred[mask]
-                    valid_labels = labels[mask]
-                    
-                    correct = (valid_preds == valid_labels).sum()
-                    total = len(valid_preds) if len(valid_preds) > 0 else 1
+                    accuracy_value = top_k_accuracy(output_tensor, labels_tensor, k=1).item()
+                    # Convert accuracy to correct/total counts for accumulation
+                    masked_count = (labels_tensor >= 0).sum().item()
+                    correct = int(accuracy_value * masked_count)
+                    total = masked_count if masked_count > 0 else 1
                 
                 correct_predictions += correct
                 total_predictions += total
@@ -600,17 +622,32 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
         if accuracy_flag and do_prints==True:
             if MODEL_TYPE == "language":
-                # TopK wrapper: print the predictions and last token label
+                # TopK wrapper: print the predictions and labels
                 print("=" * 60)
-                print("TopK Wrapper Output:")
+                print("TopK Wrapper Output [batch, seq_len, k]:")
                 print("=" * 60)
-                print("Prediction (Top-5 indices): ", output[0])  # [batch, 5]
-                print("Output dtype: ", output.dtype)
                 print("Output shape: ", output.shape)
-                # Print the LAST token label (what we're predicting)
-                last_label = yb.numpy()[0, -1] if yb.numpy().ndim == 2 else yb.numpy()[0]
-                print(f"True label (last token): {last_label}")
-                print(f"Match in top-5: {last_label in output[0]}")
+                print("Output dtype: ", output.dtype)
+                
+                labels_np = yb.numpy()
+                print(f"Labels shape: {labels_np.shape}")
+                
+                # Show stats for all masked positions
+                mask = labels_np[0] != -100
+                num_masked = np.sum(mask)
+                print(f"Number of masked tokens: {num_masked} / {labels_np.shape[1]}")
+                
+                # Show a few examples
+                print("\nFirst 5 masked positions:")
+                masked_positions = np.where(mask)[0][:5]
+                for pos in masked_positions:
+                    if output.ndim == 3:
+                        pred = output[0, pos, :]
+                    else:
+                        pred = output[pos, :]
+                    true_label = labels_np[0, pos]
+                    match = true_label in pred
+                    print(f"  Position {pos}: True={true_label}, Top-5={pred}, Match={match}")
             else:
                 # Simple model: print predictions
                 print("=" * 60)

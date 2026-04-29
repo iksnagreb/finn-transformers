@@ -82,3 +82,37 @@ TopK nicht nachträglich ins ONNX-Modell wrappen, sondern direkt im ursprünglic
 
 - this works as well, but has low accuracy (3%)
 ![alt text](image_topk.png)
+
+
+# pipeline plots wieder korrigieren
+-> unterschiedliche batch sizes für language throughput und language power
+
+
+# Accuracy funktion verbessern
+Soll (aus dem Eval Skript):
+top-1: 0.6699076429881515
+top-5: 0.8571763883413552
+onnxruntime (top5): 
+Accuracy (ORT CUDA): 85.67%
+
+
+Tensorrt (top5):  
+First 5 masked positions:
+  Position 11: True=444, Top-5=[ 16 263  18 261 265], Match=False
+  Position 14: True=447, Top-5=[ 16 263  18 261 265], Match=False
+  Position 22: True=2001, Top-5=[ 16 263  18 261 265], Match=False
+  Position 35: True=160, Top-5=[ 16 263  18 261 265], Match=False
+  Position 36: True=799, Top-5=[ 16 263  18 261 265], Match=False
+Accuracy : 19.80%
+-> da auch immer die gleichen tokens vorhergesagt werden ist es das gleiche wie beiden anderen Models mit dem uint8 problem
+
+
+
+
+Fehler vorher: nur letzes token vorhergesagt, nicht alle maskierte tokens
+
+
+
+# dvc timeout erhöhen / nochmal versuchen
+
+# in allen modellen top5 einbauen

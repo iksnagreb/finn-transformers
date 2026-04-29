@@ -37,6 +37,30 @@ os.environ.setdefault("CUDA_MODULE_LOADING", "LAZY")
 from measure.latency_throughput_log import latency_throughput
 
 
+# Computes the top-k prediction accuracy for probabilities and ground truth labels cls
+# Only considers masked positions (labels >= 0, ignores -100 padding)
+def top_k_accuracy(probabilities, cls, k=1):
+    """
+    Calculate top-k accuracy considering only masked tokens (numpy version).
+    Args:
+        probabilities: model output probabilities/logits (numpy array)
+        cls: ground truth labels (numpy array, with -100 for unmasked positions)
+        k: consider top-k predictions
+    Returns:
+        accuracy for masked tokens only
+    """
+    # Filter all predictions which are not masked (labels >= 0)
+    s = np.where(cls >= 0)
+    if len(s[0]) == 0:
+        return 0.0
+    # Select top-k probabilities predicted along the last axis
+    top_k = probabilities[s].argsort(axis=-1)[..., -k:]
+    # Check if true label is in top-k
+    matches = np.any(top_k == cls[..., None][s], axis=-1)
+    # Classification accuracy is the fraction of correct predictions
+    return matches.sum() / cls[s].size
+
+
 FP16 = os.environ.get("FP16", "0") == "1"
 GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
 GPU_MEM_LIMIT_BYTES = int(GPU_MEM_LIMIT_GB * 1024 * 1024 * 1024)
@@ -352,40 +376,32 @@ def run_inference_ort(
                 labels = yb.numpy() if hasattr(yb, 'numpy') else yb
                 
                 if topk_indices is not None:
-                    # TopK wrapper: indices are [batch, seq_len, 5] or [batch, 5]
-                    # Extract only the LAST token position
-                    if topk_indices.ndim == 3:
-                        # [batch, seq_len, 5] - extract last position
-                        pred = topk_indices[:, -1, :]  # [batch, 5]
-                    else:
-                        # Already [batch, 5]
-                        pred = topk_indices
+                    # TopK wrapper: indices are [batch, seq_len, k] - Top-k for EACH position
+                    # Reshape to [batch*seq_len, k] and [batch*seq_len] for comparison
+                    batch_size, seq_len, k = topk_indices.shape
                     
-                    # Get labels for last position (what we're predicting)
-                    if labels.ndim == 2:
-                        # [batch, seq_len] - get last position
-                        last_token_labels = labels[:, -1]  # [batch]
-                    else:
-                        # Already [batch]
-                        last_token_labels = labels
+                    # Reshape both arrays
+                    topk_flat = topk_indices.reshape(-1, k)  # [batch*seq_len, k]
+                    labels_flat = labels.reshape(-1)  # [batch*seq_len]
                     
-                    labels_expanded = last_token_labels.reshape(-1, 1)  # [batch, 1]
-                    matches = (pred == labels_expanded).any(axis=1)  # Check if label in top-5
+                    # Filter only masked positions (labels != -100)
+                    mask = labels_flat != -100
+                    topk_masked = topk_flat[mask]  # [num_masked, k]
+                    labels_masked = labels_flat[mask]  # [num_masked]
                     
+                    # Check if true label is in top-k predictions
+                    # topk_masked: [num_masked, k], labels_masked: [num_masked, 1]
+                    matches = (topk_masked == labels_masked[:, None]).any(axis=1)
                     correct = matches.sum()
-                    total = len(matches)
+                    total = len(labels_masked) if len(labels_masked) > 0 else 1
                 else:
                     # Simple model: full logits [batch, seq_len, vocab_size]
-                    # Use argmax to get predictions
-                    pred = output.argmax(axis=-1).astype(np.int64)  # [batch, seq_len]
-                    
-                    # Filter out padding tokens (label == -100)
-                    mask = labels != -100
-                    valid_preds = pred[mask]
-                    valid_labels = labels[mask]
-                    
-                    correct = (valid_preds == valid_labels).sum()
-                    total = len(valid_preds) if len(valid_preds) > 0 else 1
+                    # Use top_k_accuracy function (k=1 for accuracy metric)
+                    accuracy_value = top_k_accuracy(output, labels, k=1)
+                    # Convert accuracy to correct/total counts for accumulation
+                    masked_count = np.sum(labels >= 0)
+                    correct = int(accuracy_value * masked_count)
+                    total = masked_count if masked_count > 0 else 1
                 
                 correct_predictions += correct
                 total_predictions   += total
