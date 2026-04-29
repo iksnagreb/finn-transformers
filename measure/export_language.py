@@ -26,6 +26,8 @@ import gc
 import yaml
 import onnx
 from onnxsim import simplify
+from language.model_wrapper import ModelTopKWrapper
+
 
 # Export function mapping
 EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
@@ -135,7 +137,18 @@ def export(model, dataset, batch_size, mlm, mlm_probability, tokenizer,
 
     # Save the input and output data for verification purposes later
     np.save("outputs/language/inp.npy", inp.numpy())
-    np.save("outputs/language/out.npy", out.numpy())
+    
+    # Handle both regular output (tensor) and wrapped output (tuple of tensors)
+    if isinstance(out, tuple):
+        # Wrapper returns (topk_values, topk_indices)
+        topk_values, topk_indices = out
+        np.save("outputs/language/out_topk_values.npy", topk_values.numpy())
+        np.save("outputs/language/out_topk_indices.npy", topk_indices.numpy())
+        print(f"Saved TopK outputs: values shape {topk_values.shape}, indices shape {topk_indices.shape}")
+    else:
+        # Regular model output
+        np.save("outputs/language/out.npy", out.numpy())
+    
     np.save("outputs/language/cls.npy", cls.numpy())
 
     if INT8 == True:
@@ -218,8 +231,11 @@ if __name__ == "__main__":
     # Create a new model instance according to the configuration (vocabulary
     # size from the tokenizer in case this deviates from the configured)
     model = Model(**params["model"], vocab_size=tokenizer.vocab_size)
+
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/language/model.pt"))      # doesn't work for not quantized params -> model.pt is not te correct unquantized one
+    model = ModelTopKWrapper(model, k=5)  # to minimize the output data
+
     # model.load_state_dict(torch.load("outputs/language/model_fp32.pt")) 
     # Prevent export and streamlining issues for missing affine normalization
     # parameters

@@ -151,7 +151,15 @@ if __name__ == "__main__":
         print("Batch size:", batch_size)
         if INT8:
             if MODEL_TYPE == "language":
-                current_onnx = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_argmax.onnx"
+                # Try to use TopK wrapper model first (reduced data transfer 210x)
+                topk_model_path = f"outputs/{MODEL_TYPE}/model_topk_5.onnx"
+                if Path(topk_model_path).exists():
+                    current_onnx = topk_model_path
+                    print(f"Using TopK wrapper model for language INT8, batch size {batch_size}")
+                else:
+                    # Fallback to argmax/simple model if TopK not found
+                    current_onnx = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
+                    print(f"TopK model not found, using simple model for batch size {batch_size}")
             else:
                 current_onnx = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
         else:

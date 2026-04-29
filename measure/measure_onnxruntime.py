@@ -322,11 +322,24 @@ def run_inference_ort(
         end_time_sync = time.time()
 
         # ORT already returns numpy arrays; no extra D2H copy needed -> faster with big outputs
-        # For language models with TopK, select the top_indices output
-        if MODEL_TYPE == "language" and len(outputs) > 1 and output_names[1] == "top_indices":
-            output = outputs[1]  # top_indices output [batch, seq_len, 5]
+        # Extract outputs - handle both TopK wrapper (2 outputs) and simple model (1 output)
+        topk_indices = None
+        topk_values = None
+        
+        if MODEL_TYPE == "language" and len(outputs) > 1:
+            # TopK wrapper has 2 outputs: values (float32) and indices (int64)
+            # ONNX uses numeric names, so extract by dtype
+            for i, out in enumerate(outputs):
+                if out.dtype == np.int64:
+                    topk_indices = out  # [batch, k]
+                elif out.dtype == np.float32:
+                    topk_values = out   # [batch, k]
+            
+            output = topk_indices if topk_indices is not None else outputs[0]
         else:
-            output = outputs[0]  # original output
+            # Simple model: single output with full logits
+            output = outputs[0]
+        
         end_time_dt = time.time()
 
         total_time      += end_time      - start_time_inf
@@ -335,34 +348,100 @@ def run_inference_ort(
         iterations      += 1
 
         if accuracy_flag:
-            if MODEL_TYPE == "language" and output.ndim == 3 and output.shape[-1] == 5:
-                # output is [batch, seq_len, 5] from TopK model
-                # Extract top-1 prediction (best class) from top-5
-                pred = output[..., 0].astype(np.int64)  # [batch, seq_len]
-                labels = yb
+            if MODEL_TYPE == "language":
+                labels = yb.numpy() if hasattr(yb, 'numpy') else yb
                 
-                # Filter out padding tokens (label == -100)
-                mask = labels != -100
-                valid_preds = pred[mask]
-                valid_labels = labels[mask]
+                if topk_indices is not None:
+                    # TopK wrapper: indices are [batch, seq_len, 5] or [batch, 5]
+                    # Extract only the LAST token position
+                    if topk_indices.ndim == 3:
+                        # [batch, seq_len, 5] - extract last position
+                        pred = topk_indices[:, -1, :]  # [batch, 5]
+                    else:
+                        # Already [batch, 5]
+                        pred = topk_indices
+                    
+                    # Get labels for last position (what we're predicting)
+                    if labels.ndim == 2:
+                        # [batch, seq_len] - get last position
+                        last_token_labels = labels[:, -1]  # [batch]
+                    else:
+                        # Already [batch]
+                        last_token_labels = labels
+                    
+                    labels_expanded = last_token_labels.reshape(-1, 1)  # [batch, 1]
+                    matches = (pred == labels_expanded).any(axis=1)  # Check if label in top-5
+                    
+                    correct = matches.sum()
+                    total = len(matches)
+                else:
+                    # Simple model: full logits [batch, seq_len, vocab_size]
+                    # Use argmax to get predictions
+                    pred = output.argmax(axis=-1).astype(np.int64)  # [batch, seq_len]
+                    
+                    # Filter out padding tokens (label == -100)
+                    mask = labels != -100
+                    valid_preds = pred[mask]
+                    valid_labels = labels[mask]
+                    
+                    correct = (valid_preds == valid_labels).sum()
+                    total = len(valid_preds) if len(valid_preds) > 0 else 1
                 
-                correct = (valid_preds == valid_labels).sum()
-                total = len(valid_preds) if len(valid_preds) > 0 else 1
+                correct_predictions += correct
+                total_predictions   += total
             else:
                 pred = output.argmax(axis=-1)
-                correct = (pred == yb).sum()
-                total = int(np.prod(yb.shape)) if MODEL_TYPE == "language" else yb.shape[0]
-            
-            correct_predictions += correct
-            total_predictions   += total
+                labels = yb.numpy() if hasattr(yb, 'numpy') else yb
+                correct = (pred == labels).sum()
+                total = yb.shape[0]
+                correct_predictions += correct
+                total_predictions   += total
 
         if accuracy_flag and do_prints:
-            print("Prediction (Raw TopK):", output[0][:10] if MODEL_TYPE == "language" and output.ndim == 3 else output[0])
-            print("Output dtype:", output.dtype)
-            print("Output shape:", output.shape)
-            print("Label:", yb[0][:10] if MODEL_TYPE == "language" else yb[0])
-            if MODEL_TYPE == "language" and output.ndim == 3:
-                print("predicted label (top-1 from top-5):", output[..., 0][0][:10].astype(np.int64))
+            if MODEL_TYPE == "language":
+                # TopK wrapper: print the predictions and last token label
+                print("=" * 60)
+                print("DEBUG: TopK Wrapper Output:")
+                print("=" * 60)
+                print("Output shape: ", output.shape)
+                print("Output dtype: ", output.dtype)
+                
+                # Extract last position if output is 3D
+                if output.ndim == 3:
+                    last_pred = output[0, -1, :]  # [5]
+                    print("Prediction (Top-5 indices, last position): ", last_pred)
+                else:
+                    last_pred = output[0]  # [5]
+                    print("Prediction (Top-5 indices): ", last_pred)
+                
+                # Print the LAST token label (what we're predicting)
+                labels_np = yb.numpy() if hasattr(yb, 'numpy') else yb
+                print(f"Labels shape: {labels_np.shape}")
+                print(f"Full labels: {labels_np[0]}")
+                
+                # Find first non-padding token from the end
+                non_padding_mask = labels_np[0] != -100
+                if non_padding_mask.any():
+                    last_non_padding_idx = np.where(non_padding_mask)[0][-1]
+                    true_label = labels_np[0, last_non_padding_idx]
+                    print(f"Last non-padding position: {last_non_padding_idx}")
+                    print(f"True label (last non-padding): {true_label}")
+                    print(f"Match in top-5: {true_label in last_pred}")
+                else:
+                    print("WARNING: All labels are padding (-100)!")
+            else:
+                # Simple model: print predictions
+                print("=" * 60)
+                print("Simple Model Output:")
+                print("=" * 60)
+                print("Output dtype: ", output.dtype)
+                print("Output shape: ", output.shape)
+                
+                # Handle both language sequences and vision scalars
+                label_val = yb.numpy() if hasattr(yb, 'numpy') else yb
+                # Vision: scalar label
+                print("Prediction (logits): ", output[0])
+                print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
             do_prints = False
 
     accuracy = (
@@ -430,12 +509,8 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 
         current_onnx_path = onnx_model_path
         if INT8:
-            if MODEL_TYPE == "language":
-                current_onnx_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_argmax.onnx"
-                print(f"Using INT8 argmax model with TopK: {current_onnx_path}")
-            else:
-                current_onnx_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
-                print(f"Using INT8 simple model: {current_onnx_path}")
+            current_onnx_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
+            print(f"Using INT8 simple model: {current_onnx_path}")
 
         # Re-create session only when the model file changes
         if current_onnx_path != current_session_path:
@@ -536,12 +611,8 @@ if __name__ == "__main__":
     # ORT handles dynamic batch sizes natively → one model file for all batch sizes
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
     if INT8:
-        if MODEL_TYPE == "language":
-            # For language models: use argmax model with TopK for accuracy evaluation
-            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_argmax.onnx"
-        else:
             # For other models: use simple QCDQ model
-            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
     if FP16:
         model_fp32 = onnx.load(onnx_model_path)
         model_fp16 = float16.convert_float_to_float16(model_fp32)

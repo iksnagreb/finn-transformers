@@ -64,10 +64,22 @@ Traceback (most recent call last):
 RuntimeError: Fehler beim Bauen der TensorRT-Engine: serialized_engine ist None.
 
 
-
+# two outputs:
 but: if I leave the old output and only add the topk node, it works fine! (with onnxscript and onnxhelper)
 Problem: accuracy ist bei tensorrt schlechter als bei onnxruntime, bei tesnorrt werden immer nur die gleichen labels zurückgegeben 
 
 Das Problem: TensorRT kann die TopK-Operation bei INT8-Quantisierung nicht korrekt berechnen. Das ist eine TensorRT-Limitation.
 
 ORT CPU produces different logits per token, but TensorRT produces identical logits. This suggests the TensorRT engine serialization/conversion is the problem, not the model itself.
+
+
+
+# another approach: torch method??  1. pytorch methode ändern: topk (vor dem export)
+
+- build a wrapper around the Model -> trainng not needed
+- Für Top-5 nur für das letzte Token:
+TopK nicht nachträglich ins ONNX-Modell wrappen, sondern direkt im ursprünglichen PyTorch-Modell als Teil des forward() einbauen und dieses geänderte Modell exportieren.
+
+
+
+can you generate me the wrapper file and explain the workflow?

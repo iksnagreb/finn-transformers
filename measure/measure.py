@@ -23,6 +23,8 @@ from vision.model import Model
 from measure.latency_throughput_log import latency_throughput
 from dvclive import Live
 from torchvision import datasets, transforms
+from language.model_wrapper import ModelTopKWrapper
+
 
 FP16 = os.environ.get("FP16", "0") == "1"
 GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
@@ -325,8 +327,8 @@ def test_data(context, batch_size, input_info, output_info):
     device_input = next(iter(device_inputs.values()))
     
     # For language models, use the top_indices output specifically
-    if MODEL_TYPE == "language" and "top_indices" in device_outputs:
-        device_output = device_outputs["top_indices"]
+    if MODEL_TYPE == "language" and "462" in device_outputs:
+        device_output = device_outputs["462"]
     else:
         device_output = next(iter(device_outputs.values()))
     
@@ -482,8 +484,8 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             context.set_input_shape(token_type_name, device_token_type.shape)
 
         # For language models, set tensor address for top_indices output
-        if MODEL_TYPE == "language" and "top_indices" in device_outputs:
-            output_name = "top_indices"
+        if MODEL_TYPE == "language" and "462" in device_outputs:
+            output_name = "462"
         else:
             output_name = output_info[0]["name"]
         
@@ -518,8 +520,27 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     
         end_time = time.time()
 
-        # For TensorRT: always use logits (not TopK due to TensorRT bugs with INT8)
-        output = next(iter(device_outputs.values())).cpu().numpy()
+        # Extract outputs - handle both TopK wrapper (2 outputs) and simple model (1 output)
+        topk_indices = None
+        topk_values = None
+        
+        if MODEL_TYPE == "language" and len(device_outputs) > 1:
+            # TopK wrapper has 2 outputs: values (float32) and indices (int64)
+            # ONNX uses numeric names like '461' and '462', so extract by dtype
+            outputs_list = list(device_outputs.items())
+            
+            # Find indices output (int64) and values output (float32)
+            for name, tensor in outputs_list:
+                tensor_np = tensor.cpu().numpy()
+                if tensor_np.dtype == np.int64:
+                    topk_indices = tensor_np  # [batch, k]
+                elif tensor_np.dtype == np.float32:
+                    topk_values = tensor_np   # [batch, k]
+            
+            output = topk_indices if topk_indices is not None else next(iter(device_outputs.values())).cpu().numpy()
+        else:
+            # Simple model: single output with full logits
+            output = next(iter(device_outputs.values())).cpu().numpy()
 
         end_time_datatransfer = time.time() 
         
@@ -534,18 +555,39 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
 
         if accuracy_flag:
             if MODEL_TYPE == "language":
-                # output is [batch, seq_len, vocab_size] from simple model
-                # Use argmax to get predictions
-                pred = output.argmax(axis=-1).astype(np.int64)  # [batch, seq_len]
-                labels = yb.numpy()
+                labels = yb.numpy()  # [batch, seq_len]
                 
-                # Filter out padding tokens (label == -100)
-                mask = labels != -100
-                valid_preds = pred[mask]
-                valid_labels = labels[mask]
+                if topk_indices is not None:
+                    # TopK wrapper: indices are [batch, 5] token IDs for the LAST token
+                    # Extract the label for the last token to compare
+                    pred = topk_indices  # [batch, 5]
+                    
+                    # Get labels for last position (what we're predicting)
+                    if labels.ndim == 2:
+                        # [batch, seq_len] - get last position
+                        last_token_labels = labels[:, -1]  # [batch]
+                    else:
+                        # Already [batch]
+                        last_token_labels = labels
+                    
+                    labels_expanded = last_token_labels.reshape(-1, 1)  # [batch, 1]
+                    matches = (pred == labels_expanded).any(axis=1)  # Check if label in top-5
+                    
+                    correct = matches.sum()
+                    total = len(matches)
+                else:
+                    # Simple model: full logits [batch, seq_len, vocab_size]
+                    # Use argmax to get predictions
+                    pred = output.argmax(axis=-1).astype(np.int64)  # [batch, seq_len]
+                    
+                    # Filter out padding tokens (label == -100)
+                    mask = labels != -100
+                    valid_preds = pred[mask]
+                    valid_labels = labels[mask]
+                    
+                    correct = (valid_preds == valid_labels).sum()
+                    total = len(valid_preds) if len(valid_preds) > 0 else 1
                 
-                correct = (valid_preds == valid_labels).sum()
-                total = len(valid_preds) if len(valid_preds) > 0 else 1
                 correct_predictions += correct
                 total_predictions += total
             else:
@@ -556,11 +598,35 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
                 total_predictions += total
 
         if accuracy_flag and do_prints==True:
-            print("Prediction (Raw): ", output[0][:10])  # Print first 10 logits
-            print("Output dtype: ", output.dtype)
-            print("Output shape: ", output.shape)
-            print("Label: ", yb.numpy()[0][:10])
-            print("predicted label (argmax): ", pred[0][:10])
+            if MODEL_TYPE == "language":
+                # TopK wrapper: print the predictions and last token label
+                print("=" * 60)
+                print("TopK Wrapper Output:")
+                print("=" * 60)
+                print("Prediction (Top-5 indices): ", output[0])  # [batch, 5]
+                print("Output dtype: ", output.dtype)
+                print("Output shape: ", output.shape)
+                # Print the LAST token label (what we're predicting)
+                last_label = yb.numpy()[0, -1] if yb.numpy().ndim == 2 else yb.numpy()[0]
+                print(f"True label (last token): {last_label}")
+                print(f"Match in top-5: {last_label in output[0]}")
+            else:
+                # Simple model: print predictions
+                print("=" * 60)
+                print("Simple Model Output:")
+                print("=" * 60)
+                print("Output dtype: ", output.dtype)
+                print("Output shape: ", output.shape)
+                
+                # Handle both language sequences and vision scalars
+                label_val = yb.numpy()
+                # Vision: scalar label
+                print("Prediction (logits): ", output[0])
+                print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
+                if hasattr(pred, '__len__'):
+                    print("Predicted class: ", pred[0])
+                else:
+                    print("Predicted class: ", pred)
             do_prints = False
 
     accuracy = 0
@@ -735,8 +801,19 @@ if __name__ == "__main__":
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     if INT8:
-        # For TensorRT: use simple model (TopK in INT8 has TensorRT bugs)
-        onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+        if MODEL_TYPE == "language":
+            # Try to use TopK wrapper model first (reduced data transfer 210x)
+            topk_model_path = f"outputs/{MODEL_TYPE}/model_topk_5.onnx"
+            if Path(topk_model_path).exists():
+                onnx_model_path = topk_model_path
+                print("Using TopK wrapper model for language INT8")
+            else:
+                # Fallback to simple model if TopK not available
+                onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+                print(f"TopK model not found, using simple model instead")
+        else:
+            # For vision/radioml: use simple model
+            onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
 
     model = onnx.load(onnx_model_path)
 

@@ -397,6 +397,12 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
         # Get device_input from device_outputs (first output is usually the main one)
         device_input = next(iter(device_outputs.values()))
 
+        # For language models, use the top_indices output specifically
+        if MODEL_TYPE == "language" and "462" in device_outputs:
+            device_output = device_outputs["462"]
+        else:
+            device_output = next(iter(device_outputs.values()))
+
         input_name = input_info[0]["name"]
         if device_input.shape != xb.shape:
             device_input.resize_(xb.shape)  # Dynamisch anpassen
@@ -416,10 +422,25 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
             context.set_tensor_address(token_type_name, device_token_type.data_ptr())
             context.set_input_shape(token_type_name, device_token_type.shape)
 
-        # Set tensor addresses for ALL outputs
+                # For language models, set tensor address for top_indices output
+        if MODEL_TYPE == "language" and "462" in device_outputs:
+            output_name = "462"
+        else:
+            output_name = output_info[0]["name"]
+        
+        # Set addresses for ALL outputs
         for out_info in output_info:
             out_name = out_info["name"]
             if out_name in device_outputs:
+                addr = device_outputs[out_name].data_ptr()
+                if iterations == 0:
+                    print(f"DEBUG: Setting output '{out_name}' address to {addr}, shape {device_outputs[out_name].shape}, dtype {device_outputs[out_name].dtype}")
+                context.set_tensor_address(out_name, addr)
+        
+        # Also set addresses for any other outputs to prevent memory errors
+        for out_info in output_info:
+            out_name = out_info["name"]
+            if out_name in device_outputs and out_name != output_name:
                 context.set_tensor_address(out_name, device_outputs[out_name].data_ptr()) 
 
         
@@ -433,46 +454,73 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
             print("TensorRT Error:", e)
         torch_stream.synchronize() 
     
-        # Get output - always logits for TensorRT (TopK has bugs with INT8)
-        output = next(iter(device_outputs.values())).cpu().numpy()
+        # Extract outputs - handle both TopK wrapper (2 outputs) and simple model (1 output)
+        topk_indices = None
+        topk_values = None
+        
+        if MODEL_TYPE == "language" and len(device_outputs) > 1:
+            # TopK wrapper has 2 outputs: values (float32) and indices (int64)
+            # Extract by dtype since ONNX uses numeric names
+            outputs_list = list(device_outputs.items())
+            
+            for name, tensor in outputs_list:
+                tensor_np = tensor.cpu().numpy()
+                if tensor_np.dtype == np.int64:
+                    topk_indices = tensor_np  # [batch, k]
+                elif tensor_np.dtype == np.float32:
+                    topk_values = tensor_np   # [batch, k]
+            
+            output = topk_indices if topk_indices is not None else next(iter(device_outputs.values())).cpu().numpy()
+        else:
+            # Simple model: single output with full logits
+            output = next(iter(device_outputs.values())).cpu().numpy()
         
         iterations += 1
 
 
         if accuracy_flag:
-            if MODEL_TYPE == "language" and output.ndim == 3 and output.shape[-1] == 5:
-                # output is [batch, seq_len, 5] from TopK model (shouldn't happen now)
-                # Extract top-1 prediction (best class) from top-5
-                pred = output[..., 0].astype(np.int64)  # [batch, seq_len]
-                labels = yb.numpy()
+            if MODEL_TYPE == "language":
+                labels = yb.numpy()  # [batch, seq_len]
                 
-                # Filter out padding tokens (label == -100)
-                mask = labels != -100
-                valid_preds = pred[mask]
-                valid_labels = labels[mask]
+                if topk_indices is not None:
+                    # TopK wrapper: indices are [batch, 5] token IDs for the LAST token
+                    # Extract the label for the last token to compare
+                    pred = topk_indices  # [batch, 5]
+                    
+                    # Get labels for last position (what we're predicting)
+                    if labels.ndim == 2:
+                        # [batch, seq_len] - get last position
+                        last_token_labels = labels[:, -1]  # [batch]
+                    else:
+                        # Already [batch]
+                        last_token_labels = labels
+                    
+                    labels_expanded = last_token_labels.reshape(-1, 1)  # [batch, 1]
+                    matches = (pred == labels_expanded).any(axis=1)  # Check if label in top-5
+                    
+                    correct = matches.sum()
+                    total = len(matches)
+                else:
+                    # Simple model: full logits [batch, seq_len, vocab_size]
+                    # Use argmax to get predictions
+                    pred = output.argmax(axis=-1).astype(np.int64)  # [batch, seq_len]
+                    
+                    # Filter out padding tokens (label == -100)
+                    mask = labels != -100
+                    valid_preds = pred[mask]
+                    valid_labels = labels[mask]
+                    
+                    correct = (valid_preds == valid_labels).sum()
+                    total = len(valid_preds) if len(valid_preds) > 0 else 1
                 
-                correct = (valid_preds == valid_labels).sum()
-                total = len(valid_preds) if len(valid_preds) > 0 else 1
-            elif MODEL_TYPE == "language":
-                # output is [batch, seq_len, vocab] from simple model
-                # Use argmax to get predictions
-                pred = output.argmax(axis=-1) if output.ndim > 1 else output
-                labels = yb.numpy()
-                
-                # Filter out padding tokens (label == -100)
-                mask = labels != -100
-                valid_preds = pred[mask]
-                valid_labels = labels[mask]
-                
-                correct = (valid_preds == valid_labels).sum()
-                total = len(valid_preds) if len(valid_preds) > 0 else 1
+                correct_predictions += correct
+                total_predictions += total
             else:
-                pred = output.argmax(axis=-1) if output.ndim > 1 else output
+                pred = output.argmax(axis=-1)
                 correct = (pred == yb.numpy()).sum()
                 total = yb.shape[0]
-            
-            correct_predictions += correct
-            total_predictions += total
+                correct_predictions += correct
+                total_predictions += total
             
 
     accuracy = 0
@@ -518,22 +566,19 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
     
         
     for i in range(5):
-        # TensorRT has bugs with accuracy testing - skip for now
-        _, _, _, accuracy = None, None, None, None
-        # Instead use:
-        # _, _, _, accuracy = run_inference(
-        #             context=context,
-        #             test_loader=test_loader,
-        #             device_outputs=device_outputs,
-        #             device_attention_mask=device_attention_mask,
-        #             device_token_type=device_token_type,
-        #             stream_ptr=stream_ptr,
-        #             torch_stream=torch_stream,
-        #             batch_size=batch_size,
-        #             input_info=input_info,
-        #             output_info=output_info,
-        #             accuracy_flag=True
-        #         )
+        _, _, _, accuracy = run_inference(
+                    context=context,
+                    test_loader=test_loader,
+                    device_outputs=device_outputs,
+                    device_attention_mask=device_attention_mask,
+                    device_token_type=device_token_type,
+                    stream_ptr=stream_ptr,
+                    torch_stream=torch_stream,
+                    batch_size=batch_size,
+                    input_info=input_info,
+                    output_info=output_info,
+                    accuracy_flag=True
+                )
 
     
 
