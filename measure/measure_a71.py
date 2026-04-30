@@ -24,29 +24,6 @@ from measure.latency_throughput_log import latency_throughput
 from dvclive import Live
 from torchvision import datasets, transforms
 
-
-# Computes the top-k prediction accuracy for probabilities and ground truth labels cls
-# Only considers masked positions (labels >= 0, ignores -100 padding)
-def top_k_accuracy(probabilities, cls, k=1):
-    """
-    Calculate top-k accuracy considering only masked tokens.
-    Args:
-        probabilities: model output probabilities/logits
-        cls: ground truth labels (with -100 for unmasked positions)
-        k: consider top-k predictions
-    Returns:
-        accuracy for masked tokens only
-    """
-    # Filter all predictions which are not masked (data collator marks unmasked with -100)
-    s = torch.where(torch.as_tensor(cls) >= 0)
-    # Select top-k probabilities predicted along the last axis
-    top_k = torch.as_tensor(probabilities[s].argsort(dim=-1)[..., -k:])
-    # Classification accuracy is the fraction of correct predictions
-    if len(s[0]) == 0:
-        return torch.tensor(0.0)
-    return torch.any(top_k == cls[..., None][s], dim=-1).sum() / cls[s].numel()
-
-
 FP16 = os.environ.get("FP16", "0") == "1"
 GPU_MEM_LIMIT_GB = float(os.environ.get("GPU_MEM_LIMIT_GB", "2.0"))
 GPU_MEM_LIMIT_BYTES = int(GPU_MEM_LIMIT_GB * 1024 * 1024 * 1024)
@@ -152,30 +129,12 @@ ONNX_TO_TORCH_DTYPE = {
     "tensor(bool)": torch.bool,
 }
 
-# ONNX proto dtype to torch dtype mapping (for integer dtype values)
-ONNX_PROTO_DTYPE_TO_TORCH = {
-    1: torch.float32,    # FLOAT
-    2: torch.uint8,      # UINT8
-    3: torch.int8,       # INT8
-    5: torch.int32,      # INT32
-    6: torch.int64,      # INT64
-    7: torch.int64,      # INT64 (alternate)
-    10: torch.float16,   # FLOAT16
-    12: torch.float64,   # DOUBLE
-}
 
-
-def onnx_dtype_to_torch(onnx_dtype):
+def onnx_dtype_to_torch(onnx_dtype_str):
     """
-    Convert ONNX dtype (int or string) to torch dtype.
-    Handles both string format ("tensor(float)") and integer format (1, 7, etc.)
+    Wandelt einen ONNX-Datentyp-String in einen torch.dtype um.
     """
-    if isinstance(onnx_dtype, int):
-        # Integer dtype from ONNX proto
-        return ONNX_PROTO_DTYPE_TO_TORCH.get(onnx_dtype, torch.float32)
-    else:
-        # String format
-        return ONNX_TO_TORCH_DTYPE.get(onnx_dtype, torch.float32) 
+    return ONNX_TO_TORCH_DTYPE.get(onnx_dtype_str, torch.float32) 
 
 
 # def get_model_io_info(model_path):
@@ -256,6 +215,7 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size, onnx_model_path):
     data = np.load(DATA_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
+    print("Keys in NPZ file:", key_list)
     if len(input_info) == 2:
         input_key = key_list[0]
         attention_mask_key = key_list[1]
@@ -337,20 +297,14 @@ def test_data(context, batch_size, input_info, output_info):
     for out in output_info:
         name = out["name"]
         shape = parse_shape(out["shape"], batch_size)
-        # Use the correct dtype for each output, not just the first output's dtype
-        out_dtype = onnx_dtype_to_torch(out["dtype"])
-        tensor = torch.empty(shape, dtype=out_dtype, device='cuda')
+        print(shape)
+        dtype = onnx_dtype_to_torch(out["dtype"])  
+        tensor = torch.empty(shape, dtype=dtype_out, device='cuda')
         context.set_tensor_address(name, tensor.data_ptr())
         device_outputs[name] = tensor
 
     device_input = next(iter(device_inputs.values()))
-    
-    # For language models, use the top_indices output specifically
-    if MODEL_TYPE == "language" and "462" in device_outputs:
-        device_output = device_outputs["462"]
-    else:
-        device_output = next(iter(device_outputs.values()))
-    
+    device_output = next(iter(device_outputs.values()))
     if len(input_info) > 1:
         device_attention_mask = next(iter(device_attention_masks.values()))
     else:
@@ -361,7 +315,7 @@ def test_data(context, batch_size, input_info, output_info):
     else:
         device_token_type = None
 
-    return device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, device_outputs
+    return device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream
 
 
 def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=None, min_bs=1, opt_bs=8, max_bs=1024):
@@ -389,6 +343,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
             raise RuntimeError("ONNX Parsing failed")
 
     config = builder.create_builder_config()
+    print("config created")
     
     # DLA configuration for INT8 - disabled by default due to 16 loadables limit on Jetson
     # Language models with transformers/attention are poorly suited for DLA due to many unsupported ops
@@ -398,10 +353,13 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         print("use dla")
         config.DLA_core = 0  # 0 oder 1
         config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
+        print("fallback: gpu")
+        # DLA doesn't need optimization profile
     else:
         # GPU mode - needs optimization profile for dynamic shapes
         # (or fallback for models unsuitable for DLA like transformers)
         config.default_device_type = trt.DeviceType.GPU
+        print("config.default_device_type = trt.DeviceType.GPU")
         
         profile = builder.create_optimization_profile()
         for inp in input_info:
@@ -414,6 +372,10 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
         config.add_optimization_profile(profile)
 
+        print(f"Optimization profile for input '{name}':")
+        print(f"  min_shape: {min_shape}")
+        print(f"  opt_shape: {opt_shape}")
+        print(f"  max_shape: {max_shape}")
 
     config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, GPU_MEM_LIMIT_BYTES)
 
@@ -423,34 +385,39 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         config.set_flag(trt.BuilderFlag.INT8)
         print("int 8 builder flag gesetzt")
 
+    print("Serialized engine: ")
 
     serialized_engine = builder.build_serialized_network(network, config)
     if serialized_engine is None:
         raise RuntimeError("Fehler beim Bauen der TensorRT-Engine: serialized_engine ist None.")
 
+    print("Logger:")
     runtime = trt.Runtime(logger)
+    print("engine ")
     engine = runtime.deserialize_cuda_engine(serialized_engine)
     if engine is None:
         raise RuntimeError("Failed to deserialize TensorRT engine")
     
+    print("context: ")
     context = engine.create_execution_context()
     if context is None:
         raise RuntimeError("Failed to create execution context. If using DLA, you may have hit the 16 loadables per core limit. Try setting USE_DLA=0 environment variable.")
+    print("after context:")
     return engine, context
 
 
-def run_inference(context, test_loader, device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, batch_size=1, input_info=None, output_info=None, accuracy_flag=False, device_outputs=None):
+def run_inference(context, test_loader, device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, batch_size=1, input_info=None, output_info=None, accuracy_flag=False):
     """
     Funktion zur Bestimmung der Inferenzlatenz.
     """
     total_time = 0
     total_time_synchronize = 0
     total_time_datatransfer = 0  
+    iterations = 0 
 
     total_predictions = 0
     correct_predictions = 0
     do_prints=True
-    iterations = 0
 
     for batch in test_loader: 
         if len(batch) == 2:
@@ -489,24 +456,8 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             context.set_tensor_address(token_type_name, device_token_type.data_ptr())
             context.set_input_shape(token_type_name, device_token_type.shape)
 
-        # For language models, set tensor address for top_indices output
-        if MODEL_TYPE == "language" and "462" in device_outputs:
-            output_name = "462"
-        else:
-            output_name = output_info[0]["name"]
-        
-        # Set addresses for ALL outputs
-        for out_info in output_info:
-            out_name = out_info["name"]
-            if out_name in device_outputs:
-                addr = device_outputs[out_name].data_ptr()
-                context.set_tensor_address(out_name, addr)
-        
-        # Also set addresses for any other outputs to prevent memory errors
-        for out_info in output_info:
-            out_name = out_info["name"]
-            if out_name in device_outputs and out_name != output_name:
-                context.set_tensor_address(out_name, device_outputs[out_name].data_ptr()) 
+        output_name = output_info[0]["name"]
+        context.set_tensor_address(output_name, device_output.data_ptr()) 
 
         
         # torch_stream.synchronize()
@@ -524,27 +475,15 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     
         end_time = time.time()
 
-        # Extract outputs - handle both TopK wrapper (2 outputs) and simple model (1 output)
-        topk_indices = None
-        topk_values = None
-        
-        if MODEL_TYPE == "language" and len(device_outputs) > 1:
-            # TopK wrapper has 2 outputs: values (float32) and indices (int64)
-            # ONNX uses numeric names like '461' and '462', so extract by dtype
-            outputs_list = list(device_outputs.items())
-            
-            # Find indices output (int64) and values output (float32)
-            for name, tensor in outputs_list:
-                tensor_np = tensor.cpu().numpy()
-                if tensor_np.dtype == np.int64:
-                    topk_indices = tensor_np  # [batch, k]
-                elif tensor_np.dtype == np.float32:
-                    topk_values = tensor_np   # [batch, k]
-            
-            output = topk_indices if topk_indices is not None else next(iter(device_outputs.values())).cpu().numpy()
+        # For language models, only transfer best prediction indices to reduce data transfer
+        # torch sort doesnt work with gpu, torch topk also not supported, argmax is not supported as well:  RuntimeError: CUDA error: no kernel image is available for execution on the device
+        if MODEL_TYPE == "language":
+            # Get argmax directly on GPU and transfer only indices
+            output = device_output.cpu()    # expensive for langage (big output) 
+            output = output.numpy()    # expensive for langage (big output) 
         else:
-            # Simple model: single output with full logits
-            output = next(iter(device_outputs.values())).cpu().numpy()
+            output = device_output.cpu()    # expensive for langage (big output) 
+            output = output.numpy()    # expensive for langage (big output) 
 
         end_time_datatransfer = time.time() 
         
@@ -558,14 +497,25 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         iterations += 1
 
         if accuracy_flag:
-            labels = yb.numpy()
-            correct, total = calculate_accuracy(output, labels, topk_indices, MODEL_TYPE)
+            if MODEL_TYPE == "language":
+                # output is already [batch, seq_len] from ArgMax model
+                # no need to call argmax again
+                pred = output.argmax(axis=-1)
+                total = np.prod(yb.shape)   # tokens*batch size
+            else:
+                pred = output.argmax(axis=-1)
+                total = yb.shape[0]
+            
+            correct = (pred == yb.numpy()).sum()
             correct_predictions += correct
             total_predictions += total
 
-        if accuracy_flag and do_prints:
-            print_accuracy_and_predictions(output, yb.numpy(), topk_indices, MODEL_TYPE, yb)
+        if accuracy_flag and do_prints==True:
+            print("Prediction (Raw): ", output[0])
+            print("Label: ", yb.numpy()[0])
+            print("predicted label: ", pred[0])
             do_prints = False
+
     accuracy = 0
     if accuracy_flag:
         accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0
@@ -601,19 +551,20 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     latency_log_batch = []
 
     for batch_size in batch_sizes:
-        print("="*60)
         print("Measuring for batch size:", batch_size)
-        print("="*60)
         current_onnx_model_path = onnx_model_path
         if INT8:
-            current_onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
-            print(f"Using INT8 simple model for batch size {batch_size}: {current_onnx_model_path}")
+            # Prefer fixed ONNX if available (dequantized initializers)
+            fixed = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_fixed.onnx"
+            normal = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
+            current_onnx_model_path = normal
+            print(f"Using ONNX model for batch size {batch_size}: {current_onnx_model_path}")
 
         input_info, output_info = get_model_io_info(current_onnx_model_path)
 
         test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size, current_onnx_model_path)
         engine, context = build_tensorrt_engine(current_onnx_model_path, test_loader, batch_size, input_info)
-        device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, device_outputs = test_data(context, batch_size, input_info, output_info)
+        device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
 
         
         # for the average
@@ -635,9 +586,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
                 torch_stream=torch_stream,
                 batch_size=batch_size,
                 input_info=input_info,
-                output_info=output_info,
-                device_outputs=device_outputs,
-                accuracy_flag=False
+                output_info=output_info
             )
             latency_ms_sum = latency_ms_sum + latency_ms
             latency_synchronize_sum = latency_synchronize_sum + (latency_synchronize-latency_ms)
@@ -652,7 +601,10 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         latency_datatransfer_avg = float(lantency_datatransfer_sum/num_executions)
         total_time_avg = float(total_time_sum/num_executions)
 
+        num_batches = int(7600/batch_size) 
+        print("old num batches:", num_batches)
         num_batches = len(test_loader)
+        print("new num batches:", num_batches)
         throughput_batches = num_batches/(total_time_avg) 
         throughput_images = (num_batches*batch_size)/(total_time_avg)
 
@@ -687,118 +639,16 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     return throughput_log, latency_log, latency_log_batch
 
 
-def calculate_accuracy(output, labels, topk_indices, MODEL_TYPE):
-    """
-    Calculate accuracy for language or vision models.
-    
-    Args:
-        output: Model output (logits or indices)
-        labels: Ground truth labels
-        topk_indices: Top-k indices (only for language models with TopK wrapper)
-        MODEL_TYPE: Type of model ("language" or other)
-    
-    Returns:
-        tuple: (correct_count, total_count)
-    """
-    if MODEL_TYPE == "language":
-        if topk_indices is not None:
-            # TopK wrapper: indices are [batch, seq_len, k] - Top-k for EACH position
-            topk_indices_np = topk_indices.cpu().numpy() if isinstance(topk_indices, torch.Tensor) else topk_indices
-            batch_size, seq_len, k = topk_indices_np.shape
-            
-            # Reshape both arrays
-            topk_flat = topk_indices_np.reshape(-1, k)  # [batch*seq_len, k]
-            labels_flat = labels.reshape(-1)  # [batch*seq_len]
-            
-            # Filter only masked positions (labels != -100)
-            mask = labels_flat != -100
-            topk_masked = topk_flat[mask]  # [num_masked, k]
-            labels_masked = labels_flat[mask]  # [num_masked]
-            
-            # Check if true label is in top-k predictions
-            matches = (topk_masked == labels_masked[:, None]).any(axis=1)
-            correct = matches.sum()
-            total = len(labels_masked) if len(labels_masked) > 0 else 1
-        else:
-            # Simple model: full logits [batch, seq_len, vocab_size]
-            output_tensor = torch.as_tensor(output)
-            labels_tensor = torch.as_tensor(labels)
-            
-            accuracy_value = top_k_accuracy(output_tensor, labels_tensor, k=1).item()
-            # Convert accuracy to correct/total counts for accumulation
-            masked_count = (labels_tensor >= 0).sum().item()
-            correct = int(accuracy_value * masked_count)
-            total = masked_count if masked_count > 0 else 1
-    else:
-        # Vision/RadioML models
-        pred = output.argmax(axis=-1)
-        correct = (pred == labels).sum()
-        total = labels.shape[0]
-    
-    return correct, total
-
-
-def print_accuracy_and_predictions(output, labels, topk_indices, MODEL_TYPE, yb):
-    """
-    Print debug information about model predictions and accuracy.
-    
-    Args:
-        output: Model output
-        labels: Ground truth labels
-        topk_indices: Top-k indices (only for language models)
-        MODEL_TYPE: Type of model
-        yb: Original batch labels (for comparison)
-    """
-    if MODEL_TYPE == "language":
-        # TopK wrapper: print the predictions and labels
-        print("=" * 60)
-        print("TopK Wrapper Output [batch, seq_len, k]:")
-        print("=" * 60)
-        print("Output shape: ", output.shape)
-        
-        labels_np = yb.numpy()
-        print(f"Labels shape: {labels_np.shape}")
-        
-        # Show stats for all masked positions
-        mask = labels_np[0] != -100
-        num_masked = np.sum(mask)
-        
-        # Show a few examples
-        print("\nFirst 5 masked positions:")
-        masked_positions = np.where(mask)[0][:5]
-        for pos in masked_positions:
-            if output.ndim == 3:
-                pred = output[0, pos, :]
-            else:
-                pred = output[pos, :]
-            true_label = labels_np[0, pos]
-            match = true_label in pred
-            print(f"  Position {pos}: True={true_label}, Top-5={pred}, Match={match}")
-    else:
-        # Simple model: print predictions
-        print("=" * 60)
-        print("Simple Model Output:")
-        print("=" * 60)
-        print("Output shape: ", output.shape)
-        
-        label_val = yb.numpy()
-        print("Prediction (logits): ", output[0])
-        print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
-        pred = output.argmax(axis=-1)
-        if hasattr(pred, '__len__'):
-            print("Predicted class: ", pred[0])
-        else:
-            print("Predicted class: ", pred)
-
-
 def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path):
-    print("="*60)
-    print("Running accuracy evaluation for batch size:", batch_size)
-    print("="*60)
+    print("batch_size", batch_size)
+    print(" input_info", input_info)
+    print("output_info", output_info)
+    print("DATA_PATH_NPZ", DATA_PATH_NPZ)
+    print("onnx_model_path for accuracy validation", onnx_model_path)
     input_info, output_info = get_model_io_info(onnx_model_path)
     test_loader = create_test_dataloader(DATA_PATH_NPZ, 1, onnx_model_path)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
-    device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream, device_outputs = test_data(context, 1, input_info, output_info)
+    device_input, device_output, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, 1, input_info, output_info)
     
     _, _, _, accuracy = run_inference(
                 context=context,
@@ -812,8 +662,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
                 batch_size=batch_size,
                 input_info=input_info,
                 output_info=output_info,
-                accuracy_flag=True,
-                device_outputs=device_outputs
+                accuracy_flag=True
             )
     
     # Clean up resources
@@ -832,7 +681,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
 if __name__ == "__main__":
 
     if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
-        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
     else:
         # Vision and RadioML can handle larger batches
         batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
@@ -841,6 +690,7 @@ if __name__ == "__main__":
 
     if INT8:
         onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
+        # onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_argmax.onnx"
 
     model = onnx.load(onnx_model_path)
 
