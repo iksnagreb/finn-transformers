@@ -23,7 +23,6 @@ from vision.model import Model
 from measure.latency_throughput_log import latency_throughput
 from dvclive import Live
 from torchvision import datasets, transforms
-from language.model_wrapper import ModelTopKWrapper
 
 
 # Computes the top-k prediction accuracy for probabilities and ground truth labels cls
@@ -257,7 +256,6 @@ def create_test_dataloader(DATA_PATH_NPZ, batch_size, onnx_model_path):
     data = np.load(DATA_PATH_NPZ)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
-    print("Keys in NPZ file:", key_list)
     if len(input_info) == 2:
         input_key = key_list[0]
         attention_mask_key = key_list[1]
@@ -344,7 +342,6 @@ def test_data(context, batch_size, input_info, output_info):
         tensor = torch.empty(shape, dtype=out_dtype, device='cuda')
         context.set_tensor_address(name, tensor.data_ptr())
         device_outputs[name] = tensor
-        print(f"  Output '{name}': shape {shape}, dtype {out_dtype}, address {tensor.data_ptr()}")
 
     device_input = next(iter(device_inputs.values()))
     
@@ -392,7 +389,6 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
             raise RuntimeError("ONNX Parsing failed")
 
     config = builder.create_builder_config()
-    print("config created")
     
     # DLA configuration for INT8 - disabled by default due to 16 loadables limit on Jetson
     # Language models with transformers/attention are poorly suited for DLA due to many unsupported ops
@@ -402,13 +398,10 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         print("use dla")
         config.DLA_core = 0  # 0 oder 1
         config.set_flag(trt.BuilderFlag.GPU_FALLBACK)
-        print("fallback: gpu")
-        # DLA doesn't need optimization profile
     else:
         # GPU mode - needs optimization profile for dynamic shapes
         # (or fallback for models unsuitable for DLA like transformers)
         config.default_device_type = trt.DeviceType.GPU
-        print("config.default_device_type = trt.DeviceType.GPU")
         
         profile = builder.create_optimization_profile()
         for inp in input_info:
@@ -421,10 +414,6 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
         config.add_optimization_profile(profile)
 
-        print(f"Optimization profile for input '{name}':")
-        print(f"  min_shape: {min_shape}")
-        print(f"  opt_shape: {opt_shape}")
-        print(f"  max_shape: {max_shape}")
 
     config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, GPU_MEM_LIMIT_BYTES)
 
@@ -434,24 +423,19 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         config.set_flag(trt.BuilderFlag.INT8)
         print("int 8 builder flag gesetzt")
 
-    print("Serialized engine: ")
 
     serialized_engine = builder.build_serialized_network(network, config)
     if serialized_engine is None:
         raise RuntimeError("Fehler beim Bauen der TensorRT-Engine: serialized_engine ist None.")
 
-    print("Logger:")
     runtime = trt.Runtime(logger)
-    print("engine ")
     engine = runtime.deserialize_cuda_engine(serialized_engine)
     if engine is None:
         raise RuntimeError("Failed to deserialize TensorRT engine")
     
-    print("context: ")
     context = engine.create_execution_context()
     if context is None:
         raise RuntimeError("Failed to create execution context. If using DLA, you may have hit the 16 loadables per core limit. Try setting USE_DLA=0 environment variable.")
-    print("after context:")
     return engine, context
 
 
@@ -462,11 +446,11 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
     total_time = 0
     total_time_synchronize = 0
     total_time_datatransfer = 0  
-    iterations = 0 
 
     total_predictions = 0
     correct_predictions = 0
     do_prints=True
+    iterations = 0
 
     for batch in test_loader: 
         if len(batch) == 2:
@@ -516,8 +500,6 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             out_name = out_info["name"]
             if out_name in device_outputs:
                 addr = device_outputs[out_name].data_ptr()
-                if iterations == 0:
-                    print(f"DEBUG: Setting output '{out_name}' address to {addr}, shape {device_outputs[out_name].shape}, dtype {device_outputs[out_name].dtype}")
                 context.set_tensor_address(out_name, addr)
         
         # Also set addresses for any other outputs to prevent memory errors
@@ -576,97 +558,14 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         iterations += 1
 
         if accuracy_flag:
-            if MODEL_TYPE == "language":
-                labels = yb.numpy()  # [batch, seq_len]
-                
-                if topk_indices is not None:
-                    # TopK wrapper: indices are [batch, seq_len, k] - Top-k for EACH position
-                    # Reshape to [batch*seq_len, k] and [batch*seq_len] for comparison
-                    topk_indices_np = topk_indices.cpu().numpy() if isinstance(topk_indices, torch.Tensor) else topk_indices
-                    batch_size, seq_len, k = topk_indices_np.shape
-                    
-                    # Reshape both arrays
-                    topk_flat = topk_indices_np.reshape(-1, k)  # [batch*seq_len, k]
-                    labels_flat = labels.reshape(-1)  # [batch*seq_len]
-                    
-                    # Filter only masked positions (labels != -100)
-                    mask = labels_flat != -100
-                    topk_masked = topk_flat[mask]  # [num_masked, k]
-                    labels_masked = labels_flat[mask]  # [num_masked]
-                    
-                    # Check if true label is in top-k predictions
-                    # topk_masked: [num_masked, k], labels_masked: [num_masked, 1]
-                    matches = (topk_masked == labels_masked[:, None]).any(axis=1)
-                    correct = matches.sum()
-                    total = len(labels_masked) if len(labels_masked) > 0 else 1
-                else:
-                    # Simple model: full logits [batch, seq_len, vocab_size]
-                    # Use top_k_accuracy function (k=1 for accuracy metric)
-                    output_tensor = torch.as_tensor(output)
-                    labels_tensor = torch.as_tensor(labels)
-                    
-                    accuracy_value = top_k_accuracy(output_tensor, labels_tensor, k=1).item()
-                    # Convert accuracy to correct/total counts for accumulation
-                    masked_count = (labels_tensor >= 0).sum().item()
-                    correct = int(accuracy_value * masked_count)
-                    total = masked_count if masked_count > 0 else 1
-                
-                correct_predictions += correct
-                total_predictions += total
-            else:
-                pred = output.argmax(axis=-1)
-                correct = (pred == yb.numpy()).sum()
-                total = yb.shape[0]
-                correct_predictions += correct
-                total_predictions += total
+            labels = yb.numpy()
+            correct, total = calculate_accuracy(output, labels, topk_indices, MODEL_TYPE)
+            correct_predictions += correct
+            total_predictions += total
 
-        if accuracy_flag and do_prints==True:
-            if MODEL_TYPE == "language":
-                # TopK wrapper: print the predictions and labels
-                print("=" * 60)
-                print("TopK Wrapper Output [batch, seq_len, k]:")
-                print("=" * 60)
-                print("Output shape: ", output.shape)
-                print("Output dtype: ", output.dtype)
-                
-                labels_np = yb.numpy()
-                print(f"Labels shape: {labels_np.shape}")
-                
-                # Show stats for all masked positions
-                mask = labels_np[0] != -100
-                num_masked = np.sum(mask)
-                print(f"Number of masked tokens: {num_masked} / {labels_np.shape[1]}")
-                
-                # Show a few examples
-                print("\nFirst 5 masked positions:")
-                masked_positions = np.where(mask)[0][:5]
-                for pos in masked_positions:
-                    if output.ndim == 3:
-                        pred = output[0, pos, :]
-                    else:
-                        pred = output[pos, :]
-                    true_label = labels_np[0, pos]
-                    match = true_label in pred
-                    print(f"  Position {pos}: True={true_label}, Top-5={pred}, Match={match}")
-            else:
-                # Simple model: print predictions
-                print("=" * 60)
-                print("Simple Model Output:")
-                print("=" * 60)
-                print("Output dtype: ", output.dtype)
-                print("Output shape: ", output.shape)
-                
-                # Handle both language sequences and vision scalars
-                label_val = yb.numpy()
-                # Vision: scalar label
-                print("Prediction (logits): ", output[0])
-                print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
-                if hasattr(pred, '__len__'):
-                    print("Predicted class: ", pred[0])
-                else:
-                    print("Predicted class: ", pred)
+        if accuracy_flag and do_prints:
+            print_accuracy_and_predictions(output, yb.numpy(), topk_indices, MODEL_TYPE, yb)
             do_prints = False
-
     accuracy = 0
     if accuracy_flag:
         accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0
@@ -702,7 +601,9 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     latency_log_batch = []
 
     for batch_size in batch_sizes:
+        print("="*60)
         print("Measuring for batch size:", batch_size)
+        print("="*60)
         current_onnx_model_path = onnx_model_path
         if INT8:
             current_onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
@@ -735,7 +636,8 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
                 batch_size=batch_size,
                 input_info=input_info,
                 output_info=output_info,
-                device_outputs=device_outputs
+                device_outputs=device_outputs,
+                accuracy_flag=False
             )
             latency_ms_sum = latency_ms_sum + latency_ms
             latency_synchronize_sum = latency_synchronize_sum + (latency_synchronize-latency_ms)
@@ -750,10 +652,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         latency_datatransfer_avg = float(lantency_datatransfer_sum/num_executions)
         total_time_avg = float(total_time_sum/num_executions)
 
-        num_batches = int(7600/batch_size) 
-        print("old num batches:", num_batches)
         num_batches = len(test_loader)
-        print("new num batches:", num_batches)
         throughput_batches = num_batches/(total_time_avg) 
         throughput_images = (num_batches*batch_size)/(total_time_avg)
 
@@ -788,12 +687,114 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     return throughput_log, latency_log, latency_log_batch
 
 
+def calculate_accuracy(output, labels, topk_indices, MODEL_TYPE):
+    """
+    Calculate accuracy for language or vision models.
+    
+    Args:
+        output: Model output (logits or indices)
+        labels: Ground truth labels
+        topk_indices: Top-k indices (only for language models with TopK wrapper)
+        MODEL_TYPE: Type of model ("language" or other)
+    
+    Returns:
+        tuple: (correct_count, total_count)
+    """
+    if MODEL_TYPE == "language":
+        if topk_indices is not None:
+            # TopK wrapper: indices are [batch, seq_len, k] - Top-k for EACH position
+            topk_indices_np = topk_indices.cpu().numpy() if isinstance(topk_indices, torch.Tensor) else topk_indices
+            batch_size, seq_len, k = topk_indices_np.shape
+            
+            # Reshape both arrays
+            topk_flat = topk_indices_np.reshape(-1, k)  # [batch*seq_len, k]
+            labels_flat = labels.reshape(-1)  # [batch*seq_len]
+            
+            # Filter only masked positions (labels != -100)
+            mask = labels_flat != -100
+            topk_masked = topk_flat[mask]  # [num_masked, k]
+            labels_masked = labels_flat[mask]  # [num_masked]
+            
+            # Check if true label is in top-k predictions
+            matches = (topk_masked == labels_masked[:, None]).any(axis=1)
+            correct = matches.sum()
+            total = len(labels_masked) if len(labels_masked) > 0 else 1
+        else:
+            # Simple model: full logits [batch, seq_len, vocab_size]
+            output_tensor = torch.as_tensor(output)
+            labels_tensor = torch.as_tensor(labels)
+            
+            accuracy_value = top_k_accuracy(output_tensor, labels_tensor, k=1).item()
+            # Convert accuracy to correct/total counts for accumulation
+            masked_count = (labels_tensor >= 0).sum().item()
+            correct = int(accuracy_value * masked_count)
+            total = masked_count if masked_count > 0 else 1
+    else:
+        # Vision/RadioML models
+        pred = output.argmax(axis=-1)
+        correct = (pred == labels).sum()
+        total = labels.shape[0]
+    
+    return correct, total
+
+
+def print_accuracy_and_predictions(output, labels, topk_indices, MODEL_TYPE, yb):
+    """
+    Print debug information about model predictions and accuracy.
+    
+    Args:
+        output: Model output
+        labels: Ground truth labels
+        topk_indices: Top-k indices (only for language models)
+        MODEL_TYPE: Type of model
+        yb: Original batch labels (for comparison)
+    """
+    if MODEL_TYPE == "language":
+        # TopK wrapper: print the predictions and labels
+        print("=" * 60)
+        print("TopK Wrapper Output [batch, seq_len, k]:")
+        print("=" * 60)
+        print("Output shape: ", output.shape)
+        
+        labels_np = yb.numpy()
+        print(f"Labels shape: {labels_np.shape}")
+        
+        # Show stats for all masked positions
+        mask = labels_np[0] != -100
+        num_masked = np.sum(mask)
+        
+        # Show a few examples
+        print("\nFirst 5 masked positions:")
+        masked_positions = np.where(mask)[0][:5]
+        for pos in masked_positions:
+            if output.ndim == 3:
+                pred = output[0, pos, :]
+            else:
+                pred = output[pos, :]
+            true_label = labels_np[0, pos]
+            match = true_label in pred
+            print(f"  Position {pos}: True={true_label}, Top-5={pred}, Match={match}")
+    else:
+        # Simple model: print predictions
+        print("=" * 60)
+        print("Simple Model Output:")
+        print("=" * 60)
+        print("Output shape: ", output.shape)
+        
+        label_val = yb.numpy()
+        print("Prediction (logits): ", output[0])
+        print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
+        pred = output.argmax(axis=-1)
+        if hasattr(pred, '__len__'):
+            print("Predicted class: ", pred[0])
+        else:
+            print("Predicted class: ", pred)
+
+
 def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path):
-    print("batch_size", batch_size)
-    print(" input_info", input_info)
-    print("output_info", output_info)
-    print("DATA_PATH_NPZ", DATA_PATH_NPZ)
-    print("onnx_model_path for accuracy validation", onnx_model_path)
+    print("="*60)
+    print("Running accuracy evaluation for batch size:", batch_size)
+    print("="*60)
     input_info, output_info = get_model_io_info(onnx_model_path)
     test_loader = create_test_dataloader(DATA_PATH_NPZ, 1, onnx_model_path)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, 1, input_info)
@@ -840,17 +841,6 @@ if __name__ == "__main__":
 
     if INT8:
         if MODEL_TYPE == "language":
-            # Try to use TopK wrapper model first (reduced data transfer 210x)
-            topk_model_path = f"outputs/{MODEL_TYPE}/model_topk_5.onnx"
-            if Path(topk_model_path).exists():
-                onnx_model_path = topk_model_path
-                print("Using TopK wrapper model for language INT8")
-            else:
-                # Fallback to simple model if TopK not available
-                onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
-                print(f"TopK model not found, using simple model instead")
-        else:
-            # For vision/radioml: use simple model
             onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
 
     model = onnx.load(onnx_model_path)

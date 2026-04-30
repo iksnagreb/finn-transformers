@@ -374,7 +374,6 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
 
     total_predictions = 0
     correct_predictions = 0
-    iterations=0
 
     for batch in test_loader: 
         # je nach Aufbau des Modells: mit Attention Mask oder ohne
@@ -433,8 +432,6 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
             out_name = out_info["name"]
             if out_name in device_outputs:
                 addr = device_outputs[out_name].data_ptr()
-                if iterations == 0:
-                    print(f"DEBUG: Setting output '{out_name}' address to {addr}, shape {device_outputs[out_name].shape}, dtype {device_outputs[out_name].dtype}")
                 context.set_tensor_address(out_name, addr)
         
         # Also set addresses for any other outputs to prevent memory errors
@@ -475,61 +472,7 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
             # Simple model: single output with full logits
             output = next(iter(device_outputs.values())).cpu().numpy()
         
-        iterations += 1
-
-
-        if accuracy_flag:
-            if MODEL_TYPE == "language":
-                labels = yb.numpy()  # [batch, seq_len]
-                
-                if topk_indices is not None:
-                    # TopK wrapper: indices are [batch, 5] token IDs for the LAST token
-                    # Extract the label for the last token to compare
-                    pred = topk_indices  # [batch, 5]
-                    
-                    # Get labels for last position (what we're predicting)
-                    if labels.ndim == 2:
-                        # [batch, seq_len] - get last position
-                        last_token_labels = labels[:, -1]  # [batch]
-                    else:
-                        # Already [batch]
-                        last_token_labels = labels
-                    
-                    labels_expanded = last_token_labels.reshape(-1, 1)  # [batch, 1]
-                    matches = (pred == labels_expanded).any(axis=1)  # Check if label in top-5
-                    
-                    correct = matches.sum()
-                    total = len(matches)
-                else:
-                    # Simple model: full logits [batch, seq_len, vocab_size]
-                    # Use argmax to get predictions
-                    pred = output.argmax(axis=-1).astype(np.int64)  # [batch, seq_len]
-                    
-                    # Filter out padding tokens (label == -100)
-                    mask = labels != -100
-                    valid_preds = pred[mask]
-                    valid_labels = labels[mask]
-                    
-                    correct = (valid_preds == valid_labels).sum()
-                    total = len(valid_preds) if len(valid_preds) > 0 else 1
-                
-                correct_predictions += correct
-                total_predictions += total
-            else:
-                pred = output.argmax(axis=-1)
-                correct = (pred == yb.numpy()).sum()
-                total = yb.shape[0]
-                correct_predictions += correct
-                total_predictions += total
-            
-
-    accuracy = 0
-    if accuracy_flag:
-        accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0
-        print("correct: ", correct_predictions, "total: ", total_predictions)
-
-
-    return 0, 0, 0, accuracy
+    return 0, 0, 0, 0
 
 
 def start_tegrastats(logfile_path: Path):

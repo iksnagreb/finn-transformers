@@ -26,7 +26,7 @@ import gc
 import yaml
 import onnx
 from onnxsim import simplify
-from language.model_wrapper import ModelTopKWrapper
+from language.topk_wrapper import ModelTopKWrapper
 
 
 # Export function mapping

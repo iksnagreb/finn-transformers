@@ -159,7 +159,6 @@ def parse_shape(shape, batch_value):
 def print_latency(latency_ms, latency_synchronize, latency_datatransfer,
                   end_time, start_time, num_batches,
                   throughput_batches, throughput_images, batch_size):
-    print("For Batch Size: ", batch_size)
     print(f"Gemessene durchschnittliche Latenz für Inferenz        : {latency_ms:.4f} ms")
     print(f"Gemessene durchschnittliche Latenz mit Synchronisation : {latency_synchronize:.4f} ms")
     print(f"Gemessene durchschnittliche Latenz mit Datentransfer   : {latency_datatransfer:.4f} ms")
@@ -244,7 +243,6 @@ def create_test_dataloader(data_path_npz: str, batch_size: int, onnx_model_path:
     data = np.load(data_path_npz)
     input_info, output_info = get_model_io_info(onnx_model_path)
     key_list = list(data.keys())
-    print("Keys in NPZ file:", key_list)
 
     if len(input_info) >= 2:
         input_key        = key_list[0]
@@ -372,92 +370,13 @@ def run_inference_ort(
         iterations      += 1
 
         if accuracy_flag:
-            if MODEL_TYPE == "language":
-                labels = yb.numpy() if hasattr(yb, 'numpy') else yb
-                
-                if topk_indices is not None:
-                    # TopK wrapper: indices are [batch, seq_len, k] - Top-k for EACH position
-                    # Reshape to [batch*seq_len, k] and [batch*seq_len] for comparison
-                    batch_size, seq_len, k = topk_indices.shape
-                    
-                    # Reshape both arrays
-                    topk_flat = topk_indices.reshape(-1, k)  # [batch*seq_len, k]
-                    labels_flat = labels.reshape(-1)  # [batch*seq_len]
-                    
-                    # Filter only masked positions (labels != -100)
-                    mask = labels_flat != -100
-                    topk_masked = topk_flat[mask]  # [num_masked, k]
-                    labels_masked = labels_flat[mask]  # [num_masked]
-                    
-                    # Check if true label is in top-k predictions
-                    # topk_masked: [num_masked, k], labels_masked: [num_masked, 1]
-                    matches = (topk_masked == labels_masked[:, None]).any(axis=1)
-                    correct = matches.sum()
-                    total = len(labels_masked) if len(labels_masked) > 0 else 1
-                else:
-                    # Simple model: full logits [batch, seq_len, vocab_size]
-                    # Use top_k_accuracy function (k=1 for accuracy metric)
-                    accuracy_value = top_k_accuracy(output, labels, k=1)
-                    # Convert accuracy to correct/total counts for accumulation
-                    masked_count = np.sum(labels >= 0)
-                    correct = int(accuracy_value * masked_count)
-                    total = masked_count if masked_count > 0 else 1
-                
-                correct_predictions += correct
-                total_predictions   += total
-            else:
-                pred = output.argmax(axis=-1)
-                labels = yb.numpy() if hasattr(yb, 'numpy') else yb
-                correct = (pred == labels).sum()
-                total = yb.shape[0]
-                correct_predictions += correct
-                total_predictions   += total
+            labels = yb if isinstance(yb, np.ndarray) else yb.numpy()
+            correct, total = calculate_accuracy_ort(output, labels, topk_indices, MODEL_TYPE)
+            correct_predictions += correct
+            total_predictions   += total
 
         if accuracy_flag and do_prints:
-            if MODEL_TYPE == "language":
-                # TopK wrapper: print the predictions and last token label
-                print("=" * 60)
-                print("DEBUG: TopK Wrapper Output:")
-                print("=" * 60)
-                print("Output shape: ", output.shape)
-                print("Output dtype: ", output.dtype)
-                
-                # Extract last position if output is 3D
-                if output.ndim == 3:
-                    last_pred = output[0, -1, :]  # [5]
-                    print("Prediction (Top-5 indices, last position): ", last_pred)
-                else:
-                    last_pred = output[0]  # [5]
-                    print("Prediction (Top-5 indices): ", last_pred)
-                
-                # Print the LAST token label (what we're predicting)
-                labels_np = yb.numpy() if hasattr(yb, 'numpy') else yb
-                print(f"Labels shape: {labels_np.shape}")
-                print(f"Full labels: {labels_np[0]}")
-                
-                # Find first non-padding token from the end
-                non_padding_mask = labels_np[0] != -100
-                if non_padding_mask.any():
-                    last_non_padding_idx = np.where(non_padding_mask)[0][-1]
-                    true_label = labels_np[0, last_non_padding_idx]
-                    print(f"Last non-padding position: {last_non_padding_idx}")
-                    print(f"True label (last non-padding): {true_label}")
-                    print(f"Match in top-5: {true_label in last_pred}")
-                else:
-                    print("WARNING: All labels are padding (-100)!")
-            else:
-                # Simple model: print predictions
-                print("=" * 60)
-                print("Simple Model Output:")
-                print("=" * 60)
-                print("Output dtype: ", output.dtype)
-                print("Output shape: ", output.shape)
-                
-                # Handle both language sequences and vision scalars
-                label_val = yb.numpy() if hasattr(yb, 'numpy') else yb
-                # Vision: scalar label
-                print("Prediction (logits): ", output[0])
-                print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
+            print_accuracy_ort(output, yb if isinstance(yb, np.ndarray) else yb.numpy(), topk_indices, MODEL_TYPE, yb)
             do_prints = False
 
     accuracy = (
@@ -505,6 +424,104 @@ def run_accuracy_eval(batch_size, input_info, output_info, data_path_npz, onnx_m
 # Latency / throughput sweep
 # ---------------------------------------------------------------------------
 
+def calculate_accuracy_ort(output, labels, topk_indices, MODEL_TYPE):
+    """
+    Calculate accuracy for language or vision models (numpy version for ORT).
+    
+    Args:
+        output: Model output (logits or indices, numpy array)
+        labels: Ground truth labels (numpy array)
+        topk_indices: Top-k indices (only for language models with TopK wrapper)
+        MODEL_TYPE: Type of model ("language" or other)
+    
+    Returns:
+        tuple: (correct_count, total_count)
+    """
+    if MODEL_TYPE == "language":
+        if topk_indices is not None:
+            # TopK wrapper: indices are [batch, seq_len, k] - Top-k for EACH position
+            batch_size, seq_len, k = topk_indices.shape
+            
+            # Reshape both arrays
+            topk_flat = topk_indices.reshape(-1, k)  # [batch*seq_len, k]
+            labels_flat = labels.reshape(-1)  # [batch*seq_len]
+            
+            # Filter only masked positions (labels != -100)
+            mask = labels_flat != -100
+            topk_masked = topk_flat[mask]  # [num_masked, k]
+            labels_masked = labels_flat[mask]  # [num_masked]
+            
+            # Check if true label is in top-k predictions
+            matches = (topk_masked == labels_masked[:, None]).any(axis=1)
+            correct = matches.sum()
+            total = len(labels_masked) if len(labels_masked) > 0 else 1
+        else:
+            # Simple model: full logits [batch, seq_len, vocab_size]
+            accuracy_value = top_k_accuracy(output, labels, k=1)
+            # Convert accuracy to correct/total counts for accumulation
+            masked_count = np.sum(labels >= 0)
+            correct = int(accuracy_value * masked_count)
+            total = masked_count if masked_count > 0 else 1
+    else:
+        # Vision/RadioML models
+        pred = output.argmax(axis=-1)
+        correct = (pred == labels).sum()
+        total = labels.shape[0]
+    
+    return correct, total
+
+
+def print_accuracy_ort(output, labels, topk_indices, MODEL_TYPE, yb):
+    """
+    Print debug information about model predictions and accuracy (ORT numpy version).
+    
+    Args:
+        output: Model output (numpy array)
+        labels: Ground truth labels (numpy array)
+        topk_indices: Top-k indices (only for language models)
+        MODEL_TYPE: Type of model
+        yb: Original batch labels
+    """
+    if MODEL_TYPE == "language":
+        # TopK wrapper: print the predictions and last token label
+        print("=" * 60)
+        print("Accuracy wth topk wrapper")
+        print("=" * 60)
+        print("Output shape: ", output.shape)
+        print("Output dtype: ", output.dtype)
+        
+        # Extract last position if output is 3D
+        if output.ndim == 3:
+            last_pred = output[0, -1, :]  # [5]
+            print("Prediction (Top-5 indices, last position): ", last_pred)
+        else:
+            last_pred = output[0]  # [5]
+            print("Prediction (Top-5 indices): ", last_pred)
+        
+        # Print the LAST token label (what we're predicting)
+        labels_np = yb if isinstance(yb, np.ndarray) else yb.numpy()
+        
+        # Find first non-padding token from the end
+        non_padding_mask = labels_np[0] != -100
+        if non_padding_mask.any():
+            last_non_padding_idx = np.where(non_padding_mask)[0][-1]
+            true_label = labels_np[0, last_non_padding_idx]
+            print(f"Last non-padding position: {last_non_padding_idx}")
+            print(f"True label (last non-padding): {true_label}")
+            print(f"Match in top-5: {true_label in last_pred}")
+        else:
+            print("WARNING: All labels are padding (-100)!")
+    else:
+        # Simple model: print predictions
+        print("=" * 60)
+        print("Simple Model Output:")
+        print("=" * 60)
+        
+        label_val = yb if isinstance(yb, np.ndarray) else yb.numpy()
+        print("Prediction (logits): ", output[0])
+        print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
+
+
 def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, output_info):
     """
     Sweep over batch sizes and record latency / throughput for ORT CUDA EP.
@@ -521,8 +538,9 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
     session = None
 
     for batch_size in batch_sizes:
+        print("=" * 60)
         print("Measuring for batch size:", batch_size)
-
+        print("=" * 60)
         current_onnx_path = onnx_model_path
         if INT8:
             current_onnx_path = f"outputs/{MODEL_TYPE}/model_brevitas_{batch_size}_simple.onnx"
