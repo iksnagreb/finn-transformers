@@ -393,15 +393,8 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
 
         dtype = onnx_dtype_to_torch(input_info[0]["dtype"])
 
-        # Get device_input from device_outputs (first output is usually the main one)
+        # Get device_input from device_outputs (first input)
         device_input = next(iter(device_outputs.values()))
-
-        # For language models, use the top_indices output specifically
-        if MODEL_TYPE == "language" and "462" in device_outputs:
-            device_output = device_outputs["462"]
-        else:
-            device_output = next(iter(device_outputs.values()))
-
         input_name = input_info[0]["name"]
         if device_input.shape != xb.shape:
             device_input.resize_(xb.shape)  # Dynamisch anpassen
@@ -421,26 +414,12 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
             context.set_tensor_address(token_type_name, device_token_type.data_ptr())
             context.set_input_shape(token_type_name, device_token_type.shape)
 
-                # For language models, set tensor address for top_indices output
-        if MODEL_TYPE == "language" and "462" in device_outputs:
-            output_name = "462"
-        else:
-            output_name = output_info[0]["name"]
-        
         # Set addresses for ALL outputs
         for out_info in output_info:
             out_name = out_info["name"]
             if out_name in device_outputs:
                 addr = device_outputs[out_name].data_ptr()
                 context.set_tensor_address(out_name, addr)
-        
-        # Also set addresses for any other outputs to prevent memory errors
-        for out_info in output_info:
-            out_name = out_info["name"]
-            if out_name in device_outputs and out_name != output_name:
-                context.set_tensor_address(out_name, device_outputs[out_name].data_ptr()) 
-
-        
         torch_stream.synchronize()
 
         
@@ -452,19 +431,17 @@ def run_inference(context, test_loader, device_outputs, device_attention_mask, d
         torch_stream.synchronize() 
     
         # Extract outputs - handle both TopK wrapper (2 outputs) and simple model (1 output)
+        # Detect by dtype rather than model type, so radioml/vision work too
         topk_indices = None
         topk_values = None
         
-        if MODEL_TYPE == "language" and len(device_outputs) > 1:
-            # TopK wrapper has 2 outputs: values (float32) and indices (int64)
-            # Extract by dtype since ONNX uses numeric names
+        if len(device_outputs) > 1:
             outputs_list = list(device_outputs.items())
-            
             for name, tensor in outputs_list:
                 tensor_np = tensor.cpu().numpy()
                 if tensor_np.dtype == np.int64:
                     topk_indices = tensor_np  # [batch, k]
-                elif tensor_np.dtype == np.float32:
+                elif tensor_np.dtype in (np.float32, np.float16):
                     topk_values = tensor_np   # [batch, k]
             
             output = topk_indices if topk_indices is not None else next(iter(device_outputs.values())).cpu().numpy()
@@ -488,7 +465,7 @@ def stop_tegrastats(proc: subprocess.Popen):
         os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
         print("killed tegrastats process")
 
-def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
+def run_power_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps_file):
     test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size)
     engine, context = build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info)
     device_input, device_outputs, device_attention_mask, device_token_type, stream_ptr, torch_stream = test_data(context, batch_size, input_info, output_info)
@@ -519,8 +496,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
                     torch_stream=torch_stream,
                     batch_size=batch_size,
                     input_info=input_info,
-                    output_info=output_info,
-                    accuracy_flag=True
+                    output_info=output_info
                 )
 
     
@@ -541,10 +517,7 @@ def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_m
         json.dump(timestamps, f, indent=2)
 
     stop_tegrastats(tegra_proc)
-
-    
-
-    return accuracy
+    return
 
 
 if __name__ == "__main__":
@@ -582,9 +555,7 @@ if __name__ == "__main__":
         input_info, output_info = get_model_io_info(onnx_model_path)
         tegrastats_log = energy_base_path / f"tegrastats_{batch_size}.log"
         timestamps = energy_base_path / f"timestamps_{batch_size}.json"
-        accuracy = run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps)
-        print(f"Accuracy for batch size {batch_size}: {accuracy:.4f}")
-
+        run_power_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path, tegrastats_log, timestamps)
         tegrastats_logs.append((tegrastats_log, batch_size))
 
     parse_tegrastats(tegrastats_logs, energy_base_path, throughput_base_path)

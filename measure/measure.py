@@ -345,11 +345,8 @@ def test_data(context, batch_size, input_info, output_info):
 
     device_input = next(iter(device_inputs.values()))
     
-    # For language models, use the top_indices output specifically
-    if MODEL_TYPE == "language" and "462" in device_outputs:
-        device_output = device_outputs["462"]
-    else:
-        device_output = next(iter(device_outputs.values()))
+    # Just use the first output; TopK detection happens dynamically in run_inference by dtype
+    device_output = next(iter(device_outputs.values()))
     
     if len(input_info) > 1:
         device_attention_mask = next(iter(device_attention_masks.values()))
@@ -489,24 +486,12 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
             context.set_tensor_address(token_type_name, device_token_type.data_ptr())
             context.set_input_shape(token_type_name, device_token_type.shape)
 
-        # For language models, set tensor address for top_indices output
-        if MODEL_TYPE == "language" and "462" in device_outputs:
-            output_name = "462"
-        else:
-            output_name = output_info[0]["name"]
-        
         # Set addresses for ALL outputs
         for out_info in output_info:
             out_name = out_info["name"]
             if out_name in device_outputs:
                 addr = device_outputs[out_name].data_ptr()
-                context.set_tensor_address(out_name, addr)
-        
-        # Also set addresses for any other outputs to prevent memory errors
-        for out_info in output_info:
-            out_name = out_info["name"]
-            if out_name in device_outputs and out_name != output_name:
-                context.set_tensor_address(out_name, device_outputs[out_name].data_ptr()) 
+                context.set_tensor_address(out_name, addr) 
 
         
         # torch_stream.synchronize()
@@ -527,20 +512,19 @@ def run_inference(context, test_loader, device_input, device_output, device_atte
         # Extract outputs - handle both TopK wrapper (2 outputs) and simple model (1 output)
         topk_indices = None
         topk_values = None
-        
-        if MODEL_TYPE == "language" and len(device_outputs) > 1:
-            # TopK wrapper has 2 outputs: values (float32) and indices (int64)
-            # ONNX uses numeric names like '461' and '462', so extract by dtype
+
+        # If multiple outputs are present (e.g., TopK wrapper exported as two outputs),
+        # detect them by dtype rather than by MODEL_TYPE so radioml/vision work too.
+        if len(device_outputs) > 1:
             outputs_list = list(device_outputs.items())
-            
-            # Find indices output (int64) and values output (float32)
             for name, tensor in outputs_list:
                 tensor_np = tensor.cpu().numpy()
                 if tensor_np.dtype == np.int64:
-                    topk_indices = tensor_np  # [batch, k]
-                elif tensor_np.dtype == np.float32:
-                    topk_values = tensor_np   # [batch, k]
-            
+                    topk_indices = tensor_np  # [batch, k] or [batch, seq, k]
+                elif tensor_np.dtype in (np.float32, np.float16):
+                    topk_values = tensor_np   # [batch, k] or [batch, seq, k]
+
+            # Prefer indices as the main "prediction" output for downstream code
             output = topk_indices if topk_indices is not None else next(iter(device_outputs.values())).cpu().numpy()
         else:
             # Simple model: single output with full logits
@@ -731,9 +715,32 @@ def calculate_accuracy(output, labels, topk_indices, MODEL_TYPE):
             total = masked_count if masked_count > 0 else 1
     else:
         # Vision/RadioML models
-        pred = output.argmax(axis=-1)
-        correct = (pred == labels).sum()
-        total = labels.shape[0]
+        # If top-k indices are provided (from wrapper), compute top-1 accuracy (first element only)
+        if topk_indices is not None:
+            # topk_indices: [batch, k] (or numpy) - use only the first column for top-1
+            if isinstance(topk_indices, torch.Tensor):
+                topk_np = topk_indices.cpu().numpy()
+            else:
+                topk_np = topk_indices
+
+            if isinstance(labels, torch.Tensor):
+                labels_np = labels.cpu().numpy()
+            else:
+                labels_np = labels
+
+            # Use only the top-1 prediction (first column)
+            top1_pred = topk_np[:, 0]
+            correct = int((top1_pred == labels_np).sum())
+            total = labels_np.shape[0]
+        else:
+            pred = output.argmax(axis=-1)
+            # labels might be torch tensor or numpy
+            if isinstance(labels, torch.Tensor):
+                labels_np = labels.cpu().numpy()
+            else:
+                labels_np = labels
+            correct = int((pred == labels_np).sum())
+            total = labels_np.shape[0]
     
     return correct, total
 
@@ -745,7 +752,7 @@ def print_accuracy_and_predictions(output, labels, topk_indices, MODEL_TYPE, yb)
     Args:
         output: Model output
         labels: Ground truth labels
-        topk_indices: Top-k indices (only for language models)
+        topk_indices: Top-k indices (for TopK wrapper models)
         MODEL_TYPE: Type of model
         yb: Original batch labels (for comparison)
     """
@@ -775,20 +782,27 @@ def print_accuracy_and_predictions(output, labels, topk_indices, MODEL_TYPE, yb)
             match = true_label in pred
             print(f"  Position {pos}: True={true_label}, Top-5={pred}, Match={match}")
     else:
-        # Simple model: print predictions
+        # Vision/RadioML model
         print("=" * 60)
-        print("Simple Model Output:")
+        print("Model Output (TopK Indices):" if topk_indices is not None else "Simple Model Output:")
         print("=" * 60)
         print("Output shape: ", output.shape)
         
         label_val = yb.numpy()
-        print("Prediction (logits): ", output[0])
+        print("Top-K predictions: ", output[0])
         print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
-        pred = output.argmax(axis=-1)
-        if hasattr(pred, '__len__'):
-            print("Predicted class: ", pred[0])
+        
+        # If TopK indices, use first element as top-1 prediction
+        if topk_indices is not None:
+            top1_pred = output[0, 0]  # First element is top-1
+            print("Predicted class (top-1): ", top1_pred)
         else:
-            print("Predicted class: ", pred)
+            # Simple model: compute argmax of logits
+            pred = output.argmax(axis=-1)
+            if hasattr(pred, '__len__'):
+                print("Predicted class: ", pred[0])
+            else:
+                print("Predicted class: ", pred)
 
 
 def run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path):

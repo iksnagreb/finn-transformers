@@ -23,6 +23,8 @@ from radioml.dataset import get_datasets
 from attention import QuantMultiheadAttention
 # Seeding RNGs for reproducibility
 from utils import seed
+# TopK wrapper to reduce data transfer
+from radioml.topk_wrapper import ModelTopKWrapper
 import onnx
 from onnxsim import simplify
 import yaml
@@ -93,6 +95,20 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
 
     # Save the input and output data for verification purposes later
     np.save("outputs/radioml/inp.npy", inp.numpy())
+    
+    # Handle both regular output (tensor) and wrapped output (tuple of tensors)
+    with torch.no_grad():
+        model_out = model(inp)
+
+    # not needed:
+    # if isinstance(model_out, tuple):
+    #     # Wrapper returns (topk_values, topk_indices)
+    #     topk_values, topk_indices = model_out
+    #     np.save("outputs/radioml/out_topk_values.npy", topk_values.numpy())
+    #     np.save("outputs/radioml/out_topk_indices.npy", topk_indices.numpy())
+    #     print(f"Saved TopK outputs: values shape {topk_values.shape}, indices shape {topk_indices.shape}")
+    # else:
+    #     # Regular model output
     np.save("outputs/radioml/out.npy", out.numpy())
 
     # Standard ONNX export for reference - works with dynamic batch sizes
@@ -134,8 +150,10 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
                 (dummy_input,),
                 export_path=export_path,
                 opset_version=17,
-                quantize_bias=True,
-                fold_batch_norm=True
+                export_as_int8=True,
+                quant_type='int'
+                # quantize_bias=True,
+                # fold_batch_norm=True
             )
             print(f"Quantized Model successfully exported for Batch Size: {batch_size}")
 
@@ -169,5 +187,6 @@ if __name__ == "__main__":
     # Load the trained model parameters
     model.load_state_dict(torch.load("outputs/radioml/model.pt")) #(int8)
     # model.load_state_dict(torch.load("outputs/radioml/model_fp32.pt")) #(fp32)
+    model = ModelTopKWrapper(model, k=5)  # to minimize the output data
     export(model, dataset=params["dataset"], **params["export"])
 

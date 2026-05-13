@@ -345,17 +345,17 @@ def run_inference_ort(
 
         # ORT already returns numpy arrays; no extra D2H copy needed -> faster with big outputs
         # Extract outputs - handle both TopK wrapper (2 outputs) and simple model (1 output)
+        # Detect by dtype rather than model type, so radioml/vision work too
         topk_indices = None
         topk_values = None
         
-        if MODEL_TYPE == "language" and len(outputs) > 1:
-            # TopK wrapper has 2 outputs: values (float32) and indices (int64)
-            # ONNX uses numeric names, so extract by dtype
+        if len(outputs) > 1:
+            # Detect TopK outputs by dtype (int64 for indices, float for values)
             for i, out in enumerate(outputs):
                 if out.dtype == np.int64:
-                    topk_indices = out  # [batch, k]
-                elif out.dtype == np.float32:
-                    topk_values = out   # [batch, k]
+                    topk_indices = out  # [batch, k] or [batch, seq, k]
+                elif out.dtype in (np.float32, np.float16):
+                    topk_values = out   # [batch, k] or [batch, seq, k]
             
             output = topk_indices if topk_indices is not None else outputs[0]
         else:
@@ -464,9 +464,16 @@ def calculate_accuracy_ort(output, labels, topk_indices, MODEL_TYPE):
             total = masked_count if masked_count > 0 else 1
     else:
         # Vision/RadioML models
-        pred = output.argmax(axis=-1)
-        correct = (pred == labels).sum()
-        total = labels.shape[0]
+        # If top-k indices are provided (from wrapper), compute top-1 accuracy (first element only)
+        if topk_indices is not None:
+            # topk_indices: [batch, k] (numpy) - use only the first column for top-1
+            top1_pred = topk_indices[:, 0]
+            correct = (top1_pred == labels).sum()
+            total = labels.shape[0]
+        else:
+            pred = output.argmax(axis=-1)
+            correct = (pred == labels).sum()
+            total = labels.shape[0]
     
     return correct, total
 
@@ -512,14 +519,26 @@ def print_accuracy_ort(output, labels, topk_indices, MODEL_TYPE, yb):
         else:
             print("WARNING: All labels are padding (-100)!")
     else:
-        # Simple model: print predictions
+        # Vision/RadioML model
         print("=" * 60)
-        print("Simple Model Output:")
+        print("Model Output (TopK Indices):" if topk_indices is not None else "Simple Model Output:")
         print("=" * 60)
         
         label_val = yb if isinstance(yb, np.ndarray) else yb.numpy()
-        print("Prediction (logits): ", output[0])
+        print("Top-K predictions: ", output[0])
         print("True label: ", label_val[0] if label_val.ndim == 1 else label_val)
+        
+        # If TopK indices, use first element as top-1 prediction
+        if topk_indices is not None:
+            top1_pred = output[0, 0]  # First element is top-1
+            print("Predicted class (top-1): ", top1_pred)
+        else:
+            # Simple model: compute argmax of logits
+            pred = output.argmax(axis=-1)
+            if hasattr(pred, '__len__'):
+                print("Predicted class: ", pred[0])
+            else:
+                print("Predicted class: ", pred)
 
 
 def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, output_info):

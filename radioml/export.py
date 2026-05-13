@@ -102,9 +102,6 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
         export_data = DataLoader(eval_data, batch_size=batch_size, shuffle=True)
         inp, out, _ = next(iter(export_data))
 
-
-
-        
         export_path=f"outputs/radioml/model_brevitas_{batch_size}.onnx"
         simplified_path=f"outputs/radioml/model_brevitas_{batch_size}_simpl.onnx"
         export_onnx_qcdq(
