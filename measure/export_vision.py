@@ -24,6 +24,8 @@ from vision.model import Model
 from attention import QuantMultiheadAttention
 # Seeding RNGs for reproducibility, affine parameter export patching
 from utils import seed, patch_missing_affine_norms
+# TopK wrapper to reduce data transfer
+from vision.topk_wrapper import ModelTopKWrapper
 
 import onnx
 from onnxsim import simplify
@@ -107,7 +109,13 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
             labels = labels.to(device)
 
             outputs = model(images)
-            preds = outputs.argmax(dim=1)
+            # Handle both tuple (TopK wrapper) and tensor (regular model) outputs
+            if isinstance(outputs, tuple):
+                topk_values, topk_indices = outputs
+                preds = topk_indices[:, 0]  # Use top-1 prediction
+            else:
+                preds = outputs.argmax(dim=1)
+            
 
     # Sample the first batch from the export dataset
     inp, cls = next(iter(export_data))
@@ -116,14 +124,24 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     with torch.no_grad():
         out = model(inp)
 
-
     # Export the model to ONNX using the input example
     # model ist wahrscheinlich schon quantisiert
     export_qonnx(model, (inp,), "outputs/vision/model.onnx", **kwargs)
 
     # Save the input and output data for verification purposes later
     np.save("outputs/vision/inp.npy", inp.numpy())
-    np.save("outputs/vision/out.npy", out.numpy())
+    
+    # Handle both regular output (tensor) and wrapped output (tuple of tensors)
+    if isinstance(out, tuple):
+        # Wrapper returns (topk_values, topk_indices)
+        topk_values, topk_indices = out
+        np.save("outputs/vision/out_topk_values.npy", topk_values.numpy())
+        np.save("outputs/vision/out_topk_indices.npy", topk_indices.numpy())
+        print(f"Saved TopK outputs: values shape {topk_values.shape}, indices shape {topk_indices.shape}")
+    else:
+        # Regular model output
+        np.save("outputs/vision/out.npy", out.numpy())
+    
     np.save("outputs/vision/cls.npy", cls.numpy())
 
 
@@ -211,6 +229,7 @@ if __name__ == "__main__":
     model.load_state_dict(torch.load("outputs/vision/model.pt"))
 
     model = patch_missing_affine_norms(model)
+    model = ModelTopKWrapper(model, k=5)  # to minimize the output data
     # Pass the model and the export configuration to the evaluation loop
     params["export"].pop("format", None)
     export(model, dataset=params["dataset"], **params["export"])

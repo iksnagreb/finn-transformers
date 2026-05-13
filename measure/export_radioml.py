@@ -100,16 +100,16 @@ def export(model, dataset, batch_size, split_heads=False, **kwargs):  # noqa
     with torch.no_grad():
         model_out = model(inp)
 
-    # not needed:
-    # if isinstance(model_out, tuple):
-    #     # Wrapper returns (topk_values, topk_indices)
-    #     topk_values, topk_indices = model_out
-    #     np.save("outputs/radioml/out_topk_values.npy", topk_values.numpy())
-    #     np.save("outputs/radioml/out_topk_indices.npy", topk_indices.numpy())
-    #     print(f"Saved TopK outputs: values shape {topk_values.shape}, indices shape {topk_indices.shape}")
-    # else:
-    #     # Regular model output
-    np.save("outputs/radioml/out.npy", out.numpy())
+    # not really needed for my measure skript:
+    if isinstance(model_out, tuple):
+        # Wrapper returns (topk_values, topk_indices)
+        topk_values, topk_indices = model_out
+        np.save("outputs/radioml/out_topk_values.npy", topk_values.numpy())
+        np.save("outputs/radioml/out_topk_indices.npy", topk_indices.numpy())
+        print(f"Saved TopK outputs: values shape {topk_values.shape}, indices shape {topk_indices.shape}")
+    else:
+        # Regular model output
+        np.save("outputs/radioml/out.npy", model_out.numpy())
 
     # Standard ONNX export for reference - works with dynamic batch sizes
     onnx_path = "outputs/radioml/model_dynamic_batchsize.onnx"
