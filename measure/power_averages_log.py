@@ -187,6 +187,7 @@ def power_averages_difference(batch_sizes, power_averages_file, power_averages_b
     power_difference_file.parent.mkdir(parents=True, exist_ok=True)
     with open(power_difference_file, 'w') as f:
         json.dump(difference_data, f, indent=2)
+    print(f"{len(difference_data)} entries in '{power_difference_file.name}' saved (difference values).")
 
 def power_averages_baseline_inference(idle_path, inference_path, output_path):
     # JSON-Dateien laden
