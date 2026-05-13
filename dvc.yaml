@@ -107,5 +107,3 @@ artifacts:
     path: outputs/radioml/plot/ORT_INT8/power_throughput.json
 metrics:
 - dvclive/metrics.json
-plots:
-- dvclive/plots/images
