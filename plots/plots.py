@@ -512,7 +512,6 @@ if __name__ == "__main__":
         live.log_image(f"throughput_comparison_{variant_suffix}_{MODEL_TYPE}.png", compare_throughput_output)
         live.log_image(f"accuracy_comparison_{variant_suffix}_{MODEL_TYPE}.png", compare_accuracy_output)
 
-
         live.next_step()
 
     print("DVC Live Bericht fertig!")
