@@ -482,9 +482,9 @@ def run_power_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_mode
 
     data = {"start_time": start_iso}
 
-
-    
-    num_executions = 1
+    # Run multiple times for large batch sizes to ensure tegrastats captures data
+    # (tegrastats only samples every 1000ms, so fast inference needs multiple runs)
+    num_executions = 5 if batch_size > 32 else 1
     for i in range(num_executions):
         _, _, _, accuracy = run_inference(
                     context=context,

@@ -102,14 +102,16 @@ def run_accuracy_sweep(batch_size, onnx_model_path, tegrastats_log, timestamps_f
     # build test loader and run inference loop using existing ORT helpers
     try:
         test_loader = create_test_dataloader(DATA_PATH_NPZ, batch_size, onnx_model_path)
-        _, _, _, accuracy = run_inference_ort(
-            session=session,
-            test_loader=test_loader,
-            batch_size=batch_size,
-            input_info=input_info,
-            output_info=output_info,
-            accuracy_flag=True,
-        )
+        num_executions = 5 if batch_size > 32 else 1
+        for i in range(num_executions):
+            _, _, _, accuracy = run_inference_ort(
+                session=session,
+                test_loader=test_loader,
+                batch_size=batch_size,
+                input_info=input_info,
+                output_info=output_info,
+                accuracy_flag=True,
+            )
     finally:
         end_ts = time.time()
         end_iso = datetime.fromtimestamp(end_ts).isoformat(timespec='milliseconds')

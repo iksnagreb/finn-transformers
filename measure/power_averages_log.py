@@ -1,11 +1,19 @@
+import re
+import json
+from datetime import datetime
+from pathlib import Path
+
+
+def parse_timestamp_flexible(ts_str):
+    """Parse timestamp with or without microseconds."""
+    try:
+        return datetime.strptime(ts_str, "%Y-%m-%dT%H:%M:%S.%f")
+    except ValueError:
+        return datetime.strptime(ts_str, "%Y-%m-%dT%H:%M:%S")
+
 def power_averages(batch_sizes, power_averages_file, energy_consumption_file, quant_type, model_type):
     # input logs besteht aus tegrastats_log, batch_size tuples
     # in jedem eintrag der output dateien soll als zusätzlicher key der batch_size wert stehen
-    import re
-    import json
-    from datetime import datetime
-    from pathlib import Path
-    
 
     power_averages = []
 
@@ -18,8 +26,8 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
             timestamps = json.load(f)
         start_iso = timestamps["start_time"]
         end_iso = timestamps["end_time"]
-        start = datetime.strptime(start_iso, "%Y-%m-%dT%H:%M:%S.%f")
-        end = datetime.strptime(end_iso, "%Y-%m-%dT%H:%M:%S.%f")
+        start = parse_timestamp_flexible(start_iso)
+        end = parse_timestamp_flexible(end_iso)
 
         vdd_gpu = 0
         vdd_cpu = 0
@@ -29,7 +37,7 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
         count_vin_sys = 0
 
         for entry in energy_consumption:
-            entry_time = datetime.strptime(entry["timestamp"], "%Y-%m-%dT%H:%M:%S")
+            entry_time = parse_timestamp_flexible(entry["timestamp"])
             if entry_time >= start and entry_time <= end and batch_size == entry["batch_size"] and entry["type"]=="vdd_gpu_soc_current":
                 vdd_gpu += entry["value"]
                 count_vdd_gpu += 1
@@ -43,7 +51,7 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
                 count_vin_sys += 1
 
         if count_vdd_gpu==0 or count_vdd_cpu==0 or count_vin_sys==0:
-            print(f"⚠️ No data for batch size {batch_size} found.")
+            print(f"⚠️ No data for batch size {batch_size} found. Start: {start}, End: {end}, Found VDD_GPU: {count_vdd_gpu}, VDD_CPU: {count_vdd_cpu}, VIN_SYS: {count_vin_sys}")
 
         vdd_gpu_avg = vdd_gpu/count_vdd_gpu if count_vdd_gpu > 0 else 0
         vdd_cpu_avg = vdd_cpu/count_vdd_cpu if count_vdd_cpu > 0 else 0
@@ -75,10 +83,6 @@ def power_averages(batch_sizes, power_averages_file, energy_consumption_file, qu
 def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption_file, quant_type, model_type):
     # input logs besteht aus tegrastats_log, batch_size tuples
     # in jedem eintrag der output dateien soll als zusätzlicher key der batch_size wert stehen
-    import re
-    import json
-    from datetime import datetime
-    from pathlib import Path
 
     power_averages = []
 
@@ -91,8 +95,8 @@ def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption
             timestamps = json.load(f)
         start_iso = timestamps["start_time"]
         end_iso = timestamps["end_time"]
-        start = datetime.strptime(start_iso, "%Y-%m-%dT%H:%M:%S.%f")
-        end = datetime.strptime(end_iso, "%Y-%m-%dT%H:%M:%S.%f")
+        start = parse_timestamp_flexible(start_iso)
+        end = parse_timestamp_flexible(end_iso)
 
         vdd_gpu = 0
         vdd_cpu = 0
@@ -102,7 +106,7 @@ def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption
         count_vin_sys = 0
 
         for entry in energy_consumption:
-            entry_time = datetime.strptime(entry["timestamp"], "%Y-%m-%dT%H:%M:%S")
+            entry_time = parse_timestamp_flexible(entry["timestamp"])
             if (entry_time < start or entry_time > end) and batch_size == entry["batch_size"] and entry["type"]=="vdd_gpu_soc_current":
                 vdd_gpu += entry["value"]
                 count_vdd_gpu += 1
@@ -143,10 +147,6 @@ def power_averages_baseline(batch_sizes, power_averages_file, energy_consumption
 
 def power_averages_difference(batch_sizes, power_averages_file, power_averages_baseline_file, power_difference_file, quant_type, model_type):
     # input logs besteht aus tegrastats_log, batch_size tuples
-    import re
-    import json
-    from datetime import datetime
-    from pathlib import Path
     # in jedem eintrag der output dateien soll als zusätzlicher key der batch_size wert stehen
         # JSON-Dateien einlesen
     with open(power_averages_file, 'r') as f:
@@ -189,10 +189,6 @@ def power_averages_difference(batch_sizes, power_averages_file, power_averages_b
         json.dump(difference_data, f, indent=2)
 
 def power_averages_baseline_inference(idle_path, inference_path, output_path):
-    import re
-    import json
-    from datetime import datetime
-    from pathlib import Path
     # JSON-Dateien laden
     
     with open(idle_path, "r") as f:
