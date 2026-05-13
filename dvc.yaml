@@ -13,7 +13,7 @@ artifacts:
     path: outputs/radioml/plot/accuracy.json
 # tegrastats
   energy_consumption:
-    path: outputs/language/plot/INT8/energy_consumption.json
+    path: outputs/vision/plot/ORT_INT8/energy_consumption.json
   power_averages_difference:
     path: outputs/radioml/plot/FP32/power_averages_difference.json
   power_throughput:
@@ -114,7 +114,13 @@ artifacts:
       outputs/language/energy_metrics/ORT_INT8/power_averages_difference.json
   power_throughput_ORT_INT8_language:
     path: outputs/language/plot/ORT_INT8/power_throughput.json
+  power_averages_ORT_INT8_vision:
+    path: outputs/vision/energy_metrics/ORT_INT8/power_averages.json
+  power_averages_baseline_ORT_INT8_vision:
+    path: outputs/vision/energy_metrics/ORT_INT8/power_averages_baseline.json
+  power_averages_difference_ORT_INT8_vision:
+    path: outputs/vision/energy_metrics/ORT_INT8/power_averages_difference.json
+  power_throughput_ORT_INT8_vision:
+    path: outputs/vision/plot/ORT_INT8/power_throughput.json
 metrics:
 - dvclive/metrics.json
-plots:
-- dvclive/plots/images
