@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 from collections import defaultdict
 
@@ -43,7 +44,8 @@ def power_throughput(POWER_PATH, THROUGHPUT_PATH, OUT_PATH):
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT_PATH, "w") as f:
         json.dump(summary, f, indent=2)
-    print("Wrote", OUT_PATH, "entries:", len(summary))
+    if os.environ.get("CI", "").lower() not in ("1", "true", "yes"):
+        print("Wrote", OUT_PATH, "entries:", len(summary))
 
 if __name__ == "__main__":
     # power_throughput(POWER_PATH, THROUGHPUT_PATH, OUT_PATH)

@@ -5,6 +5,10 @@ stages:
 variables:
   VENV_PATH: "/data/gitlab/builds/runner/.venv"
   VENV_BASE: "$CI_PROJECT_DIR/.venvs"
+  PIP_CACHE_DIR: "/data/gitlab/pip-cache"
+  DVC_LOGLEVEL: "ERROR"
+  DVC_NO_ANALYTICS: "1"
+  DVC_CHECK_UPDATE: "0"
   # Keep temporary files on /data (large partition).
   # This directory must exist and be writable by the gitlab-runner user.
   TMPDIR: "/data/gitlab/tmp"
@@ -14,7 +18,7 @@ variables:
 default:
   before_script:
    - mkdir -p /data/gitlab/tmp
-   - export MODEL_TYPE=vision  # radioml, language, vision
+   - export MODEL_TYPE=radioml  # radioml, language, vision
    - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
    - export USE_DLA=0 # 0 or 1, decides if the measurements will be executed on DLA or GPU
    - export GPU_MEM_LIMIT_GB=32.0 # same limit for ORT and TRT
@@ -28,7 +32,7 @@ default:
    - export PYTHONPATH=/usr/lib/python3.10/dist-packages:${CI_PROJECT_DIR}:$PYTHONPATH  
    - export LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
    - export LD_LIBRARY_PATH=${CI_PROJECT_DIR}/.cudnn_compat:$LD_LIBRARY_PATH
-   - export PIP_CACHE_DIR=$CI_PROJECT_DIR/.cache/pip
+  - export PIP_CACHE_DIR=$PIP_CACHE_DIR
 
 export-models:
   stage: export
@@ -50,11 +54,11 @@ export-models:
 
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
-    - dvc remote modify --local public timeout 600
-    - dvc pull --allow-missing
-    - dvc remote modify --local upload user $DVC_Sciebo_Upload_USER
-    - dvc remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
-    - dvc remote modify --local upload timeout 600
+    - dvc -q remote modify --local public timeout 600
+    - dvc -q pull --allow-missing
+    - dvc -q remote modify --local upload user $DVC_Sciebo_Upload_USER
+    - dvc -q remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
+    - dvc -q remote modify --local upload timeout 600
 
     - python3 -m measure.export_wrapper 2>&1 | grep -v "pthread_setaffinity_np failed"  # Ignore CPU affinity warnings - setting num_threads doesnt help
    #- python3 -m onnxruntime.quantization.preprocess --input outputs/radioml/model_brevitas_1_simple.onnx --output outputs/radioml/model_brevitas_1_simple_pre.onnx
@@ -89,9 +93,9 @@ measure-job:
 
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
-    - dvc remote modify --local upload user $DVC_Sciebo_Upload_USER
-    - dvc remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
-    - dvc remote modify --local upload timeout 600
+    - dvc -q remote modify --local upload user $DVC_Sciebo_Upload_USER
+    - dvc -q remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
+    - dvc -q remote modify --local upload timeout 600
 
     - python3 -m measure.measure_onnxruntime      
 
@@ -112,7 +116,8 @@ measure-job:
     - git config --global user.email "jetson@runner.com"
     - git config --global user.name "CI Runner"
 
-    - dvc push -r upload  
+    - dvc -q exp save -n "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
+    - dvc -q push -r upload  
     - dvc -q exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git    
     - ssh-agent -k
   tags:

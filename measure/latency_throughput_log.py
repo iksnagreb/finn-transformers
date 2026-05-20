@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 from collections import defaultdict
 
@@ -33,7 +34,8 @@ def latency_throughput(LATENCY_PATH, THROUGHPUT_PATH, OUT_PATH):
     with open(OUT_PATH, "w") as f:
         json.dump(summary, f, indent=2)
 
-    print("Wrote", OUT_PATH, "entries:", len(summary))
+    if os.environ.get("CI", "").lower() not in ("1", "true", "yes"):
+        print("Wrote", OUT_PATH, "entries:", len(summary))
 
 if __name__ == "__main__":
     #latency_throughput(LATENCY_PATH, THROUGHPUT_PATH, OUT_PATH)
