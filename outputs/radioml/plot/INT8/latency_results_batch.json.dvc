@@ -1,5 +1,5 @@
 outs:
-- md5: 75a4f67fe4680482464aa8d1351456f5
-  size: 3504
+- md5: e09b69f565a1d9299fe351a370eabbf5
+  size: 3510
   hash: md5
   path: latency_results_batch.json
