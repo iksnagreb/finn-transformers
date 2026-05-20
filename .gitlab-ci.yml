@@ -118,7 +118,6 @@ measure-job:
 
     - dvc -q exp save -n "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
     - dvc exp list --names-only
-    - dvc exp show -q --no-params --no-metrics
     - dvc -q push -r upload 
     - dvc -q exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
     - ssh-agent -k
