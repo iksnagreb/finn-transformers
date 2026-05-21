@@ -314,7 +314,7 @@ def energy_consumption_plot(json_path, output_path):
     # Achsen und Labels
     ax.set_xticks(x)
     ax.set_xticklabels([dt.strftime("%H:%M:%S") for dt in timestamps_dt], rotation=45, ha='right')
-    ax.set_ylabel("Current (mA)")
+    ax.set_ylabel("Power (mW)")
     ax.set_xlabel("Timestamp")
     ax.set_title("Energy Consumption per Timestamp")
     ax.legend()
@@ -373,7 +373,7 @@ def power_bar_plot(json_path, output_path):
     ax.set_xticks(x)
     ax.set_xticklabels(batch_sizes)
     ax.set_xlabel("Batch Size")
-    ax.set_ylabel("Power (mA)")
+    ax.set_ylabel("Power (mW)")
     ax.set_title("Idle vs Inference Power per Batch Size")
 
     
