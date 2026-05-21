@@ -321,11 +321,11 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: a8d4f541a09aefed09cf047a1438e257
-      size: 1940526
+      md5: f0b87af2db0ffe573b34ce4cd0e4f51f
+      size: 1934606
     - path: outputs/vision/out.npy
       hash: md5
-      md5: aa65fee62b938b61d128d19a5a93772c
+      md5: e18be096bf302b22d988a3ecd50d78dc
       size: 168
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c vision/passes.yaml -o 

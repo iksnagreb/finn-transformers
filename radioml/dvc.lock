@@ -100,10 +100,10 @@ stages:
             encoding: learned
             bits: 8
           configuration: original
-          num_layers: 1
-          num_heads: 3
-          emb_dim: 96
-          expansion_dim: 384
+          num_layers: 3
+          num_heads: 4
+          emb_dim: 128
+          expansion_dim: 512
           bits: 4
           cls_bits: 8
           activation: relu
@@ -113,7 +113,7 @@ stages:
         seed: 12
         tag: quantized
         train:
-          epochs: 1
+          epochs: 100
           batch_size: 512
           optimizer:
             algorithm: adam
@@ -137,20 +137,20 @@ stages:
     outs:
     - path: outputs/radioml/loss.yaml
       hash: md5
-      md5: 99932c77ddc46df13420c6080b54c3de
-      size: 5496
+      md5: a90269efa8e3bb42136d568798e42323
+      size: 5494
     - path: outputs/radioml/lr.yaml
       hash: md5
-      md5: f1409607e731d139d0e4dc9c3155e39f
-      size: 1912
+      md5: 31f5017689b4f77045f62820577af562
+      size: 2398
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: b6fb66db61a28b82c9a2237fcaaa7c95
-      size: 580377
+      md5: dd6feb260506ba3e128defa01a7d72e4
+      size: 1056848
     - path: outputs/radioml/optimizer.pt
       hash: md5
-      md5: 3be62f4b4121b24542a0b87edcacf8fa
-      size: 1006040
+      md5: cf6477cace3e8c9da92f5f927068db0a
+      size: 1725959
   eval:
     cmd: PARTITION=gpu bash run.sh python -m radioml.eval
     deps:
@@ -180,8 +180,8 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: b6fb66db61a28b82c9a2237fcaaa7c95
-      size: 580377
+      md5: dd6feb260506ba3e128defa01a7d72e4
+      size: 1056848
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -263,10 +263,10 @@ stages:
             encoding: learned
             bits: 8
           configuration: original
-          num_layers: 1
-          num_heads: 3
-          emb_dim: 96
-          expansion_dim: 384
+          num_layers: 3
+          num_heads: 4
+          emb_dim: 128
+          expansion_dim: 512
           bits: 4
           cls_bits: 8
           activation: relu
@@ -278,12 +278,12 @@ stages:
     outs:
     - path: outputs/radioml/accuracy.yaml
       hash: md5
-      md5: e709f6b4cd4d4b7ad806ca6bd435ab63
-      size: 52
+      md5: 613351d1db6e4ad2e4fd5e07fdb682b9
+      size: 54
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: e6ffab3f585017855769decc67a5a243
-      size: 964304
+      md5: e6425210695202835c7d5f8337f05ad6
+      size: 882627
   export:
     cmd: PARTITION=normal bash run.sh python -m radioml.export
     deps:
