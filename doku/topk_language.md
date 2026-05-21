@@ -110,9 +110,9 @@ Accuracy : 19.80%
 
 
 Fehler vorher: nur letzes token vorhergesagt, nicht alle maskierte tokens
-
-
-
 # dvc timeout erhöhen / nochmal versuchen
 
 # in allen modellen top5 einbauen
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
