@@ -83,7 +83,10 @@ Radioml (change model size, always with 30 Watt):
         - Quiz VL machen
 
 
+### How to get the plots of a specific experiment:
 
-git fetch origin 'refs/exps/*:refs/exps/*'
+1. git fetch origin 'refs/exps/*:refs/exps/*'
+2. dvc exp apply ci-128068-520744
+3. dvc pull -r upload
 
-        dvc exp apply refs/exps/d8/4b7381edf822ac7ae092b24a9a26756684c3c4/ci-127257-518890 && dvc plots show outputs/language/accuracy.yaml outputs/vision/accuracy.yaml outputs/radioml/accuracy.yaml -o exp_plots.html
+the files from the experiment should be in the outputs folder now.
