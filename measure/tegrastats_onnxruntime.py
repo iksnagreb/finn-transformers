@@ -49,8 +49,6 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
-batch_sizes = cfg["measure"]["batch_sizes"]
-
 
 if INT8:
     print("INT8 enabled")
@@ -130,6 +128,10 @@ def run_accuracy_sweep(batch_size, onnx_model_path, tegrastats_log, timestamps_f
 
 
 if __name__ == "__main__":
+    if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+    else:
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 

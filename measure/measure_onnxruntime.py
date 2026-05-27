@@ -74,7 +74,6 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
     cfg = yaml.safe_load(f)
 
 bits = cfg["model"]["embedding"].get("bits", 0)
-batch_sizes = cfg["measure"]["batch_sizes"]
 INT8 = (bits == 8)
 
 if INT8:
@@ -656,6 +655,13 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    # Language model has memory constraints on Jetson → limit max batch size
+    if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+    else:
+        # Vision and RadioML can handle larger batches
+        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+    # ORT handles dynamic batch sizes natively → one model file for all batch sizes
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
     if INT8:
             # For other models: use simple QCDQ model

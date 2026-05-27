@@ -18,7 +18,7 @@ variables:
 default:
   before_script:
    - mkdir -p /data/gitlab/tmp
-   - export MODEL_TYPE=vision  # radioml, language, vision
+   - export MODEL_TYPE=radioml  # radioml, language, vision
    - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
    - export USE_DLA=0 # 0 or 1, decides if the measurements will be executed on DLA or GPU
    - export GPU_MEM_LIMIT_GB=32.0 # same limit for ORT and TRT
@@ -120,6 +120,17 @@ measure-job:
     - dvc exp list --names-only
     - dvc -q push -r upload 
     - dvc -q exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
+    - |
+      exp_name="ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
+      git ls-remote origin "refs/exps/*${exp_name}" | awk '{print $2; exit}' | xargs -r -I{} git fetch origin {}
+      if git for-each-ref --format='%(refname:short)' refs/exps refs/experiments | grep -F "$exp_name" >/dev/null; then
+        exp_ref=$(git for-each-ref --format='%(refname:short)' refs/exps refs/experiments | grep -F "$exp_name" | head -n1)
+        git checkout -B "save/${exp_name}" "$exp_ref"
+        git push origin "save/${exp_name}"
+      else
+        echo "Experiment ref not found: $exp_name"
+      fi
+
     - ssh-agent -k
   tags:
     - jetson
