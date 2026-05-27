@@ -40,7 +40,7 @@ test power modes with **normal language**:
     - 15 Watt
         - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706
     - 50 Watt
-        - Commit: TODO (failed because of DVC)
+        - Commit: d84b7381edf822ac7ae092b24a9a26756684c3c4 WIP
 
 
 Radioml (change model size, always with 30 Watt):
@@ -57,7 +57,7 @@ Radioml (change model size, always with 30 Watt):
         - emb_dims: 128
         - num_heads: 4
         - expansion_dim: 512
-        - Commit (30 Watt): 93de53e4601604953a3151b3032c0fc4cc92e68c
+        - Commit (30 Watt): TODO (used wrong model)
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d
 
