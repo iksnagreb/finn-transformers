@@ -40,7 +40,7 @@ test power modes with **normal language**:
     - 15 Watt
         - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706
     - 50 Watt
-        - Commit: d84b7381edf822ac7ae092b24a9a26756684c3c4 WIP
+        - Commit: d84b7381edf822ac7ae092b24a9a26756684c3c4
 
 
 Radioml (change model size, always with 30 Watt):
@@ -57,9 +57,12 @@ Radioml (change model size, always with 30 Watt):
         - emb_dims: 128
         - num_heads: 4
         - expansion_dim: 512
-        - Commit (30 Watt): TODO (used wrong model)
+        - Commit (30 Watt): 4dd0b68a4fc33ef228095d1fcff6a2c64ffe3981
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d
+
+    - bigger: train it again bc of bad accuracy, changed model.py:
+        Patch Model to instantiate fresh block instances per layer (fix the list-multiplication bug) 
 
     - even bigger:
         - num_layers: 6
