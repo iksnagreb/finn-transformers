@@ -53,6 +53,7 @@ with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
 
 bits = cfg["model"]["embedding"].get("bits", 0)
 INT8 = (bits == 8)
+batch_sizes = cfg["measure"]["batch_sizes"]
 
 if INT8:
     dtype = torch.int8
@@ -521,14 +522,6 @@ def run_power_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_mode
 
 
 if __name__ == "__main__":
-
-    if (MODEL_TYPE == "language") or (MODEL_TYPE == "vision"):
-        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256]
-    else:
-        # Vision and RadioML can handle larger batches
-        batch_sizes = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
-
-
     onnx_model_path = f"outputs/{MODEL_TYPE}/model_dynamic_batchsize.onnx"
 
     tegrastats_logs = []

@@ -9,7 +9,7 @@ Powermodus ändern:
 Change power mode:
 ```
 sudo nvpmodel -q    # check power mode
-sudo nvpmodel -m 3   # set mode (e.g., 15W)
+sudo nvpmodel -m 2   # set mode (e.g., 15W)
 sudo jetson_clocks   # lock clocks - test that
 ```
 Restart is needed to change power mode. What happens if I restart the jetson?
@@ -31,7 +31,7 @@ test power modes with **normal vision**:
     - 15 Watt (tag: git tag baseline-vision-15w)
         - Commit: 00ef7b8b0cb13f353944fba2f6870b6ba9f1ec9c
     - 50 Watt
-        - Commit: TODO (failed because of DVC)
+        - Commit: 15c4feb163bd84b6eda0e39c7e3999b36b938684
 
 test power modes with **normal language**:
 
@@ -73,3 +73,17 @@ Radioml (change model size, always with 30 Watt):
 
 
         mehr heads testen
+
+
+
+
+        - Vergleiche zusammenfügen (Dashboards selber erstellen, da ddatachain nicht zuverlässig alle commits hat!)
+        - größere batch sizes language und vision
+        - rätsel LPFAI lösen
+        - Quiz VL machen
+
+
+
+git fetch origin 'refs/exps/*:refs/exps/*'
+
+        dvc exp apply refs/exps/d8/4b7381edf822ac7ae092b24a9a26756684c3c4/ci-127257-518890 && dvc plots show outputs/language/accuracy.yaml outputs/vision/accuracy.yaml outputs/radioml/accuracy.yaml -o exp_plots.html
