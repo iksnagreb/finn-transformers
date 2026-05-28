@@ -120,17 +120,6 @@ measure-job:
     - dvc exp list --names-only
     - dvc -q push -r upload 
     - dvc -q exp push -r upload -f git@github.com:iksnagreb/finn-transformers.git "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
-    - |
-      exp_name="ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
-      git ls-remote origin "refs/exps/*${exp_name}" | awk '{print $2; exit}' | xargs -r -I{} git fetch origin {}
-      if git for-each-ref --format='%(refname:short)' refs/exps refs/experiments | grep -F "$exp_name" >/dev/null; then
-        exp_ref=$(git for-each-ref --format='%(refname:short)' refs/exps refs/experiments | grep -F "$exp_name" | head -n1)
-        git checkout -B "save/${exp_name}" "$exp_ref"
-        git push origin "save/${exp_name}"
-      else
-        echo "Experiment ref not found: $exp_name"
-      fi
-
     - ssh-agent -k
   tags:
     - jetson

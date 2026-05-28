@@ -20,7 +20,7 @@ test power modes with **normal radioml**:
     - 30 Watt
         - Commit: 34754810c11a7fdd3508db3884dfc6abacb2a442 [ci-127059-517947]
     - 15 Watt
-        - Commit: 67f9e9f61b14ebc1e4fabf87453d5cfc82f590ac  NOT FOUND IN DVC [ci-127073-517969]
+        - Commit: 67f9e9f61b14ebc1e4fabf87453d5cfc82f590ac  NOT FOUND IN DVC [ci-127073-517969] , after committing and push its there again
     - 50 Watt
         - Commit: TODO (failed because of DVC)
 
@@ -36,9 +36,9 @@ test power modes with **normal vision**:
 test power modes with **normal language**:
 
     - 30 Watt
-        - Commit: b4ca7ae3dab21e9979f3d49f3b347e8a6381dbd6 NOT FOUND IN DVC [ci-127069-517964]
+        - Commit: b4ca7ae3dab21e9979f3d49f3b347e8a6381dbd6 NOT FOUND IN DVC [ci-127069-517964] NOW ITS IN DVC, after updating dvc datachain its not there anymore..., after commit and push its there (before the gitlab mirror has pulled the changes), after the pipeline has begun: the commit is not there anymore!
     - 15 Watt
-        - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706 NOT FOUND IN DVC [ci-127092-518035]
+        - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706 NOT FOUND IN DVC [ci-127092-518035] NOW ITS IN DVC, not anymore now, after committing and push its there again, 
     - 50 Watt
         - Commit: d84b7381edf822ac7ae092b24a9a26756684c3c4 [ci-127257-518890]
 
@@ -57,7 +57,7 @@ Radioml (change model size, always with 30 Watt):
         - emb_dims: 128
         - num_heads: 4
         - expansion_dim: 512
-        - Commit (30 Watt): 4dd0b68a4fc33ef228095d1fcff6a2c64ffe3981 NOT FOUND IN DVC, [ci-128063-520725]
+        - Commit (30 Watt): 4dd0b68a4fc33ef228095d1fcff6a2c64ffe3981 NOT FOUND IN DVC, [ci-128063-520725] NOW ITS IN DVC
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3 [ci-127244-518854]
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d [ci-127253-518883]
 
@@ -82,8 +82,6 @@ Radioml (change model size, always with 30 Watt):
 
         - Vergleiche zusammenfügen (Dashboards selber erstellen, da ddatachain nicht zuverlässig alle commits hat!)
         - größere batch sizes language und vision
-        - rätsel LPFAI lösen
-        - Quiz VL machen
 
 
 ### How to get the plots of a specific experiment:

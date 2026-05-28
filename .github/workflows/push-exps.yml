@@ -1,0 +1,24 @@
+name: Push DVC experiments to GitLab
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push-exps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push refs/exps to GitLab
+        env:
+          GITLAB_URL: git@git.uni-paderborn.de:haka/mirror-finn-transformers.git
+          SSH_KEY: ${{ secrets.GITLAB_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H git.uni-paderborn.de >> ~/.ssh/known_hosts
+          git remote add gitlab "$GITLAB_URL" || true
+          git push --prune gitlab 'refs/exps/*:refs/exps/*' || true
