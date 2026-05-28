@@ -44,7 +44,6 @@ test power modes with **normal language**:
     - 50 Watt
         - Commit: d84b7381edf822ac7ae092b24a9a26756684c3c4 [ci-127257-518890]
 
-
 Radioml (change model size, always with 30 Watt):
 
     - **normal**
