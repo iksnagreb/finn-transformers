@@ -4,5 +4,3 @@
 /out.npy
 /cls.npy
 /streamlined.onnx.pkl.xz
-/plot/*_throughput_comparison_INT8_ORT_INT8.png
-/plot/*.dvc     

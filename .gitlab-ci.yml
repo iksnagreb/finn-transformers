@@ -116,6 +116,11 @@ measure-job:
     - git config --global user.email "jetson@runner.com"
     - git config --global user.name "CI Runner"
 
+    # make DVC track the new plot/metric files
+    - dvc add outputs/vision/plot -R || true
+      # stage .dvc metadata (do NOT commit to main branch; just stage so exp save includes them)
+    - git add outputs/vision/plot/**/*.dvc || true
+
     - dvc -q exp save -n "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
     - dvc exp list --names-only
     - dvc -q push -r upload 
