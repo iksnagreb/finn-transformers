@@ -36,7 +36,9 @@ test power modes with **normal vision**:
 test power modes with **normal language**:
 
     - 30 Watt
-        - Commit: b4ca7ae3dab21e9979f3d49f3b347e8a6381dbd6 NOT FOUND IN DVC [ci-127069-517964] NOW ITS IN DVC, after updating dvc datachain its not there anymore..., after commit and push its there (before the gitlab mirror has pulled the changes), after the pipeline has begun: the commit is not there anymore!
+        - Commit: b4ca7ae3dab21e9979f3d49f3b347e8a6381dbd6 NOT FOUND IN DVC [ci-127069-517964] NOW ITS IN DVC, after updating dvc datachain its not there anymore..., after commit and push its there (before the gitlab mirror has pulled the changes), after the pipeline in the gitlab mirror has begun: the commit is not there anymore!
+
+        or [ci-128109-520914] (all batch sizes)
     - 15 Watt
         - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706 NOT FOUND IN DVC [ci-127092-518035] NOW ITS IN DVC, not anymore now, after committing and push its there again, 
     - 50 Watt
