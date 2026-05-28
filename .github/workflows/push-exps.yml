@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 0
       - name: Push refs/exps to GitLab (HTTPS / PAT)
         env:
-          GITLAB_USER: Hanner123
+          GITLAB_USER: haka
           GITLAB_PAT: ${{ secrets.GITLAB_PAT }}
           GITLAB_URL: git.uni-paderborn.de/haka/mirror-finn-transformers.git
         run: |
