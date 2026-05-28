@@ -33,6 +33,7 @@ test power modes with **normal vision**:
     - 50 Watt
         - Commit: 15c4feb163bd84b6eda0e39c7e3999b36b938684 [ci-128068-520744]
 
+
 test power modes with **normal language**:
 
     - 30 Watt
