@@ -41,7 +41,7 @@ test power modes with **normal language**:
 
         or [ci-128109-520914] (all batch sizes)
     - 15 Watt
-        - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706 NOT FOUND IN DVC [ci-127092-518035] NOW ITS IN DVC, not anymore now, after committing and push its there again, 
+        - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706 NOT FOUND IN DVC [ci-127092-518035] NOW ITS IN DVC, not anymore now, after committing and push its there again, not there now
     - 50 Watt
         - Commit: d84b7381edf822ac7ae092b24a9a26756684c3c4 [ci-127257-518890]
 
@@ -59,7 +59,7 @@ Radioml (change model size, always with 30 Watt):
         - emb_dims: 128
         - num_heads: 4
         - expansion_dim: 512
-        - Commit (30 Watt): 4dd0b68a4fc33ef228095d1fcff6a2c64ffe3981 NOT FOUND IN DVC, [ci-128063-520725] NOW ITS IN DVC
+        - Commit (30 Watt): 4dd0b68a4fc33ef228095d1fcff6a2c64ffe3981 NOT FOUND IN DVC, [ci-128063-520725] NOW ITS IN DVC (after psuhing a branch manually)
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3 [ci-127244-518854]
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d [ci-127253-518883]
 
