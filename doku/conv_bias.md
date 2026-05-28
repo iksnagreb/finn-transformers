@@ -72,4 +72,4 @@ ORT session active providers: ['CUDAExecutionProvider', 'CPUExecutionProvider']
 Keys in NPZ file: ['X', 'Y']
 2026-04-22 14:52:59.936826862 [W:onnxruntime:Default, conv.cc:425 UpdateState] OP Conv(/emb/emb.1/patches/patches.0/Conv) running in Fallback mode. May be extremely slow.
 
---> Fehlermeldung ist immer noch da
+--> Fehlermeldung ist immer noch da -> stop testing
