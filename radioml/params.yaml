@@ -39,13 +39,13 @@ model:
   # above
   num_layers: 3
   # Number of attention heads
-  num_heads: 4
+  num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 128
+  emb_dim: 96
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 512
+  expansion_dim: 384
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: 4
@@ -94,10 +94,10 @@ model_int8:
   num_heads: 4
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 128
+  emb_dim: 32
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 512
+  expansion_dim: 128
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: 8
@@ -132,7 +132,7 @@ dataset:
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 2
+  epochs: 100
   # Batch size for training
   batch_size: 512
   # Optimizer configuration

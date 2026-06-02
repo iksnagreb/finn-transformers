@@ -61,6 +61,14 @@ Radioml (change model size, always with 30 Watt):
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d
 
+
+    - bigger (with better acccuracy hopefully):
+        - num_layers: 3
+        - emb_dims: 96
+        - num_heads: 3
+        - expansion_dim: 512
+        accuracy with 100 epochs
+
     - even bigger:
         - num_layers: 6
         - emb_dims: 128
