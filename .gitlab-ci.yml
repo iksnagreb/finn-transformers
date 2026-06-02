@@ -116,13 +116,12 @@ measure-job:
     - git config --global user.email "jetson@runner.com"
     - git config --global user.name "CI Runner"
 
-    - # only add plots if they were produced
+    # ADD THIS BACK:
     - dvc add outputs/"$MODEL_TYPE"/plot || true
 
-    # stage any newly created .dvc metadata under outputs
+# Stage the .dvc metadata files in Git
     - dvc_dvcs=$(git ls-files --others --exclude-standard outputs | grep '\.dvc$' || true)
     - git add $dvc_dvcs || true
-      
 
 
     - dvc -q exp save -n "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
