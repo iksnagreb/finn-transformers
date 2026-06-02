@@ -89,7 +89,7 @@ Radioml (change model size, always with 30 Watt):
 ### How to get the plots of a specific experiment:
 
 1. git fetch origin 'refs/exps/*:refs/exps/*'
-2. dvc exp apply ci-128068-520744
+2. dvc exp apply ci-128068-520744   
 3. dvc pull -r upload
 
 the files from the experiment should be in the outputs folder now.

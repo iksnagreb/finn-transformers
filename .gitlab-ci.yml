@@ -19,6 +19,7 @@ default:
   before_script:
    - mkdir -p /data/gitlab/tmp
    - export MODEL_TYPE=language  # radioml, language, vision
+   - export MODEL_TYPE=radioml  # radioml, language, vision
    - export FP16=0 # 0 or 1, only relevant if the model is not quantized already - decides if the measurements will be executed on FP16 or FP32 models (tensorrt internal PTQ)
    - export USE_DLA=0 # 0 or 1, decides if the measurements will be executed on DLA or GPU
    - export GPU_MEM_LIMIT_GB=32.0 # same limit for ORT and TRT
@@ -116,6 +117,15 @@ measure-job:
     - git config --global user.email "jetson@runner.com"
     - git config --global user.name "CI Runner"
 
+    # Add plots to DVC and commit .dvc metadata
+    - dvc add outputs/"$MODEL_TYPE"/plot || true
+    - dvc_dvcs=$(git ls-files --others --exclude-standard outputs | grep '\.dvc$' || true)
+    - git add $dvc_dvcs || true
+
+    # Push DVC data to remote storage BEFORE saving experiment
+    - dvc -q push -r upload
+
+    # Save experiment checkpoint
     - dvc -q exp save -n "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
     - dvc exp list --names-only
     - dvc -q push -r upload 
