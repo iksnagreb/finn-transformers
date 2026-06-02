@@ -218,6 +218,26 @@ stages:
       hash: md5
       md5: dab0f656763a2e305a2d0733a56091c6
       size: 40015
+  export:
+    cmd: PARTITION=normal bash run.sh python -m vision.export
+    # Export stage outputs (filled from cache) — added to allow `dvc pull`
+    outs:
+    - path: outputs/vision/model.onnx
+      hash: md5
+      md5: f0b87af2db0ffe573b34ce4cd0e4f51f
+      size: 1934606
+    - path: outputs/vision/inp.npy
+      hash: md5
+      md5: 04c5db62fe1ce128901047ab233dd42e
+      size: 12416
+    - path: outputs/vision/out.npy
+      hash: md5
+      md5: e18be096bf302b22d988a3ecd50d78dc
+      size: 168
+    - path: outputs/vision/cls.npy
+      hash: md5
+      md5: efa9423070d05804ad902edd7b10a08b
+      size: 136
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c vision/passes.yaml -o 
       outputs/vision/streamlined.onnx outputs/vision/model.onnx
