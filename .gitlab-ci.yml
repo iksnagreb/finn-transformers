@@ -117,17 +117,12 @@ measure-job:
     - git config --global user.name "CI Runner"
 
     - # only add plots if they were produced
-    - |
-      if [ -d outputs/"$MODEL_TYPE"/plot ]; then
-        dvc add outputs/"$MODEL_TYPE"/plot || true
-      fi
+    - dvc add outputs/"$MODEL_TYPE"/plot || true
 
     # stage any newly created .dvc metadata under outputs
-    - |
-      dvc_dvcs=$(git ls-files --others --exclude-standard outputs | grep '\.dvc$' || true)
-      if [ -n "$dvc_dvcs" ]; then
-        git add $dvc_dvcs || true
-      fi
+    - dvc_dvcs=$(git ls-files --others --exclude-standard outputs | grep '\.dvc$' || true)
+    - git add $dvc_dvcs || true
+      
 
 
     - dvc -q exp save -n "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
