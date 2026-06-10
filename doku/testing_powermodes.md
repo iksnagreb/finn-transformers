@@ -10,6 +10,7 @@ Change power mode:
 ```
 sudo nvpmodel -q    # check power mode
 sudo nvpmodel -m 2   # set mode (e.g., 15W)
+sudo jetson_clocks
 
 ```
 Restart is needed to change power mode. What happens if I restart the jetson?
