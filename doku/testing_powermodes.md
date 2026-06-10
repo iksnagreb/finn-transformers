@@ -187,5 +187,15 @@ NV Power Mode: MODE_30W
     - radioml 50W WIP
 - trainieren und lernrate variieren auf cluster
 - aufräumen (alte pngs löschen) - done
+
 - plots sind im report!!
 - Wo sind die richtigen jsons zum experiment?
+--> schauen ob dvc push extra etwas bringt
+--> dvc pull nach exp apply
+    # Add plots to DVC and commit .dvc metadata
+    - dvc add outputs/"$MODEL_TYPE"/plot || true
+    - dvc_dvcs=$(git ls-files --others --exclude-standard outputs | grep '\.dvc$' || true)
+    - git add $dvc_dvcs || true
+
+    # Push DVC data to remote storage BEFORE saving experiment
+    - dvc -q push -r upload

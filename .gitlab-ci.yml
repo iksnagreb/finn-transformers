@@ -116,12 +116,12 @@ measure-job:
     - git config --global user.name "CI Runner"
 
     # Add plots to DVC and commit .dvc metadata
-    - dvc add outputs/"$MODEL_TYPE"/plot || true
-    - dvc_dvcs=$(git ls-files --others --exclude-standard outputs | grep '\.dvc$' || true)
-    - git add $dvc_dvcs || true
+    # - dvc add outputs/"$MODEL_TYPE"/plot || true
+    # - dvc_dvcs=$(git ls-files --others --exclude-standard outputs | grep '\.dvc$' || true)
+    # - git add $dvc_dvcs || true
 
-    # Push DVC data to remote storage BEFORE saving experiment
-    - dvc -q push -r upload
+    # # Push DVC data to remote storage BEFORE saving experiment
+    # - dvc -q push -r upload
 
     # Save experiment checkpoint
     - dvc -q exp save -n "ci-${CI_PIPELINE_ID}-${CI_JOB_ID}"
