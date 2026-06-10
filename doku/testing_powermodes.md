@@ -180,3 +180,10 @@ PVA0_VPS0: Online=1 MinFreq=0 MaxFreq=512000000 CurrentFreq=512000000
 PVA0_AXI:  Online=1 MinFreq=0 MaxFreq=358400000 CurrentFreq=358400000
 FAN Dynamic Speed Control=nvfancontrol hwmon0_pwm1=48
 NV Power Mode: MODE_30W
+
+
+- power modus mit clock max testen
+- trainieren und lernrate variieren auf cluster
+- aufräumen (alte pngs löschen)
+- plots sind im report!!
+- Wo sind die richtigen jsons zum experiment?
