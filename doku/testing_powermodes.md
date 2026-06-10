@@ -184,7 +184,8 @@ NV Power Mode: MODE_30W
 
 
 - power modus mit clock max testen
+    - radioml 50W WIP
 - trainieren und lernrate variieren auf cluster
-- aufräumen (alte pngs löschen)
+- aufräumen (alte pngs löschen) - done
 - plots sind im report!!
 - Wo sind die richtigen jsons zum experiment?
