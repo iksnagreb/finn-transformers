@@ -23,7 +23,7 @@ test power modes with **normal radioml**:
     - 15 Watt
         - Commit: 67f9e9f61b14ebc1e4fabf87453d5cfc82f590ac  NOT FOUND IN DVC [ci-127073-517969] , after committing and push its there again
     - 50 Watt
-        - Commit: TODO (failed because of DVC)
+        - Commit: Todo
 
 test power modes with **normal vision**:
 
@@ -189,13 +189,8 @@ NV Power Mode: MODE_30W
 - aufräumen (alte pngs löschen) - done
 
 - plots sind im report!!
-- Wo sind die richtigen jsons zum experiment?
+- Wo sind die richtigen jsons zum experiment? - dort wo sie erzeugt werden
 --> schauen ob dvc push extra etwas bringt
 --> dvc pull nach exp apply
-    # Add plots to DVC and commit .dvc metadata
-    - dvc add outputs/"$MODEL_TYPE"/plot || true
-    - dvc_dvcs=$(git ls-files --others --exclude-standard outputs | grep '\.dvc$' || true)
-    - git add $dvc_dvcs || true
 
-    # Push DVC data to remote storage BEFORE saving experiment
-    - dvc -q push -r upload
+    --> wenn die sachen nicht geadded werden, dann werden die dateien auch richtig aktualisiert... outputs/radioml/plot/ORT_INT8/energy_consumption.json (ev. weil sie schon getracked waren?)
