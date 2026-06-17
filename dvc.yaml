@@ -13,7 +13,7 @@ artifacts:
     path: outputs/radioml/plot/accuracy.json
 # tegrastats
   energy_consumption:
-    path: outputs/radioml/plot/INT8/energy_consumption.json
+    path: outputs/language/plot/INT8/energy_consumption.json
   power_averages_difference:
     path: outputs/radioml/plot/FP32/power_averages_difference.json
   power_throughput:
