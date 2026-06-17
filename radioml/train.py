@@ -19,8 +19,11 @@ from radioml.dataset import get_datasets
 from utils import seed, get_optimizer, get_criterion
 
 # Path to the RadioML dataset
-# RADIOML_PATH = os.environ["RADIOML_PATH"]
-RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+RADIOML_PATH = os.environ["RADIOML_PATH"]
+RADIOML_PATH_NPZ = os.environ["RADIOML_PATH_NPZ"]
+
+# RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+# RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
 INT8 = os.getenv("INT8", "0")  # Default = "0"
 if INT8 == "1":
