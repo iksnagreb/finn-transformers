@@ -10,7 +10,8 @@ Change power mode:
 ```
 sudo nvpmodel -q    # check power mode
 sudo nvpmodel -m 2   # set mode (e.g., 15W)
-sudo jetson_clocks   # lock clocks - test that
+sudo jetson_clocks
+
 ```
 Restart is needed to change power mode. What happens if I restart the jetson?
 ![alt text](image-3.png)
@@ -22,7 +23,7 @@ test power modes with **normal radioml**:
     - 15 Watt
         - Commit: 67f9e9f61b14ebc1e4fabf87453d5cfc82f590ac  NOT FOUND IN DVC [ci-127073-517969] , after committing and push its there again
     - 50 Watt
-        - Commit: TODO (failed because of DVC)
+        - Commit: Todo
 
 test power modes with **normal vision**:
 
@@ -59,7 +60,7 @@ Radioml (change model size, always with 30 Watt):
         - emb_dims: 128
         - num_heads: 4
         - expansion_dim: 512
-        - Commit (30 Watt): 4dd0b68a4fc33ef228095d1fcff6a2c64ffe3981 NOT FOUND IN DVC, [ci-128063-520725] NOW ITS IN DVC (after psuhing a branch manually)
+        - Commit (30 Watt): 4dd0b68a4fc33ef228095d1fcff6a2c64ffe3981 [ci-128063-520725]
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3 [ci-127244-518854]
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d [ci-127253-518883]
 
@@ -95,3 +96,101 @@ Radioml (change model size, always with 30 Watt):
 the files from the experiment should be in the outputs folder now.
 
 4. git reset --hard HEAD
+
+
+
+
+
+Folgender Command zeigt auf unterschiedlichen PCs (aber im gleichen branch im projekt, nach git pull und dvc pull) unterschiedliche experimente an:
+dvc exp list -n 30
+
+
+Todo:
+- training auf cluster - trainingsdaten kopieren - started
+- powermodus, taktfrequenz zusammenhang?
+    - ja, dynamisch
+    - sudo jetson_clocks   würde taktfrequenz auf maximum fixieren, das sollte zu höherem stromverbrauch führen
+- dvc exp pull - done
+
+
+
+comm -23 /tmp/remote_exps.txt /tmp/local_exps.txt | sed 's#^#refs/exps/#' | while read ref; do
+  echo "fetching $ref" && git fetch origin "$ref:$ref"
+done
+
+
+dvc exp pull origin -A -r upload
+dvc exp apply ci-128068-520744
+find the plots under dvc/images/...
+
+https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
+
+
+# Bevor Clocks maximiert wurden, 30W:
+sudo jetson_clocks --show
+SOC family:tegra234  Machine:NVIDIA Jetson AGX Orin Developer Kit
+Online CPUs: 0-7
+cpu0:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=1420800 IdleStates: WFI=1 c7=1 
+cpu1:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
+cpu2:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=1420800 IdleStates: WFI=1 c7=1 
+cpu3:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
+cpu4:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=1497600 IdleStates: WFI=1 c7=1 
+cpu5:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
+cpu6:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=1497600 IdleStates: WFI=1 c7=1 
+cpu7:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
+cpu8:  Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
+cpu9:  Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
+cpu10: Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
+cpu11: Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
+GPU MinFreq=306000000 MaxFreq=612000000 CurrentFreq=306000000
+Active GPU TPCs: 4
+EMC MinFreq=204000000 MaxFreq=3199000000 CurrentFreq=3199000000 FreqOverride=0
+DLA0_CORE:   Online=1 MinFreq=0 MaxFreq=1369600000 CurrentFreq=1369600000
+DLA0_FALCON: Online=1 MinFreq=0 MaxFreq=729600000 CurrentFreq=729600000
+DLA1_CORE:   Online=1 MinFreq=0 MaxFreq=1369600000 CurrentFreq=1369600000
+DLA1_FALCON: Online=1 MinFreq=0 MaxFreq=729600000 CurrentFreq=729600000
+PVA0_VPS0: Online=1 MinFreq=0 MaxFreq=512000000 CurrentFreq=512000000
+PVA0_AXI:  Online=1 MinFreq=0 MaxFreq=358400000 CurrentFreq=358400000
+FAN Dynamic Speed Control=nvfancontrol hwmon0_pwm1=48
+NV Power Mode: MODE_30W
+# Nachdem Clocks maximiert wurden, 30W:
+hanna@ceg-391:~/git/finn-transformers$ sudo jetson_clocks
+hanna@ceg-391:~/git/finn-transformers$ sudo jetson_clocks --show
+SOC family:tegra234  Machine:NVIDIA Jetson AGX Orin Developer Kit
+Online CPUs: 0-7
+cpu0:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
+cpu1:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
+cpu2:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
+cpu3:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
+cpu4:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
+cpu5:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
+cpu6:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
+cpu7:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
+cpu8:  Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=0 c7=0 
+cpu9:  Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=0 c7=0 
+cpu10: Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=0 c7=0 
+cpu11: Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=0 c7=0 
+GPU MinFreq=612000000 MaxFreq=612000000 CurrentFreq=612000000
+Active GPU TPCs: 4
+EMC MinFreq=204000000 MaxFreq=3199000000 CurrentFreq=3199000000 FreqOverride=1
+DLA0_CORE:   Online=1 MinFreq=0 MaxFreq=1369600000 CurrentFreq=1369600000
+DLA0_FALCON: Online=1 MinFreq=0 MaxFreq=729600000 CurrentFreq=729600000
+DLA1_CORE:   Online=1 MinFreq=0 MaxFreq=1369600000 CurrentFreq=1369600000
+DLA1_FALCON: Online=1 MinFreq=0 MaxFreq=729600000 CurrentFreq=729600000
+PVA0_VPS0: Online=1 MinFreq=0 MaxFreq=512000000 CurrentFreq=512000000
+PVA0_AXI:  Online=1 MinFreq=0 MaxFreq=358400000 CurrentFreq=358400000
+FAN Dynamic Speed Control=nvfancontrol hwmon0_pwm1=48
+NV Power Mode: MODE_30W
+
+
+- power modus mit clock max testen
+    - radioml 50W WIP
+- trainieren und lernrate variieren auf cluster
+- aufräumen (alte pngs löschen) - done
+
+- plots sind im report!!
+- Wo sind die richtigen jsons zum experiment? - dort wo sie erzeugt werden
+--> schauen ob dvc push extra etwas bringt
+--> dvc pull nach exp apply
+
+    --> wenn die sachen nicht geadded werden, dann werden die dateien auch richtig aktualisiert... outputs/radioml/plot/ORT_INT8/energy_consumption.json (ev. weil sie schon getracked waren?)

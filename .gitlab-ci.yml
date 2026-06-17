@@ -55,13 +55,12 @@ export-models:
     - python3 -c "import tensorrt; print(tensorrt.__version__)"
 
     - dvc -q remote modify --local public timeout 600
-    - dvc -q pull --allow-missing
+    - dvc -q pull --allow-missing --force
     - dvc -q remote modify --local upload user $DVC_Sciebo_Upload_USER
     - dvc -q remote modify --local upload password $DVC_Sciebo_Upload_PASSWORD
     - dvc -q remote modify --local upload timeout 600
 
     - python3 -m measure.export_wrapper 2>&1 | grep -v "pthread_setaffinity_np failed"  # Ignore CPU affinity warnings - setting num_threads doesnt help
-   #- python3 -m onnxruntime.quantization.preprocess --input outputs/radioml/model_brevitas_1_simple.onnx --output outputs/radioml/model_brevitas_1_simple_pre.onnx
   artifacts:
     name: "exported-models-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 day
