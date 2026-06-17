@@ -21,7 +21,7 @@ test power modes with **normal radioml**:
     - 15 Watt
         - Commit: 67f9e9f61b14ebc1e4fabf87453d5cfc82f590ac  NOT FOUND IN DVC [ci-127073-517969] , after committing and push its there again
     - 50 Watt
-        - Commit: Todo
+        - Commit: 68025e326d6ab5dd75d9883d2becf38d1320d316, ci-131437-528975
 
 test power modes with **normal vision**:
 
@@ -30,7 +30,9 @@ test power modes with **normal vision**:
     - 15 Watt (tag: git tag baseline-vision-15w)
         - Commit: 00ef7b8b0cb13f353944fba2f6870b6ba9f1ec9c NOT FOUND IN DVC [ci-127084-518006]
     - 50 Watt
-        - Commit: 15c4feb163bd84b6eda0e39c7e3999b36b938684 [ci-128068-520744]
+        - Commit: 
+        
+        15c4feb163bd84b6eda0e39c7e3999b36b938684 [ci-128068-520744]
 
 
 test power modes with **normal language**:
