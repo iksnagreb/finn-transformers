@@ -17,7 +17,7 @@ sudo jetson_clocks
 test power modes with **normal radioml**:
 
     - 30 Watt
-        - Commit: 34754810c11a7fdd3508db3884dfc6abacb2a442 [ci-127059-517947]
+        - Commit: 07ebb266c6acb9355426bb96bbc02ff279a87cc6, ci-131471-529090
     - 15 Watt
         - Commit: 67f9e9f61b14ebc1e4fabf87453d5cfc82f590ac  NOT FOUND IN DVC [ci-127073-517969] , after committing and push its there again
     - 50 Watt
