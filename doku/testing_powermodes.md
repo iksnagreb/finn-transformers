@@ -30,9 +30,7 @@ test power modes with **normal vision**:
     - 15 Watt (tag: git tag baseline-vision-15w)
         - Commit: 00ef7b8b0cb13f353944fba2f6870b6ba9f1ec9c NOT FOUND IN DVC [ci-127084-518006]
     - 50 Watt
-        - Commit: 
-        
-        15c4feb163bd84b6eda0e39c7e3999b36b938684 [ci-128068-520744]
+        - Commit: 1b0914ea098ff533f1ab9b146a9c3022c4b0d2d3, ci-131447-529004
 
 
 test power modes with **normal language**:
@@ -44,7 +42,7 @@ test power modes with **normal language**:
     - 15 Watt
         - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706 NOT FOUND IN DVC [ci-127092-518035] NOW ITS IN DVC, not anymore now, after committing and push its there again, not there now
     - 50 Watt
-        - Commit: d84b7381edf822ac7ae092b24a9a26756684c3c4 [ci-127257-518890]
+        - Commit: 931c0e49e3d68322e37c1592a8e541b12a518562, ci-131455-529028
 
 Radioml (change model size, always with 30 Watt):
 
