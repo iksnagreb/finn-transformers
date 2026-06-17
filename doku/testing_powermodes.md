@@ -26,7 +26,7 @@ test power modes with **normal radioml**:
 test power modes with **normal vision**:
 
     - 30 Watt
-        - Commit: a6be9bbd0c4f0e4232924989f39cae98da8bca12 NOT FOUND IN DVC [logs are full, cant see exp name]
+        - Commit: 45c1469e0c8c9e57a09dfd50139ba40bf5d7cc58, ci-131472-529092
     - 15 Watt (tag: git tag baseline-vision-15w)
         - Commit: 00ef7b8b0cb13f353944fba2f6870b6ba9f1ec9c NOT FOUND IN DVC [ci-127084-518006]
     - 50 Watt
@@ -36,9 +36,7 @@ test power modes with **normal vision**:
 test power modes with **normal language**:
 
     - 30 Watt
-        - Commit: b4ca7ae3dab21e9979f3d49f3b347e8a6381dbd6 NOT FOUND IN DVC [ci-127069-517964] NOW ITS IN DVC, after updating dvc datachain its not there anymore..., after commit and push its there (before the gitlab mirror has pulled the changes), after the pipeline in the gitlab mirror has begun: the commit is not there anymore!
-
-        or [ci-128109-520914] (all batch sizes)
+        - d88996f13a432fa471d01e039ac3a3691366d40f, ci-131484-529114
     - 15 Watt
         - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706 NOT FOUND IN DVC [ci-127092-518035] NOW ITS IN DVC, not anymore now, after committing and push its there again, not there now
     - 50 Watt
@@ -61,21 +59,6 @@ Radioml (change model size, always with 30 Watt):
         - Commit (30 Watt): 4dd0b68a4fc33ef228095d1fcff6a2c64ffe3981 [ci-128063-520725]
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3 [ci-127244-518854]
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d [ci-127253-518883]
-
-
-
-
-    - bigger: train it again bc of bad accuracy, changed model.py:
-        Patch Model to instantiate fresh block instances per layer (fix the list-multiplication bug) 
-
-    - even bigger:
-        - num_layers: 6
-        - emb_dims: 128
-        - num_heads: 4
-        - expansion_dim: 512
-        - Commit: 
-
-
 
 
 
@@ -105,7 +88,7 @@ dvc exp pull origin -A -r upload
 ```
 2. Experiment apply
 ```
-dvc exp apply ci-....
+dvc exp apply ci-131471-529090
 ```
 3. Plots sind in 
 ```
