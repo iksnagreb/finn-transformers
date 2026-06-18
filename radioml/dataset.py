@@ -14,7 +14,10 @@ class RadioMLDataset(Dataset):
     def __init__(
             self, path, classes=None, signal_to_noise_ratios=None, reshape=None
     ):
-        # Open the dataset file in reading mode
+        # Store path and open the dataset file in reading mode. The file
+        # handle is not picklable/safe across DataLoader worker processes,
+        # so keep the path and reopen in worker processes via __setstate__.
+        self.path = path
         self.file = h5py.File(path, "r")
         # The dataset is composed of three subfiles: the data series, the
         # modulation classes and the signal-to-noise ration of each sample
@@ -77,9 +80,30 @@ class RadioMLDataset(Dataset):
         # Make a proper deep copy of everything else
         _copy = copy.deepcopy(_copy)
         # Reopen the dataset file
-        _copy.file = h5py.File(self.file.filename, "r")
+        _copy.file = h5py.File(self.path, "r")
         # Return the copied object
         return _copy
+
+    # Ensure that when the dataset is pickled for DataLoader workers the file
+    # handle is closed and reopened in the worker process. This avoids HDF5
+    # corruption / crashes when using multiple workers.
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        # Do not pickle the open HDF5 file handle
+        state['file'] = None
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        # Reopen the HDF5 file in the worker process
+        self.file = h5py.File(self.path, "r")
+
+    def __del__(self):
+        try:
+            if hasattr(self, 'file') and self.file is not None:
+                self.file.close()
+        except Exception:
+            pass
 
     # Generates a train/test split of the dataset
     def split(self, fraction=0.5, seed=0):
