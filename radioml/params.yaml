@@ -37,7 +37,7 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 3
+  num_layers: 1
   # Number of attention heads
   num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
@@ -89,7 +89,7 @@ model_int8:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 3
+  num_layers: 1
   # Number of attention heads
   num_heads: 4
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
