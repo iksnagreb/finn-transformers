@@ -132,7 +132,7 @@ dataset:
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 100
+  epochs: 1
   # Batch size for training
   batch_size: 512
   # Optimizer configuration
@@ -206,3 +206,4 @@ export:
   external_data: false
   # Enables dynamo export model optimization
   optimize: false
+  batch_sizes: [1,2,4,8,16,32,64,128,256,512,1024]

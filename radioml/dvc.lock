@@ -33,8 +33,8 @@ stages:
       size: 1221
     - path: radioml/dataset.py
       hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
+      md5: f2e1d50354836d2addad914e2018b135
+      size: 6165
     - path: radioml/model.py
       hash: md5
       md5: 08587aae24e58f01ef7211bbe3168da0
@@ -113,7 +113,7 @@ stages:
         seed: 12
         tag: quantized
         train:
-          epochs: 100
+          epochs: 1
           batch_size: 512
           optimizer:
             algorithm: adam
@@ -137,19 +137,19 @@ stages:
     outs:
     - path: outputs/radioml/loss.yaml
       hash: md5
-      md5: 39a756141fa92b1ae1f80c741c9a5082
-      size: 5494
+      md5: 0feb376fb7cf4629d9c26ed243e11636
+      size: 60
     - path: outputs/radioml/lr.yaml
       hash: md5
-      md5: b9fb35ab4019ea65373edc8dd5b43964
-      size: 1945
+      md5: fe56fdb7ca72a49132bad591666f3494
+      size: 22
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: 9911a4cd502dd6a146a9c87bfa7a1605
+      md5: d03ba127a278541c0454026a523ef4df
       size: 605657
     - path: outputs/radioml/optimizer.pt
       hash: md5
-      md5: 47917f0eb0cdc1e50542d4070a03ef22
+      md5: d99d6a676dfffb625c60e29ce65a796d
       size: 1006040
   eval:
     cmd: PARTITION=gpu bash run.sh python -m radioml.eval
@@ -180,7 +180,7 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: 9911a4cd502dd6a146a9c87bfa7a1605
+      md5: d03ba127a278541c0454026a523ef4df
       size: 605657
     - path: quant.py
       hash: md5
@@ -188,8 +188,8 @@ stages:
       size: 1221
     - path: radioml/dataset.py
       hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
+      md5: f2e1d50354836d2addad914e2018b135
+      size: 6165
     - path: radioml/eval.py
       hash: md5
       md5: a0fd90651391f902cbc153337044a982
@@ -278,12 +278,12 @@ stages:
     outs:
     - path: outputs/radioml/accuracy.yaml
       hash: md5
-      md5: 6fc55e77b1ee9bc7a8ceeb6ff49ee4cc
-      size: 52
+      md5: 1798faa12a4b79dc87bf64745ba3897b
+      size: 53
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: 3af7634ea7c735a06f2a375d46e89c3a
-      size: 962703
+      md5: e2a4f49e7fd3d358725c926c21b50856
+      size: 961271
   export:
     cmd: PARTITION=normal bash run.sh python -m radioml.export
     deps:
