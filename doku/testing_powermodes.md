@@ -62,7 +62,8 @@ Radioml (change model size, always with 30 Watt):
 
 - best radioml:
     - 15 watt: 282e0914885035581075a855c9600abdd0ea61c9, ci-131731-529888
-    - 30 Watt: 
+    - 30 Watt: a1566cbd0001aad275a9f8b6c3aba5ae0bd0db1c, ci-131742-529917
+    - 50 Watt: 
 
 
 
