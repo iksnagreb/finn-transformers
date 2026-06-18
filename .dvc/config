@@ -9,4 +9,3 @@
     password = ""
 ['remote "sciebo"']
     url = webdavs://uni-paderborn.sciebo.de/remote.php/webdav
-
