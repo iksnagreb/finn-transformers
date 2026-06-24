@@ -85,7 +85,7 @@ if MODEL_TYPE == "radioml":
     DATA_PATH_NPZ = RADIOML_PATH_NPZ
 if MODEL_TYPE == "vision":
     DATA_PATH_NPZ = CIFAR10_PATH_NPZ
-if MODEL_TYPE == "language":
+if MODEL_TYPE == "language": 
     DATA_PATH_NPZ = LANG_PATH_NPZ
 
 def to_device(data,device):
