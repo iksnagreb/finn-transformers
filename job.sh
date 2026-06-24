@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 # Setup the python environment on the PC² cluster
 module load lang/Python/3.10.4-GCCcore-11.3.0
 source .venv/bin/activate

@@ -60,7 +60,10 @@ Radioml (change model size, always with 30 Watt):
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3 [ci-127244-518854]
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d [ci-127253-518883]
 
-- best
+- best radioml:
+    - 15 watt: 282e0914885035581075a855c9600abdd0ea61c9, ci-131731-529888
+    - 30 Watt: a1566cbd0001aad275a9f8b6c3aba5ae0bd0db1c, ci-131742-529917
+    - 50 Watt: 
 
 
 

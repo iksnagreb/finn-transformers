@@ -24,20 +24,15 @@ model:
     patches:
     - 1
     - 64
-    # Kernel size for sliding windows generating the patches
     kernel_size:
     - 1
     - 16
-    # Stride of the sliding windows
     stride:
     - 1
     - 16
-    # Padding to the input width to ensure expected number of output patches
     padding:
     - 0
     - 0
-    # Activation functions to use after the convolution layer
-    #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
@@ -92,16 +87,12 @@ model_int8:
     patches:
     - 1
     - 64
-    # Kernel size for sliding windows generating the patches
     kernel_size:
     - 1
     - 16
-    # Stride of the sliding windows
     stride:
     - 1
     - 16
-    # Activation functions to use after the convolution layer
-    #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
@@ -162,9 +153,11 @@ dataset:
   - 26
   - 28
   - 30
-  # Splits the dataset into train/validation/evaluation subsets
   splits:                       # 80%, 10%, 10% splits
   # Seed used for reproducible splitting of datasets
+  - 0.80
+  - 0.10
+  - 0.10
   - 0.80
   - 0.10
   - 0.10
@@ -175,7 +168,6 @@ dataset:
   - 1
   - 1024
   - 2
-# Training hyperparameters
 train:
   # Number of training epochs to run
   epochs: 60
@@ -194,7 +186,6 @@ train:
     betas:
     - 0.9
     - 0.999
-    # Term added to the denominator to improve numerical stability
     eps: 1.0e-8
   # Loss function to use: cross-entropy or nll
   criterion: cross-entropy
