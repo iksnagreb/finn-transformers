@@ -9,19 +9,13 @@ export LC_ALL="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 
 
-# norms=(batch-norm layer-norm)
-# activations=(relu gelu)
-# nls=(2 3 4)
-# nhs=(3)
-# embs=(192)
-# lrs=(0.001)
-
 norms=(layer-norm)
-activations=(gelu)
-nls=(2)
+activations=(relu gelu)
+nls=(2 3 4)
 nhs=(3)
-embs=(192)
+embs=(192, 256, 384)
 lrs=(0.001)
+
 
 echo "Queueing Round 1..."
 for norm in "${norms[@]}"; do
@@ -41,7 +35,7 @@ for norm in "${norms[@]}"; do
             --set-param model.emb_dim="${emb}" \
             --set-param model.expansion_dim="${expdim}" \
             --set-param model.num_heads="${nh}" \
-            --set-param train.epochs=1
+            --set-param train.epochs=50
         done
       done
     done
