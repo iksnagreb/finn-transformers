@@ -43,6 +43,8 @@ dvc exp run --run-all
 
 # dvc exp run --run-all --jobs 3
 
+# dvc exp run --run-all --jobs 3
+
 #!/usr/bin/env bash
 set -euo pipefail
 

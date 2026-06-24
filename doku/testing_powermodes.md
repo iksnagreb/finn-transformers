@@ -13,38 +13,34 @@ sudo nvpmodel -m 2   # set mode (e.g., 15W)
 sudo jetson_clocks
 
 ```
-Restart is needed to change power mode. What happens if I restart the jetson?
-![alt text](image-3.png)
 
 test power modes with **normal radioml**:
 
     - 30 Watt
-        - Commit: 34754810c11a7fdd3508db3884dfc6abacb2a442 [ci-127059-517947]
+        - Commit: 07ebb266c6acb9355426bb96bbc02ff279a87cc6, ci-131471-529090
     - 15 Watt
-        - Commit: 67f9e9f61b14ebc1e4fabf87453d5cfc82f590ac  NOT FOUND IN DVC [ci-127073-517969] , after committing and push its there again
+        - Commit: fb5101f6193cbf0bf5e8019e0121bd00971f27c1, ci-131492-529136
     - 50 Watt
-        - Commit: Todo
+        - Commit: 68025e326d6ab5dd75d9883d2becf38d1320d316, ci-131437-528975
 
 test power modes with **normal vision**:
 
     - 30 Watt
-        - Commit: a6be9bbd0c4f0e4232924989f39cae98da8bca12 NOT FOUND IN DVC [logs are full, cant see exp name]
+        - Commit: 45c1469e0c8c9e57a09dfd50139ba40bf5d7cc58, ci-131472-529092
     - 15 Watt (tag: git tag baseline-vision-15w)
-        - Commit: 00ef7b8b0cb13f353944fba2f6870b6ba9f1ec9c NOT FOUND IN DVC [ci-127084-518006]
+        - Commit: eada526496667733420247f557c6bce64a0fe07b, ci-131497-529142
     - 50 Watt
-        - Commit: 15c4feb163bd84b6eda0e39c7e3999b36b938684 [ci-128068-520744]
+        - Commit: 1b0914ea098ff533f1ab9b146a9c3022c4b0d2d3, ci-131447-529004
 
 
 test power modes with **normal language**:
 
     - 30 Watt
-        - Commit: b4ca7ae3dab21e9979f3d49f3b347e8a6381dbd6 NOT FOUND IN DVC [ci-127069-517964] NOW ITS IN DVC, after updating dvc datachain its not there anymore..., after commit and push its there (before the gitlab mirror has pulled the changes), after the pipeline in the gitlab mirror has begun: the commit is not there anymore!
-
-        or [ci-128109-520914] (all batch sizes)
+        - Commit: d88996f13a432fa471d01e039ac3a3691366d40f, ci-131484-529114
     - 15 Watt
-        - Commit: c48b2ba3e62eead9dcd3ae07f31a9fecd6b3f706 NOT FOUND IN DVC [ci-127092-518035] NOW ITS IN DVC, not anymore now, after committing and push its there again, not there now
+        - Commit: fac8cd0d931b4adab8540591858f93fcbe22d22e, ci-131506-529170
     - 50 Watt
-        - Commit: d84b7381edf822ac7ae092b24a9a26756684c3c4 [ci-127257-518890]
+        - Commit: 931c0e49e3d68322e37c1592a8e541b12a518562, ci-131455-529028
 
 Radioml (change model size, always with 30 Watt):
 
@@ -64,133 +60,45 @@ Radioml (change model size, always with 30 Watt):
         - Commmit (50 Watt): e6da147df1da6788092118d9b2b241dcbd8b3ca3 [ci-127244-518854]
         - Commit (15 Watt): 0b21f8e27ca1bb6fd73031adb61ad2b9ffdf8c3d [ci-127253-518883]
 
+- best radioml:
+    - 15 watt: 282e0914885035581075a855c9600abdd0ea61c9, ci-131731-529888
+    - 30 Watt: a1566cbd0001aad275a9f8b6c3aba5ae0bd0db1c, ci-131742-529917
+    - 50 Watt: 
 
 
-
-    - bigger: train it again bc of bad accuracy, changed model.py:
-        Patch Model to instantiate fresh block instances per layer (fix the list-multiplication bug) 
-
-    - even bigger:
-        - num_layers: 6
-        - emb_dims: 128
-        - num_heads: 4
-        - expansion_dim: 512
-        - Commit: 
-
-
-        mehr heads testen
-
-
-
-
-        - Vergleiche zusammenfügen (Dashboards selber erstellen, da ddatachain nicht zuverlässig alle commits hat!)
-        - größere batch sizes language und vision
-
-
-### How to get the plots of a specific experiment:
-
-1. git fetch origin 'refs/exps/*:refs/exps/*'
-2. dvc exp apply ci-128068-520744   
-3. dvc pull -r upload
-
-the files from the experiment should be in the outputs folder now.
-
-4. git reset --hard HEAD
-
-
-
-
-
-Folgender Command zeigt auf unterschiedlichen PCs (aber im gleichen branch im projekt, nach git pull und dvc pull) unterschiedliche experimente an:
-dvc exp list -n 30
-
-
-Todo:
-- training auf cluster - trainingsdaten kopieren - started
-- powermodus, taktfrequenz zusammenhang?
-    - ja, dynamisch
-    - sudo jetson_clocks   würde taktfrequenz auf maximum fixieren, das sollte zu höherem stromverbrauch führen
-- dvc exp pull - done
-
-
-
-comm -23 /tmp/remote_exps.txt /tmp/local_exps.txt | sed 's#^#refs/exps/#' | while read ref; do
-  echo "fetching $ref" && git fetch origin "$ref:$ref"
-done
-
-
-dvc exp pull origin -A -r upload
-dvc exp apply ci-128068-520744
-find the plots under dvc/images/...
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
-
-
-# Bevor Clocks maximiert wurden, 30W:
 sudo jetson_clocks --show
-SOC family:tegra234  Machine:NVIDIA Jetson AGX Orin Developer Kit
-Online CPUs: 0-7
-cpu0:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=1420800 IdleStates: WFI=1 c7=1 
-cpu1:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
-cpu2:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=1420800 IdleStates: WFI=1 c7=1 
-cpu3:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
-cpu4:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=1497600 IdleStates: WFI=1 c7=1 
-cpu5:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
-cpu6:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=1497600 IdleStates: WFI=1 c7=1 
-cpu7:  Online=1 Governor=schedutil MinFreq=729600 MaxFreq=1728000 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
-cpu8:  Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
-cpu9:  Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
-cpu10: Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
-cpu11: Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=1 c7=1 
-GPU MinFreq=306000000 MaxFreq=612000000 CurrentFreq=306000000
-Active GPU TPCs: 4
-EMC MinFreq=204000000 MaxFreq=3199000000 CurrentFreq=3199000000 FreqOverride=0
-DLA0_CORE:   Online=1 MinFreq=0 MaxFreq=1369600000 CurrentFreq=1369600000
-DLA0_FALCON: Online=1 MinFreq=0 MaxFreq=729600000 CurrentFreq=729600000
-DLA1_CORE:   Online=1 MinFreq=0 MaxFreq=1369600000 CurrentFreq=1369600000
-DLA1_FALCON: Online=1 MinFreq=0 MaxFreq=729600000 CurrentFreq=729600000
-PVA0_VPS0: Online=1 MinFreq=0 MaxFreq=512000000 CurrentFreq=512000000
-PVA0_AXI:  Online=1 MinFreq=0 MaxFreq=358400000 CurrentFreq=358400000
-FAN Dynamic Speed Control=nvfancontrol hwmon0_pwm1=48
-NV Power Mode: MODE_30W
-# Nachdem Clocks maximiert wurden, 30W:
-hanna@ceg-391:~/git/finn-transformers$ sudo jetson_clocks
-hanna@ceg-391:~/git/finn-transformers$ sudo jetson_clocks --show
-SOC family:tegra234  Machine:NVIDIA Jetson AGX Orin Developer Kit
-Online CPUs: 0-7
-cpu0:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
-cpu1:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
-cpu2:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
-cpu3:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
-cpu4:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
-cpu5:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
-cpu6:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
-cpu7:  Online=1 Governor=schedutil MinFreq=1728000 MaxFreq=1728000 CurrentFreq=1728000 IdleStates: WFI=0 c7=0 
-cpu8:  Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=0 c7=0 
-cpu9:  Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=0 c7=0 
-cpu10: Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=0 c7=0 
-cpu11: Online=0 Governor=schedutil MinFreq=729600 MaxFreq=2201600 CurrentFreq=729600 IdleStates: WFI=0 c7=0 
-GPU MinFreq=612000000 MaxFreq=612000000 CurrentFreq=612000000
-Active GPU TPCs: 4
-EMC MinFreq=204000000 MaxFreq=3199000000 CurrentFreq=3199000000 FreqOverride=1
-DLA0_CORE:   Online=1 MinFreq=0 MaxFreq=1369600000 CurrentFreq=1369600000
-DLA0_FALCON: Online=1 MinFreq=0 MaxFreq=729600000 CurrentFreq=729600000
-DLA1_CORE:   Online=1 MinFreq=0 MaxFreq=1369600000 CurrentFreq=1369600000
-DLA1_FALCON: Online=1 MinFreq=0 MaxFreq=729600000 CurrentFreq=729600000
-PVA0_VPS0: Online=1 MinFreq=0 MaxFreq=512000000 CurrentFreq=512000000
-PVA0_AXI:  Online=1 MinFreq=0 MaxFreq=358400000 CurrentFreq=358400000
-FAN Dynamic Speed Control=nvfancontrol hwmon0_pwm1=48
-NV Power Mode: MODE_30W
+sudo jetson_clocks: fixes clocks to max. frequenz
 
+# Todo:
 
-- power modus mit clock max testen
-    - radioml 50W WIP
-- trainieren und lernrate variieren auf cluster
-- aufräumen (alte pngs löschen) - done
+## Cluster
+- Radioml trainieren mit alten parametern (Vergleichswert/überprüfen ob das training klappt)
+- größerere Modelle und lernrate verändern
+    - more layers
+    - more heads
 
-- plots sind im report!!
-- Wo sind die richtigen jsons zum experiment? - dort wo sie erzeugt werden
---> schauen ob dvc push extra etwas bringt
---> dvc pull nach exp apply
+# Jetson
+- alle tests nochmal ausführen, mit sudo jetson clocks
 
-    --> wenn die sachen nicht geadded werden, dann werden die dateien auch richtig aktualisiert... outputs/radioml/plot/ORT_INT8/energy_consumption.json (ev. weil sie schon getracked waren?)
+# Aufräumen:
+- alte pngs löschen - fertig
+
+# Experimente anschauen:
+1. Alle experimente pullen (geht genauso langsam wie wenn ich nur eins pulle):
+```
+dvc exp pull origin -A -r upload
+```
+2. Experiment apply
+```
+dvc exp apply ci-131471-529090
+```
+3. Plots sind in 
+```
+dvclive/report.md
+```
+4. Jsons sind dort wo sie erstellt wurden, eg.
+```
+outputs/radioml/plot/INT8/energy_consumption.json
+```

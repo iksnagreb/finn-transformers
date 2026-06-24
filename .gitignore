@@ -16,6 +16,7 @@ data/
 # Plots produced by dvc from pipeline outputs
 dvc_plots/builds/
 builds/
+artifacts/
 
 outputs/**/*.json
 outputs/**/*.log

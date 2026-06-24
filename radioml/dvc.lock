@@ -113,7 +113,7 @@ stages:
         seed: 12
         tag: quantized
         train:
-          epochs: 100
+          epochs: 60
           batch_size: 512
           optimizer:
             algorithm: adam
