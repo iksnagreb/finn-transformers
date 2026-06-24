@@ -15,18 +15,6 @@ batch_sizes:
 - 256
 - 512
 - 1024
-batch_sizes:
-- 1
-- 2
-- 4
-- 8
-- 16
-- 32
-- 64
-- 128
-- 256
-- 512
-- 1024
 model:
   # Number of output classes to predict (default 24 RadioML classes)
   num_classes: 24
@@ -66,14 +54,11 @@ model:
   num_layers: 1
   # Number of attention heads
   num_heads: 4
-  num_heads: 4
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
   emb_dim: 192
-  emb_dim: 192
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 768
   expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
@@ -260,18 +245,6 @@ export:
   external_data: false
   # Enables dynamo export model optimization
   optimize: false
-  batch_sizes:
-  - 1
-  - 2
-  - 4
-  - 8
-  - 16
-  - 32
-  - 64
-  - 128
-  - 256
-  - 512
-  - 1024
   batch_sizes:
   - 1
   - 2
