@@ -2,15 +2,18 @@
 set -euo pipefail
 
 
-lrs=(0.001 0.0008 0.0005)
-embs=(48 96 192)
-nls=(1 2)
-nhs=(3 4)
+export RADIOML_PATH="/scratch/hpc-prf-ekiapp/haka/finn-transformers/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+export RADIOML_PATH_NPZ="/scratch/hpc-prf-ekiapp/haka/finn-transformers/data/GOLD_XYZ_OSC.0001_1024.npz"
 
-# lrs=(0.0023 0.000323)
-# embs=(48)
-# nls=(1)
-# nhs=(3)
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US.UTF-8"
+
+
+lrs=(0.001)
+embs=(192)
+nls=(1)
+nhs=(4)
+
 
 echo "Queueing experiments..."
 for lr in "${lrs[@]}"; do
@@ -28,7 +31,7 @@ for lr in "${lrs[@]}"; do
           --set-param model.expansion_dim="${expdim}" \
           --set-param model.num_layers="${nl}" \
           --set-param model.num_heads="${nh}"\
-          --set-param train.epochs=60
+          --set-param train.epochs=100
       done
     done
   done
