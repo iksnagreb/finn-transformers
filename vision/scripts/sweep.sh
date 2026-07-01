@@ -8,17 +8,17 @@ export LANG="en_US.UTF-8"
 export LC_CTYPE=en_US.UTF-8
 export PYTHONUTF8=1
 
-# activations=(relu gelu)
-# nls=(2 3 4)
-# nhs=(3, 4)
-# embs=(192, 256, 384)
-# lrs=(0.001)
-
-activations=(relu)
-nls=(2)
-nhs=(3)
-embs=(192)
+activations=(relu gelu)
+nls=(3)
+nhs=(4)
+embs=(384)
 lrs=(0.001)
+
+# activations=(relu)
+# nls=(2)
+# nhs=(3)
+# embs=(192)
+# lrs=(0.001)
 
 echo "Queueing Round 1..."
 for act in "${activations[@]}"; do
@@ -36,7 +36,7 @@ for act in "${activations[@]}"; do
           --set-param model.emb_dim="${emb}" \
           --set-param model.expansion_dim="${expdim}" \
           --set-param model.num_heads="${nh}" \
-          --set-param train.epochs=1
+          --set-param train.epochs=100
       done
     done
   done
