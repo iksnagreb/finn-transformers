@@ -56,7 +56,7 @@ model:
   expansion_dim: 1536
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: 4
+  bits: 8
   # Number of quantization bits for weights and activations of the
   # output classification layer, null means no quantization
   cls_bits: 8

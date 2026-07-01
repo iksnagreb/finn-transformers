@@ -158,9 +158,6 @@ dataset:
   - 0.80
   - 0.10
   - 0.10
-  - 0.80
-  - 0.10
-  - 0.10
   seed: 12
   # Reshape the dataset to fit the expected embedding dimension of the model
   # and to effectively reduce the sequence length
