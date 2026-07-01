@@ -74,6 +74,9 @@ stages:
           - 0.8
           - 0.1
           - 0.1
+          - 0.8
+          - 0.1
+          - 0.1
           seed: 12
           reshape:
           - 1
@@ -141,8 +144,8 @@ stages:
       size: 5527
     - path: outputs/radioml/lr.yaml
       hash: md5
-      md5: ba5131b76ec4b8fdf1a74652b342cc03
-      size: 1901
+      md5: 89d603d4ad6935fcf2213fc96a4b6df3
+      size: 1835
     - path: outputs/radioml/model.pt
       hash: md5
       md5: 86c992b09f859685c0a2c7c10370386f
@@ -229,6 +232,9 @@ stages:
           - 0.8
           - 0.1
           - 0.1
+          - 0.8
+          - 0.1
+          - 0.1
           seed: 12
           reshape:
           - 1
@@ -282,8 +288,8 @@ stages:
       size: 52
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: 3b1a1b4f94e8d9667c06c1466cc3319c
-      size: 962284
+      md5: c5e44bbbc7c561e824de12f2f0b9566e
+      size: 974452
   export:
     cmd: PARTITION=normal bash run.sh python -m radioml.export
     deps:
