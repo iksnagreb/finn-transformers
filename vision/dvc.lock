@@ -71,7 +71,7 @@ stages:
           num_heads: 4
           emb_dim: 384
           expansion_dim: 1536
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: gelu
           norm: batch-norm
@@ -201,7 +201,7 @@ stages:
           num_heads: 4
           emb_dim: 384
           expansion_dim: 1536
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: gelu
           norm: batch-norm
@@ -302,7 +302,7 @@ stages:
           num_heads: 4
           emb_dim: 384
           expansion_dim: 1536
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: gelu
           norm: batch-norm
