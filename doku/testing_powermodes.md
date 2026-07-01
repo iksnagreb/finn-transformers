@@ -42,7 +42,7 @@ test power modes with **normal language**:
     - 50 Watt
         - Commit: 931c0e49e3d68322e37c1592a8e541b12a518562, ci-131455-529028
 
-Radioml (change model size, always with 30 Watt):
+Radioml (change model size):
 
     - **normal**
         - num_layers:1
@@ -63,13 +63,22 @@ Radioml (change model size, always with 30 Watt):
 - best radioml:
     - 15 watt: 282e0914885035581075a855c9600abdd0ea61c9, ci-131731-529888
     - 30 Watt: a1566cbd0001aad275a9f8b6c3aba5ae0bd0db1c, ci-131742-529917
-    - 50 Watt: 
+    - 50 Watt: 784a3c801ec9f33f2981272286b41f4e00a1dd24, ci-131752-529947
 
+
+271596b [atrip-fish]
+best radioml mit 100 epochen
 
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
 sudo jetson_clocks --show
 sudo jetson_clocks: fixes clocks to max. frequenz
+
+
+bigger vision (emb dim 384, num heads 4, num layers 3, accuracy: 72%)
+- 50 Watt: ci-134012-537991, 298743c4c1e02ec4ca494b25da375a531da578ec
+- 30 Watt:
+- 15 Watt:
 
 # Todo:
 
