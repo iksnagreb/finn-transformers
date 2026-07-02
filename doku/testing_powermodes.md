@@ -77,7 +77,7 @@ sudo jetson_clocks: fixes clocks to max. frequenz
 
 bigger vision (emb dim 384, num heads 4, num layers 3, accuracy: 72%)
 - 50 Watt: ci-134012-537991, 298743c4c1e02ec4ca494b25da375a531da578ec
-- 30 Watt:
+- 30 Watt: ci-134059-538121, 00c79f71083e10826eacb13a0c53f0fa9724f37b
 - 15 Watt:
 
 # Todo:
