@@ -13,20 +13,15 @@ model:
     patches:
     - 8
     - 8
-    # Kernel size for sliding windows generating the patches
     kernel_size:
     - 4
     - 4
-    # Padding to the input width to ensure expected number of output patches
     padding:
     - 0
     - 0
-    # Stride of the sliding windows
     stride:
     - 4
     - 4
-    # Activation functions to use after the convolution layer
-    #   Options: tanh, sigmoid, relu, gelu, silu, none
     activation: relu
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
@@ -45,9 +40,9 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 3
+  num_layers: 6
   # Number of attention heads
-  num_heads: 4
+  num_heads: 6
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
   emb_dim: 384
@@ -62,7 +57,7 @@ model:
   cls_bits: 8
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
-  activation: gelu
+  activation: relu
   # Normalization layer preceding or following each block
   #   Options: batch-norm, layer-norm, none
   norm: batch-norm
@@ -76,7 +71,7 @@ dataset: '...'
 # Training hyperparameters
 train:
   # Number of training epochs to run
-  epochs: 100
+  epochs: 150
   # Batch size for training
   batch_size: 256
   # Optimizer configuration
@@ -92,7 +87,6 @@ train:
     betas:
     - 0.9
     - 0.999
-    # Term added to the denominator to improve numerical stability
     eps: 1.0e-8
   # Loss function to use: cross-entropy or nll
   criterion: cross-entropy

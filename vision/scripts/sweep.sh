@@ -8,38 +8,39 @@ export LANG="en_US.UTF-8"
 export LC_CTYPE=en_US.UTF-8
 export PYTHONUTF8=1
 
-activations=(relu gelu)
-nls=(3)
-nhs=(4)
-embs=(384)
-lrs=(0.001)
 
-# activations=(relu)
-# nls=(2)
-# nhs=(3)
-# embs=(192)
-# lrs=(0.001)
+activations=(relu relu relu relu)
+nls=(3 12 6 3)
+nhs=(4 12 6 3)
+embs=(384 768 384 192)
+lrs=(0.001 0.001 0.001 0.001)
 
-echo "Queueing Round 1..."
-for act in "${activations[@]}"; do
-  for nl in "${nls[@]}"; do
-    for emb in "${embs[@]}"; do
-      expdim=$((4 * emb))
-      for nh in "${nhs[@]}"; do
-        if (( emb % nh != 0 )); then
-          echo "Skipping emb=${emb} nh=${nh}"
-          continue
-        fi
-        dvc exp run --queue \
-          --set-param model.activation="${act}" \
-          --set-param model.num_layers="${nl}" \
-          --set-param model.emb_dim="${emb}" \
-          --set-param model.expansion_dim="${expdim}" \
-          --set-param model.num_heads="${nh}" \
-          --set-param train.epochs=100
-      done
-    done
-  done
+echo "Queueing experiments..."
+
+for i in "${!activations[@]}"; do
+    act="${activations[$i]}"
+    nl="${nls[$i]}"
+    nh="${nhs[$i]}"
+    emb="${embs[$i]}"
+    lr="${lrs[$i]}"
+
+    expdim=$((4 * emb))
+
+    if (( emb % nh != 0 )); then
+        echo "Skipping experiment $((i+1)): emb=${emb}, nh=${nh}"
+        continue
+    fi
+
+    echo "Queueing experiment $((i+1)): nl=${nl}, nh=${nh}, emb=${emb}, lr=${lr}"
+
+    dvc exp run --queue \
+        --set-param model.activation="${act}" \
+        --set-param model.num_layers="${nl}" \
+        --set-param model.emb_dim="${emb}" \
+        --set-param model.expansion_dim="${expdim}" \
+        --set-param model.num_heads="${nh}" \
+        --set-param train.optimizer.lr="${lr}" \
+        --set-param train.epochs=150
 done
 
 
