@@ -71,7 +71,7 @@ stages:
           num_heads: 4
           emb_dim: 384
           expansion_dim: 1536
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: gelu
           norm: batch-norm
@@ -201,7 +201,7 @@ stages:
           num_heads: 4
           emb_dim: 384
           expansion_dim: 1536
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: gelu
           norm: batch-norm
@@ -302,7 +302,7 @@ stages:
           num_heads: 4
           emb_dim: 384
           expansion_dim: 1536
-          bits: 4
+          bits: 8
           cls_bits: 8
           activation: gelu
           norm: batch-norm
@@ -321,8 +321,8 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 7c33805a5342b9d5736c269080d6f4c5
-      size: 7382979
+      md5: d26fa970a5f56fb86056ff44abc54d49
+      size: 7391933
     - path: outputs/vision/out.npy
       hash: md5
       md5: fa1c09e881e78db90f8fae03667a0cc9
