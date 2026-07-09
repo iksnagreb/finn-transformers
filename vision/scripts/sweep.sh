@@ -9,11 +9,17 @@ export LC_CTYPE=en_US.UTF-8
 export PYTHONUTF8=1
 
 
-activations=(relu relu relu relu)
-nls=(3 12 6 3)
-nhs=(4 12 6 3)
-embs=(384 768 384 192)
-lrs=(0.001 0.001 0.001 0.001)
+# activations=(relu relu relu relu)
+# nls=(3 12 6 3)
+# nhs=(4 12 6 3)
+# embs=(384 768 384 192)
+# lrs=(0.001 0.001 0.001 0.001)
+
+activations=(relu)
+nls=(12)
+nhs=(12)
+embs=(768)
+lrs=(0.0005)
 
 echo "Queueing experiments..."
 
