@@ -1,5 +1,5 @@
 outs:
-- md5: e6ebe3cc724e9a0b7960b036a1f78af8
-  size: 1445
+- md5: 9e7c0aa4c98e1f98b8acffd40a8a325c
+  size: 1483
   hash: md5
   path: power_throughput.json
