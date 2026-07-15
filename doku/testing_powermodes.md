@@ -72,9 +72,9 @@ Radioml (change model size, always with 30 Watt):
     - 50 watt:
 
 - vision base/2: jazzy-cogs (0.74 accuracy)
-    - 15 watt:
+    - 15 watt: 3f47aab516bd4dd22cae92bfc84bfb8549857694, no exp (took more than 2h)
     - 30 watt:
-    - 50 watt:
+    - 50 watt: right now
 
 - vision base (did not learn correctly) - whole-dops
     - 15 watt: 
