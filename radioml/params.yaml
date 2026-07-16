@@ -167,9 +167,9 @@ dataset:
   - 2
 train:
   # Number of training epochs to run
-  epochs: 10
+  epochs: 60
   # Batch size for training
-  batch_size: 64 # 512
+  batch_size: 512
   # Optimizer configuration
   optimizer:
     # Name of the optimization algorithm to use: adam or sgd

@@ -9,29 +9,11 @@ export LC_CTYPE=en_US.UTF-8
 export PYTHONUTF8=1
 
 
-# activations=(relu relu relu relu)
-# nls=(3 12 6 3)
-# nhs=(4 12 6 3)
-# embs=(384 768 384 192)
-# lrs=(0.001 0.001 0.001 0.001)
-
-
-# ev. layer norm instead of batch norm
-
-
-# Der originale Vision Transformer verwendet:
-
-# LayerNorm -> AssertionError: Unsupported norm: layer-norm
-# GELU
-# MLP mit Expansion 4×
-# keine BatchNorm
-
-activations=(gelu) # swap to gelu, or silu
-nls=(12)
-nhs=(12)
-embs=(768)
-lrs=(0.0005)  # 0.00025
-norm=(batch-norm)
+activations=(relu relu relu relu)
+nls=(3 12 6 3)
+nhs=(4 12 6 3)
+embs=(384 768 384 192)
+lrs=(0.001 0.001 0.001 0.001)
 
 echo "Queueing experiments..."
 
@@ -41,7 +23,6 @@ for i in "${!activations[@]}"; do
     nh="${nhs[$i]}"
     emb="${embs[$i]}"
     lr="${lrs[$i]}"
-    norm="${norm[$i]}"
 
     expdim=$((4 * emb))
 
@@ -58,7 +39,6 @@ for i in "${!activations[@]}"; do
         --set-param model.emb_dim="${emb}" \
         --set-param model.expansion_dim="${expdim}" \
         --set-param model.num_heads="${nh}" \
-        --set-param model.norm="${norm}" \
         --set-param train.optimizer.lr="${lr}" \
         --set-param train.epochs=150
 done
@@ -83,10 +63,3 @@ set -euo pipefail
 
 
 # scluster
-
-
-
-# dvc im training live metrik einbauen/ tensorboard
-# training ohne quantisierung mit vision
-# language trainieren
-# dropout: 0.25 verringern erhöhen

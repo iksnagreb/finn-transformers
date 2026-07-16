@@ -8,8 +8,6 @@ import dvc.api
 import tqdm
 # PyTorch base package: Math and Tensor Stuff
 import torch
-# TensorBoard writer for live training charts
-from torch.utils.tensorboard import SummaryWriter
 # Loads shuffled batches from datasets
 from torch.utils.data import DataLoader, random_split
 # PyTorch vision datasets and transformations
@@ -22,13 +20,12 @@ from utils import seed, get_optimizer, get_criterion
 
 # Path to the CIFAR-10 dataset
 CIFAR10_ROOT = os.environ.setdefault("CIFAR10_ROOT", "data")
-CIFAR10_DATA_DIR = os.path.join(CIFAR10_ROOT, "cifar-10-batches-py")
 
 
 # Main training loop: Takes a model, loads the dataset and sets up the
 # optimizer. Runs the configured number of training epochs
 def train(model, batch_size, epochs, criterion, optimizer, loader,  # noqa
-          scheduler, tensorboard_log_dir="outputs/vision/tensorboard"):
+          scheduler):
     # Check whether GPU training is available and select the appropriate device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # Move the model to the training device
@@ -65,12 +62,7 @@ def train(model, batch_size, epochs, criterion, optimizer, loader,  # noqa
 
     # Load the Vision training split (should already be in CIFAR10_ROOT,
     # otherwise download)
-    dataset = datasets.CIFAR10(
-        CIFAR10_ROOT,
-        True,
-        download=not os.path.isdir(CIFAR10_DATA_DIR),
-        transform=tf,
-    )
+    dataset = datasets.CIFAR10(CIFAR10_ROOT, True, download=True, transform=tf)
     # Split into 90% training and 10% validation dataset
     train_data, valid_data = random_split(dataset, [0.9, 0.1])
 
@@ -78,49 +70,29 @@ def train(model, batch_size, epochs, criterion, optimizer, loader,  # noqa
     train_data = DataLoader(train_data, batch_size=batch_size, **loader)
     valid_data = DataLoader(valid_data, batch_size=batch_size, **loader)
 
-    # Log scalars for live inspection in TensorBoard
-    writer = SummaryWriter(log_dir=tensorboard_log_dir)
-
     # Collect training and validation loss and learning rate per epoch
     _loss, _lr = [], []
 
     # Run the configured number of training epochs
-    for epoch in tqdm.trange(epochs, desc="epoch"):
+    for _ in tqdm.trange(epochs, desc="epoch"):
         # Collect training and validation loss per epoch
         train_loss, valid_loss = (0, 0)
-        train_correct, train_total = (0, 0)
-        valid_correct, valid_total = (0, 0)
         # Set model to training mode
         model = model.train()  # noqa: Shadows model...
         # Iterate the batches of (input, target labels) pairs
-        for batch_idx, (x, y) in enumerate(tqdm.tqdm(
-            train_data, desc="train-batch", leave=False
-        )):
-            labels = y.to(device)
+        for x, y in tqdm.tqdm(train_data, desc="train-batch", leave=False):
             # Clear gradients of last iteration
             optimizer.zero_grad(set_to_none=True)
             # Feed input data to model to get predictions
             p = model(x.to(device))  # noqa: Duplicate, see below
             # Loss between class probabilities and true class labels
-            loss = criterion(p, labels)  # noqa: Shadows outer scope
+            loss = criterion(p, y.to(device))  # noqa: Shadows outer scope
             # Backpropagation of the error to compute gradients
             loss.backward()
             # Parameter update step
             optimizer.step()
             # Accumulate the loss over the whole validation dataset
             train_loss += loss.item()
-            # Track training accuracy for live monitoring
-            predictions = p.argmax(dim=1)
-            train_correct += (predictions == labels).sum().item()
-            train_total += labels.size(0)
-            # Log batch-level training scalars for TensorBoard
-            global_step = epoch * len(train_data) + batch_idx
-            writer.add_scalar("loss/train_batch", loss.item(), global_step)
-            writer.add_scalar(
-                "accuracy/train_batch",
-                (predictions == labels).float().mean().item(),
-                global_step,
-            )
         # Clear gradients of last iteration
         optimizer.zero_grad(set_to_none=True)
         # Switch the model to evaluation mode, disabling dropouts and scale
@@ -130,38 +102,20 @@ def train(model, batch_size, epochs, criterion, optimizer, loader,  # noqa
         with torch.no_grad():
             # Iterate the batches of (input, target labels) pairs
             for x, y in tqdm.tqdm(valid_data, "valid-batch", leave=False):
-                labels = y.to(device)
                 # Feed input data to model to get predictions
                 p = model(x.to(device))  # noqa: Duplicate, see above
                 # Loss between class probabilities and true class labels
-                loss = criterion(p, labels)  # noqa: Shadows outer scope
+                loss = criterion(p, y.to(device))  # noqa: Shadows outer scope
                 # Accumulate the loss over the whole validation dataset
                 valid_loss += loss.item()
-                # Track validation accuracy for comparison against training
-                predictions = p.argmax(dim=1)
-                valid_correct += (predictions == labels).sum().item()
-                valid_total += labels.size(0)
         # Adjust the learning rate if necessary
         scheduler.step(valid_loss)
-        # Normalize the logged scalars to make TensorBoard charts comparable
-        train_loss_avg = train_loss / len(train_data)
-        valid_loss_avg = valid_loss / len(valid_data)
-        train_accuracy = train_correct / train_total if train_total else 0.0
-        valid_accuracy = valid_correct / valid_total if valid_total else 0.0
-        writer.add_scalar("loss/train_epoch", train_loss_avg, epoch)
-        writer.add_scalar("loss/valid_epoch", valid_loss_avg, epoch)
-        writer.add_scalar("accuracy/train_epoch", train_accuracy, epoch)
-        writer.add_scalar("accuracy/valid_epoch", valid_accuracy, epoch)
-        writer.add_scalar("learning_rate", scheduler.get_last_lr()[0], epoch)
         # Append loss information to the log
         _loss.append({"train": train_loss, "valid": valid_loss})
         # keep track of the learning rate
         _lr.append({"last": scheduler.get_last_lr()})
     # Clear the gradients of last iteration
     optimizer.zero_grad(set_to_none=True)
-    # Make sure TensorBoard flushes the last events to disk
-    writer.flush()
-    writer.close()
     # Return the model, the optimizer state and the log after training
     return model.cpu(), optimizer, {"loss": _loss}, {"lr": _lr}
 
@@ -178,7 +132,6 @@ if __name__ == "__main__":
     model, optimizer, loss, lr = train(model, **params["train"])
     # Create the output directory if it does not already exist
     os.makedirs("outputs/vision", exist_ok=True)
-    os.makedirs("outputs/vision/tensorboard", exist_ok=True)
     # Save the model in PyTorch format
     torch.save(model.state_dict(), "outputs/vision/model.pt")
     # Save the optimizer state in PyTorch format

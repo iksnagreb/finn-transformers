@@ -40,15 +40,15 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 12
+  num_layers: 3
   # Number of attention heads
-  num_heads: 12
+  num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 768
+  emb_dim: 192
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 3072
+  expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: 8
@@ -65,7 +65,7 @@ model:
   # none
   norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
-  dropout: 0.25   
+  dropout: 0.25
 # Training/Validation dataset configuration
 dataset: '...'
 # Training hyperparameters
@@ -73,13 +73,13 @@ train:
   # Number of training epochs to run
   epochs: 150
   # Batch size for training
-  batch_size: 64  # 256->64 because of CUDA out of memory. Tried to allocate 198.00 MiB. GPU 0 has a total capacity of 15.57 GiB of which 198.94 MiB is free.
+  batch_size: 256
   # Optimizer configuration
   optimizer:
     # Name of the optimization algorithm to use: adam or sgd
     algorithm: adam
     # (Initial) Learning rate
-    lr: 0.0005
+    lr: 0.001
     # L2 regularization
     weight_decay: 1.0e-3
     # Coefficients used for computing running averages of gradient and its
