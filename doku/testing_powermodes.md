@@ -102,3 +102,10 @@ dvclive/report.md
 ```
 outputs/radioml/plot/INT8/energy_consumption.json
 ```
+
+
+
+
+base/4 testen:
+
+was

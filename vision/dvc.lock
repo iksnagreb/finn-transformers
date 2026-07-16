@@ -104,20 +104,20 @@ stages:
     outs:
     - path: outputs/vision/loss.yaml
       hash: md5
-      md5: fe4753023c16fb9d4c8747333d11960f
-      size: 8238
+      md5: a6b3510f31aea6fcb6779bfa85bb7bd7
+      size: 560
     - path: outputs/vision/lr.yaml
       hash: md5
-      md5: a5942fdea7be9dc4f928ac121698a384
-      size: 3358
+      md5: eacfa18636b33e02ca4524dd18113541
+      size: 204
     - path: outputs/vision/model.pt
       hash: md5
-      md5: c4d713682cc592a8ff4d8f2b08dd0806
-      size: 2075088
+      md5: ae2f3748f949b123d600ab40b97aa81a
+      size: 29448144
     - path: outputs/vision/optimizer.pt
       hash: md5
-      md5: 888a35abcb1c233476bd01c2af086b04
-      size: 3759495
+      md5: 8f63f415ad78ce354080fa37094df64c
+      size: 57433543
   eval:
     cmd: PARTITION=gpu bash run.sh python -m vision.eval
     deps:
