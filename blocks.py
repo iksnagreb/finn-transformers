@@ -181,6 +181,8 @@ class Attention(torch.nn.Module):
                 Rearrange("b c ... -> b ... c"),
             )
 
+        # Layer Norm auch einbauen
+
         # Block of quantized multihead attention where all quantizers share the
         # same quantization bit-width
         self.mha = QuantMultiheadAttention(

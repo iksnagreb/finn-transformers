@@ -16,3 +16,4 @@ dvclive
 matplotlib
 transformers==4.53.0
 datasets==4.5.0
+tensorboard

@@ -66,7 +66,7 @@ Radioml (change model size, always with 30 Watt):
     - 50 Watt: 
 
 
-- vision base/4: muley-nims
+- vision base/4: muley-nims (0.54 accuracy)
     - 15 watt: 
     - 30 watt: 
     - 50 watt:
@@ -76,10 +76,11 @@ Radioml (change model size, always with 30 Watt):
     - 30 watt:
     - 50 watt:
 
-- vision base (did not learn correctly) - whole-dops
+- vision base (did not learn correctly) - whole-dops (did also not learn with smaller LR)
     - 15 watt: 
     - 30 watt:
     - 50 watt:
+    new try with gelu: jammy-taka
 
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
