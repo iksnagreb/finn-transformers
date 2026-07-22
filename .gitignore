@@ -23,6 +23,7 @@ outputs/**/*.log
 outputs/**/*.md
 outputs/**/*.png
 outputs/**/*.npy
+logs/
 
 !outputs/language/tokenizer/tokenizer_config.json
 dvclive/plots/images/
