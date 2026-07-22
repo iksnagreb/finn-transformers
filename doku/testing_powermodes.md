@@ -69,7 +69,7 @@ Radioml (change model size, always with 30 Watt):
 - vision base/4: muley-nims
     - 15 watt: 
     - 30 watt: right now
-    - 50 watt: 1f18e53231966f05df71022f422b85684be671a1, ci-136699-547457
+    - 50 watt: 1f18e53231966f05df71022f422b85684be671a1, ci-136699-547457 (wrong model, used base/2)
 
 - vision base/2: jazzy-cogs (0.74 accuracy)
     - 15 watt: 25c6dacfbebf10d86940d15f4debd1ddd3e367d7, ci-136567-547139
