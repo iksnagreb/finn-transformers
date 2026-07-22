@@ -68,8 +68,8 @@ Radioml (change model size, always with 30 Watt):
 
 - vision base/4: muley-nims
     - 15 watt: 
-    - 30 watt: right now
-    - 50 watt: 1f18e53231966f05df71022f422b85684be671a1, ci-136699-547457 (wrong model, used base/2)
+    - 30 watt: 
+    - 50 watt: d25373d7a30ceaeaf3a4c2e09922e13d27b2d98e, ci-137709-550489
 
 - vision base/2: jazzy-cogs (0.74 accuracy)
     - 15 watt: 25c6dacfbebf10d86940d15f4debd1ddd3e367d7, ci-136567-547139
@@ -79,7 +79,7 @@ Radioml (change model size, always with 30 Watt):
 - vision base (did not learn correctly) - whole-dops
     - 15 watt: 
     - 30 watt:
-    - 50 watt:
+    - 50 watt: 
 
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
@@ -120,7 +120,3 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 
 
-
-base/4 testen:
-
-was
