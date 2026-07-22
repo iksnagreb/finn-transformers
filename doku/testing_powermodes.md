@@ -66,21 +66,20 @@ Radioml (change model size, always with 30 Watt):
     - 50 Watt: 
 
 
-- vision base/4: muley-nims (0.56 accuracy)
+- vision base/4: muley-nims
     - 15 watt: 
-    - 30 watt: 
-    - 50 watt:
+    - 30 watt: b1cdbc2c68a2d3eea87a8ae415dc2267dc313d9f, ci-137717-550529
+    - 50 watt: d25373d7a30ceaeaf3a4c2e09922e13d27b2d98e, ci-137709-550489
 
 - vision base/2: jazzy-cogs (0.74 accuracy)
-    - 15 watt:
-    - 30 watt:
-    - 50 watt:
+    - 15 watt: 25c6dacfbebf10d86940d15f4debd1ddd3e367d7, ci-136567-547139
+    - 30 watt: e80fd4fd95a21db469060ba84d8485202ea9ef4a, ci-136553-547096
+    - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
 
-- vision base (did not learn correctly) - whole-dops (did also not learn with smaller LR)
+- vision base (did not learn correctly) - whole-dops
     - 15 watt: 
     - 30 watt:
-    - 50 watt:
-    new try with gelu: jammy-taka
+    - 50 watt: 
 
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
@@ -120,44 +119,8 @@ outputs/radioml/plot/INT8/energy_consumption.json
 ```
 
 
-Der komplette typische Ablauf nach einem neuen Training ist also:
-dvc repro vision/train
-dvc push -r public
-git add vision/dvc.lock
-git commit -m "Update vision model checkpoint"
-git push
 
 
-## Training without quantisation:
-RuntimeError: QuantLayer is not correctly configured
-ERROR: failed to reproduce 'train': failed to run: PARTITION=gpu bash run.sh python -m vision.train_tensorboard, exited with 1
---> change convolution in embeddings
+base/4 testen:
 
-
-
-
-
-
--> accuracy base/4 100 epochs without quantisation: 0.59 - auch auf jetson ausführen (FP32 und FP16)
-TODO, train again
-
--> accuracy base/4 100 epochs with quantisation: 0.54
-
-
-
-- train base model without quantisation -> works better (zumindest lauf training, die validation accuracy ist trotzdem schlecht)
-- tensorboard to check loss during training
-- experiments for base/4 model in different power modes
-- traned base/4 models 2 times more -> accuracy was always between 0.54 and 0.56
-
-
-- training with layer-norm
-- pre and post norm
-- lernrate deutlich ändern (0.1  ... 0.00001)
-    - 0.1 nope
-    - 0.01
-    - 0.001
-    - 0.0001 -> good training with layer norm!!
-    - 0.00001 -> worked as well with the layer norm
-- change dropout parameter
-- train the language model (on cluster if available)
+was
