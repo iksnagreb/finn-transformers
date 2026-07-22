@@ -37,14 +37,28 @@ class PatchEmbedding(torch.nn.Module):
         weight_quant = (
             {"weight_bit_width": bits} if bits else {"weight_quant": None}
         )
-
+        if bits is None:
+            conv = torch.nn.LazyConv2d(
+                dim,
+                kernel_size,
+                **kwargs,
+            )
+        else:
+            conv = LazyQuantConv2d(
+                dim,
+                kernel_size,
+                **kwargs,
+                weight_bit_width=bits,
+                bias_quant=Int8Bias,
+                return_quant_tensor=True,
+            )
         # Convolution plus pooling layer generating patches of the desired size
         # from the 2d input
         self.patches = torch.nn.Sequential(
             # Insert optional activation quantizer if enabled
              *([QuantIdentity(bit_width=bits, return_quant_tensor=True)] if bits else []),
 
-            LazyQuantConv2d(dim, kernel_size, **kwargs, **weight_quant, bias_quant=Int8Bias,return_quant_tensor=True), 
+            conv,
 
             # Normalization between convolution and activation function - this
             # is always a batch norm and not configurable

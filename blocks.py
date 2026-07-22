@@ -46,7 +46,7 @@ class MLP(torch.nn.Module):
         super().__init__()
 
         # Not support for other than batch normalization for now...
-        assert norm in {"batch-norm", "none", None}, f"Unsupported norm: {norm}"
+        assert norm in {"batch-norm", "layer-norm", "none", None}, f"Unsupported norm: {norm}"
 
         # Weight quantizer configuration: Disables quantizer if bits are None
         weight_quant = (
@@ -55,38 +55,66 @@ class MLP(torch.nn.Module):
 
         # MLP block of two linear layers as the main branch of the residual
         # block
-        self.mlp = torch.nn.Sequential(
-            # Normalization layer preceding the main branch if configured as
-            # pre-norm
-            *(torch.nn.Sequential(
-                # Transformer data comes in with sequence (temporal) dimension
-                # before channels but is treated as an image in channels-first
-                # layout
-                Rearrange("b ... c -> b c ..."),
-                # Batch normalization inferring the size of the embedding
-                # dimension
-                torch.nn.LazyBatchNorm1d(affine=False),
-                # Rearrange from channels-first back to channels-last
-                # sequence-first layout
-                Rearrange("b c ... -> b ... c"),
-            ) if norm_placement == "pre-norm" and norm is not None else []),
-            # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits)] if bits else []),
-            # Quantized linear projection to the expanded embedding dimension
-            LazyQuantLinear(expansion_dim, bias=bias, **weight_quant),
-            # Select and instantiate activation functions from the dictionary
-            # defined above
-            ACTIVATIONS[activation](),
-            # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
-            # Amount of dropout to apply at the sublayer output
-            torch.nn.Dropout(p=dropout),
-            # Quantized linear projection to the output embedding dimension
-            LazyQuantLinear(emb_dim, bias=bias, **weight_quant),
-            # No output quantizer here, see below, avoid double quantizer...
-            # Amount of dropout to apply at the sublayer output
-            torch.nn.Dropout(p=dropout),
-        )
+        if norm == "batch-norm":
+            self.mlp = torch.nn.Sequential(
+                # Normalization layer preceding the main branch if configured as
+                # pre-norm
+                *(torch.nn.Sequential(
+                    # Transformer data comes in with sequence (temporal) dimension
+                    # before channels but is treated as an image in channels-first
+                    # layout
+                    Rearrange("b ... c -> b c ..."),
+                    # Batch normalization inferring the size of the embedding
+                    # dimension
+                    torch.nn.LazyBatchNorm1d(affine=False),
+                    # Rearrange from channels-first back to channels-last
+                    # sequence-first layout
+                    Rearrange("b c ... -> b ... c"),
+                ) if norm_placement == "pre-norm" and norm is not None else []),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits)] if bits else []),
+                # Quantized linear projection to the expanded embedding dimension
+                LazyQuantLinear(expansion_dim, bias=bias, **weight_quant),
+                # Select and instantiate activation functions from the dictionary
+                # defined above
+                ACTIVATIONS[activation](),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
+                # Amount of dropout to apply at the sublayer output
+                torch.nn.Dropout(p=dropout),
+                # Quantized linear projection to the output embedding dimension
+                LazyQuantLinear(emb_dim, bias=bias, **weight_quant),
+                # No output quantizer here, see below, avoid double quantizer...
+                # Amount of dropout to apply at the sublayer output
+                torch.nn.Dropout(p=dropout),
+            )
+        elif norm == "layer-norm":
+            self.mlp = torch.nn.Sequential(
+                # Normalization layer preceding the main branch if configured as
+                # pre-norm
+                *(torch.nn.Sequential(
+                    torch.nn.LayerNorm(
+                        normalized_shape=emb_dim,
+                        elementwise_affine=False,
+                    ),
+                ) if norm_placement == "pre-norm" and norm is not None else []),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits)] if bits else []),
+                # Quantized linear projection to the expanded embedding dimension
+                LazyQuantLinear(expansion_dim, bias=bias, **weight_quant),
+                # Select and instantiate activation functions from the dictionary
+                # defined above
+                ACTIVATIONS[activation](),
+                # Insert optional activation quantizer if enabled
+                *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
+                # Amount of dropout to apply at the sublayer output
+                torch.nn.Dropout(p=dropout),
+                # Quantized linear projection to the output embedding dimension
+                LazyQuantLinear(emb_dim, bias=bias, **weight_quant),
+                # No output quantizer here, see below, avoid double quantizer...
+                # Amount of dropout to apply at the sublayer output
+                torch.nn.Dropout(p=dropout),
+            )
 
         # The final quantizer of the two branches needs to be shared to have
         # matching quantizer scales preceding the addition
@@ -100,7 +128,8 @@ class MLP(torch.nn.Module):
         # Normalization layer following the residual addition if configured as
         # post-norm
         if norm_placement == "post-norm" and norm is not None:
-            self.post_norm = torch.nn.Sequential(
+            if norm == "batch-norm":
+                self.post_norm = torch.nn.Sequential(
                 # Transformer data comes in with sequence (temporal) dimension
                 # before channels but is treated as an image in channels-first
                 # layout
@@ -114,6 +143,19 @@ class MLP(torch.nn.Module):
                 # Insert optional activation quantizer if enabled
                 *([QuantIdentity(bit_width=bits)] if bits else []),
             )
+            elif norm == "layer-norm":
+                self.post_norm = torch.nn.Sequential(
+                    torch.nn.LayerNorm(
+                        normalized_shape=emb_dim,
+                        elementwise_affine=False,
+                    ),
+
+                    *(
+                        [QuantIdentity(bit_width=bits)]
+                        if bits else []
+                    ),
+                )
+            
 
     def forward(self, x):
         # Pack multiple sequence/spatial dimensions into a single sequence
@@ -139,7 +181,7 @@ class Attention(torch.nn.Module):
             # Normalization layer preceding or following the block
             norm="batch-norm",
             # Placement of the normalization layer: pre-norm or post-norm
-            norm_placement="post-norm",
+            norm_placement="post-norm",         
             # Number of quantization bits for weights and activations (for all
             # intermediate layers)
             bits=None,
@@ -154,7 +196,7 @@ class Attention(torch.nn.Module):
         super().__init__()
 
         # Not support for other than batch normalization for now...
-        assert norm in {"batch-norm", "none", None}, f"Unsupported norm: {norm}"
+        assert norm in {"batch-norm", "layer-norm", "none", None}, f"Unsupported norm: {norm}"
 
         # Optional input quantizer in front of the entire block
         self.input_quant = torch.nn.Identity()
@@ -167,19 +209,33 @@ class Attention(torch.nn.Module):
 
         # Normalization layer preceding the attention if configured as pre-norm
         if norm_placement == "pre-norm" and norm is not None:
-            self.pre_norm = torch.nn.Sequential(
-                # Packed sequential/spatial data comes in channel-last layout
-                # while batch normalization expects channels-first
-                Rearrange("b ... c -> b c ..."),
-                # Batch normalization inferring the size of the embedding
-                # dimension
-                torch.nn.LazyBatchNorm1d(affine=False),
-                # Insert optional activation quantizer if enabled
-                *([QuantIdentity(bit_width=bits)] if bits else []),
-                # Rearrange from channels-first back to channels-last
-                # sequence-first layout
-                Rearrange("b c ... -> b ... c"),
-            )
+            if norm == "batch-norm":
+                self.pre_norm = torch.nn.Sequential(
+                    # Packed sequential/spatial data comes in channel-last layout
+                    # while batch normalization expects channels-first
+                    Rearrange("b ... c -> b c ..."),
+                    # Batch normalization inferring the size of the embedding
+                    # dimension
+                    torch.nn.LazyBatchNorm1d(affine=False),
+                    # Insert optional activation quantizer if enabled
+                    *([QuantIdentity(bit_width=bits)] if bits else []),
+                    # Rearrange from channels-first back to channels-last
+                    # sequence-first layout
+                    Rearrange("b c ... -> b ... c"),
+                )
+            elif norm == "layer-norm":
+                self.pre_norm = torch.nn.Sequential(
+                    torch.nn.LayerNorm(
+                        normalized_shape=emb_dim,
+                        elementwise_affine=False,
+                    ),
+
+                    *(
+                        [QuantIdentity(bit_width=bits)]
+                        if bits else []
+                    ),
+                )
+
 
         # Block of quantized multihead attention where all quantizers share the
         # same quantization bit-width
@@ -230,8 +286,8 @@ class Attention(torch.nn.Module):
 
         # Normalization layer following the residual addition if configured as
         # post-norm
-        if norm_placement == "post-norm" and norm is not None:
-            self.post_norm = torch.nn.Sequential(
+        if norm == "batch-norm":
+                self.post_norm = torch.nn.Sequential(
                 # Packed sequential/spatial data comes in channel-last layout
                 # while batch normalization expects channels-first
                 Rearrange("b ... c -> b c ..."),
@@ -244,6 +300,46 @@ class Attention(torch.nn.Module):
                 # sequence-first layout
                 Rearrange("b c ... -> b ... c"),
             )
+        elif norm == "layer-norm":
+                self.post_norm = torch.nn.Sequential(
+                    torch.nn.LayerNorm(
+                        normalized_shape=emb_dim,
+                        elementwise_affine=False,
+                    ),
+
+                    *(
+                        [QuantIdentity(bit_width=bits)]
+                        if bits else []
+                    ),
+                )
+        if norm_placement == "post-norm" and norm is not None:
+            if norm == "batch-norm":
+                self.post_norm = torch.nn.Sequential(
+                    # Packed sequential/spatial data comes in channel-last layout
+                    # while batch normalization expects channels-first
+                    Rearrange("b ... c -> b c ..."),
+                    # Batch normalization inferring the size of the embedding
+                    # dimension
+                    torch.nn.LazyBatchNorm1d(affine=False),
+                    # Insert optional activation quantizer if enabled
+                    *([QuantIdentity(bit_width=bits)] if bits else []),
+                    # Rearrange from channels-first back to channels-last
+                    # sequence-first layout
+                    Rearrange("b c ... -> b ... c"),
+                )
+            elif norm == "layer-norm":
+                self.post_norm = torch.nn.Sequential(
+                    torch.nn.LayerNorm(
+                        normalized_shape=emb_dim,
+                        elementwise_affine=False,
+                    ),
+
+                    *(
+                        [QuantIdentity(bit_width=bits)]
+                        if bits else []
+                    ),
+                )
+        
 
     def forward(self, x):
         # Pack multiple sequence/spatial dimensions into a single sequence
@@ -292,7 +388,7 @@ class Conv(torch.nn.Module):
         super().__init__()
 
         # Not support for other than batch normalization for now...
-        assert norm in {"batch-norm", "none", None}, f"Unsupported norm: {norm}"
+        assert norm in {"batch-norm", "layer-norm", "none", None}, f"Unsupported norm: {norm}"
 
         # Weight quantizer configuration: Disables quantizer if bits are None
         weight_quant = (

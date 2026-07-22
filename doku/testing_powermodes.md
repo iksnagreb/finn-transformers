@@ -66,6 +66,22 @@ Radioml (change model size, always with 30 Watt):
     - 50 Watt: 
 
 
+- vision base/4: muley-nims (0.56 accuracy)
+    - 15 watt: 
+    - 30 watt: 
+    - 50 watt:
+
+- vision base/2: jazzy-cogs (0.74 accuracy)
+    - 15 watt:
+    - 30 watt:
+    - 50 watt:
+
+- vision base (did not learn correctly) - whole-dops (did also not learn with smaller LR)
+    - 15 watt: 
+    - 30 watt:
+    - 50 watt:
+    new try with gelu: jammy-taka
+
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
 sudo jetson_clocks --show
@@ -104,8 +120,44 @@ outputs/radioml/plot/INT8/energy_consumption.json
 ```
 
 
+Der komplette typische Ablauf nach einem neuen Training ist also:
+dvc repro vision/train
+dvc push -r public
+git add vision/dvc.lock
+git commit -m "Update vision model checkpoint"
+git push
 
 
-base/4 testen:
+## Training without quantisation:
+RuntimeError: QuantLayer is not correctly configured
+ERROR: failed to reproduce 'train': failed to run: PARTITION=gpu bash run.sh python -m vision.train_tensorboard, exited with 1
+--> change convolution in embeddings
 
-was
+
+
+
+
+
+-> accuracy base/4 100 epochs without quantisation: 0.59 - auch auf jetson ausführen (FP32 und FP16)
+TODO, train again
+
+-> accuracy base/4 100 epochs with quantisation: 0.54
+
+
+
+- train base model without quantisation -> works better (zumindest lauf training, die validation accuracy ist trotzdem schlecht)
+- tensorboard to check loss during training
+- experiments for base/4 model in different power modes
+- traned base/4 models 2 times more -> accuracy was always between 0.54 and 0.56
+
+
+- training with layer-norm
+- pre and post norm
+- lernrate deutlich ändern (0.1  ... 0.00001)
+    - 0.1 nope
+    - 0.01
+    - 0.001
+    - 0.0001 -> good training with layer norm!!
+    - 0.00001 -> worked as well with the layer norm
+- change dropout parameter
+- train the language model (on cluster if available)

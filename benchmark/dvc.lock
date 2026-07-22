@@ -21,12 +21,12 @@ stages:
       size: 136
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 380212a175c0775cd08c2374f2e61b86
+      size: 23590
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: fdfcf02f5da237ed129088687dc7544a
+      size: 4308
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -78,7 +78,7 @@ stages:
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: f394b43fb00bcc93458602d5253f5614
+      md5: 35c1b9443dc05bc62ae4339c24221dbb
       size: 34913
     - path: outputs/benchmark/out.npy
       hash: md5
@@ -98,7 +98,7 @@ stages:
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: f394b43fb00bcc93458602d5253f5614
+      md5: 35c1b9443dc05bc62ae4339c24221dbb
       size: 34913
     - path: outputs/benchmark/out.npy
       hash: md5
@@ -162,9 +162,9 @@ stages:
     outs:
     - path: outputs/benchmark/streamlined.onnx
       hash: md5
-      md5: 93ee17494d6ab4607cc0fe93f4131cd0
-      size: 367226
+      md5: 127a0c162588b74a0a3578f556522535
+      size: 214074
     - path: outputs/benchmark/streamlined.onnx.pkl.xz
       hash: md5
-      md5: a9f7460dce3783aba5e9cd06c8cf8ee9
-      size: 6960
+      md5: eccc0e4fa5d55acfa596c0a1916f347e
+      size: 7404
