@@ -118,9 +118,4 @@ dvclive/report.md
 outputs/radioml/plot/INT8/energy_consumption.json
 ```
 
-
-
-
-base/4 testen:
-
-was
+-> layernorm and noquant and 0.0001 LR is working, as well as 0.00001 LR
