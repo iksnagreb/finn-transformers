@@ -120,14 +120,14 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 
 - train base model without quantisation -> works 
-- tensorboard to check loss during training
-- experiments for base/4 model in different power modes
-- traned base/4 models 2 times more -> accuracy was always between 0.54 and 0.56
+- experiments for base/4 model fp32 and fp16 in different power modes
 
 
-- training with layer-norm
-- change dropout parameter
+- training with layer-norm - done -> layernorm and noquant and 0.0001 LR is working, as well as 0.00001 LR
+- change dropout parameter (try doing that with the base/2 model, without or with quantisation)?
+
 - train the language model (on cluster if available)
 
-
--> layernorm and noquant and 0.0001 LR is working, as well as 0.00001 LR
+dropout sweep:
+-> base/2 vision without quantisation, with layer norm
+-> only very little changes in dopout 0 ... 0.35, then the accuracy gets bad
