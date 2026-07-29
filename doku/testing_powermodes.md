@@ -66,8 +66,8 @@ Radioml (change model size, always with 30 Watt):
     - 50 Watt: 
 
 
-- vision base/4: muley-nims
-    - 15 watt: 
+- vision base/4: 
+    - 15 watt: 13b83500c0f90eabb05b2abc3bc21dc087b52d89, ci-137765-550751
     - 30 watt: b1cdbc2c68a2d3eea87a8ae415dc2267dc313d9f, ci-137717-550529
     - 50 watt: d25373d7a30ceaeaf3a4c2e09922e13d27b2d98e, ci-137709-550489
 
@@ -76,7 +76,7 @@ Radioml (change model size, always with 30 Watt):
     - 30 watt: e80fd4fd95a21db469060ba84d8485202ea9ef4a, ci-136553-547096
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
 
-- vision base (did not learn correctly) - whole-dops
+- vision base (did not learn correctly with quantisation)
     - 15 watt: 
     - 30 watt:
     - 50 watt: 
@@ -119,4 +119,12 @@ outputs/radioml/plot/INT8/energy_consumption.json
 ```
 
 
+- train base model without quantisation -> works 
+- tensorboard to check loss during training
+- experiments for base/4 model in different power modes
+- traned base/4 models 2 times more -> accuracy was always between 0.54 and 0.56
 
+
+- training with layer-norm
+- change dropout parameter
+- train the language model (on cluster if available)
