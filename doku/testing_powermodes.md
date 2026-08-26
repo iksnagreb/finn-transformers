@@ -79,7 +79,7 @@ Radioml (change model size, always with 30 Watt):
 - vision base FP32 -> 0.8286 accuracy
     - 15 watt: 
     - 30 watt:
-    - 50 watt: 
+    - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05, ci-139320-555878
 
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
