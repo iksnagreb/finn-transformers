@@ -40,15 +40,15 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 12
+  num_layers: 3
   # Number of attention heads
-  num_heads: 12
+  num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
-  emb_dim: 768
+  emb_dim: 192
   # Expanded embedding dimension in MLP or convolution blocks, usually this is
   # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 3072
+  expansion_dim: 768
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
   bits: null
@@ -73,7 +73,7 @@ train:
   # Number of training epochs to run
   epochs: 100
   # Batch size for training
-  batch_size: 64
+  batch_size: 256
   # Optimizer configuration
   optimizer:
     # Name of the optimization algorithm to use: adam or sgd
