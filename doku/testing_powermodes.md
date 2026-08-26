@@ -76,7 +76,7 @@ Radioml (change model size, always with 30 Watt):
     - 30 watt: e80fd4fd95a21db469060ba84d8485202ea9ef4a, ci-136553-547096
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
 
-- vision base (did not learn correctly with quantisation)
+- vision base FP32 -> 0.8286 accuracy
     - 15 watt: 
     - 30 watt:
     - 50 watt: 
@@ -86,7 +86,7 @@ https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/P
 sudo jetson_clocks --show
 sudo jetson_clocks: fixes clocks to max. frequenz
 
-# Todo:
+
 
 ## Cluster
 - Radioml trainieren mit alten parametern (Vergleichswert/überprüfen ob das training klappt)
