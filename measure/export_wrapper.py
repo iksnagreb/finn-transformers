@@ -21,6 +21,6 @@ if MODEL_TYPE not in MODULE_MAP:
 
 module_name = MODULE_MAP[MODEL_TYPE]
 print(f"Starting export for: {MODEL_TYPE}")
-if MODEL_TYPE == "vision":
-    runpy.run_module("measure.data_to_numpy", run_name="__main__")
+# if MODEL_TYPE == "vision":
+#     runpy.run_module("measure.data_to_numpy", run_name="__main__")
 runpy.run_module(module_name, run_name="__main__")
