@@ -5,7 +5,12 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 
-def throughput_comparison_power_modes_plot(power_mode_files, output_path, value_key="throughput_images_per_s"):
+def throughput_comparison_power_modes_plot(
+    power_mode_files,
+    output_path,
+    value_key="throughput_images_per_s",
+    yscale="linear",
+):
     """
     Erstellt einen Throughput-Vergleich mehrerer Power-Modi als Liniendiagramm.
 
@@ -88,7 +93,11 @@ def throughput_comparison_power_modes_plot(power_mode_files, output_path, value_
     ylabel = "Throughput (images/s)" if value_key == "throughput_images_per_s" else "Throughput (batches/s)"
     ax.set_xlabel("Batch Size")
     ax.set_ylabel(ylabel)
-    ax.set_title("Throughput Comparison per Power Mode")
+    title = "Throughput Comparison per Power Mode"
+    if yscale == "log":
+        ax.set_yscale("log")
+        title += " (log scale)"
+    ax.set_title(title)
     ax.set_xticks(batch_sizes)
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.legend(title="Power Mode")
@@ -103,7 +112,12 @@ def throughput_comparison_power_modes_plot(power_mode_files, output_path, value_
     print(f"Saved plot to {output_path}")
 
 
-def throughput_comparison_model_families_plot(model_family_files, output_path, value_key="throughput_images_per_s"):
+def throughput_comparison_model_families_plot(
+    model_family_files,
+    output_path,
+    value_key="throughput_images_per_s",
+    yscale="linear",
+):
     """
     Erstellt einen kombinierten Throughput-Vergleich mehrerer Modellfamilien
     und Power-Modi in einem Diagramm.
@@ -212,7 +226,237 @@ def throughput_comparison_model_families_plot(model_family_files, output_path, v
     ylabel = "Throughput (images/s)" if value_key == "throughput_images_per_s" else "Throughput (batches/s)"
     ax.set_xlabel("Batch Size")
     ax.set_ylabel(ylabel)
-    ax.set_title("Throughput Comparison per Power Mode and Model Family")
+    title = "Throughput Comparison per Power Mode and Model Family"
+    if yscale == "log":
+        ax.set_yscale("log")
+        title += " (log scale)"
+    ax.set_title(title)
+    ax.set_xticks(batch_sizes)
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.legend(title="Model / Power Mode")
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+    print(f"Saved plot to {output_path}")
+
+
+def _load_latency_totals_by_batch(json_path):
+    """Load latency entries and return per-batch totals plus per-type breakdown."""
+    with open(json_path, "r") as f:
+        data = json.load(f)
+
+    totals_by_batch = {}
+    breakdown_by_type = {}
+
+    for entry in data:
+        batch_size = entry.get("batch_size")
+        latency_type = entry.get("type", "unknown")
+        value = entry.get("value")
+
+        if batch_size is None or value is None:
+            continue
+
+        totals_by_batch[batch_size] = totals_by_batch.get(batch_size, 0.0) + value
+        if latency_type not in breakdown_by_type:
+            breakdown_by_type[latency_type] = {}
+        breakdown_by_type[latency_type][batch_size] = value
+
+    return totals_by_batch, breakdown_by_type
+
+
+def latency_comparison_power_modes_plot(power_mode_files, output_path, xscale="linear"):
+    """
+    Erstellt einen Latency-Vergleich eines Modells ueber mehrere Power-Modi.
+
+    Args:
+        power_mode_files: Dict mit Label -> JSON-Pfad, z.B.
+            {
+                "15W": ".../latency_15w.json",
+                "30W": ".../latency_30w.json",
+                "50W": ".../latency_50w.json",
+            }
+        output_path: Ausgabe-Pfad fuer den Plot.
+    """
+    if not power_mode_files:
+        print("WARNING: No power mode files provided")
+        return
+
+    mode_data = {}
+    all_batch_sizes = set()
+
+    for mode_label, json_path in power_mode_files.items():
+        try:
+            totals_by_batch, _ = _load_latency_totals_by_batch(json_path)
+        except FileNotFoundError:
+            print(f"WARNING: File not found for mode {mode_label}: {json_path}")
+            continue
+        except json.JSONDecodeError:
+            print(f"WARNING: Invalid JSON for mode {mode_label}: {json_path}")
+            continue
+
+        if not totals_by_batch:
+            print(f"WARNING: No valid latency data for mode {mode_label}")
+            continue
+
+        mode_data[mode_label] = totals_by_batch
+        all_batch_sizes.update(totals_by_batch.keys())
+
+    if not mode_data or not all_batch_sizes:
+        print("WARNING: No valid data available to create latency comparison plot")
+        return
+
+    batch_sizes = sorted(all_batch_sizes)
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+    markers = ["o", "s", "^", "D", "v", "P", "X", "*"]
+
+    for idx, (mode_label, totals_by_batch) in enumerate(mode_data.items()):
+        x_vals = []
+        y_vals = []
+        for batch_size in batch_sizes:
+            if batch_size in totals_by_batch:
+                x_vals.append(batch_size)
+                y_vals.append(totals_by_batch[batch_size])
+
+        if not x_vals:
+            continue
+
+        ax.plot(
+            x_vals,
+            y_vals,
+            marker=markers[idx % len(markers)],
+            linewidth=2,
+            label=mode_label,
+        )
+
+    if xscale == "log":
+        ax.set_xscale("log")
+
+    ax.set_xlabel("Batch Size")
+    ax.set_ylabel("Latency (ms)")
+    title = "Total Latency per Batch and Power Mode"
+    if xscale == "log":
+        title += " (log scale)"
+    ax.set_title(title)
+    ax.set_xticks(batch_sizes)
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.legend(title="Power Mode")
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+    print(f"Saved plot to {output_path}")
+
+
+def latency_summary_model_families_plot(model_family_files, output_path, xscale="linear"):
+    """
+    Erstellt einen kombinierten Latency-Vergleich mehrerer Modellfamilien
+    und Power-Modi in einem Diagramm.
+
+    Args:
+        model_family_files: Dict mit Modellfamilien-Label -> Dict von Power-Mode-Label
+            zu JSON-Pfad, z.B.
+            {
+                "vision_base2_int8": {
+                    "15W": ".../vision_base2_int8/latency_15w.json",
+                    "30W": ".../vision_base2_int8/latency_30w.json",
+                    "50W": ".../vision_base2_int8/latency_50w.json",
+                },
+                "vision_base4_int8": {
+                    "15W": ".../vision_base4_int8/latency_15w.json",
+                    "30W": ".../vision_base4_int8/latency_30w.json",
+                    "50W": ".../vision_base4_int8/latency_50w.json",
+                },
+            }
+        output_path: Ausgabe-Pfad fuer den Plot.
+    """
+    if not model_family_files:
+        print("WARNING: No model family files provided")
+        return
+
+    family_data = {}
+    all_batch_sizes = set()
+
+    for family_label, power_mode_files in model_family_files.items():
+        if not power_mode_files:
+            continue
+
+        mode_data = {}
+
+        for mode_label, json_path in power_mode_files.items():
+            try:
+                totals_by_batch, _ = _load_latency_totals_by_batch(json_path)
+            except FileNotFoundError:
+                print(f"WARNING: File not found for {family_label} / {mode_label}: {json_path}")
+                continue
+            except json.JSONDecodeError:
+                print(f"WARNING: Invalid JSON for {family_label} / {mode_label}: {json_path}")
+                continue
+
+            if not totals_by_batch:
+                print(f"WARNING: No valid latency data in {json_path} ({family_label} / {mode_label})")
+                continue
+
+            mode_data[mode_label] = totals_by_batch
+            all_batch_sizes.update(totals_by_batch.keys())
+
+        if mode_data:
+            family_data[family_label] = mode_data
+
+    if not family_data or not all_batch_sizes:
+        print("WARNING: No valid data available to create combined latency comparison plot")
+        return
+
+    batch_sizes = sorted(all_batch_sizes)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    markers = ["o", "s", "^", "D", "v", "P", "X", "*"]
+    linestyles = ["-", "--", ":", "-."]
+
+    family_labels = list(family_data.keys())
+    for family_idx, family_label in enumerate(family_labels):
+        mode_items = list(family_data[family_label].items())
+        for mode_idx, (mode_label, totals_by_batch) in enumerate(mode_items):
+            x_vals = []
+            y_vals = []
+            for batch_size in batch_sizes:
+                if batch_size in totals_by_batch:
+                    x_vals.append(batch_size)
+                    y_vals.append(totals_by_batch[batch_size])
+
+            if not x_vals:
+                continue
+
+            color = f"C{family_idx % 10}"
+            linestyle = linestyles[mode_idx % len(linestyles)]
+            ax.plot(
+                x_vals,
+                y_vals,
+                marker=markers[(family_idx + mode_idx) % len(markers)],
+                linewidth=2,
+                linestyle=linestyle,
+                color=color,
+                label=f"{family_label} / {mode_label}",
+            )
+
+    if xscale == "log":
+        ax.set_xscale("log")
+
+    ax.set_xlabel("Batch Size")
+    ax.set_ylabel("Latency (ms)")
+    title = "Total Latency per Batch, Power Mode, and Model Family"
+    if xscale == "log":
+        title += " (log scale)"
+    ax.set_title(title)
     ax.set_xticks(batch_sizes)
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.legend(title="Model / Power Mode")
@@ -264,6 +508,26 @@ def main():
         help="Generate the combined base2/base4 vision comparison plot and ignore the other input arguments.",
     )
     parser.add_argument(
+        "--latency-one-model",
+        action="store_true",
+        help="Generate the latency comparison plot for one model and ignore the throughput arguments.",
+    )
+    parser.add_argument(
+        "--latency-summary",
+        action="store_true",
+        help="Generate the combined latency summary plot for the available model families.",
+    )
+    parser.add_argument(
+        "--throughput-log-scale",
+        action="store_true",
+        help="Use a logarithmic y-axis for throughput plots.",
+    )
+    parser.add_argument(
+        "--latency-log-scale",
+        action="store_true",
+        help="Use a logarithmic x-axis for latency plots.",
+    )
+    parser.add_argument(
         "--mode",
         action="append",
         default=[],
@@ -289,7 +553,15 @@ def main():
     args = parser.parse_args()
 
     if args.combined_vision_models:
-        main_combined_vision_models()
+        main_combined_vision_models(log_scale=args.throughput_log_scale)
+        return
+
+    if args.latency_one_model:
+        main_latency_one_model(log_scale=args.latency_log_scale)
+        return
+
+    if args.latency_summary:
+        main_latency_summary(log_scale=args.latency_log_scale)
         return
 
     if args.mode:
@@ -301,10 +573,11 @@ def main():
         power_mode_files=power_mode_files,
         output_path=args.output,
         value_key=args.value_key,
+        yscale="log" if args.throughput_log_scale else "linear",
     )
 
 
-def main_combined_vision_models():
+def main_combined_vision_models(log_scale=False):
     """Generate one plot that combines the base2 and base4 vision runs."""
     model_family_files = {
         "vision_base2_int8": {
@@ -321,7 +594,54 @@ def main_combined_vision_models():
 
     throughput_comparison_model_families_plot(
         model_family_files=model_family_files,
-        output_path="/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/throughput_power_modes_base2_base4_comparison.png",
+        output_path=(
+            "/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/"
+            + ("throughput_power_modes_base2_base4_comparison_logy.png" if log_scale else "throughput_power_modes_base2_base4_comparison.png")
+        ),
+        yscale="log" if log_scale else "linear",
+    )
+
+
+def main_latency_one_model(log_scale=False):
+    """Generate the latency plot for the base4 vision model across power modes."""
+    power_mode_files = {
+        "15W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base4_int8/latency_15w.json",
+        "30W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base4_int8/latency_30w.json",
+        "50W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base4_int8/latency_50w.json",
+    }
+
+    latency_comparison_power_modes_plot(
+        power_mode_files=power_mode_files,
+        output_path=(
+            "/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base4_int8/"
+            + ("latency_power_modes_comparison_logx.png" if log_scale else "latency_power_modes_comparison.png")
+        ),
+        xscale="log" if log_scale else "linear",
+    )
+
+
+def main_latency_summary(log_scale=False):
+    """Generate one plot that compares base2 and base4 latency across power modes."""
+    model_family_files = {
+        "vision_base2_int8": {
+            "15W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base2_int8/latency_15w.json",
+            "30W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base2_int8/latency_30w.json",
+            "50W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base2_int8/latency_50w.json",
+        },
+        "vision_base4_int8": {
+            "15W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base4_int8/latency_15w.json",
+            "30W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base4_int8/latency_30w.json",
+            "50W": "/home/hanna/git/finn-transformers/summary_plots/data/vision_base4_int8/latency_50w.json",
+        },
+    }
+
+    latency_summary_model_families_plot(
+        model_family_files=model_family_files,
+        output_path=(
+            "/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/"
+            + ("latency_summary_base2_base4_comparison_logx.png" if log_scale else "latency_summary_base2_base4_comparison.png")
+        ),
+        xscale="log" if log_scale else "linear",
     )
 
 
