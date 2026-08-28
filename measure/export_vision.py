@@ -41,6 +41,7 @@ RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_
 
 # Path to the CIFAR-10 dataset
 CIFAR10_ROOT = R"/data/gitlab"
+# CIFAR10_ROOT = R"data"
 MODEL_TYPE = "vision"
 
 with open(f"{MODEL_TYPE}/params.yaml", "r") as f:
@@ -228,7 +229,7 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load("outputs/vision/model_fp32.pt"))
     model.load_state_dict(torch.load("outputs/vision/model.pt"))
 
-    model = patch_missing_affine_norms(model)
+    # model = patch_missing_affine_norms(model) # FP32 model had 10% accuracy because of that
     model = ModelTopKWrapper(model, k=5)  # to minimize the output data
     # Pass the model and the export configuration to the evaluation loop
     params["export"].pop("format", None)

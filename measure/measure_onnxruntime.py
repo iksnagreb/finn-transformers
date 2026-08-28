@@ -88,6 +88,8 @@ print(f"GPU memory budget: {GPU_MEM_LIMIT_GB:.2f} GB ({GPU_MEM_LIMIT_BYTES} byte
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 CIFAR10_PATH_NPZ = R"/data/gitlab/cifar-10-batches-py/cifar10.npz"
 LANG_PATH_NPZ    = R"/data/gitlab/language.npz"
+# CIFAR10_PATH_NPZ = R"data/cifar10.npz"
+
 
 DATA_PATH_NPZ = {
     "radioml":  RADIOML_PATH_NPZ,

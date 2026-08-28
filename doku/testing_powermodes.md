@@ -76,10 +76,12 @@ Radioml (change model size, always with 30 Watt):
     - 30 watt: e80fd4fd95a21db469060ba84d8485202ea9ef4a, ci-136553-547096
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
 
-- vision base FP32
+- vision base FP32 -> 
     - 15 watt: 
     - 30 watt:
-    - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05
+    - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05, ci-139320-555878
+
+
     -> 50 W, 10% accuracy: 16a86549530c9dc1bddd96c1f5db98e09fbaace3, ci-139282-555740
 
 
@@ -93,7 +95,7 @@ https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/P
 sudo jetson_clocks --show
 sudo jetson_clocks: fixes clocks to max. frequenz
 
-# Todo:
+
 
 ## Cluster
 - Radioml trainieren mit alten parametern (Vergleichswert/überprüfen ob das training klappt)
@@ -127,11 +129,14 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 
 - train base model without quantisation -> works 
-- tensorboard to check loss during training
-- experiments for base/4 model in different power modes
-- traned base/4 models 2 times more -> accuracy was always between 0.54 and 0.56
+- experiments for base/4 model fp32 and fp16 in different power modes
 
 
-- training with layer-norm
-- change dropout parameter
+- training with layer-norm - done -> layernorm and noquant and 0.0001 LR is working, as well as 0.00001 LR
+- change dropout parameter (try doing that with the base/2 model, without or with quantisation)?
+
 - train the language model (on cluster if available)
+
+dropout sweep:
+-> base/2 vision without quantisation, with layer norm
+-> only very little changes in dopout 0 ... 0.35, then the accuracy gets bad
