@@ -139,9 +139,9 @@ dropout sweep:
 -> only very little changes in dopout 0 ... 0.35, then the accuracy gets bad
 
 
--> todo use evaluation data for evaluation fertig
+-> todo use evaluation data for evaluation -> fertig
 
 Freitag:
--> power modi in throughput comparison kombinieren
+-> power modi in throughput comparison kombinieren -> neuer branch, für dvc
 -> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
 -> language model trainieren
