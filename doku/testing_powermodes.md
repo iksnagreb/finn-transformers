@@ -14,6 +14,7 @@ sudo jetson_clocks
 
 ```
 
+
 test power modes with **normal radioml**:
 
     - 30 Watt
