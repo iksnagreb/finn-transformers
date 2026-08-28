@@ -78,11 +78,11 @@ Radioml (change model size, always with 30 Watt):
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
     - FP32: is trained already
 
-- vision base FP32 -> 0.8286 accuracy
+- vision base FP32 -> 0.8286 accuracy, eval dataset
     - 15 watt: 
-    - 30 watt: df99dc5b64dcb59f35c5c81b27754cd2164b052f
-    - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05, ci-139320-555878
-- vision base FP16 -> 0.8286 accuracy
+    - 30 watt: 81dac9dfb47b952629d409b9ac81693e2b9ee7b4, ci-144377-571533 (eval dataset)
+    - 50 watt: 
+- vision base FP16 ->   accuracy
     - 15 watt: 
     - 30 watt: 
     - 50 watt: 
@@ -137,3 +137,11 @@ outputs/radioml/plot/INT8/energy_consumption.json
 dropout sweep:
 -> base/2 vision without quantisation, with layer norm
 -> only very little changes in dopout 0 ... 0.35, then the accuracy gets bad
+
+
+-> todo use evaluation data for evaluation fertig
+
+Freitag:
+-> power modi in throughput comparison kombinieren
+-> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
+-> language model trainieren
