@@ -5,6 +5,79 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_INPUT_DIR = PROJECT_ROOT / "data" / "vision_base4_int8"
+DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "outputs"
+
+
+class RawDefaultsHelpFormatter(argparse.RawDescriptionHelpFormatter, argparse.ArgumentDefaultsHelpFormatter):
+        pass
+
+
+CLI_REFERENCE = """Plot modes
+    Default throughput plot
+        Reads throughput_*w.json files from --input-dir or explicit --mode mappings.
+        Writes to summary_plots/outputs/<input-folder>/throughput_power_modes_comparison.png when --output is omitted.
+
+    --latency-throughput
+        Reads latency_throughput_*w.json files from --input-dir or explicit --mode mappings.
+        Writes to summary_plots/outputs/<input-folder>/latency_throughput_power_modes_comparison_logxy.png when --latency-throughput-output is omitted.
+
+    --latency-throughput-summary
+        Reads latency_throughput_*w.json files from the base2 and base4 family directories under --input-dir.
+        Writes to summary_plots/outputs/vision_base2_int8/latency_throughput_base2_base4_comparison_logxy.png.
+
+    --combined-vision-models
+        Generates the combined base2/base4 throughput comparison.
+
+    --latency-one-model
+        Generates the base4 latency comparison across power modes.
+
+    --latency-summary
+        Generates the combined base2/base4 latency summary.
+
+Common options
+    --mode LABEL=/path/to/file.json
+        Repeatable explicit mode mapping. Skips auto-discovery.
+
+    --input-dir DIR
+        Directory used for auto-discovery of throughput_*w.json or latency_throughput_*w.json files.
+
+    --output PATH
+        Output image path for the default throughput plot. If omitted, the output folder is derived from --input-dir.
+
+    --latency-throughput-output PATH
+        Output image path for the latency-throughput plot. If omitted, the output folder is derived from --input-dir.
+
+    --value-key {throughput_images_per_s,throughput_batches_per_s}
+        Throughput metric used by the default throughput plot.
+
+    --throughput-log-scale
+        Use a logarithmic y-axis for throughput plots.
+
+    --latency-log-scale
+        Use a logarithmic x-axis for latency plots.
+"""
+
+
+def _default_output_path(source_dir, filename):
+        source_dir = Path(source_dir)
+        return DEFAULT_OUTPUT_ROOT / source_dir.name / filename
+
+
+def _resolve_default_output_path(output_path, source_dir, filename):
+        if output_path:
+                return Path(output_path)
+        return _default_output_path(source_dir, filename)
+
+
+def _infer_source_dir_from_mode_files(mode_files, fallback_dir):
+        if mode_files:
+                first_path = Path(next(iter(mode_files.values())))
+                return first_path.parent
+        return Path(fallback_dir)
+
+
 def throughput_comparison_power_modes_plot(
     power_mode_files,
     output_path,
@@ -331,6 +404,112 @@ def latency_throughput_comparison_power_modes_plot(power_mode_files, output_path
     print(f"Saved plot to {output_path}")
 
 
+def latency_throughput_comparison_model_families_plot(model_family_files, output_path, xscale="log", yscale="log"):
+    """Create a latency-vs-throughput plot for multiple model families and power modes."""
+    if not model_family_files:
+        print("WARNING: No model family files provided")
+        return
+
+    family_data = {}
+
+    for family_label, power_mode_files in model_family_files.items():
+        if not power_mode_files:
+            continue
+
+        mode_data = {}
+
+        for mode_label, json_path in power_mode_files.items():
+            try:
+                with open(json_path, "r") as f:
+                    data = json.load(f)
+            except FileNotFoundError:
+                print(f"WARNING: File not found for {family_label} / {mode_label}: {json_path}")
+                continue
+            except json.JSONDecodeError:
+                print(f"WARNING: Invalid JSON for {family_label} / {mode_label}: {json_path}")
+                continue
+
+            if not data:
+                print(f"WARNING: No data in {json_path} ({family_label} / {mode_label})")
+                continue
+
+            points_by_batch = {}
+            for entry in data:
+                batch_size = entry.get("batch_size")
+                latency_total = entry.get("latency_total")
+                throughput_images_per_s = entry.get("throughput_images_per_s")
+                if batch_size is None or latency_total is None or throughput_images_per_s is None:
+                    continue
+                points_by_batch[batch_size] = (latency_total, throughput_images_per_s)
+
+            if not points_by_batch:
+                print(f"WARNING: No valid latency-throughput data for {family_label} / {mode_label}")
+                continue
+
+            mode_data[mode_label] = points_by_batch
+
+        if mode_data:
+            family_data[family_label] = mode_data
+
+    if not family_data:
+        print("WARNING: No valid data available to create combined latency-throughput comparison plot")
+        return
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    markers = ["o", "s", "^", "D", "v", "P", "X", "*"]
+    linestyles = ["-", "--", ":", "-."]
+
+    family_labels = list(family_data.keys())
+    for family_idx, family_label in enumerate(family_labels):
+        mode_items = list(family_data[family_label].items())
+        for mode_idx, (mode_label, points_by_batch) in enumerate(mode_items):
+            sorted_points = sorted(points_by_batch.items())
+            latency_values = [point[0] for _, point in sorted_points]
+            throughput_values = [point[1] for _, point in sorted_points]
+            batch_sizes = [batch_size for batch_size, _ in sorted_points]
+
+            if not latency_values:
+                continue
+
+            color = f"C{family_idx % 10}"
+            linestyle = linestyles[mode_idx % len(linestyles)]
+            ax.plot(
+                latency_values,
+                throughput_values,
+                marker=markers[(family_idx + mode_idx) % len(markers)],
+                linewidth=2,
+                linestyle=linestyle,
+                color=color,
+                label=f"{family_label} / {mode_label}",
+            )
+
+            for latency_value, throughput_value, batch_size in zip(latency_values, throughput_values, batch_sizes):
+                ax.text(latency_value, throughput_value, str(batch_size), fontsize=9, ha="right", va="bottom")
+
+    if xscale == "log":
+        ax.set_xscale("log")
+    if yscale == "log":
+        ax.set_yscale("log")
+
+    ax.set_xlabel("Latency (s)")
+    ax.set_ylabel("Throughput (images/s)")
+    title = "Throughput vs. Latency per Batch Size, Power Mode, and Model Family"
+    if xscale == "log" or yscale == "log":
+        title += " (log scale)"
+    ax.set_title(title)
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.legend(title="Model / Power Mode")
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+    print(f"Saved plot to {output_path}")
+
+
 def _load_latency_totals_by_batch(json_path):
     """Load latency entries and return per-batch totals plus per-type breakdown."""
     with open(json_path, "r") as f:
@@ -597,9 +776,30 @@ def discover_latency_throughput_from_input_dir(input_dir):
     return power_mode_files
 
 
+def discover_latency_throughput_families_from_input_dir(input_dir):
+    input_dir = Path(input_dir)
+    candidate_roots = [input_dir, input_dir.parent]
+
+    for root in candidate_roots:
+        base2_dir = root / "vision_base2_int8"
+        base4_dir = root / "vision_base4_int8"
+        if base2_dir.exists() or base4_dir.exists():
+            return {
+                "vision_base2_int8": discover_latency_throughput_from_input_dir(base2_dir),
+                "vision_base4_int8": discover_latency_throughput_from_input_dir(base4_dir),
+            }
+
+    return {
+        "vision_base2_int8": {},
+        "vision_base4_int8": {},
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate throughput comparison plot per power mode (one line per mode)."
+        description="Generate throughput and latency comparison plots per power mode.",
+        formatter_class=RawDefaultsHelpFormatter,
+        epilog=CLI_REFERENCE,
     )
     parser.add_argument(
         "--combined-vision-models",
@@ -622,6 +822,11 @@ def main():
         help="Generate the latency-throughput plot for the available power modes.",
     )
     parser.add_argument(
+        "--latency-throughput-summary",
+        action="store_true",
+        help="Generate the combined latency-throughput plot for the available model families.",
+    )
+    parser.add_argument(
         "--throughput-log-scale",
         action="store_true",
         help="Use a logarithmic y-axis for throughput plots.",
@@ -639,18 +844,18 @@ def main():
     )
     parser.add_argument(
         "--input-dir",
-        default="/home/hanna/git/finn-transformers/summary_plots/data/vision_base4_int8",
+        default=str(DEFAULT_INPUT_DIR),
         help="Directory for auto-discovery of files named throughput_*w.json.",
     )
     parser.add_argument(
         "--output",
-        default="/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/throughput_power_modes_comparison.png",
-        help="Output path for the generated plot image.",
+        default=None,
+        help="Output path for the generated plot image. If omitted, the folder is derived from --input-dir.",
     )
     parser.add_argument(
         "--latency-throughput-output",
-        default="/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/latency_throughput_power_modes_comparison_logxy.png",
-        help="Output path for the generated latency-throughput plot image.",
+        default=None,
+        help="Output path for the generated latency-throughput plot image. If omitted, the folder is derived from --input-dir.",
     )
     parser.add_argument(
         "--value-key",
@@ -676,12 +881,33 @@ def main():
     if args.latency_throughput:
         if args.mode:
             power_mode_files = parse_mode_args(args.mode)
+            source_dir = _infer_source_dir_from_mode_files(power_mode_files, args.input_dir)
         else:
             power_mode_files = discover_latency_throughput_from_input_dir(args.input_dir)
+            source_dir = Path(args.input_dir)
+
+        latency_throughput_output = _resolve_default_output_path(
+            args.latency_throughput_output,
+            source_dir,
+            "latency_throughput_power_modes_comparison_logxy.png",
+        )
 
         latency_throughput_comparison_power_modes_plot(
             power_mode_files=power_mode_files,
-            output_path=args.latency_throughput_output,
+            output_path=latency_throughput_output,
+            xscale="log",
+            yscale="log",
+        )
+        return
+
+    if args.latency_throughput_summary:
+        model_family_files = discover_latency_throughput_families_from_input_dir(args.input_dir)
+        latency_throughput_comparison_model_families_plot(
+            model_family_files=model_family_files,
+            output_path=_default_output_path(
+                "vision_base2_int8",
+                "latency_throughput_base2_base4_comparison_logxy.png",
+            ),
             xscale="log",
             yscale="log",
         )
@@ -689,12 +915,20 @@ def main():
 
     if args.mode:
         power_mode_files = parse_mode_args(args.mode)
+        source_dir = _infer_source_dir_from_mode_files(power_mode_files, args.input_dir)
     else:
         power_mode_files = discover_modes_from_input_dir(args.input_dir)
+        source_dir = Path(args.input_dir)
+
+    output_path = _resolve_default_output_path(
+        args.output,
+        source_dir,
+        "throughput_power_modes_comparison.png",
+    )
 
     throughput_comparison_power_modes_plot(
         power_mode_files=power_mode_files,
-        output_path=args.output,
+        output_path=output_path,
         value_key=args.value_key,
         yscale="log" if args.throughput_log_scale else "linear",
     )
@@ -717,9 +951,11 @@ def main_combined_vision_models(log_scale=False):
 
     throughput_comparison_model_families_plot(
         model_family_files=model_family_files,
-        output_path=(
-            "/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/"
-            + ("throughput_power_modes_base2_base4_comparison_logy.png" if log_scale else "throughput_power_modes_base2_base4_comparison.png")
+        output_path=_default_output_path(
+            "vision_base2_int8",
+            "throughput_power_modes_base2_base4_comparison_logy.png"
+            if log_scale
+            else "throughput_power_modes_base2_base4_comparison.png",
         ),
         yscale="log" if log_scale else "linear",
     )
@@ -735,9 +971,9 @@ def main_latency_one_model(log_scale=False):
 
     latency_comparison_power_modes_plot(
         power_mode_files=power_mode_files,
-        output_path=(
-            "/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base4_int8/"
-            + ("latency_power_modes_comparison_logx.png" if log_scale else "latency_power_modes_comparison.png")
+        output_path=_default_output_path(
+            "vision_base4_int8",
+            "latency_power_modes_comparison_logx.png" if log_scale else "latency_power_modes_comparison.png",
         ),
         xscale="log" if log_scale else "linear",
     )
@@ -760,9 +996,11 @@ def main_latency_summary(log_scale=False):
 
     latency_summary_model_families_plot(
         model_family_files=model_family_files,
-        output_path=(
-            "/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/"
-            + ("latency_summary_base2_base4_comparison_logx.png" if log_scale else "latency_summary_base2_base4_comparison.png")
+        output_path=_default_output_path(
+            "vision_base2_int8",
+            "latency_summary_base2_base4_comparison_logx.png"
+            if log_scale
+            else "latency_summary_base2_base4_comparison.png",
         ),
         xscale="log" if log_scale else "linear",
     )
