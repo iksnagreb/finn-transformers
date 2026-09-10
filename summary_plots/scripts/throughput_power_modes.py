@@ -644,12 +644,12 @@ def main():
     )
     parser.add_argument(
         "--output",
-        default="/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base4_int8/throughput_power_modes_comparison.png",
+        default="/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/throughput_power_modes_comparison.png",
         help="Output path for the generated plot image.",
     )
     parser.add_argument(
         "--latency-throughput-output",
-        default="/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base4_int8/latency_throughput_power_modes_comparison_logxy.png",
+        default="/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base2_int8/latency_throughput_power_modes_comparison_logxy.png",
         help="Output path for the generated latency-throughput plot image.",
     )
     parser.add_argument(
