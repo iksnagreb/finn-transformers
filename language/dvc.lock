@@ -50,12 +50,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 97751442e0e6954c9c6d9da4d59a0dd4
+      size: 27455
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: fdfcf02f5da237ed129088687dc7544a
+      size: 4308
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -146,12 +146,12 @@ stages:
     outs:
     - path: outputs/language/loss.yaml
       hash: md5
-      md5: 6a378ee0206f5de336d9ce2d94f1a991
-      size: 2784
+      md5: af4d66d3d0540b47c97508593fa53080
+      size: 60
     - path: outputs/language/lr.yaml
       hash: md5
-      md5: 96eee227b2bd5f0c92bbc2af803b1672
-      size: 910
+      md5: fe56fdb7ca72a49132bad591666f3494
+      size: 22
     - path: outputs/language/model.pt
       hash: md5
       md5: 78f3a2f9fd4695365f081d6abaddea42
@@ -173,12 +173,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 97751442e0e6954c9c6d9da4d59a0dd4
+      size: 27455
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: fdfcf02f5da237ed129088687dc7544a
+      size: 4308
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -259,7 +259,7 @@ stages:
     outs:
     - path: outputs/language/accuracy.yaml
       hash: md5
-      md5: 6167d61c5dc61f737d0255d8c612fe5e
+      md5: 8a20cf0523c753a114fb637932788823
       size: 52
   export:
     cmd: PARTITION=normal bash run.sh python -m language.export
@@ -274,12 +274,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 97751442e0e6954c9c6d9da4d59a0dd4
+      size: 27455
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: fdfcf02f5da237ed129088687dc7544a
+      size: 4308
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
