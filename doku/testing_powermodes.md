@@ -14,6 +14,7 @@ sudo jetson_clocks
 
 ```
 
+
 test power modes with **normal radioml**:
 
     - 30 Watt
@@ -83,13 +84,13 @@ Radioml (change model size, always with 30 Watt):
 
 
 - vision base FP32 -> 0.8286 accuracy, eval dataset
-    - 15 watt: 
+    - 15 watt: f3bd756f25e0577ef12ec5d1b53157bcf794a231, ci-144854-573492
     - 30 watt: 81dac9dfb47b952629d409b9ac81693e2b9ee7b4, ci-144377-571533
-    - 50 watt: fd466c120f3fcecae57358de165eb886a1a22240, ci-144793-573297
+    - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05, ci-139320-555878
 - vision base FP16 -> 0.8286 accuracy
-    - 15 watt: 
+    - 15 watt: aa6ee6bcd671184c9072ab7510e40fc380bb4a46, ci-144941-573891
     - 30 watt:
-    - 50 watt: f2475416de98772b79c2433d8c792ece16c250c1, 
+    - 50 watt: f2475416de98772b79c2433d8c792ece16c250c1, ci-144854-573492
 
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
