@@ -245,6 +245,92 @@ def throughput_comparison_model_families_plot(
     print(f"Saved plot to {output_path}")
 
 
+def latency_throughput_comparison_power_modes_plot(power_mode_files, output_path, xscale="log", yscale="log"):
+    """Create a latency-vs-throughput plot for multiple power modes."""
+    if not power_mode_files:
+        print("WARNING: No power mode files provided")
+        return
+
+    mode_data = {}
+
+    for mode_label, json_path in power_mode_files.items():
+        try:
+            with open(json_path, "r") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            print(f"WARNING: File not found for mode {mode_label}: {json_path}")
+            continue
+        except json.JSONDecodeError:
+            print(f"WARNING: Invalid JSON for mode {mode_label}: {json_path}")
+            continue
+
+        if not data:
+            print(f"WARNING: No data in {json_path} (mode {mode_label})")
+            continue
+
+        points_by_batch = {}
+        for entry in data:
+            batch_size = entry.get("batch_size")
+            latency_total = entry.get("latency_total")
+            throughput_images_per_s = entry.get("throughput_images_per_s")
+            if batch_size is None or latency_total is None or throughput_images_per_s is None:
+                continue
+            points_by_batch[batch_size] = (latency_total, throughput_images_per_s)
+
+        if not points_by_batch:
+            print(f"WARNING: No valid latency-throughput data for mode {mode_label}")
+            continue
+
+        mode_data[mode_label] = points_by_batch
+
+    if not mode_data:
+        print("WARNING: No valid data available to create latency-throughput comparison plot")
+        return
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+    markers = ["o", "s", "^", "D", "v", "P", "X", "*"]
+
+    for idx, (mode_label, points_by_batch) in enumerate(mode_data.items()):
+        sorted_points = sorted(points_by_batch.items())
+        latency_values = [point[0] for _, point in sorted_points]
+        throughput_values = [point[1] for _, point in sorted_points]
+        batch_sizes = [batch_size for batch_size, _ in sorted_points]
+
+        ax.plot(
+            latency_values,
+            throughput_values,
+            marker=markers[idx % len(markers)],
+            linewidth=2,
+            label=mode_label,
+        )
+
+        for latency_value, throughput_value, batch_size in zip(latency_values, throughput_values, batch_sizes):
+            ax.text(latency_value, throughput_value, str(batch_size), fontsize=9, ha="right", va="bottom")
+
+    if xscale == "log":
+        ax.set_xscale("log")
+    if yscale == "log":
+        ax.set_yscale("log")
+
+    ax.set_xlabel("Latency (s)")
+    ax.set_ylabel("Throughput (images/s)")
+    title = "Throughput vs. Latency per Batch Size and Power Mode"
+    if xscale == "log" or yscale == "log":
+        title += " (log scale)"
+    ax.set_title(title)
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.legend(title="Power Mode")
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+    print(f"Saved plot to {output_path}")
+
+
 def _load_latency_totals_by_batch(json_path):
     """Load latency entries and return per-batch totals plus per-type breakdown."""
     with open(json_path, "r") as f:
@@ -498,6 +584,19 @@ def discover_modes_from_input_dir(input_dir):
     return power_mode_files
 
 
+def discover_latency_throughput_from_input_dir(input_dir):
+    input_dir = Path(input_dir)
+    files = sorted(input_dir.glob("latency_throughput_*w.json"))
+    power_mode_files = {}
+
+    for file_path in files:
+        stem = file_path.stem.lower()
+        label = stem.replace("latency_throughput_", "").upper()
+        power_mode_files[label] = str(file_path)
+
+    return power_mode_files
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Generate throughput comparison plot per power mode (one line per mode)."
@@ -516,6 +615,11 @@ def main():
         "--latency-summary",
         action="store_true",
         help="Generate the combined latency summary plot for the available model families.",
+    )
+    parser.add_argument(
+        "--latency-throughput",
+        action="store_true",
+        help="Generate the latency-throughput plot for the available power modes.",
     )
     parser.add_argument(
         "--throughput-log-scale",
@@ -544,6 +648,11 @@ def main():
         help="Output path for the generated plot image.",
     )
     parser.add_argument(
+        "--latency-throughput-output",
+        default="/home/hanna/git/finn-transformers/summary_plots/outputs/vision_base4_int8/latency_throughput_power_modes_comparison_logxy.png",
+        help="Output path for the generated latency-throughput plot image.",
+    )
+    parser.add_argument(
         "--value-key",
         default="throughput_images_per_s",
         choices=["throughput_images_per_s", "throughput_batches_per_s"],
@@ -562,6 +671,20 @@ def main():
 
     if args.latency_summary:
         main_latency_summary(log_scale=args.latency_log_scale)
+        return
+
+    if args.latency_throughput:
+        if args.mode:
+            power_mode_files = parse_mode_args(args.mode)
+        else:
+            power_mode_files = discover_latency_throughput_from_input_dir(args.input_dir)
+
+        latency_throughput_comparison_power_modes_plot(
+            power_mode_files=power_mode_files,
+            output_path=args.latency_throughput_output,
+            xscale="log",
+            yscale="log",
+        )
         return
 
     if args.mode:
