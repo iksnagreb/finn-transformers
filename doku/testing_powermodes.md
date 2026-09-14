@@ -79,13 +79,18 @@ Radioml (change model size, always with 30 Watt):
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
     - FP32: is trained already
 
+    eval dataset:
+    - 15 watt: 
+    - 30 watt: 
+    - 50 watt: 
+
 - vision base FP32 -> 0.8286 accuracy, eval dataset
-    - 15 watt: f3bd756f25e0577ef12ec5d1b53157bcf794a231, ci-144854-573492
+    - 15 watt: f3bd756f25e0577ef12ec5d1b53157bcf794a231, ci-147861-586679
     - 30 watt: 81dac9dfb47b952629d409b9ac81693e2b9ee7b4, ci-144377-571533
     - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05, ci-139320-555878
 - vision base FP16 -> 0.8286 accuracy
     - 15 watt: aa6ee6bcd671184c9072ab7510e40fc380bb4a46, ci-144941-573891
-    - 30 watt:
+    - 30 watt: d9947a69695e9323d7f60a70ded169a8140a434d, ci-147874-586629
     - 50 watt: f2475416de98772b79c2433d8c792ece16c250c1, ci-144854-573492
 
 

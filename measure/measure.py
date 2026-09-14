@@ -414,11 +414,12 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
 
     config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, GPU_MEM_LIMIT_BYTES)
 
-    if FP16 == True:
-        config.set_flag(trt.BuilderFlag.FP16)
-    if INT8 == True: 
+    if INT8 == True:
         config.set_flag(trt.BuilderFlag.INT8)
         print("int 8 builder flag gesetzt")
+    elif FP16 == True: 
+        config.set_flag(trt.BuilderFlag.FP16)
+        print("fp16 builder flag gesetzt")
 
 
     serialized_engine = builder.build_serialized_network(network, config)
@@ -864,12 +865,12 @@ if __name__ == "__main__":
     accuracy = run_accuracy_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_model_path)
     print(f"Accuracy : {accuracy:.2%}")
 
-    if FP16:
-        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_FP16.json"
-        quantisation_type = "FP16"
-    elif INT8: 
+    if INT8:
         accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_INT8.json"
         quantisation_type = "INT8"
+    elif FP16: 
+        accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_FP16.json"
+        quantisation_type = "FP16"
     else:
         accuracy_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "eval_results" /"accuracy_FP32.json"
         quantisation_type = "FP32"
@@ -884,16 +885,16 @@ if __name__ == "__main__":
 
 
     throughput_log, latency_log, latency_log_batch = calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info=input_info, output_info=output_info)
-    if FP16:
-        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16" / "throughput_results.json"
-        latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results.json"
-        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results_batch.json"
-        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_throughput.json"
-    elif INT8:
+    if INT8:
         throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8" / "throughput_results.json"
         latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_results.json"
         latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_results_batch.json"
         latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "INT8"/ "latency_throughput.json"
+    elif FP16:
+        throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16" / "throughput_results.json"
+        latency_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results.json"
+        latency_results_batch = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_results_batch.json"
+        latency_throughput_path = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP16"/ "latency_throughput.json"
     else:
         throughput_results = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot" / "FP32" / "throughput_results.json"
         os.makedirs(os.path.dirname(throughput_results), exist_ok=True)
