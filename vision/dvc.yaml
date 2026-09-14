@@ -8,7 +8,7 @@ stages:
     # This stage runs the training script as a module, potentially scheduled via
     # SLURM by the run.sh script
     # Note: Training needs GPUs, schedule to GPU partition if via SLURM.
-    cmd: PARTITION=gpu bash run.sh python -m vision.train_tensorboard
+    cmd: PARTITION=gpu_h100 bash run.sh python -m vision.train_tensorboard
     # Stage dependencies (code and data) determining when to rerun the stage
     deps:
       # Dataset configuration, loading and preprocessing and model and training
@@ -60,7 +60,7 @@ stages:
     # This stage runs the evaluation script as a module, potentially scheduled
     # via SLURM by the run.sh script
     # Note: Evaluation needs GPUs, schedule to GPU partition if via SLURM.
-    cmd: PARTITION=gpu bash run.sh python -m vision.eval
+    cmd: PARTITION=gpu_h100 bash run.sh python -m vision.eval
     # Stage dependencies (code and data) determining when to rerun the stage
     deps:
       # Dataset configuration, loading and preprocessing, model and eval code

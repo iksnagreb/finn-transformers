@@ -17,7 +17,7 @@ if [ "$RUN_VIA_SLURM" = 1 ]; then
   MAIL="--mail-type FAIL --mail-user ${MAIL:=}"
   # If using GPUS, specify which type of GPU and how many
   #   Note: Hardcode this to 1, there is no need for more GPUs right now
-  if [[ "$PARTITION" = "-p gpu" ]] || [[ "$PARTITION" = "-p dgx" ]]; then
+  if [[ "$PARTITION" = "-p gpu" ]] || [[ "$PARTITION" = "-p gpu_h100" ]] || [[ "$PARTITION" = "-p dgx" ]]; then
     #   Note: Hardcode this to 1, there is no need for more GPUs right now
     GPUS="--gres=gpu:${GPUS:=h100:1}"
   fi;

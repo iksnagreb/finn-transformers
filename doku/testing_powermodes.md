@@ -14,6 +14,7 @@ sudo jetson_clocks
 
 ```
 
+
 test power modes with **normal radioml**:
 
     - 30 Watt
@@ -70,16 +71,28 @@ Radioml (change model size, always with 30 Watt):
     - 15 watt: 13b83500c0f90eabb05b2abc3bc21dc087b52d89, ci-137765-550751
     - 30 watt: b1cdbc2c68a2d3eea87a8ae415dc2267dc313d9f, ci-137717-550529
     - 50 watt: d25373d7a30ceaeaf3a4c2e09922e13d27b2d98e, ci-137709-550489
+    - FP32: is trained already
 
 - vision base/2: jazzy-cogs (0.74 accuracy)
     - 15 watt: 25c6dacfbebf10d86940d15f4debd1ddd3e367d7, ci-136567-547139
     - 30 watt: e80fd4fd95a21db469060ba84d8485202ea9ef4a, ci-136553-547096
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
+    - FP32: is trained already
 
+<<<<<<< HEAD
 - vision base FP32 -> 0.8286 accuracy
     - 15 watt: 
     - 30 watt: 
+=======
+- vision base FP32 -> 0.8286 accuracy, eval dataset
+    - 15 watt: f3bd756f25e0577ef12ec5d1b53157bcf794a231, ci-144854-573492
+    - 30 watt: 81dac9dfb47b952629d409b9ac81693e2b9ee7b4, ci-144377-571533
+>>>>>>> d9947a69695e9323d7f60a70ded169a8140a434d
     - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05, ci-139320-555878
+- vision base FP16 -> 0.8286 accuracy
+    - 15 watt: aa6ee6bcd671184c9072ab7510e40fc380bb4a46, ci-144941-573891
+    - 30 watt:
+    - 50 watt: f2475416de98772b79c2433d8c792ece16c250c1, ci-144854-573492
 
 
 
@@ -130,9 +143,18 @@ dropout sweep:
 -> only very little changes in dopout 0 ... 0.35, then the accuracy gets bad
 
 
+<<<<<<< HEAD
 language model:
 - train different sizes
 train with quantisation
 without quantisation
 Base: Layers=12, Hidden size=768, Attention Heads=12
 Large Layers=24, Hidden size=1024, Attention Heads=16
+=======
+-> todo use evaluation data for evaluation -> fertig
+
+Freitag:
+-> power modi in throughput comparison kombinieren -> neuer branch, für dvc
+-> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
+-> language model trainieren
+>>>>>>> d9947a69695e9323d7f60a70ded169a8140a434d
