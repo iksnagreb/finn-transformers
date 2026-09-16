@@ -1,7 +1,6 @@
 Powermodus ändern:
-
-    2: 30 Watt
     1: 15 Watt
+    2: 30 Watt
     3: 50 Watt
     0: no constraints (kann zu überhitzung kommen)
 
@@ -73,9 +72,10 @@ Radioml (change model size, always with 30 Watt):
     - 50 watt: d25373d7a30ceaeaf3a4c2e09922e13d27b2d98e, ci-137709-550489
     - FP32: is trained already
     eval dataset:
-    - 15 watt: 
-    - 30 watt: 
-    - 50 watt: 
+    - 15 watt: bc5cef0c29396a2b695f0780565850f0a9750002, ci-148567-588762
+    - 30 Watt: f3bce167791c7d993968072cbf63d0e87024c5ce, ci-149008-590221
+    - 50 watt: 0e5d4254bc8cccc5f8ccc56530bfd4e4d5253fce, ci-148580-588796
+
 
 - vision base/2: jazzy-cogs (0.74 accuracy)
     - 15 watt: 25c6dacfbebf10d86940d15f4debd1ddd3e367d7, ci-136567-547139
@@ -83,9 +83,10 @@ Radioml (change model size, always with 30 Watt):
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
     - FP32: is trained already
 -> tests wiederholen mit neuem dataset (eval) & code --> schlechte accuracy mit diesem Training...
-    - 15 watt: bc5cef0c29396a2b695f0780565850f0a9750002, ci-148567-588762
-    - 30 Watt: f3bce167791c7d993968072cbf63d0e87024c5ce, ci-149008-590221
-    - 50 watt: 0e5d4254bc8cccc5f8ccc56530bfd4e4d5253fce, ci-148580-588796
+    - 15 watt: 
+    - 30 watt: 4c0628268a4aaaa0fb01d68366eca6357ecd2987, ci-149017-590270
+    - 50 watt: 
+
 
 
 
