@@ -321,8 +321,8 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 51b16d85713eaeb5ff0f571a076baeaa
-      size: 1957931
+      md5: b9d5dfd3c17ddc23da58e25e045736f8
+      size: 1973038
     - path: outputs/vision/out.npy
       hash: md5
       md5: b9eafd186242cfa5ade7b448894633bd
