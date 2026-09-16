@@ -85,7 +85,7 @@ Radioml (change model size, always with 30 Watt):
 -> tests wiederholen mit neuem dataset (eval) & code --> schlechte accuracy mit diesem Training...
     - 15 watt: 
     - 30 watt: 4c0628268a4aaaa0fb01d68366eca6357ecd2987, ci-149017-590270
-    - 50 watt: 
+    - 50 watt: 2be7e4e522b6aeefa7c80b52a36f463c544594f2, ci-149075-590584
 
 
 
