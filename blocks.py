@@ -284,36 +284,6 @@ class Attention(torch.nn.Module):
         # Default identity post-norm will be overwritten below if configured
         self.post_norm = torch.nn.Identity()
 
-        # Normalization layer following the residual addition if configured as
-        # post-norm
-
-        # batch norm and layer norm probably belong somewhere else!
-        # if norm == "batch-norm":
-        #         self.post_norm = torch.nn.Sequential(
-        #         # Packed sequential/spatial data comes in channel-last layout
-        #         # while batch normalization expects channels-first
-        #         Rearrange("b ... c -> b c ..."),
-        #         # Batch normalization inferring the size of the embedding
-        #         # dimension
-        #         torch.nn.LazyBatchNorm1d(affine=False),
-        #         # Insert optional activation quantizer if enabled
-        #         *([QuantIdentity(bit_width=bits)] if bits else []),
-        #         # Rearrange from channels-first back to channels-last
-        #         # sequence-first layout
-        #         Rearrange("b c ... -> b ... c"),
-        #     )
-        # elif norm == "layer-norm":
-        #         self.post_norm = torch.nn.Sequential(
-        #             torch.nn.LayerNorm(
-        #                 normalized_shape=emb_dim,
-        #                 elementwise_affine=False,
-        #             ),
-
-        #             *(
-        #                 [QuantIdentity(bit_width=bits)]
-        #                 if bits else []
-        #             ),
-        #         )
         if norm_placement == "post-norm" and norm is not None:
             if norm == "batch-norm":
                 self.post_norm = torch.nn.Sequential(
