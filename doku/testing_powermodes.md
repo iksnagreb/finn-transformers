@@ -82,13 +82,23 @@ Radioml (change model size, always with 30 Watt):
     - 30 watt: e80fd4fd95a21db469060ba84d8485202ea9ef4a, ci-136553-547096
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
     - FP32: is trained already
--> tests wiederholen mit neuem dataset (eval) & code --> schlechte accuracy mit diesem Training...
+-> tests wiederholen mit neuem dataset (eval) 
     - 15 watt: 668f15e5165607d7ade2c78aa286a079bd451fc0, ci-149099-590654
     - 30 watt: 4c0628268a4aaaa0fb01d68366eca6357ecd2987, ci-149017-590270
     - 50 watt: 2be7e4e522b6aeefa7c80b52a36f463c544594f2, ci-149075-590584
 
 
+## Evaluation with eval dataset, vision:
 
+- vision base/2 INT8
+    - 15 watt: 668f15e5165607d7ade2c78aa286a079bd451fc0, ci-149099-590654
+    - 30 watt: 4c0628268a4aaaa0fb01d68366eca6357ecd2987, ci-149017-590270
+    - 50 watt: 2be7e4e522b6aeefa7c80b52a36f463c544594f2, ci-149075-590584
+
+- vision base/4 INT8
+    - 15 watt: bc5cef0c29396a2b695f0780565850f0a9750002, ci-148567-588762
+    - 30 Watt: f3bce167791c7d993968072cbf63d0e87024c5ce, ci-149008-590221
+    - 50 watt: 0e5d4254bc8cccc5f8ccc56530bfd4e4d5253fce, ci-148580-588796
 
 
 - vision base FP32 -> 0.8286 accuracy, eval dataset
@@ -158,3 +168,4 @@ Freitag:
 -> power modi in throughput comparison kombinieren -> neuer branch, für dvc
 -> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
 -> language model trainieren
+
