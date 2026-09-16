@@ -84,7 +84,7 @@ Radioml (change model size, always with 30 Watt):
     - FP32: is trained already
 -> tests wiederholen mit neuem dataset (eval) & code --> schlechte accuracy mit diesem Training...
     - 15 watt: bc5cef0c29396a2b695f0780565850f0a9750002, ci-148567-588762
-    - 30 Watt:
+    - 30 Watt: f3bce167791c7d993968072cbf63d0e87024c5ce, ci-149008-590221
     - 50 watt: 0e5d4254bc8cccc5f8ccc56530bfd4e4d5253fce, ci-148580-588796
 
 
