@@ -110,11 +110,11 @@ Radioml (change model size, always with 30 Watt):
 - vision base/4 FP16
     - 15 watt: 
     - 30 Watt: 
-    - 50 watt: 
+    - 50 watt: dfb50cc5686022611c98ab7de7e770328cab6103, ci-150761-597470
 - vision base/4 FP32
     - 15 watt: 
     - 30 Watt: 
-    - 50 watt: 
+    - 50 watt: bcb7be87bc334093950b2463366dc3536e9fa093, ci-150747-597418
 
 
 - vision base FP32 -> 0.8286 accuracy, eval dataset
