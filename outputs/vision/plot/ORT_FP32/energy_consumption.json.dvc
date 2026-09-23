@@ -1,0 +1,5 @@
+outs:
+- md5: d5e8805c8d627229ec3f59bbfa2befe6
+  size: 389668
+  hash: md5
+  path: energy_consumption.json
