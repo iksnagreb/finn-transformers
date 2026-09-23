@@ -94,14 +94,12 @@ Radioml (change model size, always with 30 Watt):
     - 15 watt: 668f15e5165607d7ade2c78aa286a079bd451fc0, ci-149099-590654
     - 30 watt: 4c0628268a4aaaa0fb01d68366eca6357ecd2987, ci-149017-590270
     - 50 watt: 2be7e4e522b6aeefa7c80b52a36f463c544594f2, ci-149075-590584
-
 - vision base/2 FP16
-    - 15 watt: 
+    - 15 watt: 6426f0d8e24ce26bb427e9be45e5f725c6183b91, ci-150711-597254
     - 30 watt: 02dc34f238ff6eda1b0c5408f637d7a2e753827f, ci-150703-597238
     - 50 watt: ac521abd6b996db1ed571d10e104062a018c6536, ci-149139-590748
-
 - vision base/2 FP32
-    - 15 watt: 
+    - 15 watt: b8f1ed6ba2cbcf7bade8773080d53781443e1deb, ci-150714-597259
     - 30 watt: c24f80b4acac6e39ca1a7d57e4c1cc49818f2502, ci-150695-597208
     - 50 watt: 3b17c7a03fdde11260fb515fab2a66d6c73cd3e0, ci-149142-590753
 
@@ -109,6 +107,14 @@ Radioml (change model size, always with 30 Watt):
     - 15 watt: bc5cef0c29396a2b695f0780565850f0a9750002, ci-148567-588762
     - 30 Watt: f3bce167791c7d993968072cbf63d0e87024c5ce, ci-149008-590221
     - 50 watt: 0e5d4254bc8cccc5f8ccc56530bfd4e4d5253fce, ci-148580-588796
+- vision base/4 FP16
+    - 15 watt: 
+    - 30 Watt: 
+    - 50 watt: 
+- vision base/4 FP32
+    - 15 watt: 
+    - 30 Watt: 
+    - 50 watt: 
 
 
 - vision base FP32 -> 0.8286 accuracy, eval dataset
@@ -119,7 +125,10 @@ Radioml (change model size, always with 30 Watt):
     - 15 watt: aa6ee6bcd671184c9072ab7510e40fc380bb4a46, ci-144941-573891
     - 30 watt: d9947a69695e9323d7f60a70ded169a8140a434d, ci-147874-586629
     - 50 watt: f2475416de98772b79c2433d8c792ece16c250c1, ci-144854-573492
-
+- vision base INT8
+    - 15 watt: 
+    - 30 watt: 
+    - 50 watt: 
 
 https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
 sudo jetson_clocks --show
