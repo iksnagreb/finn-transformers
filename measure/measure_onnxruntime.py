@@ -668,7 +668,7 @@ if __name__ == "__main__":
     if INT8:
             # For other models: use simple QCDQ model
         onnx_model_path = f"outputs/{MODEL_TYPE}/model_brevitas_1_simple.onnx"
-    if FP16:
+    elif FP16:
         model_fp32 = onnx.load(onnx_model_path)
         model_fp16 = float16.convert_float_to_float16(model_fp32)
         onnx.save(model_fp16, f"outputs/{MODEL_TYPE}/model_dynamic_batchsize_fp16.onnx")
@@ -682,17 +682,17 @@ if __name__ == "__main__":
     print("onnx model path for accuracy eval:", onnx_model_path)
     print(f"Accuracy (ORT CUDA): {accuracy:.2%}")
 
-    if FP16:
-        quantisation_type = "FP16"
-        accuracy_path = (
-            Path(__file__).resolve().parent.parent
-            / "outputs" / MODEL_TYPE / "eval_results" / "accuracy_ORT_FP16.json"
-        )
-    elif INT8:
+    if INT8:
         quantisation_type = "INT8"
         accuracy_path = (
             Path(__file__).resolve().parent.parent
             / "outputs" / MODEL_TYPE / "eval_results" / "accuracy_ORT_INT8.json"
+        )
+    elif FP16:
+        quantisation_type = "FP16"
+        accuracy_path = (
+            Path(__file__).resolve().parent.parent
+            / "outputs" / MODEL_TYPE / "eval_results" / "accuracy_ORT_FP16.json"
         )
     else:
         quantisation_type = "FP32"
@@ -712,10 +712,10 @@ if __name__ == "__main__":
     )
 
     base_dir = Path(__file__).resolve().parent.parent / "outputs" / MODEL_TYPE / "plot"
-    if FP16:
-        subdir = base_dir / "ORT_FP16"
-    elif INT8:
+    if INT8:
         subdir = base_dir / "ORT_INT8"
+    elif FP16:
+        subdir = base_dir / "ORT_FP16"
     else:
         subdir = base_dir / "ORT_FP32"
 

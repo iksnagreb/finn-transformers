@@ -1,7 +1,6 @@
 Powermodus ändern:
-
-    2: 30 Watt
     1: 15 Watt
+    2: 30 Watt
     3: 50 Watt
     0: no constraints (kann zu überhitzung kommen)
 
@@ -72,12 +71,45 @@ Radioml (change model size, always with 30 Watt):
     - 30 watt: b1cdbc2c68a2d3eea87a8ae415dc2267dc313d9f, ci-137717-550529
     - 50 watt: d25373d7a30ceaeaf3a4c2e09922e13d27b2d98e, ci-137709-550489
     - FP32: is trained already
+    eval dataset:
+    - 15 watt: bc5cef0c29396a2b695f0780565850f0a9750002, ci-148567-588762
+    - 30 Watt: f3bce167791c7d993968072cbf63d0e87024c5ce, ci-149008-590221
+    - 50 watt: 0e5d4254bc8cccc5f8ccc56530bfd4e4d5253fce, ci-148580-588796
+
 
 - vision base/2: jazzy-cogs (0.74 accuracy)
     - 15 watt: 25c6dacfbebf10d86940d15f4debd1ddd3e367d7, ci-136567-547139
     - 30 watt: e80fd4fd95a21db469060ba84d8485202ea9ef4a, ci-136553-547096
     - 50 watt: 0c7c2b58a0e8b9a92557c1221bf25af24c9e489b, ci-136537-547026
     - FP32: is trained already
+-> tests wiederholen mit neuem dataset (eval) 
+    - 15 watt: 668f15e5165607d7ade2c78aa286a079bd451fc0, ci-149099-590654
+    - 30 watt: 4c0628268a4aaaa0fb01d68366eca6357ecd2987, ci-149017-590270
+    - 50 watt: 2be7e4e522b6aeefa7c80b52a36f463c544594f2, ci-149075-590584
+
+
+## Evaluation with eval dataset, vision:
+
+- vision base/2 INT8
+    - 15 watt: 668f15e5165607d7ade2c78aa286a079bd451fc0, ci-149099-590654
+    - 30 watt: 4c0628268a4aaaa0fb01d68366eca6357ecd2987, ci-149017-590270
+    - 50 watt: 2be7e4e522b6aeefa7c80b52a36f463c544594f2, ci-149075-590584
+
+- vision base/2 FP16
+    - 15 watt: 
+    - 30 watt: 
+    - 50 watt: ac521abd6b996db1ed571d10e104062a018c6536, ci-149139-590748
+
+- vision base/2 FP32
+    - 15 watt: 
+    - 30 watt: 
+    - 50 watt: 3b17c7a03fdde11260fb515fab2a66d6c73cd3e0, ci-149142-590753
+
+- vision base/4 INT8
+    - 15 watt: bc5cef0c29396a2b695f0780565850f0a9750002, ci-148567-588762
+    - 30 Watt: f3bce167791c7d993968072cbf63d0e87024c5ce, ci-149008-590221
+    - 50 watt: 0e5d4254bc8cccc5f8ccc56530bfd4e4d5253fce, ci-148580-588796
+
 
 <<<<<<< HEAD
 - vision base FP32 -> 0.8286 accuracy
@@ -85,13 +117,13 @@ Radioml (change model size, always with 30 Watt):
     - 30 watt: 
 =======
 - vision base FP32 -> 0.8286 accuracy, eval dataset
-    - 15 watt: f3bd756f25e0577ef12ec5d1b53157bcf794a231, ci-144854-573492
+    - 15 watt: f3bd756f25e0577ef12ec5d1b53157bcf794a231, ci-147861-586679
     - 30 watt: 81dac9dfb47b952629d409b9ac81693e2b9ee7b4, ci-144377-571533
 >>>>>>> d9947a69695e9323d7f60a70ded169a8140a434d
     - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05, ci-139320-555878
 - vision base FP16 -> 0.8286 accuracy
     - 15 watt: aa6ee6bcd671184c9072ab7510e40fc380bb4a46, ci-144941-573891
-    - 30 watt:
+    - 30 watt: d9947a69695e9323d7f60a70ded169a8140a434d, ci-147874-586629
     - 50 watt: f2475416de98772b79c2433d8c792ece16c250c1, ci-144854-573492
 
 
@@ -157,4 +189,8 @@ Freitag:
 -> power modi in throughput comparison kombinieren -> neuer branch, für dvc
 -> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
 -> language model trainieren
+<<<<<<< HEAD
 >>>>>>> d9947a69695e9323d7f60a70ded169a8140a434d
+=======
+
+>>>>>>> cc1a277f90888403884ba848f57bd2f855345f66

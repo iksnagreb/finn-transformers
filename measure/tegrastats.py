@@ -338,10 +338,10 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
     
     config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, GPU_MEM_LIMIT_BYTES)
 
-    if FP16 == True:
-        config.set_flag(trt.BuilderFlag.FP16)
     if INT8 == True:
         config.set_flag(trt.BuilderFlag.INT8)
+    elif FP16 == True:
+        config.set_flag(trt.BuilderFlag.FP16)
 
     profile = builder.create_optimization_profile()
 
@@ -484,7 +484,7 @@ def run_power_eval(batch_size, input_info, output_info, DATA_PATH_NPZ, onnx_mode
 
     # Run multiple times for large batch sizes to ensure tegrastats captures data
     # (tegrastats only samples every 1000ms, so fast inference needs multiple runs)
-    num_executions = 5 if MODEL_TYPE == "radioml" else 1
+    num_executions = 5 if (MODEL_TYPE == "radioml" or MODEL_TYPE == "vision") else 1
     for i in range(num_executions):
         _, _, _, accuracy = run_inference(
                     context=context,
