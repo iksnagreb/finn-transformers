@@ -13,6 +13,7 @@ MODEL_COMPARISON_OUTPUT_DIR = DEFAULT_OUTPUT_ROOT / "model_comparison"
 POWER_MODES = ("15w", "30w", "50w")
 MODELS = ("base", "base2", "base4")
 QUANT_COMPARISON_MODES = ("int8", "ort_int8")
+QUANT_MODES = ("int8", "ort_int8", "fp16", "fp32")
 
 
 class RawDefaultsHelpFormatter(argparse.RawDescriptionHelpFormatter, argparse.ArgumentDefaultsHelpFormatter):
@@ -47,6 +48,11 @@ CLI_REFERENCE = """Plot modes
     --quant-comparison
         Generates all three plots comparing int8 against ort_int8 for the model of --input-dir.
         Writes to summary_plots/outputs/vision_<model>_int8_ort_int8/*_quant_modes_comparison*.png.
+
+    --quant-modes
+        Generates all three plots once per power mode, comparing int8, ort_int8, fp16 and fp32
+        for the model of --input-dir.
+        Writes to summary_plots/outputs/vision_<model>_quantmodes/*_quant_modes_comparison_<power>*.png.
 
 Common options
     --mode LABEL=/path/to/file.json
@@ -116,6 +122,16 @@ def _quant_family_files(model, prefix):
         return family_files
 
 
+def _quant_mode_files_for_power(model, power, prefix):
+        """Map every quantization mode with data for this model and power mode to its file."""
+        files = {}
+        for mode in QUANT_MODES:
+                path = DATA_ROOT / model / mode / f"{prefix}_{power}.json"
+                if path.is_file():
+                        files[mode] = str(path)
+        return files
+
+
 def _default_output_path(source_dir, filename):
         return DEFAULT_OUTPUT_ROOT / _output_folder_name(source_dir) / filename
 
@@ -138,6 +154,8 @@ def throughput_comparison_power_modes_plot(
     output_path,
     value_key="throughput_images_per_s",
     yscale="linear",
+    series_kind="Power Mode",
+    title_note="",
 ):
     """
     Erstellt einen Throughput-Vergleich mehrerer Power-Modi als Liniendiagramm.
@@ -221,14 +239,14 @@ def throughput_comparison_power_modes_plot(
     ylabel = "Throughput (images/s)" if value_key == "throughput_images_per_s" else "Throughput (batches/s)"
     ax.set_xlabel("Batch Size")
     ax.set_ylabel(ylabel)
-    title = "Throughput Comparison per Power Mode"
+    title = f"Throughput Comparison per {series_kind}{title_note}"
     if yscale == "log":
         ax.set_yscale("log")
         title += " (log scale)"
     ax.set_title(title)
     ax.set_xticks(batch_sizes)
     ax.grid(True, linestyle="--", alpha=0.5)
-    ax.legend(title="Power Mode")
+    ax.legend(title=series_kind)
 
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -374,7 +392,14 @@ def throughput_comparison_model_families_plot(
     print(f"Saved plot to {output_path}")
 
 
-def latency_throughput_comparison_power_modes_plot(power_mode_files, output_path, xscale="log", yscale="log"):
+def latency_throughput_comparison_power_modes_plot(
+    power_mode_files,
+    output_path,
+    xscale="log",
+    yscale="log",
+    series_kind="Power Mode",
+    title_note="",
+):
     """Create a latency-vs-throughput plot for multiple power modes."""
     if not power_mode_files:
         print("WARNING: No power mode files provided")
@@ -443,12 +468,12 @@ def latency_throughput_comparison_power_modes_plot(power_mode_files, output_path
 
     ax.set_xlabel("Latency (ms)")
     ax.set_ylabel("Throughput (images/s)")
-    title = "Throughput vs. Latency per Batch Size and Power Mode"
+    title = f"Throughput vs. Latency per Batch Size and {series_kind}{title_note}"
     if xscale == "log" or yscale == "log":
         title += " (log scale)"
     ax.set_title(title)
     ax.grid(True, linestyle="--", alpha=0.5)
-    ax.legend(title="Power Mode")
+    ax.legend(title=series_kind)
 
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -596,7 +621,13 @@ def _load_latency_totals_by_batch(json_path):
     return totals_by_batch, breakdown_by_type
 
 
-def latency_comparison_power_modes_plot(power_mode_files, output_path, xscale="linear"):
+def latency_comparison_power_modes_plot(
+    power_mode_files,
+    output_path,
+    xscale="linear",
+    series_kind="Power Mode",
+    title_note="",
+):
     """
     Erstellt einen Latency-Vergleich eines Modells ueber mehrere Power-Modi.
 
@@ -666,13 +697,13 @@ def latency_comparison_power_modes_plot(power_mode_files, output_path, xscale="l
 
     ax.set_xlabel("Batch Size")
     ax.set_ylabel("Latency (ms)")
-    title = "Total Latency per Batch and Power Mode"
+    title = f"Total Latency per Batch and {series_kind}{title_note}"
     if xscale == "log":
         title += " (log scale)"
     ax.set_title(title)
     ax.set_xticks(batch_sizes)
     ax.grid(True, linestyle="--", alpha=0.5)
-    ax.legend(title="Power Mode")
+    ax.legend(title=series_kind)
 
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -887,6 +918,11 @@ def main():
         help="Generate all three plots comparing int8 against ort_int8 for the model of --input-dir.",
     )
     parser.add_argument(
+        "--quant-modes",
+        action="store_true",
+        help="Generate all three plots per power mode, comparing every quantization mode of the model of --input-dir.",
+    )
+    parser.add_argument(
         "--latency-throughput",
         action="store_true",
         help="Generate the latency-throughput plot for the available power modes.",
@@ -958,6 +994,14 @@ def main():
 
     if args.latency_summary:
         main_latency_summary(log_scale=args.latency_log_scale, mode=Path(args.input_dir).name)
+        return
+
+    if args.quant_modes:
+        main_quant_modes(
+            Path(args.input_dir).parent.name,
+            throughput_log_scale=args.throughput_log_scale,
+            latency_log_scale=args.latency_log_scale,
+        )
         return
 
     if args.quant_comparison:
@@ -1032,6 +1076,54 @@ def main_combined_vision_models(log_scale=False, mode="int8"):
         ),
         yscale="log" if log_scale else "linear",
     )
+
+
+def main_quant_modes(model, throughput_log_scale=False, latency_log_scale=False):
+    """Generate all three plots per power mode, comparing every quantization mode of one model."""
+    output_dir = DEFAULT_OUTPUT_ROOT / f"vision_{model}_quantmodes"
+
+    for power in POWER_MODES:
+        label = power.upper()
+        title_note = f" ({label})"
+
+        throughput_files = _quant_mode_files_for_power(model, power, "throughput")
+        if throughput_files:
+            throughput_comparison_power_modes_plot(
+                power_mode_files=throughput_files,
+                output_path=output_dir
+                / (
+                    f"throughput_quant_modes_comparison_{power}_logy.png"
+                    if throughput_log_scale
+                    else f"throughput_quant_modes_comparison_{power}.png"
+                ),
+                yscale="log" if throughput_log_scale else "linear",
+                series_kind="Quantization",
+                title_note=title_note,
+            )
+
+        latency_throughput_files = _quant_mode_files_for_power(model, power, "latency_throughput")
+        if latency_throughput_files:
+            latency_throughput_comparison_power_modes_plot(
+                power_mode_files=latency_throughput_files,
+                output_path=output_dir / f"latency_throughput_quant_modes_comparison_{power}_logxy.png",
+                series_kind="Quantization",
+                title_note=title_note,
+            )
+
+        latency_files = _quant_mode_files_for_power(model, power, "latency")
+        if latency_files:
+            latency_comparison_power_modes_plot(
+                power_mode_files=latency_files,
+                output_path=output_dir
+                / (
+                    f"latency_quant_modes_comparison_{power}_logx.png"
+                    if latency_log_scale
+                    else f"latency_quant_modes_comparison_{power}.png"
+                ),
+                xscale="log" if latency_log_scale else "linear",
+                series_kind="Quantization",
+                title_note=title_note,
+            )
 
 
 def main_quant_comparison(model, throughput_log_scale=False, latency_log_scale=False):
