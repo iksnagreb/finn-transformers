@@ -125,23 +125,15 @@ outputs/radioml/plot/INT8/energy_consumption.json
 ```
 
 
-- train base model without quantisation -> works 
-- experiments for base/4 model fp32 and fp16 in different power modes
 
-
-- training with layer-norm - done -> layernorm and noquant and 0.0001 LR is working, as well as 0.00001 LR
-- change dropout parameter (try doing that with the base/2 model, without or with quantisation)?
-
-- train the language model (on cluster if available)
 
 dropout sweep:
 -> base/2 vision without quantisation, with layer norm
 -> only very little changes in dopout 0 ... 0.35, then the accuracy gets bad
 
 
--> todo use evaluation data for evaluation -> fertig
 
-Freitag:
--> power modi in throughput comparison kombinieren -> neuer branch, für dvc
--> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
--> language model trainieren
+
+
+aktivierungsfunktionen testen, relu, gelu, silu... mit tensorrt
+schauen, ob measure schneller wird, wenn man bei trt die warnungen ganz ausschaltet
