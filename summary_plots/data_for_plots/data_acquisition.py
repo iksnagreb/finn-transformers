@@ -50,6 +50,8 @@ EXPERIMENTS = {
 	"ci-150771-597495": {"model": "base4", "power": "30w", "mode": "fp32"},
 	"ci-150747-597418": {"model": "base4", "power": "50w", "mode": "fp32"},
 	"ci-151271-600411": {"model": "base", "power": "15w", "mode": ("int8", "ort_int8")},
+	"ci-152127-602776": {"model": "base", "power": "30w", "mode": ("int8", "ort_int8")},
+	"ci-152114-602751": {"model": "base", "power": "50w", "mode": ("int8", "ort_int8")},
 	"ci-147861-586679": {"model": "base", "power": "15w", "mode": "fp32"},
 	"ci-144377-571533": {"model": "base", "power": "30w", "mode": "fp32"},
 	"ci-139320-555878": {"model": "base", "power": "50w", "mode": "fp32"},
