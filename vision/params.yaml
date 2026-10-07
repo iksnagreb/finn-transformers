@@ -57,7 +57,7 @@ model:
   cls_bits: 8
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
-  activation: relu
+  activation: gelu
   # Normalization layer preceding or following each block
   #   Options: batch-norm, layer-norm, none
   norm: batch-norm
