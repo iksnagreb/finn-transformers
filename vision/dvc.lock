@@ -104,12 +104,12 @@ stages:
     outs:
     - path: outputs/vision/loss.yaml
       hash: md5
-      md5: a87633eba954b083411ec4173b64fa3a
-      size: 8240
+      md5: 1939a212d6eae50abd20cdc77233c7c1
+      size: 5530
     - path: outputs/vision/lr.yaml
       hash: md5
-      md5: f6913af93985254ed84cf3733bf9bf21
-      size: 3424
+      md5: b6e254fa837be5d25e06c7c9118f95d2
+      size: 1925
     - path: outputs/vision/model.pt
       hash: md5
       md5: b0901d427ee6b8de3926036efde01ec9
@@ -212,11 +212,11 @@ stages:
     outs:
     - path: outputs/vision/accuracy.yaml
       hash: md5
-      md5: aeb2049ce18bc225eb8631426a173b0b
+      md5: d86b0ccb07984128fce4695a48e2246d
       size: 28
     - path: outputs/vision/classes.csv
       hash: md5
-      md5: 77bb900fe87dc1b4bc56204de9f030d1
+      md5: fcde56f1f47150469872afb837c7f235
       size: 40015
   export:
     cmd: PARTITION=normal bash run.sh python -m vision.export
@@ -321,8 +321,8 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 30739bfffe75b5d4951cfd78cee08abb
-      size: 1958828
+      md5: fc9d95c4267a4e420be37a0cd6e9471b
+      size: 1974050
     - path: outputs/vision/out.npy
       hash: md5
       md5: c735df19fa2360c9dc7a6e6e3767204b
