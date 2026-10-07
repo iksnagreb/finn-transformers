@@ -34,7 +34,6 @@ import onnxruntime as ort
 
 # Path to the RadioML dataset
 # RADIOML_PATH = os.environ["RADIOML_PATH"]
-# anpassen für vision
 RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
 RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
