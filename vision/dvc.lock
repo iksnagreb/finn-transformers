@@ -13,12 +13,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 7a56410f3a2bcb68140d5f552141cdd3
+      md5: 336b0281d20b313130b05bc497979152
       size: 26197
     - path: embedding.py
       hash: md5
-      md5: fdfcf02f5da237ed129088687dc7544a
-      size: 4308
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -104,19 +104,19 @@ stages:
     outs:
     - path: outputs/vision/loss.yaml
       hash: md5
-      md5: be30ca6f07de679ea0a9c9a79c50d9f3
-      size: 8232
+      md5: f124fca11814477aece131bd9b8ecc30
+      size: 8296
     - path: outputs/vision/lr.yaml
       hash: md5
-      md5: f6913af93985254ed84cf3733bf9bf21
-      size: 3424
+      md5: 8d42321b4b5a33939a14bbe3df7bf8cf
+      size: 2840
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 5b4c52140f6893122865c7a65f89377e
+      md5: 990141b31ecfe7590a862e3cd9fa4bab
       size: 2075088
     - path: outputs/vision/optimizer.pt
       hash: md5
-      md5: 910f32e53a07411ec6e1bf028d80fcda
+      md5: ea0791cd050f5a27ad6b591a1fced138
       size: 3759495
   eval:
     cmd: PARTITION=gpu bash run.sh python -m vision.eval
@@ -131,12 +131,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 7a56410f3a2bcb68140d5f552141cdd3
+      md5: 336b0281d20b313130b05bc497979152
       size: 26197
     - path: embedding.py
       hash: md5
-      md5: fdfcf02f5da237ed129088687dc7544a
-      size: 4308
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -147,7 +147,7 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 5b4c52140f6893122865c7a65f89377e
+      md5: 990141b31ecfe7590a862e3cd9fa4bab
       size: 2075088
     - path: quant.py
       hash: md5
@@ -212,11 +212,11 @@ stages:
     outs:
     - path: outputs/vision/accuracy.yaml
       hash: md5
-      md5: 86ca168a8844a2e100c9826405cb389e
-      size: 28
+      md5: 7a97ff62e9d9b9532a8e9d5dc2eed374
+      size: 27
     - path: outputs/vision/classes.csv
       hash: md5
-      md5: 97941f65a32f8aef3209aa6a39e5dd4d
+      md5: bdd5a85cfbf126abdc5e19554f04bb2c
       size: 40015
   export:
     cmd: PARTITION=normal bash run.sh python -m vision.export
@@ -231,12 +231,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 7a56410f3a2bcb68140d5f552141cdd3
+      md5: 336b0281d20b313130b05bc497979152
       size: 26197
     - path: embedding.py
       hash: md5
-      md5: fdfcf02f5da237ed129088687dc7544a
-      size: 4308
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -247,7 +247,7 @@ stages:
       size: 5162
     - path: outputs/vision/model.pt
       hash: md5
-      md5: 5b4c52140f6893122865c7a65f89377e
+      md5: 990141b31ecfe7590a862e3cd9fa4bab
       size: 2075088
     - path: quant.py
       hash: md5
@@ -321,11 +321,11 @@ stages:
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 83e80809576a23424d68a77ff98d5695
+      md5: fd78f07d99fd41e9c83b16a27a346244
       size: 1961097
     - path: outputs/vision/out.npy
       hash: md5
-      md5: f7db0f8a85cd0d3cd390cb9f887dabcc
+      md5: bfa653415a8cb8ddf3a1e0312eae28d5
       size: 168
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c vision/passes.yaml -o 
