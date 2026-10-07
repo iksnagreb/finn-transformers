@@ -154,4 +154,4 @@ dropout sweep:
 
 
 TODO: aktivierungsfunktionen testen, relu, gelu, silu... mit tensorrt
-Is RUNNING: schauen, ob measure schneller wird, wenn man bei trt die warnungen ganz ausschaltet
+Is RUNNING: schauen, ob measure schneller wird, wenn man bei trt die warnungen ganz ausschaltet -> wird nicht schneller
