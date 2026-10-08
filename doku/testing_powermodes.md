@@ -115,6 +115,11 @@ Radioml (change model size, always with 30 Watt):
     - 15 watt: 460a40ad13773ddbcf1801f5b78c558f98a72c1d, ci-150799-597574
     - 30 Watt: fdb625037280c62b0d349d833ef5144f1198e5cf, ci-150771-597495
     - 50 watt: bcb7be87bc334093950b2463366dc3536e9fa093, ci-150747-597418
+- vision base/4 INT8 & ORT_INT8 (signed instead of unsigned)
+    - 15 watt: 
+    - 30 Watt: 2b23914bb9379ceb7cd1828b80de34decb9c7861, ci-153280-605765
+    - 50 watt: 
+
 
 - vision base INT8 & ORT_INT8
     - 15 watt: eeb964837daa5929f98c827aec52e1d24664ccd3, ci-151271-600411
