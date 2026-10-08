@@ -118,7 +118,7 @@ Radioml (change model size, always with 30 Watt):
 - vision base/4 INT8 & ORT_INT8 (signed instead of unsigned)
     - 15 watt: 
     - 30 Watt: 2b23914bb9379ceb7cd1828b80de34decb9c7861, ci-153280-605765
-    - 50 watt: 
+    - 50 watt: f2e40c2f29e3bcccb212cd2692caf025100262da, ci-153396-606064
 
 
 - vision base INT8 & ORT_INT8
