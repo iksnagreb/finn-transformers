@@ -105,7 +105,7 @@ Radioml (change model size, always with 30 Watt):
 - vision base/2 INT8 & ORT_INT8 (signed instead of unsigned)
     - 15 watt: 5ad3ec4945c6d07f781bc23006a63b95ce5bf870, ci-154419-608791
     - 30 watt: 9214c5ce64a8e0c7eeac3209ee146544c3f95c62, ci-154428-608813
-    - 50 watt: 
+    - 50 watt: 0395c0e4cf8a3e4151fcfc295cef9cc2e250d90b, ci-154435-608828
 
 
 
@@ -199,4 +199,7 @@ Freitag:
 -> power modi in throughput comparison kombinieren -> neuer branch, für dvc
 -> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
 -> language model trainieren
+
+
+
 
