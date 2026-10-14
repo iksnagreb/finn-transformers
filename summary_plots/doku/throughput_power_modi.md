@@ -16,3 +16,13 @@ Base/4
 - 15 watt: 13b83500c0f90eabb05b2abc3bc21dc087b52d89, ci-137765-550751
 - 30 watt: d25373d7a30ceaeaf3a4c2e09922e13d27b2d98e, ci-137709-550489
 - 50 watt: b1cdbc2c68a2d3eea87a8ae415dc2267dc313d9f, ci-137717-550529
+
+
+
+
+
+int8: warnungen von trt unterdrücken:
+[09/30/2026-12:28:16] [TRT] [W] onnxOpImporters.cpp:1458: TensorRT doesn't support QuantizeLinear/DequantizeLinear with UINT8 zero_point. TensorRT will use INT8 instead.
+
+
+onnx aktivierungsfunktionen mit trt testen (silu, gelu, elu, ...), Zeit messen, verschiedene Quantisierungen und batch sizes

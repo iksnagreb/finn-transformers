@@ -31,18 +31,18 @@ SOURCE_FILES = {
 # Add or remove experiments here. The experiment ID is the key; the remaining
 # fields determine the destination path and output filenames.
 EXPERIMENTS = {
-	"ci-149099-590654": {"model": "base2", "power": "15w", "mode": ("int8", "ort_int8")},
-	"ci-149017-590270": {"model": "base2", "power": "30w", "mode": ("int8", "ort_int8")},
-	"ci-149075-590584": {"model": "base2", "power": "50w", "mode": ("int8", "ort_int8")},
+	"ci-154419-608791": {"model": "base2", "power": "15w", "mode": ("int8", "ort_int8")},
+	"ci-154428-608813": {"model": "base2", "power": "30w", "mode": ("int8", "ort_int8")},
+	"ci-154435-608828": {"model": "base2", "power": "50w", "mode": ("int8", "ort_int8")},
 	"ci-150711-597254": {"model": "base2", "power": "15w", "mode": "fp16"},
 	"ci-150703-597238": {"model": "base2", "power": "30w", "mode": "fp16"},
 	"ci-149139-590748": {"model": "base2", "power": "50w", "mode": "fp16"},
 	"ci-150714-597259": {"model": "base2", "power": "15w", "mode": "fp32"},
 	"ci-150695-597208": {"model": "base2", "power": "30w", "mode": "fp32"},
 	"ci-149142-590753": {"model": "base2", "power": "50w", "mode": "fp32"},
-	"ci-148567-588762": {"model": "base4", "power": "15w", "mode": ("int8", "ort_int8")},
-	"ci-149008-590221": {"model": "base4", "power": "30w", "mode": ("int8", "ort_int8")},
-	"ci-148580-588796": {"model": "base4", "power": "50w", "mode": ("int8", "ort_int8")},
+	"ci-153406-606107": {"model": "base4", "power": "15w", "mode": ("int8", "ort_int8")},
+	"ci-153280-605765": {"model": "base4", "power": "30w", "mode": ("int8", "ort_int8")},
+	"ci-153396-606064": {"model": "base4", "power": "50w", "mode": ("int8", "ort_int8")},
 	"ci-150803-597585": {"model": "base4", "power": "15w", "mode": "fp16"},
 	"ci-150768-597490": {"model": "base4", "power": "30w", "mode": "fp16"},
 	"ci-150761-597470": {"model": "base4", "power": "50w", "mode": "fp16"},
@@ -94,7 +94,8 @@ def acquire(experiment_id: str, experiment: dict[str, str | tuple[str, ...]], dr
 
 def restore_checkout(dry_run: bool) -> None:
 	"""Restore tracked experiment changes and remove generated vision outputs."""
-	run(["git", "reset", "--hard", "HEAD"], dry_run)
+	# Keep summary_plots out of the restore so freshly acquired data survives.
+	run(["git", "restore", "--source=HEAD", "--staged", "--worktree", "--", ".", ":(exclude)summary_plots"], dry_run)
 	run(["git", "clean", "-fd", "--", "outputs/vision"], dry_run)
 
 
