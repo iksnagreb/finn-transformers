@@ -317,12 +317,12 @@ stages:
       size: 136
     - path: outputs/vision/inp.npy
       hash: md5
-      md5: 04c5db62fe1ce128901047ab233dd42e
+      md5: 2e88193b4ec4f0b4b43f9d4e7229e13c
       size: 12416
     - path: outputs/vision/model.onnx
       hash: md5
-      md5: 93ab7a5b146cc6cce039647619b573bf
-      size: 22206292
+      md5: 4725e8db725002540478eb4a580c7fc3
+      size: 22399572
     - path: outputs/vision/out.npy
       hash: md5
       md5: 8ff73f467c72b7c47c27e742ccbab18f
