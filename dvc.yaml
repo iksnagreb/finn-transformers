@@ -138,3 +138,5 @@ artifacts:
     path: outputs/vision/plot/FP32/latency_throughput.json
 metrics:
 - dvclive/metrics.json
+plots:
+- dvclive/plots/images
