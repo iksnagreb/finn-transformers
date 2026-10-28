@@ -6,7 +6,7 @@ if [ "$RUN_VIA_SLURM" = 1 ]; then
   JOB_NAME="-J ${JOB_NAME:=DVC}"
   # Hard time limit of the job, will forcefully be terminated if not done within
   # this time
-  TIME_LIMIT="-t ${TIME_LIMIT:=24:00:00}"
+  TIME_LIMIT="-t ${TIME_LIMIT:=72:00:00}" # time limit verlängern
   # Number of CPUs to use per task
   NUM_CPUS="--cpus-per-task=${NUM_CPUS:=16}"
   # Amount of memory to allocate for the job
@@ -17,7 +17,7 @@ if [ "$RUN_VIA_SLURM" = 1 ]; then
   MAIL="--mail-type FAIL --mail-user ${MAIL:=}"
   # If using GPUS, specify which type of GPU and how many
   #   Note: Hardcode this to 1, there is no need for more GPUs right now
-  if [[ "$PARTITION" = "-p gpu" ]] || [[ "$PARTITION" = "-p dgx" ]]; then
+  if [[ "$PARTITION" = "-p gpu" ]] || [[ "$PARTITION" = "-p gpu_h100" ]] || [[ "$PARTITION" = "-p dgx" ]]; then
     #   Note: Hardcode this to 1, there is no need for more GPUs right now
     GPUS="--gres=gpu:${GPUS:=h100:1}"
   fi;

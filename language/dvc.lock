@@ -38,7 +38,7 @@ stages:
       size: 12163
       nfiles: 2
   train:
-    cmd: PARTITION=gpu bash run.sh python -m language.train
+    cmd: PARTITION=gpu_h100 bash run.sh python -m language.train
     deps:
     - path: activations.py
       hash: md5
@@ -50,12 +50,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 59e803ab61b75b2712c099a5fee9f3d5
+      size: 26215
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: fdfcf02f5da237ed129088687dc7544a
+      size: 4308
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -101,21 +101,21 @@ stages:
           - 0.1
         model:
           embedding:
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
-          num_layers: 2
-          num_heads: 3
-          emb_dim: 192
-          expansion_dim: 768
-          bits: 4
-          cls_bits: 8
-          activation: relu
-          norm: batch-norm
+          num_layers: 3
+          num_heads: 12
+          emb_dim: 768
+          expansion_dim: 3072
+          bits:
+          cls_bits:
+          activation: gelu
+          norm: layer-norm
           norm_placement: pre-norm
-          dropout: 0.25
+          dropout: 0.1
         seed: 12
         tag: quantized
         train:
@@ -126,7 +126,7 @@ stages:
           mlm_probability: 0.15
           optimizer:
             algorithm: adam
-            lr: 0.001
+            lr: 0.0001
             weight_decay: 0.0
             betas:
             - 0.9
@@ -146,22 +146,22 @@ stages:
     outs:
     - path: outputs/language/loss.yaml
       hash: md5
-      md5: 6a378ee0206f5de336d9ce2d94f1a991
-      size: 2784
+      md5: 15f404702057948fbddd50e1b9d16c1d
+      size: 2738
     - path: outputs/language/lr.yaml
       hash: md5
-      md5: 96eee227b2bd5f0c92bbc2af803b1672
-      size: 910
+      md5: 38a248a56b9827061e85f823a1b548e7
+      size: 954
     - path: outputs/language/model.pt
       hash: md5
-      md5: 78f3a2f9fd4695365f081d6abaddea42
-      size: 5303223
+      md5: 328f55d0c4beb22e04782183ca246d4b
+      size: 41731025
     - path: outputs/language/optimizer.pt
       hash: md5
-      md5: ff921dbdf12453381dfb9806945cfad0
-      size: 10269665
+      md5: ed1078f513f01bebcf862f4d80050cd3
+      size: 83433797
   eval:
-    cmd: PARTITION=gpu bash run.sh python -m language.eval
+    cmd: PARTITION=gpu_h100 bash run.sh python -m language.eval
     deps:
     - path: activations.py
       hash: md5
@@ -173,12 +173,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 59e803ab61b75b2712c099a5fee9f3d5
+      size: 26215
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: fdfcf02f5da237ed129088687dc7544a
+      size: 4308
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -201,8 +201,8 @@ stages:
       size: 5162
     - path: outputs/language/model.pt
       hash: md5
-      md5: 78f3a2f9fd4695365f081d6abaddea42
-      size: 5303223
+      md5: 328f55d0c4beb22e04782183ca246d4b
+      size: 41731025
     - path: outputs/language/tokenizer
       hash: md5
       md5: 0aeb9ab95d648e857f27811f81d53d92.dir
@@ -239,27 +239,27 @@ stages:
             drop_last: true
         model:
           embedding:
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
-          num_layers: 2
-          num_heads: 3
-          emb_dim: 192
-          expansion_dim: 768
-          bits: 4
-          cls_bits: 8
-          activation: relu
-          norm: batch-norm
+          num_layers: 3
+          num_heads: 12
+          emb_dim: 768
+          expansion_dim: 3072
+          bits:
+          cls_bits:
+          activation: gelu
+          norm: layer-norm
           norm_placement: pre-norm
-          dropout: 0.25
+          dropout: 0.1
         seed: 12
         tag: quantized
     outs:
     - path: outputs/language/accuracy.yaml
       hash: md5
-      md5: 6167d61c5dc61f737d0255d8c612fe5e
+      md5: 3c5aed3cee90744bb51638644fe6a198
       size: 52
   export:
     cmd: PARTITION=normal bash run.sh python -m language.export
@@ -274,12 +274,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 59e803ab61b75b2712c099a5fee9f3d5
+      size: 26215
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: fdfcf02f5da237ed129088687dc7544a
+      size: 4308
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -302,8 +302,8 @@ stages:
       size: 5162
     - path: outputs/language/model.pt
       hash: md5
-      md5: 78f3a2f9fd4695365f081d6abaddea42
-      size: 5303223
+      md5: 328f55d0c4beb22e04782183ca246d4b
+      size: 41731025
     - path: outputs/language/tokenizer
       hash: md5
       md5: 0aeb9ab95d648e857f27811f81d53d92.dir
@@ -341,39 +341,39 @@ stages:
           optimize: false
         model:
           embedding:
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
-          num_layers: 2
-          num_heads: 3
-          emb_dim: 192
-          expansion_dim: 768
-          bits: 4
-          cls_bits: 8
-          activation: relu
-          norm: batch-norm
+          num_layers: 3
+          num_heads: 12
+          emb_dim: 768
+          expansion_dim: 3072
+          bits:
+          cls_bits:
+          activation: gelu
+          norm: layer-norm
           norm_placement: pre-norm
-          dropout: 0.25
+          dropout: 0.1
         seed: 12
         tag: quantized
     outs:
     - path: outputs/language/cls.npy
       hash: md5
-      md5: 9a7c6409148f50ddabea0660f6db32b0
+      md5: fb5c4cee3f1096de95d28bda7cfcfdaf
       size: 2176
     - path: outputs/language/inp.npy
       hash: md5
-      md5: 453347a178a4de4b62a7ff6932f24aad
+      md5: 60e03e6f1c238750113758a1ab6db762
       size: 2176
     - path: outputs/language/model.onnx
       hash: md5
-      md5: e8cf4bca937378b31bba14729c203bdd
-      size: 5188378
+      md5: 0d632816f1344678cc8b935644a6c2fc
+      size: 98398777
     - path: outputs/language/out.npy
       hash: md5
-      md5: 338e64803f8ca191130dd1e609b8201f
+      md5: 5d2fed7ae811d0d22e6eefe1d7f92b86
       size: 2097280
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c language/passes.yaml -o 

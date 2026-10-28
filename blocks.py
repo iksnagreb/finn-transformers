@@ -95,7 +95,7 @@ class MLP(torch.nn.Module):
                 *(torch.nn.Sequential(
                     torch.nn.LayerNorm(
                         normalized_shape=emb_dim,
-                        elementwise_affine=False,
+                        elementwise_affine=True, # instead of False
                     ),
                 ) if norm_placement == "pre-norm" and norm is not None else []),
                 # Insert optional activation quantizer if enabled

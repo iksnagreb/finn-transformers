@@ -149,9 +149,6 @@ Radioml (change model size, always with 30 Watt):
 
 
 
-https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_Orin/JetPack_5.0.2/Performance_Tuning/Maximizing_Performance
-sudo jetson_clocks --show
-sudo jetson_clocks: fixes clocks to max. frequenz
 
 
 
@@ -200,13 +197,9 @@ dropout sweep:
 -> only very little changes in dopout 0 ... 0.35, then the accuracy gets bad
 
 
--> todo use evaluation data for evaluation -> fertig
-
-Freitag:
--> power modi in throughput comparison kombinieren -> neuer branch, für dvc
--> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
--> language model trainieren
-
-
-
-
+language model:
+- train different sizes
+train with quantisation
+without quantisation
+Base: Layers=12, Hidden size=768, Attention Heads=12
+Large Layers=24, Hidden size=1024, Attention Heads=16

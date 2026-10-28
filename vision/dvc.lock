@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: PARTITION=gpu bash run.sh python -m vision.train_tensorboard
+    cmd: PARTITION=gpu_h100 bash run.sh python -m vision.train
     deps:
     - path: activations.py
       hash: md5
@@ -39,10 +39,10 @@ stages:
       hash: md5
       md5: 90c9ab4bc24ddeabf3a3b76c63c07e16
       size: 6783
-    - path: vision/train_tensorboard.py
+    - path: vision/train.py
       hash: md5
-      md5: 0e1acff164be93f5c7c05540080a9525
-      size: 8938
+      md5: 8a532405fe8779a22dd8477487505685
+      size: 6662
     params:
       vision/params.yaml:
         dataset: '...'
@@ -119,7 +119,7 @@ stages:
       md5: 26cde555ff35cc6cfe5110d080d7b145
       size: 57433543
   eval:
-    cmd: PARTITION=gpu bash run.sh python -m vision.eval
+    cmd: PARTITION=gpu_h100 bash run.sh python -m vision.eval
     deps:
     - path: activations.py
       hash: md5
@@ -169,7 +169,7 @@ stages:
       vision/params.yaml:
         dataset: '...'
         eval:
-          batch_size: 512
+          batch_size: 64
           loader:
             num_workers: 32
             prefetch_factor: 4
