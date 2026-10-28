@@ -145,7 +145,6 @@ Radioml (change model size, always with 30 Watt):
 - vision base FP32 -> 0.8286 accuracy, eval dataset
     - 15 watt: f3bd756f25e0577ef12ec5d1b53157bcf794a231, ci-147861-586679
     - 30 watt: 81dac9dfb47b952629d409b9ac81693e2b9ee7b4, ci-144377-571533
->>>>>>> d9947a69695e9323d7f60a70ded169a8140a434d
     - 50 watt: 5fab971f1f673020c12e7eb9cce4dc73ca632c05, ci-139320-555878
 
 
@@ -198,22 +197,9 @@ dropout sweep:
 -> only very little changes in dopout 0 ... 0.35, then the accuracy gets bad
 
 
-<<<<<<< HEAD
 language model:
 - train different sizes
 train with quantisation
 without quantisation
 Base: Layers=12, Hidden size=768, Attention Heads=12
 Large Layers=24, Hidden size=1024, Attention Heads=16
-=======
--> todo use evaluation data for evaluation -> fertig
-
-Freitag:
--> power modi in throughput comparison kombinieren -> neuer branch, für dvc
--> power modi & Modelle (extra dimension) in throughput comparison kombinieren -> seaborn
--> language model trainieren
-
-
-
-
->>>>>>> cc1a277f90888403884ba848f57bd2f855345f66
