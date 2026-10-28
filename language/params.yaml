@@ -23,9 +23,9 @@ model:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 3
+  num_layers: 6
   # Number of attention heads
-  num_heads: 12
+  num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
   emb_dim: 768
