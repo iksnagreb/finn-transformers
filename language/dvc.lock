@@ -50,12 +50,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 59e803ab61b75b2712c099a5fee9f3d5
-      size: 26215
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
-      md5: fdfcf02f5da237ed129088687dc7544a
-      size: 4308
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -115,6 +115,7 @@ stages:
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
+          norm_affine: true
           dropout: 0.1
         seed: 12
         tag: quantized
@@ -173,12 +174,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 59e803ab61b75b2712c099a5fee9f3d5
-      size: 26215
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
-      md5: fdfcf02f5da237ed129088687dc7544a
-      size: 4308
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -253,6 +254,7 @@ stages:
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
+          norm_affine: true
           dropout: 0.1
         seed: 12
         tag: quantized
@@ -274,12 +276,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 59e803ab61b75b2712c099a5fee9f3d5
-      size: 26215
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
-      md5: fdfcf02f5da237ed129088687dc7544a
-      size: 4308
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -355,22 +357,23 @@ stages:
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
+          norm_affine: true
           dropout: 0.1
         seed: 12
         tag: quantized
     outs:
     - path: outputs/language/cls.npy
       hash: md5
-      md5: fb5c4cee3f1096de95d28bda7cfcfdaf
+      md5: 26c08941ae89d0f8e0c2e2ebcfabaea6
       size: 2176
     - path: outputs/language/inp.npy
       hash: md5
-      md5: 60e03e6f1c238750113758a1ab6db762
+      md5: 469c8ae33a2ef98711a6b7ebb49b2487
       size: 2176
     - path: outputs/language/model.onnx
       hash: md5
-      md5: 0d632816f1344678cc8b935644a6c2fc
-      size: 98398777
+      md5: 7b67b5dba1bfc0865086363ba0d05d12
+      size: 98412840
     - path: outputs/language/out.npy
       hash: md5
       md5: 5d2fed7ae811d0d22e6eefe1d7f92b86
