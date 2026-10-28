@@ -6,7 +6,7 @@ if [ "$RUN_VIA_SLURM" = 1 ]; then
   JOB_NAME="-J ${JOB_NAME:=DVC}"
   # Hard time limit of the job, will forcefully be terminated if not done within
   # this time
-  TIME_LIMIT="-t ${TIME_LIMIT:=24:00:00}"
+  TIME_LIMIT="-t ${TIME_LIMIT:=72:00:00}" # time limit verlängern
   # Number of CPUs to use per task
   NUM_CPUS="--cpus-per-task=${NUM_CPUS:=16}"
   # Amount of memory to allocate for the job
