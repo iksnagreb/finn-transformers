@@ -57,7 +57,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 |---|---|
 | 15 W | `TODO` |
 | 30 W | `ci-157856-620950` |
-| 50 W | `TODO` |
+| 50 W | `ci-157934-621235` |
 
 ### INT8 (Model training on Cluster)
 
