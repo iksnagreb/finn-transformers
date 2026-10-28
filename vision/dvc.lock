@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: PARTITION=gpu_h100 bash run.sh python -m vision.train
+    cmd: PARTITION=gpu_h100 bash run.sh python -m vision.train_tensorboard
     deps:
     - path: activations.py
       hash: md5
@@ -13,8 +13,8 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 229e090767db89d03d57625a53a16c61
-      size: 26234
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
       md5: 9b233fed5663d825d22709b2edb23644
@@ -39,10 +39,10 @@ stages:
       hash: md5
       md5: 90c9ab4bc24ddeabf3a3b76c63c07e16
       size: 6783
-    - path: vision/train.py
+    - path: vision/train_tensorboard.py
       hash: md5
-      md5: 8a532405fe8779a22dd8477487505685
-      size: 6662
+      md5: 0e1acff164be93f5c7c05540080a9525
+      size: 8938
     params:
       vision/params.yaml:
         dataset: '...'
@@ -131,8 +131,8 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 229e090767db89d03d57625a53a16c61
-      size: 26234
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
       md5: 9b233fed5663d825d22709b2edb23644
@@ -169,7 +169,7 @@ stages:
       vision/params.yaml:
         dataset: '...'
         eval:
-          batch_size: 64
+          batch_size: 512
           loader:
             num_workers: 32
             prefetch_factor: 4
@@ -216,8 +216,8 @@ stages:
       size: 28
     - path: outputs/vision/classes.csv
       hash: md5
-      md5: 36342481dff3c7ad922a8a93185ae337
-      size: 40015
+      md5: 6a6be00b45f38c23022d115e08255b62
+      size: 40259
   export:
     cmd: PARTITION=normal bash run.sh python -m vision.export
     deps:
@@ -231,8 +231,8 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 229e090767db89d03d57625a53a16c61
-      size: 26234
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
       md5: 9b233fed5663d825d22709b2edb23644
