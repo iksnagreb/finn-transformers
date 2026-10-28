@@ -67,7 +67,7 @@ class PatchEmbedding(torch.nn.Module):
             # defined above
             ACTIVATIONS[activation](),
             # Insert optional activation quantizer if enabled
-            *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
+            *([QuantIdentity(bit_width=bits, signed=True)] if bits else []),       # vielleicht das auf true setzen, für gelu
             # Pooling layer to reduce the feature map to the expected number of
             # patches
             torch.nn.AdaptiveAvgPool2d(patches),

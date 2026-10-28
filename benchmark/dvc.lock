@@ -21,12 +21,12 @@ stages:
       size: 136
     - path: blocks.py
       hash: md5
-      md5: 97751442e0e6954c9c6d9da4d59a0dd4
-      size: 27455
+      md5: 229e090767db89d03d57625a53a16c61
+      size: 26234
     - path: embedding.py
       hash: md5
-      md5: fdfcf02f5da237ed129088687dc7544a
-      size: 4308
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -78,11 +78,11 @@ stages:
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: 35c1b9443dc05bc62ae4339c24221dbb
+      md5: 3cefd7c2d1e5725b4d98599e8685eb0d
       size: 34913
     - path: outputs/benchmark/out.npy
       hash: md5
-      md5: 3472b667213d7d22b329fdc31f315071
+      md5: 1ded6b66c03bf240fca5bdb391f1ec6e
       size: 8320
   streamline:
     cmd: PARTITION=normal bash run.sh onnx-passes -c benchmark/passes.yaml -o 
@@ -98,11 +98,11 @@ stages:
       size: 8320
     - path: outputs/benchmark/model.onnx
       hash: md5
-      md5: 35c1b9443dc05bc62ae4339c24221dbb
+      md5: 3cefd7c2d1e5725b4d98599e8685eb0d
       size: 34913
     - path: outputs/benchmark/out.npy
       hash: md5
-      md5: 3472b667213d7d22b329fdc31f315071
+      md5: 1ded6b66c03bf240fca5bdb391f1ec6e
       size: 8320
     params:
       benchmark/passes.yaml:
@@ -162,9 +162,9 @@ stages:
     outs:
     - path: outputs/benchmark/streamlined.onnx
       hash: md5
-      md5: 127a0c162588b74a0a3578f556522535
-      size: 214074
+      md5: 56efa4db3db6b803e8cb9a19c97a21c6
+      size: 214482
     - path: outputs/benchmark/streamlined.onnx.pkl.xz
       hash: md5
-      md5: eccc0e4fa5d55acfa596c0a1916f347e
-      size: 7404
+      md5: 3a571b6fb320b8b20aa0d80be837fc35
+      size: 7392

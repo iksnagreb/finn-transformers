@@ -79,7 +79,7 @@ class MLP(torch.nn.Module):
                 # defined above
                 ACTIVATIONS[activation](),
                 # Insert optional activation quantizer if enabled
-                *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
+                *([QuantIdentity(bit_width=bits, signed=True)] if bits else []),
                 # Amount of dropout to apply at the sublayer output
                 torch.nn.Dropout(p=dropout),
                 # Quantized linear projection to the output embedding dimension
@@ -106,7 +106,7 @@ class MLP(torch.nn.Module):
                 # defined above
                 ACTIVATIONS[activation](),
                 # Insert optional activation quantizer if enabled
-                *([QuantIdentity(bit_width=bits, signed=False)] if bits else []),
+                *([QuantIdentity(bit_width=bits, signed=True)] if bits else []),    # set signed to true for layer norm
                 # Amount of dropout to apply at the sublayer output
                 torch.nn.Dropout(p=dropout),
                 # Quantized linear projection to the output embedding dimension
@@ -261,8 +261,8 @@ class Attention(torch.nn.Module):
             v_quant=act_quantizer(bits),
             # Input and output quantization of the softmax normalization of the
             # attention weights
-            softmax_input_quant=act_quantizer(bits),
-            softmax_output_quant=act_quantizer(bits, _signed=False),
+            softmax_input_quant=act_quantizer(bits), 
+            softmax_output_quant=act_quantizer(bits, _signed=True),
             # Input, weight and bias quantization settings of output projection
             output_projection_input_quant=act_quantizer(bits),
             output_projection_weight_quant=weight_quantizer(bits),

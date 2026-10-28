@@ -373,7 +373,7 @@ def build_tensorrt_engine(onnx_model_path, test_loader, batch_size, input_info=N
         opt_bs = batch_size
         max_bs = batch_size
         
-    logger = trt.Logger(trt.Logger.WARNING)
+    logger = trt.Logger(trt.Logger.INTERNAL_ERROR)
     builder = trt.Builder(logger)
 
     network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
