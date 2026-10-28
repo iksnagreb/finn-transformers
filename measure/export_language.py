@@ -239,7 +239,7 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load("outputs/language/model_fp32.pt")) 
     # Prevent export and streamlining issues for missing affine normalization
     # parameters
-    model = patch_missing_affine_norms(model)
+    # model = patch_missing_affine_norms(model) # sets LayerNorm weights to zero (utils.py bug) -> ORT accuracy ~10%
     # Pass the model and the export configuration to the evaluation loop
     export(model, dataset=params["dataset"], tokenizer=tokenizer,
            **params["export"])

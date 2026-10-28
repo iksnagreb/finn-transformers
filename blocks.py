@@ -35,6 +35,8 @@ class MLP(torch.nn.Module):
             activation="relu",
             # Placement of the normalization layer: pre-norm or post-norm
             norm_placement="post-norm",
+            # Learnable scale and shift of the layer-norm (MLP block only)
+            norm_affine=False,
             # Number of quantization bits for weights and activations (for all
             # intermediate layers)
             bits=None,
@@ -95,7 +97,7 @@ class MLP(torch.nn.Module):
                 *(torch.nn.Sequential(
                     torch.nn.LayerNorm(
                         normalized_shape=emb_dim,
-                        elementwise_affine=True, # instead of False
+                        elementwise_affine=norm_affine,
                     ),
                 ) if norm_placement == "pre-norm" and norm is not None else []),
                 # Insert optional activation quantizer if enabled
@@ -147,7 +149,7 @@ class MLP(torch.nn.Module):
                 self.post_norm = torch.nn.Sequential(
                     torch.nn.LayerNorm(
                         normalized_shape=emb_dim,
-                        elementwise_affine=False,
+                        elementwise_affine=norm_affine,
                     ),
 
                     *(

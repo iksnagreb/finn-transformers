@@ -47,6 +47,8 @@ model:
   # Placement of the normalization layer: pre-norm or post-norm, if norm is not
   # none
   norm_placement: pre-norm
+  # Learnable scale and shift in the MLP layer-norm
+  norm_affine: true
   # Dropout: probability of an element to be zeroed during training
   dropout: 0.1 # instead of 0.25
 # Training/Validation dataset configuration
