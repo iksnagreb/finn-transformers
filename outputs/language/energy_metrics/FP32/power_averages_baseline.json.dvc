@@ -1,0 +1,5 @@
+outs:
+- md5: 48cb9e0003dcc82421e479a963edb6ac
+  size: 2371
+  hash: md5
+  path: power_averages_baseline.json
