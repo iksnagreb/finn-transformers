@@ -8,7 +8,7 @@ model:
   embedding:
     # Number of quantization bits for weights and activations of the embedding
     # layer, null means no quantization
-    bits: null
+    bits: 8
   # Configures the positional encoding layer in front of the first attention
   # block
   positional:
@@ -17,15 +17,15 @@ model:
     encoding: learned
     # Number of quantization bits for weights and activations of the encoding
     # layer, null means no quantization
-    bits: null
+    bits: 8
   # List of layers configuring the encoder stack: Either a string referring to a
   # pre-defined configuration or a list of individual layer configurations
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 6
+  num_layers: 3
   # Number of attention heads
-  num_heads: 3
+  num_heads: 12
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
   # convolution, etc.
   emb_dim: 768
@@ -34,10 +34,10 @@ model:
   expansion_dim: 3072
   # Number of quantization bits for weights and activations (for all
   # intermediate layers), null means no quantization
-  bits: null
+  bits: 8
   # Number of quantization bits for weights and activations of the
   # output classification layer, null means no quantization
-  cls_bits: null
+  cls_bits: 8
   # Activation functions to use after convolution and linear layers
   #   Options: tanh, sigmoid, relu, gelu, silu
   activation: gelu # instead of relu
@@ -74,7 +74,7 @@ train:
   # Number of training epochs to run
   epochs: 50
   # Batch size for training
-  batch_size: 64
+  batch_size: 256
   # Context length for training inputs
   context_length: 256
   # Whether to use masked language modeling
@@ -108,7 +108,7 @@ train:
     # Reshuffle data every epoch
     shuffle: true
     # Number of workers to use for loading the data in parallel
-    num_workers: 8
+    num_workers: 32
     # Number of batches loaded in advance by each worker
     prefetch_factor: 4
     # Keep worker processes alive after consuming the dataset once
@@ -121,7 +121,7 @@ train:
 eval:
   # Evaluation batch size - does not influence the result, just speeds up the
   # evaluation by doing more in parallel
-  batch_size: 128
+  batch_size: 512
   # Context length for evaluation inputs
   context_length: 256
   # Whether to use masked language modeling

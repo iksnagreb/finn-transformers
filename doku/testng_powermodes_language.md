@@ -43,7 +43,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 ## Config 1
 
-### FP16 (trained)
+### FP16 (trained on Cluster)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -52,7 +52,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `ci-157847-620922` |
 | 50 W | `ci-157834-620886` |
 
-### FP32 (trained)
+### FP32 (trained on Cluster)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -61,7 +61,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `ci-157856-620950` |
 | 50 W | `ci-157934-621235` |
 
-### INT8 (Model training on Cluster)
+### INT8 (trained on Cluster)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -71,21 +71,21 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 ## Config 2
 
-### FP16 (training on CEG-420)
+### FP16 (trained on CEG-420)
 
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `ci-159132-625618` |
 | 30 W | `ci-159323-626162` |
-| 50 W | `running` |
+| 50 W | `ci-159358-626249` |
 
-### FP32 (training on CEG-420)
+### FP32 (trained on CEG-420)
 
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `ci-159132-625618` |
 | 30 W | `ci-159320-626153` |
-| 50 W | `running` |
+| 50 W | `ci-159363-626259` |
 
 ### INT8 (params on CEG 420)
 
