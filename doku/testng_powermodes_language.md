@@ -76,16 +76,16 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `ci-159132-625618` |
-| 30 W | `running` |
-| 50 W | `TODO` |
+| 30 W | `ci-159323-626162` |
+| 50 W | `running` |
 
 ### FP32 
 
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `ci-159132-625618` |
-| 30 W | `running` |
-| 50 W | `TODO` |
+| 30 W | `ci-159320-626153` |
+| 50 W | `running` |
 
 ### INT8
 
