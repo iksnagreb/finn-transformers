@@ -71,7 +71,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 ## Config 2
 
-### FP16 
+### FP16 (training on CEG-420)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -79,7 +79,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `ci-159323-626162` |
 | 50 W | `running` |
 
-### FP32 
+### FP32 (training on CEG-420)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -87,7 +87,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `ci-159320-626153` |
 | 50 W | `running` |
 
-### INT8
+### INT8 (params on CEG 420)
 
 | Power Mode | Experiment-ID |
 |---|---|
