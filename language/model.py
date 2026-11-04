@@ -112,7 +112,7 @@ class Model(torch.nn.Module):
             # Insert a (quantized) positional encoding layer between embedding
             # and encoder stack
             get_positional(**positional),
-            # Unpack and repeat the configured sequence of blocks
+            # Unpack and repeat the configured sequence of blocks (werden hier die Gewichte mitkopiert/die gleichen referenzen für die gewichte aus unterschiedlichen layers genutzt?)
             *(num_layers * configuration),
         )
 

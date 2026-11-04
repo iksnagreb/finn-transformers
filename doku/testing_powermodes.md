@@ -150,20 +150,6 @@ Radioml (change model size, always with 30 Watt):
 
 
 
-
-
-## Cluster
-- Radioml trainieren mit alten parametern (Vergleichswert/überprüfen ob das training klappt)
-- größerere Modelle und lernrate verändern
-    - more layers
-    - more heads
-
-# Jetson
-- alle tests nochmal ausführen, mit sudo jetson clocks
-
-# Aufräumen:
-- alte pngs löschen - fertig
-
 # Experimente anschauen:
 1. Alle experimente pullen (geht genauso langsam wie wenn ich nur eins pulle):
 ```
