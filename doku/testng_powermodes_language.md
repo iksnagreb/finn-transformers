@@ -87,7 +87,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `ci-159320-626153` |
 | 50 W | `ci-159363-626259` |
 
-### INT8
+### INT8 (params on CEG 420)
 
 | Power Mode | Experiment-ID |
 |---|---|
