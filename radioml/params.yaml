@@ -105,7 +105,7 @@ model_int8:
   configuration: original
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
-  num_layers: 1
+  num_layers: 1 # ähnlich zu vision, nur weniger parameter
   # Number of attention heads
   num_heads: 4
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
@@ -133,7 +133,7 @@ dataset:
   # Optionally select only a subset of the classes
   #  classes: null
   # Optionally select only a subset of the available noise levels
-  signal_to_noise_ratios:
+  signal_to_noise_ratios: # -20 oder -30 testen für mehr trainingsdaten
   - -6
   - -4
   - -2
