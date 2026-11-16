@@ -27,6 +27,15 @@ SOURCE_FILES = {
 	"throughput_results.json": "throughput_{power}.json",
 }
 
+# Copied only if the experiment produced them (older runs may lack these).
+OPTIONAL_SOURCE_FILES = {
+	"energy_consumption.json": "energy_consumption_{power}.json",
+	"power_throughput.json": "power_throughput_{power}.json",
+}
+
+# Training metrics are independent of the benchmark mode and power mode.
+MODEL_SOURCE_FILES = ("accuracy.yaml", "loss.yaml")
+
 
 # Add or remove experiments here. The experiment ID is the key; the remaining
 # fields determine the destination path and output filenames.
@@ -40,6 +49,10 @@ EXPERIMENTS = {
 	"ci-150714-597259": {"model": "base2", "power": "15w", "mode": "fp32"},
 	"ci-150695-597208": {"model": "base2", "power": "30w", "mode": "fp32"},
 	"ci-149142-590753": {"model": "base2", "power": "50w", "mode": "fp32"},
+	# base2 trained with individual (non-shared) layers instead of a repeated layer loop
+	"ci-160990-631006": {"model": "base2_individual", "power": "15w", "mode": "fp32"},
+	"ci-160980-630979": {"model": "base2_individual", "power": "30w", "mode": "fp32"},
+	"ci-159647-627017": {"model": "base2_individual", "power": "50w", "mode": "fp32"},
 	"ci-154683-610018": {"model": "base4", "power": "15w", "mode": ("int8", "ort_int8")},
 	"ci-154650-609906": {"model": "base4", "power": "30w", "mode": ("int8", "ort_int8")},
 	"ci-154618-609786": {"model": "base4", "power": "50w", "mode": ("int8", "ort_int8")},
@@ -90,6 +103,21 @@ def acquire(experiment_id: str, experiment: dict[str, str | tuple[str, ...]], dr
 				if not source.is_file():
 					raise FileNotFoundError(f"Expected experiment output was not found: {source}")
 				shutil.copy2(source, target)
+
+		for source_name, destination_template in OPTIONAL_SOURCE_FILES.items():
+			source = OUTPUT_ROOT / mode.upper() / source_name
+			target = destination / destination_template.format(power=power)
+			print(f"  (optional) {source.relative_to(REPOSITORY_ROOT)} -> {target.relative_to(REPOSITORY_ROOT)}")
+			if not dry_run and source.is_file():
+				shutil.copy2(source, target)
+
+	for source_name in MODEL_SOURCE_FILES:
+		source = OUTPUT_ROOT.parent / source_name
+		target = DATA_ROOT / model / source_name
+		print(f"  (optional) {source.relative_to(REPOSITORY_ROOT)} -> {target.relative_to(REPOSITORY_ROOT)}")
+		if not dry_run and source.is_file():
+			target.parent.mkdir(parents=True, exist_ok=True)
+			shutil.copy2(source, target)
 
 
 def restore_checkout(dry_run: bool) -> None:
