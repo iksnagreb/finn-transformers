@@ -1,5 +1,5 @@
 outs:
-- md5: 358f7ce0e84b86d3134502565e6935b3
+- md5: 3fb47dd11ec626a67f023bd5e99abac7
   size: 1088
   hash: md5
   path: latency_throughput.json
