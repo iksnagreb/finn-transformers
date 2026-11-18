@@ -97,23 +97,23 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 ## Config 3
 
-### FP16 (trained on cluster)
+### FP16 (trained on cluster, pushed)
 
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `TODO` |
 | 30 W | `TODO` |
-| 50 W | `TODO` |
+| 50 W | `running` |
 
-### FP32 (training on cluster)
+### FP32 (training on cluster, pushed)
 
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `TODO` |
 | 30 W | `TODO` |
-| 50 W | `TODO` |
+| 50 W | `running` |
 
-### INT8 (training on cluster)
+### INT8 (training on cluster, not pushed yet)
 
 | Power Mode | Experiment-ID |
 |---|---|
