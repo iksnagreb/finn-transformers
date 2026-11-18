@@ -107,7 +107,7 @@ stages:
             bits:
           configuration: original
           num_layers: 6
-          num_heads: 12
+          num_heads: 3
           emb_dim: 768
           expansion_dim: 3072
           bits:
@@ -246,7 +246,7 @@ stages:
             bits:
           configuration: original
           num_layers: 6
-          num_heads: 12
+          num_heads: 3
           emb_dim: 768
           expansion_dim: 3072
           bits:
@@ -349,7 +349,7 @@ stages:
             bits:
           configuration: original
           num_layers: 6
-          num_heads: 12
+          num_heads: 3
           emb_dim: 768
           expansion_dim: 3072
           bits:
