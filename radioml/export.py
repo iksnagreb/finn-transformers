@@ -22,9 +22,10 @@ from attention import QuantMultiheadAttention
 from utils import seed, patch_missing_affine_norms
 
 # Path to the RadioML dataset
-# RADIOML_PATH = os.environ["RADIOML_PATH"]
-RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
-RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
+RADIOML_PATH = os.environ["RADIOML_PATH"]
+RADIOML_PATH_NPZ = os.environ["RADIOML_PATH_NPZ"]
+# RADIOML_PATH = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5"
+# RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz"
 
 # Export function mapping
 EXPORTERS = {"qonnx": export_qonnx, "qcdq": export_onnx_qcdq}
@@ -127,7 +128,6 @@ def export(model, model_int8, dataset, batch_size, split_heads=False, **kwargs):
 if __name__ == "__main__":
     # Load the stage parameters from the parameters file
     params = dvc.api.params_show(stages="radioml/dvc.yaml:export")
-    batch_sizes = params["batch_sizes"]
     # Seed all RNGs
     seed(params["seed"])
     # Create a new model instance according to the configuration
