@@ -38,6 +38,10 @@ class Model(torch.nn.Module):
             # Number of layers, i.e., stacked repetitions of the encoder
             # configuration above
             num_layers=1,
+            # Share the parameters among the stacked repetitions of the encoder
+            # configuration (True) or give each repetition individual
+            # parameters (False)
+            share_weights=True,
             # Embedding dimension shared by all blocks, i.e., embedding,
             # attention, MLP, convolution, etc.
             emb_dim=512,
@@ -73,42 +77,62 @@ class Model(torch.nn.Module):
         if isinstance(configuration, str):
             configuration = TRANSFORMER_CONFIGURATIONS[configuration]
 
-        # Turn the configuration into a list supporting assignment (might be
-        # tuple when coming from configurations above)
-        configuration = list(configuration)
+        # Instantiates the configured sequence of blocks once, i.e., each call
+        # yields new block instances with individual parameters
+        def instantiate(configuration):  # noqa: Shadows configuration
+            # Turn the configuration into a list supporting assignment (might
+            # be tuple when coming from configurations above)
+            configuration = list(configuration)
 
-        # Convert mixed configuration (string, type, object) to a list of
-        # configured layer instances
-        for i, layer in enumerate(configuration):
-            # Skip already fully configured layer instances, i.e., any PyTorch
-            # Module instance
-            if isinstance(layer, torch.nn.Module):
-                continue
+            # Convert mixed configuration (string, type, object) to a list of
+            # configured layer instances
+            for i, layer in enumerate(configuration):
+                # Skip already fully configured layer instances, i.e., any
+                # PyTorch Module instance
+                if isinstance(layer, torch.nn.Module):
+                    continue
 
-            # Start with a fresh global configuration dictionary for each layer,
-            # potentially overwriting options with block-local configurations
-            global_config = {"emb_dim": emb_dim, "bits": bits, **kwargs}
+                # Start with a fresh global configuration dictionary for each
+                # layer, potentially overwriting options with block-local
+                # configurations
+                global_config = {"emb_dim": emb_dim, "bits": bits, **kwargs}
 
-            # If the layer is a string, this must be an identifier into the
-            # named layers above - lookup and replace by the corresponding class
-            if isinstance(layer, str):
-                layer = BLOCKS[layer]
+                # If the layer is a string, this must be an identifier into the
+                # named layers above - lookup and replace by the corresponding
+                # class
+                if isinstance(layer, str):
+                    layer = BLOCKS[layer]
 
-            # If the layer is a type, this must be an unconfigured class type to
-            # be configured and put into the configuration list
-            if isinstance(layer, type):
-                configuration[i] = layer(**global_config)
+                # If the layer is a type, this must be an unconfigured class
+                # type to be configured and put into the configuration list
+                if isinstance(layer, type):
+                    configuration[i] = layer(**global_config)
 
-            # If layer is a dictionary, this must be a key followed by
-            # configuration of the blocks above
-            if isinstance(layer, dict):
-                # The dictionary must be a single key-configuration pair
-                key, config = tuple(*layer.items())
-                # Merge block-local with global configuration with local taking
-                # precedence
-                global_config.update(config)
-                # Load the configuration into the block type
-                configuration[i] = BLOCKS[key](**global_config)
+                # If layer is a dictionary, this must be a key followed by
+                # configuration of the blocks above
+                if isinstance(layer, dict):
+                    # The dictionary must be a single key-configuration pair
+                    key, config = tuple(*layer.items())
+                    # Merge block-local with global configuration with local
+                    # taking precedence
+                    global_config.update(config)
+                    # Load the configuration into the block type
+                    configuration[i] = BLOCKS[key](**global_config)
+            # Return the list of configured layer instances
+            return configuration
+
+        # Unpack and repeat the configured sequence of blocks: Either repeating
+        # the same block instances (shared parameters) or instantiating the
+        # configuration individually for each repetition (unshared parameters)
+        # Note: Already instantiated layers in the configuration (instances of
+        # PyTorch Module) are always shared
+        if share_weights:
+            blocks = num_layers * instantiate(configuration)
+        else:
+            blocks = [
+                block for _ in range(num_layers)
+                for block in instantiate(configuration)
+            ]
 
         # Default positional encoding
         if positional is None:
@@ -120,8 +144,8 @@ class Model(torch.nn.Module):
             # Insert a (quantized) positional encoding layer between embedding
             # and encoder stack
             get_positional(**positional),
-            # Unpack and repeat the configured sequence of blocks
-            *(num_layers * configuration),
+            # Unpack the (repeated) sequence of configured blocks
+            *blocks,
             # Transformer data comes in with sequence (spatial) dimension before
             # channels but is treated as an image in channels-first layout
             Rearrange("b h w c -> b c h w"),

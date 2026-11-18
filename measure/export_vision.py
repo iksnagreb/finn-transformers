@@ -40,7 +40,7 @@ RADIOML_PATH_NPZ = R"/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_
 
 # Path to the CIFAR-10 dataset
 CIFAR10_ROOT = R"/data/gitlab"
-CIFAR10_ROOT = R"/home/hanna/git/finn-transformers/data"
+# CIFAR10_ROOT = R"/home/hanna/git/finn-transformers/data"
 
 # CIFAR10_ROOT = R"data"
 MODEL_TYPE = "vision"

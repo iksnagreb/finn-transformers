@@ -65,9 +65,9 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 | Power Mode | Experiment-ID |
 |---|---|
-| 15 W | `TODO` |
-| 30 W | `TODO` |
-| 50 W | `TODO` |
+| 15 W | `ci-161017-631177` |
+| 30 W | `ci-161060-631350` |
+| 50 W | `ci-159385-626322` |
 
 ## Config 2
 
@@ -87,17 +87,17 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `ci-159320-626153` |
 | 50 W | `ci-159363-626259` |
 
-### INT8
+### INT8 (training on CEG 420, ready on 12.11. 15:00)
 
 | Power Mode | Experiment-ID |
 |---|---|
-| 15 W | `TODO` |
-| 30 W | `TODO` |
-| 50 W | `TODO` |
+| 15 W | `ci-162190-635715` |
+| 30 W | `ci-162011-634859` |
+| 50 W | `running` |
 
 ## Config 3
 
-### FP16
+### FP16 (training on cluster, in queue)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -105,7 +105,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `TODO` |
 | 50 W | `TODO` |
 
-### FP32
+### FP32 (training on cluster, in queue)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -113,7 +113,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `TODO` |
 | 50 W | `TODO` |
 
-### INT8
+### INT8 (todo)
 
 | Power Mode | Experiment-ID |
 |---|---|
