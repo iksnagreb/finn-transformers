@@ -43,7 +43,7 @@ model:
   num_layers: 6
   # Share the parameters among the stacked repetitions of the encoder
   # configuration (true) or train individual parameters per layer (false)
-  share_weights: false
+  share_weights: true
   # Number of attention heads
   num_heads: 6
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,

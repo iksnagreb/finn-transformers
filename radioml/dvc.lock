@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: PARTITION=gpu bash run.sh python -m radioml.train
+    cmd: PARTITION=gpu_h100 bash run.sh python -m radioml.train
     deps:
     - path: activations.py
       hash: md5
@@ -13,12 +13,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -95,17 +95,17 @@ stages:
             - 0
             - 0
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
-          num_layers: 1
-          num_heads: 4
+          num_layers: 3
+          num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -137,22 +137,22 @@ stages:
     outs:
     - path: outputs/radioml/loss.yaml
       hash: md5
-      md5: b39a4cf33a40327af8e66d53df6e3cf1
-      size: 5527
+      md5: 9394d772c1a825b92cfc98282b05ae40
+      size: 3279
     - path: outputs/radioml/lr.yaml
       hash: md5
-      md5: ba5131b76ec4b8fdf1a74652b342cc03
-      size: 1901
+      md5: 43c9571ff0191266e41e71b53ab1588c
+      size: 1252
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: 86c992b09f859685c0a2c7c10370386f
-      size: 1983449
+      md5: 99725f6f32695948a80dc22c329e2941
+      size: 1894432
     - path: outputs/radioml/optimizer.pt
       hash: md5
-      md5: 9f8698ca77298f89c6e62fc163ee9d0b
-      size: 3757016
+      md5: 2d515d6e4e5bedd7280624fa551c073d
+      size: 3743927
   eval:
-    cmd: PARTITION=gpu bash run.sh python -m radioml.eval
+    cmd: PARTITION=gpu_h100 bash run.sh python -m radioml.eval
     deps:
     - path: activations.py
       hash: md5
@@ -164,12 +164,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -180,8 +180,8 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: 86c992b09f859685c0a2c7c10370386f
-      size: 1983449
+      md5: 99725f6f32695948a80dc22c329e2941
+      size: 1894432
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
@@ -258,17 +258,17 @@ stages:
             - 0
             - 0
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
-          num_layers: 1
-          num_heads: 4
+          num_layers: 3
+          num_heads: 3
           emb_dim: 192
           expansion_dim: 768
-          bits: 4
-          cls_bits: 8
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
@@ -278,12 +278,12 @@ stages:
     outs:
     - path: outputs/radioml/accuracy.yaml
       hash: md5
-      md5: 28bbfe8eb8d4d8ecf47da32fa35dddf2
-      size: 52
+      md5: f70b6fa24f11b9c09de3e3441b45c92a
+      size: 55
     - path: outputs/radioml/classes.csv
       hash: md5
-      md5: 3b1a1b4f94e8d9667c06c1466cc3319c
-      size: 962284
+      md5: 4fe96ba2ac5ca626c0e40768dd58715f
+      size: 855996
   export:
     cmd: PARTITION=normal bash run.sh python -m radioml.export
     deps:
