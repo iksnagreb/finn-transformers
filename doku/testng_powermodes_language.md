@@ -91,9 +91,9 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 | Power Mode | Experiment-ID |
 |---|---|
-| 15 W | `running` |
+| 15 W | `ci-162190-635715` |
 | 30 W | `ci-162011-634859` |
-| 50 W | `TODO` |
+| 50 W | `running` |
 
 ## Config 3
 
