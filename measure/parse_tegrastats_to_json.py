@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+from datetime import datetime
 
 def save_json(log, filepath):
     filepath = Path(filepath)
@@ -7,6 +8,54 @@ def save_json(log, filepath):
     filepath.parent.mkdir(parents=True, exist_ok=True)
     with open(filepath, "w") as f:
         json.dump(log, f, indent=2)
+
+
+def print_average_ram_usage(simple_data, base_path, batch_sizes):
+    """Print average tegrastats RAM usage during each batch's inference window."""
+    print("Average RAM usage during TensorRT inference:")
+
+    for batch_size in batch_sizes:
+        timestamps_file = base_path / f"timestamps_{batch_size}.json"
+        if not timestamps_file.exists():
+            print(f"  Batch size {batch_size}: no timestamp data")
+            continue
+
+        with open(timestamps_file, "r") as f:
+            timestamps = json.load(f)
+
+        def parse_timestamp(timestamp):
+            try:
+                return datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+            except ValueError:
+                return datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
+
+        start = parse_timestamp(timestamps["start_time"])
+        end = parse_timestamp(timestamps["end_time"])
+        start = start.replace(microsecond=0)
+        end = end.replace(microsecond=0)
+        ram_values = []
+        ram_totals = []
+
+        for entry in simple_data:
+            if entry["batch_size"] != batch_size:
+                continue
+
+            entry_time = datetime.strptime(entry["timestamp"], "%Y-%m-%dT%H:%M:%S")
+            if start <= entry_time <= end:
+                ram_values.append(entry["ram_used"])
+                ram_totals.append(entry["ram_total"])
+
+        if not ram_values:
+            print(f"  Batch size {batch_size}: no RAM samples")
+            continue
+
+        average_ram_used = sum(ram_values) / len(ram_values)
+        average_ram_total = sum(ram_totals) / len(ram_totals)
+        print(
+            f"  Batch size {batch_size}: {average_ram_used:.2f} MB "
+            f"(average of {len(ram_values)} samples, "
+            f"{average_ram_total:.2f} MB total)"
+        )
 
 
 def parse_tegrastats(input_logs, base_path, plot_base_path):
@@ -156,6 +205,8 @@ def parse_tegrastats(input_logs, base_path, plot_base_path):
     save_json(simple_data, output_json_simple)
     save_json(simple_data, output_json_simple2)
     print(f"{len(simple_data)} entries in '{output_json_simple.name}' saved (simplified).")
+    batch_sizes = list(dict.fromkeys(batch_size for _, batch_size in input_logs))
+    print_average_ram_usage(simple_data, base_path, batch_sizes)
     save_json(energy_data, output_json_energy)    
     save_json(energy_data, output_json_energy2)
         
