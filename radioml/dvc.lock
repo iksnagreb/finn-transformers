@@ -297,12 +297,12 @@ stages:
       size: 7516
     - path: blocks.py
       hash: md5
-      md5: 94b955d3c734cb1e5c007c9e9e356f29
-      size: 23056
+      md5: 5a4c8a761045f367d3b9c46e46d88e52
+      size: 26352
     - path: embedding.py
       hash: md5
-      md5: a06e3ff4051b39ecfddb85ffbe790b65
-      size: 3998
+      md5: 9b233fed5663d825d22709b2edb23644
+      size: 4357
     - path: encoding.py
       hash: md5
       md5: 08ba618cce0e47e68014ac1c9ee77b05
@@ -313,20 +313,20 @@ stages:
       size: 5162
     - path: outputs/radioml/model.pt
       hash: md5
-      md5: dd6feb260506ba3e128defa01a7d72e4
-      size: 1056848
+      md5: 99725f6f32695948a80dc22c329e2941
+      size: 1894432
     - path: quant.py
       hash: md5
       md5: 861ee87e24d388efec8bc21cc3df989e
       size: 1221
     - path: radioml/dataset.py
       hash: md5
-      md5: 098d3a3ea30571b048605c4de0818496
-      size: 5248
+      md5: f2e1d50354836d2addad914e2018b135
+      size: 6165
     - path: radioml/export.py
       hash: md5
-      md5: 0a7aeed8d97cda6cfa71130f20af97ab
-      size: 5996
+      md5: d419be1ed7afebb46671f6ad0de8f203
+      size: 6008
     - path: radioml/model.py
       hash: md5
       md5: 08587aae24e58f01ef7211bbe3168da0
@@ -376,6 +376,18 @@ stages:
           dynamo: false
           external_data: false
           optimize: false
+          batch_sizes:
+          - 1
+          - 2
+          - 4
+          - 8
+          - 16
+          - 32
+          - 64
+          - 128
+          - 256
+          - 512
+          - 1024
         model:
           num_classes: 24
           embedding:
@@ -392,17 +404,17 @@ stages:
             - 0
             - 0
             activation: relu
-            bits: 8
+            bits:
           positional:
             encoding: learned
-            bits: 8
+            bits:
           configuration: original
           num_layers: 3
-          num_heads: 4
-          emb_dim: 128
-          expansion_dim: 512
-          bits: 4
-          cls_bits: 8
+          num_heads: 3
+          emb_dim: 192
+          expansion_dim: 768
+          bits:
+          cls_bits:
           activation: relu
           norm: batch-norm
           norm_placement: pre-norm
