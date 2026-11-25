@@ -41,21 +41,6 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | Config 2 (base/2)| 3 | 3 | 192 |
 | Config 3 (base)| 6 | 6 | 384 |
 
--> oder besser 8->4->2
-
-| Konfiguration | `num_layers` | `num_heads` | `emb_dim` |
-|---|---:|---:|---:|
-| Config 1 (base/4) | 2 | 2 | 96 |
-| Config 2 (base/2)| 4 | 4 | 192 |
-| Config 3 (base)| 8 | 8 | 384 |
-
--> oder besser 4->2->1
-
-| Konfiguration | `num_layers` | `num_heads` | `emb_dim` |
-|---|---:|---:|---:|
-| Config 1 (base/4) | 1 | 1 | 96 |
-| Config 2 (base/2)| 2 | 2 | 192 |
-| Config 3 (base)| 4 | 4 | 384 |
 
 ## Config 1
 

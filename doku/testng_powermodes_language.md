@@ -95,7 +95,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 ## Config 3
 
-### FP16 (trained on cluster, pushed)
+### FP16 (trained on cluster)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -103,7 +103,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `ci-163015-639902` |
 | 50 W | `ci-162854-639381` |
 
-### FP32 (training on cluster, pushed)
+### FP32 (training on cluster)
 
 | Power Mode | Experiment-ID |
 |---|---|
@@ -111,17 +111,20 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `ci-163023-639937` |
 | 50 W | `ci-162858-639386` |
 
-### INT8 (training on cluster, pushed)
+### INT8 (training on cluster)
 
 | Power Mode | Experiment-ID |
 |---|---|
-| 15 W | `TODO` |
+| 15 W | `running` |
 | 30 W | `ci-164911-646442` |
 | 50 W | `ci-164944-646619` |
 
 
+Nächste Woche:
 - Language Experimente fertig machen
 - Language plots fertig machen
+- number_batches korrigieren (in summary_plots)
 - Radioml: Configs trainieren
-- Radioml: daten für evaluation speichern (splitten)
+- Radioml: daten für evaluation speichern
 - Radioml: erste Experimente starten
+- radioml quantisiert, qonnx teilen (exp name)
