@@ -1,0 +1,65 @@
+[
+    {
+        "batch_size": 1,
+        "power_total": 12378.539568345324,
+        "throughput_images_per_s": 123.92649071566238,
+        "throughput_per_power": 0.010011398358540612,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 2,
+        "power_total": 13024.853448275862,
+        "throughput_images_per_s": 222.3838992577455,
+        "throughput_per_power": 0.017073812011849016,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 4,
+        "power_total": 13624.814285714285,
+        "throughput_images_per_s": 363.28731372166914,
+        "throughput_per_power": 0.02666365251690649,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 8,
+        "power_total": 14659.660714285714,
+        "throughput_images_per_s": 445.2517559604024,
+        "throughput_per_power": 0.030372582601895307,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 16,
+        "power_total": 16328.634408602149,
+        "throughput_images_per_s": 509.3334726430639,
+        "throughput_per_power": 0.031192655790905577,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 32,
+        "power_total": 17666.33766233766,
+        "throughput_images_per_s": 615.5995519799159,
+        "throughput_per_power": 0.0348459065906056,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 64,
+        "power_total": 18004.184210526317,
+        "throughput_images_per_s": 620.9884925790967,
+        "throughput_per_power": 0.034491342974375366,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 128,
+        "power_total": 18408.185714285715,
+        "throughput_images_per_s": 665.0282925886639,
+        "throughput_per_power": 0.036126770063633545,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 256,
+        "power_total": 18799.128571428573,
+        "throughput_images_per_s": 664.090551677212,
+        "throughput_per_power": 0.0353256029477087,
+        "num_batches_corrected": true
+    }
+]

@@ -1,0 +1,65 @@
+[
+    {
+        "batch_size": 1,
+        "power_total": 10629.219702892886,
+        "throughput_images_per_s": 19.444658451022047,
+        "throughput_per_power": 0.0018293589740863028,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 2,
+        "power_total": 10643.456733897203,
+        "throughput_images_per_s": 32.42380401919705,
+        "throughput_per_power": 0.0030463602972081384,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 4,
+        "power_total": 11615.335671342684,
+        "throughput_images_per_s": 49.9231899193717,
+        "throughput_per_power": 0.004298041083956103,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 8,
+        "power_total": 12324.817948717948,
+        "throughput_images_per_s": 63.72827731291415,
+        "throughput_per_power": 0.005170727679555161,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 16,
+        "power_total": 12995.560113154173,
+        "throughput_images_per_s": 70.96609158339741,
+        "throughput_per_power": 0.0054607951458410155,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 32,
+        "power_total": 13089.268476621417,
+        "throughput_images_per_s": 74.9278913336089,
+        "throughput_per_power": 0.005724375771452521,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 64,
+        "power_total": 13127.058637083994,
+        "throughput_images_per_s": 78.61300704238612,
+        "throughput_per_power": 0.005988623134530995,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 128,
+        "power_total": 13058.308681672026,
+        "throughput_images_per_s": 79.79328303017476,
+        "throughput_per_power": 0.006110537357886824,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 256,
+        "power_total": 13181.620578778136,
+        "throughput_images_per_s": 79.60594349870853,
+        "throughput_per_power": 0.006039162106279315,
+        "num_batches_corrected": true
+    }
+]

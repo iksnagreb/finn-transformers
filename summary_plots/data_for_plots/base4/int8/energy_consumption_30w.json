@@ -1,0 +1,7646 @@
+[
+  {
+    "timestamp": "2026-10-15T13:27:52",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:52",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:52",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:53",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:53",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:53",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:54",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:54",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:54",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:55",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:55",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:55",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:56",
+    "type": "vdd_gpu_soc_current",
+    "value": 3600,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:56",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:56",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:57",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:57",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:57",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:58",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:58",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:58",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:59",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:59",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:27:59",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:00",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:00",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:00",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:01",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:28:01",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:28:01",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:28:02",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:02",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:02",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:03",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:03",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:03",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:04",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:04",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:04",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:05",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:05",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:05",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:06",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:06",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:06",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:07",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:07",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:07",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:08",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:08",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:08",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:09",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:09",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:09",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:10",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:10",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:10",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:11",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:11",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:11",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:12",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:12",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:12",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:13",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:13",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:13",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:14",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:14",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:14",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:15",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:15",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:15",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:16",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:16",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:16",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:17",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:17",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:17",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:18",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:18",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:18",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:19",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:19",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:19",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:20",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:20",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:20",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:21",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:21",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:21",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:22",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:22",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:22",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:23",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:23",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:23",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:24",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:24",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:24",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:25",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:25",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:25",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:26",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:26",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:26",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:27",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:27",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:27",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:28",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:28",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:28",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:29",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:29",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:29",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:30",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:30",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:30",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:31",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:31",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:31",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:32",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:32",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:32",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:33",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:33",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:33",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:34",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:34",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:34",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:35",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:35",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:35",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:36",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:36",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:36",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:37",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:37",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:37",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:38",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:38",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:38",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:39",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:39",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:39",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:40",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:40",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:40",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:41",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:41",
+    "type": "vdd_cpu_cv_current",
+    "value": 1600,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:41",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:42",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:42",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:42",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:43",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:43",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:43",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:44",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:44",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:44",
+    "type": "vin_sys_5v0_current",
+    "value": 4830,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:45",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:45",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:45",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:46",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:46",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:46",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:47",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:47",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:47",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:48",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:48",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:48",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:49",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:49",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:49",
+    "type": "vin_sys_5v0_current",
+    "value": 4830,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:50",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:50",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:50",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:51",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:51",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:51",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:52",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:52",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:52",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:53",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:53",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:53",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:54",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:54",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:54",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:55",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:55",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:55",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:56",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:56",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:56",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:57",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:57",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:57",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:58",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:58",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:58",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:59",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:59",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:28:59",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:00",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:00",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:00",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:01",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:01",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:01",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:02",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:02",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:02",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:03",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:03",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:03",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:04",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:04",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:04",
+    "type": "vin_sys_5v0_current",
+    "value": 4823,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:05",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:05",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:05",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:06",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:06",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:06",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:07",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:07",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:07",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:08",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:08",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:08",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:09",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:09",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:09",
+    "type": "vin_sys_5v0_current",
+    "value": 4830,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:10",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:10",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:10",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:11",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:11",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:11",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:12",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:12",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:12",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:13",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:13",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:13",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:14",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:14",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:14",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:15",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:15",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:15",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:16",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:16",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:16",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:17",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:17",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:17",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:18",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:18",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:18",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:19",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:19",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:19",
+    "type": "vin_sys_5v0_current",
+    "value": 4830,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:20",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:20",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:20",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:21",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:21",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:21",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:22",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:22",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:22",
+    "type": "vin_sys_5v0_current",
+    "value": 4421,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:23",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:29:23",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:29:23",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:29:24",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:24",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:24",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:25",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:25",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:25",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:26",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:26",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:26",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:27",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:27",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:27",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:28",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:28",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:28",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:29",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:29",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:29",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:30",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:30",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:30",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:31",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:31",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:31",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 1,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:40",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:40",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:40",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:41",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:41",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:41",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:42",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:42",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:42",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:43",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:43",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:43",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:44",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:44",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:44",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:45",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:45",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:45",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:46",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:46",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:46",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:47",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:47",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:47",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:48",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:48",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:48",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:49",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:49",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:49",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:50",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:29:50",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:29:50",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:29:51",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:51",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:51",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:52",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:52",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:52",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:53",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:53",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:53",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:54",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:54",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:54",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:55",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:55",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:55",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:56",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:56",
+    "type": "vdd_cpu_cv_current",
+    "value": 1599,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:56",
+    "type": "vin_sys_5v0_current",
+    "value": 4830,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:57",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:57",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:57",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:58",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:58",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:58",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:59",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:59",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:29:59",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:00",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:00",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:00",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:01",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:01",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:01",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:02",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:02",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:02",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:03",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:03",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:03",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:04",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:04",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:04",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:05",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:05",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:05",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:06",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:06",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:06",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:07",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:07",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:07",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:08",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:08",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:08",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:09",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:09",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:09",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:10",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:10",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:10",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:11",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:11",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:11",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:12",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:12",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:12",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:13",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:13",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:13",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:14",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:14",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:14",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:15",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:15",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:15",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:16",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:16",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:16",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:17",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:17",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:17",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:18",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:18",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:18",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:19",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:19",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:19",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:20",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:20",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:20",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:21",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:21",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:21",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:22",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:22",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:22",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:23",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:23",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:23",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:24",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:24",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:24",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:25",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:25",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:25",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:26",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:26",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:26",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:27",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:27",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:27",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:28",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:28",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:28",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:29",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:29",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:29",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:30",
+    "type": "vdd_gpu_soc_current",
+    "value": 4000,
+    "batch_size": 2,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:30:30",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 2,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:30:30",
+    "type": "vin_sys_5v0_current",
+    "value": 4421,
+    "batch_size": 2,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:30:31",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:31",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:31",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:32",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:32",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:32",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:33",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:33",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:33",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:34",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:34",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:34",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:35",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:35",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:35",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:36",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:36",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:36",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:37",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:37",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:37",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:38",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:38",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:38",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:39",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:39",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:39",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 2,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:48",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:48",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:48",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:49",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:49",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:49",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:50",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:50",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:50",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:51",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:51",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:51",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:52",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:52",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:52",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:53",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:53",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:53",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:54",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:54",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:54",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:55",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:55",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:55",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:56",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:56",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:56",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:57",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 4,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:30:57",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:30:57",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 4,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:30:58",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:58",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:58",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:59",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:59",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:30:59",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:00",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:00",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:00",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:01",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:01",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:01",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:02",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:02",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:02",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:03",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:03",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:03",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:04",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:04",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:04",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:05",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:05",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:05",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:06",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:06",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:06",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:07",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:07",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:07",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:08",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:08",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:08",
+    "type": "vin_sys_5v0_current",
+    "value": 4830,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:09",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:09",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:09",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:10",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:10",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:10",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:11",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:11",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:11",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:12",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:12",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:12",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:13",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:13",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:13",
+    "type": "vin_sys_5v0_current",
+    "value": 4730,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:14",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:14",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:14",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:15",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:15",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:15",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:16",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:16",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:16",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:17",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:17",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:17",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:18",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:18",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:18",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:19",
+    "type": "vdd_gpu_soc_current",
+    "value": 4798,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:19",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:19",
+    "type": "vin_sys_5v0_current",
+    "value": 4722,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:20",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 4,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:31:20",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:31:20",
+    "type": "vin_sys_5v0_current",
+    "value": 4421,
+    "batch_size": 4,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:31:21",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:21",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:21",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:22",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:22",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:22",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:23",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:23",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:23",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:24",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:24",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:24",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:25",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:25",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:25",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:26",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:26",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:26",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:27",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:27",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:27",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:28",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:28",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:28",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:29",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:29",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:29",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 4,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:38",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:38",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:38",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:39",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:39",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:39",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:40",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:40",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:40",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:41",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:41",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:41",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:42",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:42",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:42",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:43",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:43",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:43",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:44",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:44",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:44",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:45",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:45",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:45",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:46",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:46",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:46",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:47",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 8,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:31:47",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:31:47",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 8,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:31:48",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:48",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:48",
+    "type": "vin_sys_5v0_current",
+    "value": 4830,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:49",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:49",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:49",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:50",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:50",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:50",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:51",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:51",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:51",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:52",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:52",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:52",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:53",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:53",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:53",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:54",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:54",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:54",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:55",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:55",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:55",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:56",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:56",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:56",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:57",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:57",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:57",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:58",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:58",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:58",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:59",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:59",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:31:59",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:00",
+    "type": "vdd_gpu_soc_current",
+    "value": 5197,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:00",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:00",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:01",
+    "type": "vdd_gpu_soc_current",
+    "value": 4400,
+    "batch_size": 8,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:01",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 8,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:01",
+    "type": "vin_sys_5v0_current",
+    "value": 4528,
+    "batch_size": 8,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:02",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:02",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:02",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:03",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:03",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:03",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:04",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:04",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:04",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:05",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:05",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:05",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:06",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:06",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:06",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:07",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:07",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:07",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:08",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:08",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:08",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:09",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:09",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:09",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:10",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:10",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:10",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 8,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:19",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:19",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:19",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:20",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:20",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:20",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:21",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:21",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:21",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:22",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:22",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:22",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:23",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:23",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:23",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:24",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:24",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:24",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:25",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:25",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:25",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:26",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:26",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:26",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:27",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:27",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:27",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:28",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 16,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:28",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:28",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 16,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:29",
+    "type": "vdd_gpu_soc_current",
+    "value": 5597,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:29",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:29",
+    "type": "vin_sys_5v0_current",
+    "value": 5132,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:30",
+    "type": "vdd_gpu_soc_current",
+    "value": 5997,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:30",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:30",
+    "type": "vin_sys_5v0_current",
+    "value": 5132,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:31",
+    "type": "vdd_gpu_soc_current",
+    "value": 5997,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:31",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:31",
+    "type": "vin_sys_5v0_current",
+    "value": 5132,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:32",
+    "type": "vdd_gpu_soc_current",
+    "value": 5997,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:32",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:32",
+    "type": "vin_sys_5v0_current",
+    "value": 5132,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:33",
+    "type": "vdd_gpu_soc_current",
+    "value": 5997,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:33",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:33",
+    "type": "vin_sys_5v0_current",
+    "value": 5233,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:34",
+    "type": "vdd_gpu_soc_current",
+    "value": 5997,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:34",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:34",
+    "type": "vin_sys_5v0_current",
+    "value": 5132,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:35",
+    "type": "vdd_gpu_soc_current",
+    "value": 5997,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:35",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:35",
+    "type": "vin_sys_5v0_current",
+    "value": 5132,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:36",
+    "type": "vdd_gpu_soc_current",
+    "value": 5997,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:36",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:36",
+    "type": "vin_sys_5v0_current",
+    "value": 5132,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:37",
+    "type": "vdd_gpu_soc_current",
+    "value": 5997,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:37",
+    "type": "vdd_cpu_cv_current",
+    "value": 1599,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:37",
+    "type": "vin_sys_5v0_current",
+    "value": 5233,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:38",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 16,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:38",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:38",
+    "type": "vin_sys_5v0_current",
+    "value": 4421,
+    "batch_size": 16,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:32:39",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:39",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:39",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:40",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:40",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:40",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:41",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:41",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:41",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:42",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:42",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:42",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:43",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:43",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:43",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:44",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:44",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:44",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:45",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:45",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:45",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:46",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:46",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:46",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:47",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:47",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:47",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 16,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:56",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:56",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:56",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:57",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:57",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:57",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:58",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:58",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:58",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:59",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:59",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:32:59",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:00",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:00",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:00",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:01",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:01",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:01",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:02",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:02",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:02",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:03",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:03",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:03",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:04",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:04",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:04",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:05",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:05",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:05",
+    "type": "vin_sys_5v0_current",
+    "value": 4421,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:06",
+    "type": "vdd_gpu_soc_current",
+    "value": 6397,
+    "batch_size": 32,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:06",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 32,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:06",
+    "type": "vin_sys_5v0_current",
+    "value": 5434,
+    "batch_size": 32,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:07",
+    "type": "vdd_gpu_soc_current",
+    "value": 6797,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:07",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:07",
+    "type": "vin_sys_5v0_current",
+    "value": 5535,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:08",
+    "type": "vdd_gpu_soc_current",
+    "value": 6797,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:08",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:08",
+    "type": "vin_sys_5v0_current",
+    "value": 5535,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:09",
+    "type": "vdd_gpu_soc_current",
+    "value": 6800,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:09",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:09",
+    "type": "vin_sys_5v0_current",
+    "value": 5635,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:10",
+    "type": "vdd_gpu_soc_current",
+    "value": 6797,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:10",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:10",
+    "type": "vin_sys_5v0_current",
+    "value": 5635,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:11",
+    "type": "vdd_gpu_soc_current",
+    "value": 6797,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:11",
+    "type": "vdd_cpu_cv_current",
+    "value": 1200,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:11",
+    "type": "vin_sys_5v0_current",
+    "value": 5535,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:12",
+    "type": "vdd_gpu_soc_current",
+    "value": 5200,
+    "batch_size": 32,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:12",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 32,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:12",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 32,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:13",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:13",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:13",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:14",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:14",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:14",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:15",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:15",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:15",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:16",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:16",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:16",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:17",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:17",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:17",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:18",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:18",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:18",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:19",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:19",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:19",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:20",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:20",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:20",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:21",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:21",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:21",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 32,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:31",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:31",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:31",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:32",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:32",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:32",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:33",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:33",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:33",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:34",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:34",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:34",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:35",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:35",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:35",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:36",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:36",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:36",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:37",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:37",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:37",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:38",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:38",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:38",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:39",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:39",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:39",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:40",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 64,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:40",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:40",
+    "type": "vin_sys_5v0_current",
+    "value": 4421,
+    "batch_size": 64,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:41",
+    "type": "vdd_gpu_soc_current",
+    "value": 7197,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:41",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:41",
+    "type": "vin_sys_5v0_current",
+    "value": 5937,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:42",
+    "type": "vdd_gpu_soc_current",
+    "value": 7596,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:42",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:42",
+    "type": "vin_sys_5v0_current",
+    "value": 6139,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:43",
+    "type": "vdd_gpu_soc_current",
+    "value": 7596,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:43",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:43",
+    "type": "vin_sys_5v0_current",
+    "value": 6139,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:44",
+    "type": "vdd_gpu_soc_current",
+    "value": 7596,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:44",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:44",
+    "type": "vin_sys_5v0_current",
+    "value": 6139,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:45",
+    "type": "vdd_gpu_soc_current",
+    "value": 7596,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:45",
+    "type": "vdd_cpu_cv_current",
+    "value": 1199,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:45",
+    "type": "vin_sys_5v0_current",
+    "value": 6139,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:46",
+    "type": "vdd_gpu_soc_current",
+    "value": 4800,
+    "batch_size": 64,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:46",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 64,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:46",
+    "type": "vin_sys_5v0_current",
+    "value": 4931,
+    "batch_size": 64,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:33:47",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:47",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:47",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:48",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:48",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:48",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:49",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:49",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:49",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:50",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:50",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:50",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:51",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:51",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:51",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:52",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:52",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:52",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:53",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:53",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:53",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:54",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:54",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:54",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:55",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:55",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:33:55",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 64,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:05",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:05",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:05",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:06",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:06",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:06",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:07",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:07",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:07",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:08",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:08",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:08",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:09",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:09",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:09",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:10",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:10",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:10",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:11",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:11",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:11",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:12",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:12",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:12",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:13",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:13",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:13",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:14",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 128,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:14",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:14",
+    "type": "vin_sys_5v0_current",
+    "value": 4521,
+    "batch_size": 128,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:15",
+    "type": "vdd_gpu_soc_current",
+    "value": 7596,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:15",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:15",
+    "type": "vin_sys_5v0_current",
+    "value": 6139,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:16",
+    "type": "vdd_gpu_soc_current",
+    "value": 7996,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:16",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:16",
+    "type": "vin_sys_5v0_current",
+    "value": 6239,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:17",
+    "type": "vdd_gpu_soc_current",
+    "value": 7996,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:17",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:17",
+    "type": "vin_sys_5v0_current",
+    "value": 6340,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:18",
+    "type": "vdd_gpu_soc_current",
+    "value": 7996,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:18",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:18",
+    "type": "vin_sys_5v0_current",
+    "value": 6239,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:19",
+    "type": "vdd_gpu_soc_current",
+    "value": 7996,
+    "batch_size": 128,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:19",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:19",
+    "type": "vin_sys_5v0_current",
+    "value": 6340,
+    "batch_size": 128,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:20",
+    "type": "vdd_gpu_soc_current",
+    "value": 4398,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:20",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:20",
+    "type": "vin_sys_5v0_current",
+    "value": 4521,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:21",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:21",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:21",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:22",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:22",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:22",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:23",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:23",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:23",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:24",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:24",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:24",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:25",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:25",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:25",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:26",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:26",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:26",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:27",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:27",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:27",
+    "type": "vin_sys_5v0_current",
+    "value": 4421,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:28",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:28",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:28",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:29",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:29",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:29",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 128,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:38",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:38",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:38",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:39",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:39",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:39",
+    "type": "vin_sys_5v0_current",
+    "value": 4320,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:40",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:40",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:40",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:41",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:41",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:41",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:42",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:42",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:42",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:44",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:44",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:44",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:45",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:45",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:45",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:46",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:46",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:46",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:47",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:47",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:47",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:48",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 256,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:48",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:48",
+    "type": "vin_sys_5v0_current",
+    "value": 4521,
+    "batch_size": 256,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:49",
+    "type": "vdd_gpu_soc_current",
+    "value": 7996,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:49",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:49",
+    "type": "vin_sys_5v0_current",
+    "value": 6440,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:50",
+    "type": "vdd_gpu_soc_current",
+    "value": 8396,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:50",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:50",
+    "type": "vin_sys_5v0_current",
+    "value": 6642,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:51",
+    "type": "vdd_gpu_soc_current",
+    "value": 8396,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:51",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:51",
+    "type": "vin_sys_5v0_current",
+    "value": 6642,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:52",
+    "type": "vdd_gpu_soc_current",
+    "value": 8396,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:52",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:52",
+    "type": "vin_sys_5v0_current",
+    "value": 6642,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:53",
+    "type": "vdd_gpu_soc_current",
+    "value": 7200,
+    "batch_size": 256,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:53",
+    "type": "vdd_cpu_cv_current",
+    "value": 800,
+    "batch_size": 256,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:53",
+    "type": "vin_sys_5v0_current",
+    "value": 5937,
+    "batch_size": 256,
+    "bar_start_end": true
+  },
+  {
+    "timestamp": "2026-10-15T13:34:54",
+    "type": "vdd_gpu_soc_current",
+    "value": 3998,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:54",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:54",
+    "type": "vin_sys_5v0_current",
+    "value": 4421,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:55",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:55",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:55",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:56",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:56",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:56",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:57",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:57",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:57",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:58",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:58",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:58",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:59",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:59",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:34:59",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:00",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:00",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:00",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:01",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:01",
+    "type": "vdd_cpu_cv_current",
+    "value": 799,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:01",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:02",
+    "type": "vdd_gpu_soc_current",
+    "value": 3598,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:02",
+    "type": "vdd_cpu_cv_current",
+    "value": 399,
+    "batch_size": 256,
+    "bar_start_end": false
+  },
+  {
+    "timestamp": "2026-10-15T13:35:02",
+    "type": "vin_sys_5v0_current",
+    "value": 4220,
+    "batch_size": 256,
+    "bar_start_end": false
+  }
+]
