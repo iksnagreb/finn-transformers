@@ -123,7 +123,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 Nächste Woche:
 - Language Experimente fertig machen
 - Language plots fertig machen
-- number_batches korrigieren (in summary_plots)
+- number_batches korrigieren (in summary_plots) -> fertig
 - Radioml: Configs trainieren
 - Radioml: daten für evaluation speichern
 - Radioml: erste Experimente starten
