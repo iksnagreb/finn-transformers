@@ -613,7 +613,7 @@ def calculate_latency_and_throughput(batch_sizes, onnx_model_path, input_info, o
         latency_dt_avg   = latency_dt_sum   / num_executions
         total_time_avg   = total_time_sum   / num_executions
 
-        num_batches        = int(7600 / batch_size)
+        num_batches        = len(test_loader)
         throughput_batches = num_batches / total_time_avg
         throughput_images  = (num_batches * batch_size) / total_time_avg
 

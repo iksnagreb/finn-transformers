@@ -52,6 +52,12 @@ model:
   # Number of layers, i.e., stacked repetitions of the encoder configuration
   # above
   num_layers: 3
+  # Share parameters between the stacked repetitions of the encoder
+  # configuration: true repeats the same block instances num_layers times
+  # (including the batch-norm running statistics!), false gives each layer its
+  # own parameters
+  share_weights: true
+  share_norm: false
   # Number of attention heads
   num_heads: 3
   # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
@@ -76,59 +82,8 @@ model:
   # none
   norm_placement: pre-norm
   # Dropout: probability of an element to be zeroed during training
-  dropout: 0.5
-# Training/Validation dataset configuration
-model_int8:
-  # Number of output classes to predict (default 24 RadioML classes)
-  num_classes: 24
-  # Configuration of the initial patch-embedding layer
-  embedding:
-    # Number of patches to aggregate the feature map into
-    patches:
-    - 1
-    - 64
-    kernel_size:
-    - 1
-    - 16
-    stride:
-    - 1
-    - 16
-    activation: relu
-    # Number of quantization bits for weights and activations of the embedding
-    # layer, null means no quantization
-    bits: null
-  # Type of positional encoding to use at the input (following the embedding)
-  #   Options are: none, sinusoidal, binary, learned
-  positional: binary
-  # List of layers configuring the encoder stack: Either a string referring to a
-  # pre-defined configuration or a list of individual layer configurations
-  configuration: original
-  # Number of layers, i.e., stacked repetitions of the encoder configuration
-  # above
-  num_layers: 1 # ähnlich zu vision, nur weniger parameter
-  # Number of attention heads
-  num_heads: 4
-  # Embedding dimension shared by all blocks, i.e., embedding, attention, MLP,
-  # convolution, etc.
-  emb_dim: 32
-  # Expanded embedding dimension in MLP or convolution blocks, usually this is
-  # related to the embedding dimension as 4 * emb_dim
-  expansion_dim: 128
-  # Number of quantization bits for weights and activations (for all
-  # intermediate layers), null means no quantization
-  bits: null
-  # Activation functions to use after convolution and linear layers
-  #   Options: tanh, sigmoid, relu, gelu, silu
-  activation: relu
-  # Normalization layer preceding or following each block
-  #   Options: batch-norm, layer-norm, none
-  norm: batch-norm
-  # Placement of the normalization layer: pre-norm or post-norm, if norm is not
-  # none
-  norm_placement: post-norm
-  # Dropout: probability of an element to be zeroed during training
-  dropout: 0.0
-# Training/Validation dataset configuration
+  dropout: 0.1
+  # Training/Validation dataset configuration
 dataset:
   # Optionally select only a subset of the classes
   #  classes: null

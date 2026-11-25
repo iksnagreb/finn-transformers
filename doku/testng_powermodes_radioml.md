@@ -68,21 +68,21 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | 30 W | `TODO` |
 | 50 W | `TODO` |
 
-## Config 2
+## Config 2 
 
-### FP16 
+### FP16  (trained CEG)
 
 | Power Mode | Experiment-ID |
 |---|---|
-| 15 W | `TODO` |
+| 15 W | `next` |
 | 30 W | `TODO` |
 | 50 W | `TODO` |
 
-### FP32 
+### FP32  (trained CEG)
 
 | Power Mode | Experiment-ID |
 |---|---|
-| 15 W | `TODO` |
+| 15 W | `next` |
 | 30 W | `TODO` |
 | 50 W | `TODO` |
 
