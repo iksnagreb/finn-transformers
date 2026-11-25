@@ -122,9 +122,15 @@ outputs/radioml/plot/INT8/energy_consumption.json
 
 Nächste Woche:
 - Language Experimente fertig machen
-- Language plots fertig machen
+- Language plots fertig machen -> fertig außer ein experiment
 - number_batches korrigieren (in summary_plots) -> fertig
-- Radioml: Configs trainieren
-- Radioml: daten für evaluation speichern
+- Radioml: daten für evaluation speichern (nachdem 15w fertig ist)
+
+/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024_eval.npz. Sie enthält 10.000 Samples aus dem Eval-Split
+kopieren nach jetson: /home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.npz
+/home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024_eval.hdf5
+kopieren nach jetson: /home/hanna/git/radioml-transformer/data/GOLD_XYZ_OSC.0001_1024.hdf5
+
+- Radioml: Configs trainieren 
 - Radioml: erste Experimente starten
 - radioml quantisiert, qonnx teilen (exp name)
