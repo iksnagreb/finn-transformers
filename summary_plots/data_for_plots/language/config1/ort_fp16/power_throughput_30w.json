@@ -1,0 +1,65 @@
+[
+    {
+        "batch_size": 1,
+        "power_total": 16289.621951219513,
+        "throughput_images_per_s": 141.03767712787956,
+        "throughput_per_power": 0.008658130774933107,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 2,
+        "power_total": 17829.703125,
+        "throughput_images_per_s": 168.13549781150155,
+        "throughput_per_power": 0.00943007837162188,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 4,
+        "power_total": 18852.7,
+        "throughput_images_per_s": 197.3545761353823,
+        "throughput_per_power": 0.01046823935751284,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 8,
+        "power_total": 19326.875,
+        "throughput_images_per_s": 208.31561118942395,
+        "throughput_per_power": 0.01077854599822392,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 16,
+        "power_total": 19855.254545454547,
+        "throughput_images_per_s": 218.36430147295565,
+        "throughput_per_power": 0.010997809218363594,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 32,
+        "power_total": 19530.944444444445,
+        "throughput_images_per_s": 226.77513888493905,
+        "throughput_per_power": 0.011611068759629029,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 64,
+        "power_total": 19442.24528301887,
+        "throughput_images_per_s": 228.14333453488925,
+        "throughput_per_power": 0.011734412935020052,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 128,
+        "power_total": 19228.592592592595,
+        "throughput_images_per_s": 225.21307794120855,
+        "throughput_per_power": 0.011712405723753651,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 256,
+        "power_total": 19316.345454545455,
+        "throughput_images_per_s": 224.9060788686147,
+        "throughput_per_power": 0.011643303822550482,
+        "num_batches_corrected": true
+    }
+]

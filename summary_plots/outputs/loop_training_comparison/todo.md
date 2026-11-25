@@ -1,0 +1,1 @@
+speicherauslastung vergleich (nvidia smi)

@@ -1,0 +1,65 @@
+[
+    {
+        "batch_size": 1,
+        "power_total": 17524.575,
+        "throughput_images_per_s": 110.7603229873901,
+        "throughput_per_power": 0.006320285826468836,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 2,
+        "power_total": 19146.34,
+        "throughput_images_per_s": 119.89908740016922,
+        "throughput_per_power": 0.006262245807823805,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 4,
+        "power_total": 19991.364583333336,
+        "throughput_images_per_s": 141.629892637216,
+        "throughput_per_power": 0.007084553535444592,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 8,
+        "power_total": 20493.088888888888,
+        "throughput_images_per_s": 148.2338451863833,
+        "throughput_per_power": 0.0072333578402987335,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 16,
+        "power_total": 20417.922222222223,
+        "throughput_images_per_s": 163.7216371672475,
+        "throughput_per_power": 0.008018525851227802,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 32,
+        "power_total": 20316.724137931033,
+        "throughput_images_per_s": 165.92530796816624,
+        "throughput_per_power": 0.008166932170840774,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 64,
+        "power_total": 20179.655172413793,
+        "throughput_images_per_s": 166.51140846385292,
+        "throughput_per_power": 0.008251449642780769,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 128,
+        "power_total": 20049.352272727272,
+        "throughput_images_per_s": 165.15980133704682,
+        "throughput_per_power": 0.008237662698046877,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 256,
+        "power_total": 19921.91011235955,
+        "throughput_images_per_s": 165.25140130698958,
+        "throughput_per_power": 0.008294957681014114,
+        "num_batches_corrected": true
+    }
+]

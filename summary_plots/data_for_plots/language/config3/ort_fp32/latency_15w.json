@@ -1,0 +1,137 @@
+[
+    {
+        "batch_size": 1,
+        "type": "inference",
+        "value": 25.27067999024206
+    },
+    {
+        "batch_size": 1,
+        "type": "synchronize",
+        "value": 0.0009111692622738587
+    },
+    {
+        "batch_size": 1,
+        "type": "datatransfer",
+        "value": 0.04922418003942752
+    },
+    {
+        "batch_size": 2,
+        "type": "inference",
+        "value": 44.340641926368164
+    },
+    {
+        "batch_size": 2,
+        "type": "synchronize",
+        "value": 0.000937262712220388
+    },
+    {
+        "batch_size": 2,
+        "type": "datatransfer",
+        "value": 0.05236787786013508
+    },
+    {
+        "batch_size": 4,
+        "type": "inference",
+        "value": 85.2184190557946
+    },
+    {
+        "batch_size": 4,
+        "type": "synchronize",
+        "value": 0.0009145384371294085
+    },
+    {
+        "batch_size": 4,
+        "type": "datatransfer",
+        "value": 0.05421870701658804
+    },
+    {
+        "batch_size": 8,
+        "type": "inference",
+        "value": 159.95674709829336
+    },
+    {
+        "batch_size": 8,
+        "type": "synchronize",
+        "value": 0.0009875053322616623
+    },
+    {
+        "batch_size": 8,
+        "type": "datatransfer",
+        "value": 0.06654520779471795
+    },
+    {
+        "batch_size": 16,
+        "type": "inference",
+        "value": 311.131375176566
+    },
+    {
+        "batch_size": 16,
+        "type": "synchronize",
+        "value": 0.0009460609500138162
+    },
+    {
+        "batch_size": 16,
+        "type": "datatransfer",
+        "value": 0.07534507943802282
+    },
+    {
+        "batch_size": 32,
+        "type": "inference",
+        "value": 617.2422367314297
+    },
+    {
+        "batch_size": 32,
+        "type": "synchronize",
+        "value": 0.0010483995431513904
+    },
+    {
+        "batch_size": 32,
+        "type": "datatransfer",
+        "value": 0.08678596830520746
+    },
+    {
+        "batch_size": 64,
+        "type": "inference",
+        "value": 1225.968436614887
+    },
+    {
+        "batch_size": 64,
+        "type": "synchronize",
+        "value": 0.0012533084768620029
+    },
+    {
+        "batch_size": 64,
+        "type": "datatransfer",
+        "value": 0.1108485299187123
+    },
+    {
+        "batch_size": 128,
+        "type": "inference",
+        "value": 2474.3456743858956
+    },
+    {
+        "batch_size": 128,
+        "type": "synchronize",
+        "value": 0.0014498427108264877
+    },
+    {
+        "batch_size": 128,
+        "type": "datatransfer",
+        "value": 0.1545467892206034
+    },
+    {
+        "batch_size": 256,
+        "type": "inference",
+        "value": 4966.764572504404
+    },
+    {
+        "batch_size": 256,
+        "type": "synchronize",
+        "value": 0.0016947050353337545
+    },
+    {
+        "batch_size": 256,
+        "type": "datatransfer",
+        "value": 0.23307027043574635
+    }
+]

@@ -1,0 +1,65 @@
+[
+    {
+        "batch_size": 1,
+        "power_total": 20786.666666666668,
+        "throughput_images_per_s": 217.44400531080225,
+        "throughput_per_power": 0.010460744322200236,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 2,
+        "power_total": 26087.029411764706,
+        "throughput_images_per_s": 367.0582480069763,
+        "throughput_per_power": 0.014070526858893357,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 4,
+        "power_total": 30140.285714285714,
+        "throughput_images_per_s": 472.9036473868729,
+        "throughput_per_power": 0.015690085086443917,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 8,
+        "power_total": 31783.64,
+        "throughput_images_per_s": 519.8507860084995,
+        "throughput_per_power": 0.016355923550873955,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 16,
+        "power_total": 31917.84,
+        "throughput_images_per_s": 556.9845042630618,
+        "throughput_per_power": 0.017450570096944586,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 32,
+        "power_total": 32477.08,
+        "throughput_images_per_s": 581.6183142950939,
+        "throughput_per_power": 0.01790857781226311,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 64,
+        "power_total": 32527.0,
+        "throughput_images_per_s": 565.949295001622,
+        "throughput_per_power": 0.017399369600689333,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 128,
+        "power_total": 31997.54166666667,
+        "throughput_images_per_s": 563.4711035677383,
+        "throughput_per_power": 0.017609824824596835,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 256,
+        "power_total": 31539.28,
+        "throughput_images_per_s": 560.8777294251443,
+        "throughput_per_power": 0.017783466503520192,
+        "num_batches_corrected": true
+    }
+]

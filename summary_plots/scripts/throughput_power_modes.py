@@ -14,6 +14,54 @@ POWER_MODES = ("15w", "30w", "50w")
 MODELS = ("base", "base2", "base4")
 QUANT_COMPARISON_MODES = ("int8", "ort_int8")
 QUANT_MODES = ("int8", "ort_int8", "fp16", "fp32")
+OUTPUT_PREFIX = "vision_"
+# TensorRT vs. ONNX Runtime pairs for --quant-comparison (only pairs with data are plotted).
+QUANT_COMPARISON_PAIRS = (("int8", "ort_int8"), ("fp16", "ort_fp16"), ("fp32", "ort_fp32"))
+
+# Settings per task. vision keeps the original layout (data_for_plots/<model>/<mode>,
+# outputs/vision_<model>_<mode>); the other tasks live in their own sub folders
+# (data_for_plots/<task>/<model>/<mode> -> outputs/<task>/<task>_<model>_<mode>).
+TASKS = {
+    "vision": {
+        "data_root": DATA_ROOT,
+        "output_root": DEFAULT_OUTPUT_ROOT,
+        "models": MODELS,
+        "quant_modes": QUANT_MODES,
+    },
+    "language": {
+        "data_root": DATA_ROOT / "language",
+        "output_root": DEFAULT_OUTPUT_ROOT / "language",
+        "models": ("config1", "config2", "config3"),
+        "quant_modes": ("int8", "ort_int8", "fp16", "ort_fp16", "fp32", "ort_fp32"),
+    },
+    "radioml": {
+        "data_root": DATA_ROOT / "radioml",
+        "output_root": DEFAULT_OUTPUT_ROOT / "radioml",
+        "models": (),  # fill in once radioml data is acquired
+        "quant_modes": ("int8", "ort_int8", "fp16", "ort_fp16", "fp32", "ort_fp32"),
+    },
+}
+
+
+def configure_task(task):
+    """Point the module-level paths and model lists at one task."""
+    global DATA_ROOT, DEFAULT_OUTPUT_ROOT, MODEL_COMPARISON_OUTPUT_DIR, MODELS, QUANT_MODES, OUTPUT_PREFIX
+    config = TASKS[task]
+    DATA_ROOT = config["data_root"]
+    DEFAULT_OUTPUT_ROOT = config["output_root"]
+    MODEL_COMPARISON_OUTPUT_DIR = DEFAULT_OUTPUT_ROOT / "model_comparison"
+    MODELS = config["models"]
+    QUANT_MODES = config["quant_modes"]
+    OUTPUT_PREFIX = f"{task}_"
+
+
+def infer_task(input_dir):
+    """Task whose data folder contains input_dir; vision for everything else."""
+    input_dir = Path(input_dir).resolve()
+    for task, config in TASKS.items():
+        if task != "vision" and input_dir.is_relative_to(config["data_root"].resolve()):
+            return task
+    return "vision"
 
 
 class RawDefaultsHelpFormatter(argparse.RawDescriptionHelpFormatter, argparse.ArgumentDefaultsHelpFormatter):
@@ -34,7 +82,7 @@ CLI_REFERENCE = """Plot modes
         Writes to summary_plots/outputs/model_comparison/latency_throughput_model_comparison_<mode>_logxy.png.
 
     --combined-vision-models
-        Generates the throughput comparison across all models for the mode of --input-dir.
+        Generates the throughput comparison across all models (of the task) for the mode of --input-dir.
         Writes to summary_plots/outputs/model_comparison/throughput_model_comparison_<mode>.png.
 
     --latency-one-model
@@ -46,13 +94,21 @@ CLI_REFERENCE = """Plot modes
         Writes to summary_plots/outputs/model_comparison/latency_model_comparison_<mode>.png.
 
     --quant-comparison
-        Generates all three plots comparing int8 against ort_int8 for the model of --input-dir.
+        Generates all three plots comparing TensorRT against ONNX Runtime (int8/ort_int8, fp16/ort_fp16,
+        fp32/ort_fp32; only pairs with data) for the model of --input-dir.
         Writes to summary_plots/outputs/vision_<model>_int8_ort_int8/*_quant_modes_comparison*.png.
 
     --quant-modes
         Generates all three plots once per power mode, comparing int8, ort_int8, fp16 and fp32
         for the model of --input-dir.
         Writes to summary_plots/outputs/vision_<model>_quantmodes/*_quant_modes_comparison_<power>*.png.
+
+Tasks
+    The task is inferred from --input-dir (or set with --task):
+        vision    data_for_plots/<model>/<mode>           -> outputs/vision_<model>_<mode>/
+        language  data_for_plots/language/<model>/<mode>  -> outputs/language/language_<model>_<mode>/
+        radioml   data_for_plots/radioml/<model>/<mode>   -> outputs/radioml/radioml_<model>_<mode>/
+    Model comparisons go to <output root>/model_comparison/.
 
 Common options
     --mode LABEL=/path/to/file.json
@@ -83,7 +139,7 @@ def _output_folder_name(source_dir):
                 relative = source_dir.relative_to(DATA_ROOT)
         except ValueError:
                 return source_dir.name
-        return "vision_" + "_".join(relative.parts)
+        return OUTPUT_PREFIX + "_".join(relative.parts)
 
 
 def _family_dir(input_dir, model):
@@ -112,10 +168,10 @@ def _model_family_files(mode, prefix):
         return family_files
 
 
-def _quant_family_files(model, prefix):
+def _quant_family_files(model, prefix, modes=None):
         """Map every quantization mode with data for this model to its power mode files."""
         family_files = {}
-        for mode in QUANT_COMPARISON_MODES:
+        for mode in modes or QUANT_COMPARISON_MODES:
                 power_mode_files = _power_mode_files(model, mode, prefix)
                 if power_mode_files:
                         family_files[mode] = power_mode_files
@@ -965,7 +1021,15 @@ def main():
         help="Which throughput metric to plot.",
     )
 
+    parser.add_argument(
+        "--task",
+        choices=sorted(TASKS),
+        default=None,
+        help="Data/output layout to use. Default: inferred from --input-dir (vision unless it lies in data_for_plots/<task>).",
+    )
+
     args = parser.parse_args()
+    configure_task(args.task or infer_task(args.input_dir))
 
     if args.combined_vision_models:
         main_combined_vision_models(log_scale=args.throughput_log_scale, mode=Path(args.input_dir).name)
@@ -1080,7 +1144,7 @@ def main_combined_vision_models(log_scale=False, mode="int8"):
 
 def main_quant_modes(model, throughput_log_scale=False, latency_log_scale=False):
     """Generate all three plots per power mode, comparing every quantization mode of one model."""
-    output_dir = DEFAULT_OUTPUT_ROOT / f"vision_{model}_quantmodes"
+    output_dir = DEFAULT_OUTPUT_ROOT / f"{OUTPUT_PREFIX}{model}_quantmodes"
 
     for power in POWER_MODES:
         label = power.upper()
@@ -1127,11 +1191,18 @@ def main_quant_modes(model, throughput_log_scale=False, latency_log_scale=False)
 
 
 def main_quant_comparison(model, throughput_log_scale=False, latency_log_scale=False):
-    """Generate all three plots comparing the quantization modes of one model."""
-    output_dir = DEFAULT_OUTPUT_ROOT / f"vision_{model}_{'_'.join(QUANT_COMPARISON_MODES)}"
+    """Generate the TensorRT vs. ONNX Runtime plots for every precision with data for both."""
+    for modes in QUANT_COMPARISON_PAIRS:
+        if len(_quant_family_files(model, "throughput", modes)) == len(modes):
+            _quant_comparison(model, modes, throughput_log_scale, latency_log_scale)
+
+
+def _quant_comparison(model, modes, throughput_log_scale=False, latency_log_scale=False):
+    """Generate all three plots comparing the given quantization modes of one model."""
+    output_dir = DEFAULT_OUTPUT_ROOT / f"{OUTPUT_PREFIX}{model}_{'_'.join(modes)}"
 
     throughput_comparison_model_families_plot(
-        model_family_files=_quant_family_files(model, "throughput"),
+        model_family_files=_quant_family_files(model, "throughput", modes),
         output_path=output_dir
         / (
             "throughput_quant_modes_comparison_logy.png"
@@ -1143,13 +1214,13 @@ def main_quant_comparison(model, throughput_log_scale=False, latency_log_scale=F
     )
 
     latency_throughput_comparison_model_families_plot(
-        model_family_files=_quant_family_files(model, "latency_throughput"),
+        model_family_files=_quant_family_files(model, "latency_throughput", modes),
         output_path=output_dir / "latency_throughput_quant_modes_comparison_logxy.png",
         family_kind="Quantization",
     )
 
     latency_summary_model_families_plot(
-        model_family_files=_quant_family_files(model, "latency"),
+        model_family_files=_quant_family_files(model, "latency", modes),
         output_path=output_dir
         / ("latency_quant_modes_comparison_logx.png" if latency_log_scale else "latency_quant_modes_comparison.png"),
         xscale="log" if latency_log_scale else "linear",

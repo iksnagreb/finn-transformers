@@ -1,0 +1,65 @@
+[
+    {
+        "batch_size": 1,
+        "power_total": 21798.48076923077,
+        "throughput_images_per_s": 172.98663125686798,
+        "throughput_per_power": 0.00793571960762715,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 2,
+        "power_total": 26651.484848484848,
+        "throughput_images_per_s": 273.49546066302526,
+        "throughput_per_power": 0.010261922073680395,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 4,
+        "power_total": 30031.285714285717,
+        "throughput_images_per_s": 319.70094253443796,
+        "throughput_per_power": 0.010645596248393653,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 8,
+        "power_total": 31790.64,
+        "throughput_images_per_s": 372.8118475035856,
+        "throughput_per_power": 0.011727094751901364,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 16,
+        "power_total": 31995.72,
+        "throughput_images_per_s": 376.2391423817201,
+        "throughput_per_power": 0.011759045971827486,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 32,
+        "power_total": 32648.0,
+        "throughput_images_per_s": 383.14968464112224,
+        "throughput_per_power": 0.011735778137745718,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 64,
+        "power_total": 32691.916666666664,
+        "throughput_images_per_s": 392.74828326555956,
+        "throughput_per_power": 0.012013620592212436,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 128,
+        "power_total": 32015.958333333332,
+        "throughput_images_per_s": 392.2491335279879,
+        "throughput_per_power": 0.012251675537683302,
+        "num_batches_corrected": true
+    },
+    {
+        "batch_size": 256,
+        "power_total": 31793.0,
+        "throughput_images_per_s": 389.59837298616816,
+        "throughput_per_power": 0.01225421863259737,
+        "num_batches_corrected": true
+    }
+]
