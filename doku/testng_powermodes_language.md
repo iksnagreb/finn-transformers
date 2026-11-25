@@ -117,7 +117,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 |---|---|
 | 15 W | `TODO` |
 | 30 W | `ci-164911-646442` |
-| 50 W | `running` |
+| 50 W | `ci-164944-646619` |
 
 
 - Language Experimente fertig machen
