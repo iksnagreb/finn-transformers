@@ -101,17 +101,17 @@ stages:
           - 0.1
         model:
           embedding:
-            bits:
+            bits: 8
           positional:
             encoding: learned
-            bits:
+            bits: 8
           configuration: original
           num_layers: 6
           num_heads: 12
           emb_dim: 768
           expansion_dim: 3072
-          bits:
-          cls_bits:
+          bits: 8
+          cls_bits: 8
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
@@ -121,7 +121,7 @@ stages:
         tag: quantized
         train:
           epochs: 50
-          batch_size: 32
+          batch_size: 256
           context_length: 256
           mlm: true
           mlm_probability: 0.15
@@ -139,7 +139,7 @@ stages:
             patience: 10
           loader:
             shuffle: true
-            num_workers: 8
+            num_workers: 32
             prefetch_factor: 4
             persistent_workers: false
             pin_memory: true
@@ -228,7 +228,7 @@ stages:
           - 0.1
           - 0.1
         eval:
-          batch_size: 64
+          batch_size: 512
           context_length: 256
           mlm: true
           mlm_probability: 0.15
@@ -240,17 +240,17 @@ stages:
             drop_last: true
         model:
           embedding:
-            bits:
+            bits: 8
           positional:
             encoding: learned
-            bits:
+            bits: 8
           configuration: original
           num_layers: 6
           num_heads: 12
           emb_dim: 768
           expansion_dim: 3072
-          bits:
-          cls_bits:
+          bits: 8
+          cls_bits: 8
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
@@ -343,17 +343,17 @@ stages:
           optimize: false
         model:
           embedding:
-            bits:
+            bits: 8
           positional:
             encoding: learned
-            bits:
+            bits: 8
           configuration: original
           num_layers: 6
           num_heads: 12
           emb_dim: 768
           expansion_dim: 3072
-          bits:
-          cls_bits:
+          bits: 8
+          cls_bits: 8
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
@@ -364,16 +364,16 @@ stages:
     outs:
     - path: outputs/language/cls.npy
       hash: md5
-      md5: fb5c4cee3f1096de95d28bda7cfcfdaf
+      md5: 26c08941ae89d0f8e0c2e2ebcfabaea6
       size: 2176
     - path: outputs/language/inp.npy
       hash: md5
-      md5: 60e03e6f1c238750113758a1ab6db762
+      md5: 469c8ae33a2ef98711a6b7ebb49b2487
       size: 2176
     - path: outputs/language/model.onnx
       hash: md5
-      md5: 848827422a65169d6fab46846e4547db
-      size: 41992608
+      md5: 5001787e7b5004bc0295f921909a9413
+      size: 42034036
     - path: outputs/language/out.npy
       hash: md5
       md5: 59660cac9bebdb307e4a9d819f34013b
