@@ -75,7 +75,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `ci-165241-647646` |
-| 30 W | `running` |
+| 30 W | `ci-165437-648251` |
 | 50 W | `ci-165312-647888` |
 
 ### FP32  (trained CEG)
@@ -83,15 +83,15 @@ outputs/radioml/plot/INT8/energy_consumption.json
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `ci-165273-647759` |
-| 30 W | `running` |
+| 30 W | `ci-165440-648255` |
 | 50 W | `ci-165308-647881` |
 
-### INT8 
+### INT8  (trained CEG)
 
 | Power Mode | Experiment-ID |
 |---|---|
 | 15 W | `TODO` |
-| 30 W | `TODO` |
+| 30 W | `running` |
 | 50 W | `TODO` |
 
 ## Config 3
