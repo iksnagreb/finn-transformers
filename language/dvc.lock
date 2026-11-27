@@ -101,17 +101,17 @@ stages:
           - 0.1
         model:
           embedding:
-            bits:
+            bits: 8
           positional:
             encoding: learned
-            bits:
+            bits: 8
           configuration: original
           num_layers: 6
           num_heads: 12
           emb_dim: 768
           expansion_dim: 3072
-          bits:
-          cls_bits:
+          bits: 8
+          cls_bits: 8
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
@@ -121,7 +121,7 @@ stages:
         tag: quantized
         train:
           epochs: 50
-          batch_size: 32
+          batch_size: 256
           context_length: 256
           mlm: true
           mlm_probability: 0.15
@@ -139,7 +139,7 @@ stages:
             patience: 10
           loader:
             shuffle: true
-            num_workers: 8
+            num_workers: 32
             prefetch_factor: 4
             persistent_workers: false
             pin_memory: true
@@ -228,7 +228,7 @@ stages:
           - 0.1
           - 0.1
         eval:
-          batch_size: 64
+          batch_size: 512
           context_length: 256
           mlm: true
           mlm_probability: 0.15
@@ -240,17 +240,17 @@ stages:
             drop_last: true
         model:
           embedding:
-            bits:
+            bits: 8
           positional:
             encoding: learned
-            bits:
+            bits: 8
           configuration: original
           num_layers: 6
           num_heads: 12
           emb_dim: 768
           expansion_dim: 3072
-          bits:
-          cls_bits:
+          bits: 8
+          cls_bits: 8
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
@@ -343,17 +343,17 @@ stages:
           optimize: false
         model:
           embedding:
-            bits:
+            bits: 8
           positional:
             encoding: learned
-            bits:
+            bits: 8
           configuration: original
           num_layers: 6
           num_heads: 12
           emb_dim: 768
           expansion_dim: 3072
-          bits:
-          cls_bits:
+          bits: 8
+          cls_bits: 8
           activation: gelu
           norm: layer-norm
           norm_placement: pre-norm
