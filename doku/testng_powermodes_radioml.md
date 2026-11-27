@@ -92,7 +92,7 @@ outputs/radioml/plot/INT8/energy_consumption.json
 |---|---|
 | 15 W | `TODO` |
 | 30 W | `ci-165455-648308` |
-| 50 W | `TODO` |
+| 50 W | `running` |
 
 ## Config 3
 
